@@ -121,7 +121,7 @@ export const RelationSection = ({
       filters: {
         originalId: {
           value: relations
-            .filter((rel) => rel.internal)
+            .filter((rel) => rel.internal && rel.relatertBegrep)
             .map((rel) => rel.relatertBegrep as string),
         },
       },
@@ -133,7 +133,7 @@ export const RelationSection = ({
         filters: {
           uri: {
             value: relations
-              .filter((rel) => !rel.internal)
+              .filter((rel) => !rel.internal && rel.relatertBegrep)
               .map((rel) => rel.relatertBegrep as string),
           },
         },
