@@ -81,15 +81,15 @@ export async function createPublicService(
       );
     }
     serviceId = response?.headers?.get("location")?.split("/").pop();
-    updateTag("public-service");
-    updateTag("public-services");
-    return serviceId;
   } catch (error) {
     console.error(error);
     throw new Error(
       error instanceof Error ? error.message : localization.alert.createFailed,
     );
   }
+  updateTag("public-service");
+  updateTag("public-services");
+  return serviceId;
 }
 
 export async function deletePublicService(
@@ -111,14 +111,15 @@ export async function deletePublicService(
         `API responded with status ${response.status} for deletePublicService`,
       );
     }
-    updateTag("public-services");
-    redirect(`/catalogs/${catalogId}/public-services`);
   } catch (error) {
     console.error(error);
     throw new Error(
       error instanceof Error ? error.message : localization.alert.deleteFailed,
     );
   }
+
+  updateTag("public-services");
+  redirect(`/catalogs/${catalogId}/public-services`);
 }
 
 export async function updatePublicService(
@@ -162,14 +163,14 @@ export async function updatePublicService(
         `API responded with status ${response.status} for updatePublicService`,
       );
     }
-    updateTag("public-service");
-    updateTag("public-services");
   } catch (error) {
     console.error(error);
     throw new Error(
       error instanceof Error ? error.message : localization.alert.updateFailed,
     );
   }
+  updateTag("public-service");
+  updateTag("public-services");
 }
 
 export async function publishPublicService(
@@ -191,14 +192,14 @@ export async function publishPublicService(
         `API responded with status ${response.status} for publishPublicService`,
       );
     }
-    updateTag("public-service");
-    updateTag("public-services");
   } catch (error) {
     console.error(error);
     throw new Error(
       error instanceof Error ? error.message : localization.alert.publishFailed,
     );
   }
+  updateTag("public-service");
+  updateTag("public-services");
 }
 
 export async function unpublishPublicService(
@@ -220,8 +221,6 @@ export async function unpublishPublicService(
         `API responded with status ${response.status} for unpublishPublicService`,
       );
     }
-    updateTag("public-service");
-    updateTag("public-services");
   } catch (error) {
     console.error(error);
     throw new Error(
@@ -230,4 +229,6 @@ export async function unpublishPublicService(
         : localization.alert.unpublishFailed,
     );
   }
+  updateTag("public-service");
+  updateTag("public-services");
 }

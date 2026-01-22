@@ -299,7 +299,7 @@ rettigheter, eller at det har oppstått en feil ved henting av tilganger. Vennli
 
   snackbar: {
     saveSuccessful: "Endringene ble lagret.",
-    saveFailed: "Lagring feilet.",
+    saveFailed: "Lagring feilet. Vennligst prøv igjen.",
     restoreSuccessful: "Endringene ble gjenopprettet.",
   },
 

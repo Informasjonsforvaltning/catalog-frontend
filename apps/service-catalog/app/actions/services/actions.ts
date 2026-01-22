@@ -79,15 +79,15 @@ export async function createService(
       );
     }
     serviceId = response?.headers?.get("location")?.split("/").pop();
-    updateTag("service");
-    updateTag("services");
-    return serviceId;
   } catch (error) {
     console.error(error);
     throw new Error(
       error instanceof Error ? error.message : localization.alert.createFailed,
     );
   }
+  updateTag("service");
+  updateTag("services");
+  return serviceId;
 }
 
 export async function deleteService(catalogId: string, serviceId: string) {
@@ -106,14 +106,14 @@ export async function deleteService(catalogId: string, serviceId: string) {
         `API responded with status ${response.status} for deleteService`,
       );
     }
-    updateTag("services");
-    redirect(`/catalogs/${catalogId}/services`);
   } catch (error) {
     console.error(error);
     throw new Error(
       error instanceof Error ? error.message : localization.alert.deleteFailed,
     );
   }
+  updateTag("services");
+  redirect(`/catalogs/${catalogId}/services`);
 }
 
 export async function updateService(
@@ -158,14 +158,14 @@ export async function updateService(
         `API responded with status ${response.status} for updateService`,
       );
     }
-    updateTag("service");
-    updateTag("services");
   } catch (error) {
     console.error(error);
     throw new Error(
       error instanceof Error ? error.message : localization.alert.updateFailed,
     );
   }
+  updateTag("service");
+  updateTag("services");
 }
 
 export async function publishService(catalogId: string, serviceId: string) {
@@ -184,14 +184,14 @@ export async function publishService(catalogId: string, serviceId: string) {
         `API responded with status ${response.status} for publishService`,
       );
     }
-    updateTag("service");
-    updateTag("services");
   } catch (error) {
     console.error(error);
     throw new Error(
       error instanceof Error ? error.message : localization.alert.publishFailed,
     );
   }
+  updateTag("service");
+  updateTag("services");
 }
 
 export async function unpublishService(catalogId: string, serviceId: string) {
@@ -210,8 +210,6 @@ export async function unpublishService(catalogId: string, serviceId: string) {
         `API responded with status ${response.status} for unpublishService`,
       );
     }
-    updateTag("service");
-    updateTag("services");
   } catch (error) {
     console.error(error);
     throw new Error(
@@ -220,4 +218,6 @@ export async function unpublishService(catalogId: string, serviceId: string) {
         : localization.alert.unpublishFailed,
     );
   }
+  updateTag("service");
+  updateTag("services");
 }

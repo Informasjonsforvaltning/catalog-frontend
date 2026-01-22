@@ -87,15 +87,15 @@ export async function createDataService(
     console.log(
       `[createDataService] Revalidating cache tags for data service ${dataServiceId}`,
     );
-    updateTag("data-service");
-    updateTag("data-services");
-    return dataServiceId;
   } catch (error) {
     console.error(error);
     throw new Error(
       error instanceof Error ? error.message : localization.alert.createFailed,
     );
   }
+  updateTag("data-service");
+  updateTag("data-services");
+  return dataServiceId;
 }
 
 export async function deleteDataService(
@@ -117,13 +117,13 @@ export async function deleteDataService(
         `API responded with status ${response.status} for deleteDataService`,
       );
     }
-    updateTag("data-services");
   } catch (error) {
     console.error(error);
     throw new Error(
       error instanceof Error ? error.message : localization.alert.deleteFailed,
     );
   }
+  updateTag("data-services");
 }
 
 export async function updateDataService(
@@ -131,7 +131,8 @@ export async function updateDataService(
   initialDataService: DataService,
   values: DataService,
 ) {
-  const updatedDataService = removeEmptyValues({
+  let updatedDataService: DataService;
+  const nextDataService = removeEmptyValues({
     ...values,
     accessRights:
       values?.accessRights === "none" ? undefined : values?.accessRights,
@@ -143,7 +144,7 @@ export async function updateDataService(
 
   const diff = compare(
     omit(initialDataService, dataServiceMetadataFieldsToOmit),
-    omit(updatedDataService, dataServiceMetadataFieldsToOmit),
+    omit(nextDataService, dataServiceMetadataFieldsToOmit),
   );
 
   if (diff.length === 0) {
@@ -167,17 +168,17 @@ export async function updateDataService(
         `API responded with status ${response.status} for updateDataService`,
       );
     }
-    updateTag("data-service");
-    updateTag("data-services");
 
-    const updatedDataService = await response.json();
-    return updatedDataService;
+    updatedDataService = await response.json();
   } catch (error) {
     console.error(error);
     throw new Error(
       error instanceof Error ? error.message : localization.alert.updateFailed,
     );
   }
+  updateTag("data-service");
+  updateTag("data-services");
+  return updatedDataService;
 }
 
 export async function publishDataService(
@@ -196,14 +197,14 @@ export async function publishDataService(
         `API responded with status ${response.status} for publishDataService`,
       );
     }
-    updateTag("data-service");
-    updateTag("data-services");
   } catch (error) {
     console.error(error);
     throw new Error(
       error instanceof Error ? error.message : localization.alert.publishFailed,
     );
   }
+  updateTag("data-service");
+  updateTag("data-services");
 }
 
 export async function unpublishDataService(
@@ -222,8 +223,6 @@ export async function unpublishDataService(
         `API responded with status ${response.status} for unpublishDataService`,
       );
     }
-    updateTag("data-service");
-    updateTag("data-services");
   } catch (error) {
     console.error(error);
     throw new Error(
@@ -232,6 +231,8 @@ export async function unpublishDataService(
         : localization.alert.unpublishFailed,
     );
   }
+  updateTag("data-service");
+  updateTag("data-services");
 }
 
 export async function deleteImportResult(catalogId: string, resultId: string) {
@@ -250,11 +251,11 @@ export async function deleteImportResult(catalogId: string, resultId: string) {
         `API responded with status ${response.status} for deleteImportResult`,
       );
     }
-    updateTag("import-results");
   } catch (error) {
     console.error(error);
     throw new Error(
       error instanceof Error ? error.message : localization.alert.deleteFailed,
     );
   }
+  updateTag("import-results");
 }

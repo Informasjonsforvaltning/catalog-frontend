@@ -78,15 +78,15 @@ export async function createDataset(
     }
 
     datasetId = response?.headers?.get("location")?.split("/").pop();
-    updateTag("dataset");
-    updateTag("datasets");
-    return datasetId;
   } catch (error) {
     console.error(error);
     throw new Error(
       error instanceof Error ? error.message : localization.alert.createFailed,
     );
   }
+  updateTag("dataset");
+  updateTag("datasets");
+  return datasetId;
 }
 
 export async function deleteDataset(catalogId: string, datasetId: string) {
@@ -105,13 +105,13 @@ export async function deleteDataset(catalogId: string, datasetId: string) {
         `API responded with status ${response.status} for deleteDataset`,
       );
     }
-    updateTag("datasets");
   } catch (error) {
     console.error(error);
     throw new Error(
       error instanceof Error ? error.message : localization.alert.deleteFailed,
     );
   }
+  updateTag("datasets");
 }
 
 export async function updateDataset(
@@ -144,14 +144,14 @@ export async function updateDataset(
         `API responded with status ${response.status} for updateDataset`,
       );
     }
-    updateTag("dataset");
-    updateTag("datasets");
   } catch (error) {
     console.error(error);
     throw new Error(
       error instanceof Error ? error.message : localization.alert.updateFailed,
     );
   }
+  updateTag("dataset");
+  updateTag("datasets");
 }
 
 export async function publishDataset(
@@ -179,7 +179,7 @@ export async function publishDataset(
     );
     if (response.status !== 200) {
       throw new Error(
-        `API responded with status ${response.status} for updateDataset`,
+        `API responded with status ${response.status} for publishDataset`,
       );
     }
   } catch (error) {

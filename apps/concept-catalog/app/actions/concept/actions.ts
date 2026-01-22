@@ -109,15 +109,14 @@ export async function createConcept(
       );
     }
     conceptId = response?.headers?.get("location")?.split("/").pop();
-    updateTag("concept");
-    updateTag("concepts");
   } catch (error) {
     console.error(error);
     throw new Error(
       error instanceof Error ? error.message : localization.alert.createFailed,
     );
   }
-
+  updateTag("concept");
+  updateTag("concepts");
   return conceptId;
 }
 
@@ -136,13 +135,13 @@ export async function deleteConcept(catalogId: string, conceptId: string) {
         `API responded with status ${response.status} for deleteConcept`,
       );
     }
-    updateTag("concepts");
   } catch (error) {
     console.error(error);
     throw new Error(
       error instanceof Error ? error.message : localization.alert.deleteFailed,
     );
   }
+  updateTag("concepts");
 }
 
 export async function updateConcept(
@@ -200,22 +199,21 @@ export async function updateConcept(
     );
     if (response.status !== 200 && response.status !== 201) {
       throw new Error(
-        `API responded with status ${response.status} for patchConceptApi`,
+        `API responded with status ${response.status} for patchConcept`,
       );
     }
 
     if (response.status === 201) {
       conceptId = response?.headers?.get("location")?.split("/").pop();
     }
-    updateTag("concept");
-    updateTag("concepts");
   } catch (error) {
     console.error(error);
     throw new Error(
       error instanceof Error ? error.message : localization.alert.updateFailed,
     );
   }
-
+  updateTag("concept");
+  updateTag("concepts");
   return await getConcept(`${conceptId}`, `${session?.accessToken}`).then(
     (response) => (response.ok ? response.json() : undefined),
   );
@@ -237,14 +235,14 @@ export async function deleteImportResult(catalogId: string, resultId: string) {
         `API responded with status ${response.status} for deleteImportResult`,
       );
     }
-    updateTag("import-results");
-    console.log("Deleted import result", catalogId, resultId);
   } catch (error) {
     console.error(error);
     throw new Error(
       error instanceof Error ? error.message : localization.alert.deleteFailed,
     );
   }
+  updateTag("import-results");
+  console.log("Deleted import result", catalogId, resultId);
 }
 
 export async function saveImportedConcept(
@@ -275,10 +273,9 @@ export async function saveImportedConcept(
     throw new Error(
       error instanceof Error ? error.message : localization.alert.fail,
     );
-  } finally {
-    updateTag("import-result");
-    updateTag("import-results");
   }
+  updateTag("import-result");
+  updateTag("import-results");
 }
 
 export async function cancelImport(catalogId: string, resultId: string) {
@@ -302,13 +299,13 @@ export async function cancelImport(catalogId: string, resultId: string) {
         `API responded with status ${response.status} for cancelConceptImport`,
       );
     }
-    updateTag("import-result");
-    updateTag("import-results");
-    console.log("Importing result has been cancelled", catalogId, resultId);
   } catch (error) {
     console.error(error);
     throw new Error(
       error instanceof Error ? error.message : localization.alert.fail,
     );
   }
+  updateTag("import-result");
+  updateTag("import-results");
+  console.log("Importing result has been cancelled", catalogId, resultId);
 }
