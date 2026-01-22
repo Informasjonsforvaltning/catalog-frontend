@@ -456,3 +456,53 @@ runTestAsAdmin(
     await detailPage.expectContactPointUrl("https://example.com/new-contact");
   },
 );
+
+runTestAsAdmin(
+  "empty submit check prevents save when only whitespace added",
+  async ({ page, datasetsPage, playwright }) => {
+    const apiRequestContext = await playwright.request.newContext({
+      storageState: adminAuthFile,
+    });
+
+    // Create a dataset via API with structure matching form expectations
+    const dataset: DatasetToBeCreated = {
+      title: { nb: "Test whitespace", nn: "", en: "" },
+      description: { nb: "Test description" },
+      accessRight: accessRightPublic.uri,
+      approved: false,
+      landingPage: [],
+      legalBasisForAccess: [],
+      legalBasisForProcessing: [],
+      legalBasisForRestriction: [],
+      euDataTheme: [],
+      losTheme: [],
+      contactPoints: [],
+    };
+
+    const datasetId = await createDataset(apiRequestContext, dataset);
+
+    // Navigate to edit page
+    const detailPage = datasetsPage.detailPage;
+    await detailPage.goto(process.env.E2E_CATALOG_ID as string, datasetId);
+    await detailPage.clickEditButton();
+
+    // Wait for form to be ready
+    await expect(page.getByRole("button", { name: "Lagre" })).toBeVisible();
+
+    // Add trailing whitespace to title
+    const titleField = page
+      .getByRole("group", { name: "Tittel Hjelp til utfylling Må fylles ut" })
+      .getByLabel("Bokmål");
+    await titleField.fill("Test whitespace ");
+
+    // Click save button
+    await page.getByRole("button", { name: "Lagre" }).click();
+
+    // Wait for network to settle - if empty submit check works, no request is made
+    await page.waitForLoadState("networkidle");
+
+    // Verify NO snackbar appears (empty submit check should prevent save)
+    await expect(page.getByText("Endringene ble lagret.")).not.toBeVisible();
+    await expect(page.getByText("Lagring feilet")).not.toBeVisible();
+  },
+);
