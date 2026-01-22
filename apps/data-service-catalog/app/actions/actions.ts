@@ -34,7 +34,7 @@ export async function getDataServices(catalogId: string) {
   );
   if (response.status !== 200) {
     throw new Error(
-      "getDataServices failed with response code " + response.status,
+      `API responded with status ${response.status} for getAllDataServices`,
     );
   }
   return await response.json();
@@ -58,7 +58,6 @@ export async function createDataService(
   if (!session) {
     return redirectToSignIn();
   }
-  let success = false;
   let dataServiceId: undefined | string = undefined;
   try {
     const response = await postDataService(
@@ -68,7 +67,7 @@ export async function createDataService(
     );
     if (response.status !== 201) {
       throw new Error(
-        `Failed to create data service: ${response.status} ${response.statusText}`,
+        `API responded with status ${response.status} for createDataService`,
       );
     }
 
@@ -85,19 +84,17 @@ export async function createDataService(
     console.log(
       `[createDataService] Successfully created data service with ID: ${dataServiceId}`,
     );
-    success = true;
+    console.log(
+      `[createDataService] Revalidating cache tags for data service ${dataServiceId}`,
+    );
+    updateTag("data-service");
+    updateTag("data-services");
     return dataServiceId;
   } catch (error) {
-    console.error("Error creating data service:", error);
-    throw new Error(localization.alert.fail);
-  } finally {
-    if (success) {
-      console.log(
-        `[createDataService] Revalidating cache tags for data service ${dataServiceId}`,
-      );
-      updateTag("data-service");
-      updateTag("data-services");
-    }
+    console.error(error);
+    throw new Error(
+      error instanceof Error ? error.message : localization.alert.createFailed,
+    );
   }
 }
 
@@ -109,7 +106,6 @@ export async function deleteDataService(
   if (!session) {
     return redirectToSignIn();
   }
-  let success = false;
   try {
     const response = await removeDataService(
       catalogId,
@@ -117,15 +113,16 @@ export async function deleteDataService(
       `${session?.accessToken}`,
     );
     if (response.status !== 204) {
-      throw new Error();
+      throw new Error(
+        `API responded with status ${response.status} for deleteDataService`,
+      );
     }
-    success = true;
+    updateTag("data-services");
   } catch (error) {
-    throw new Error(localization.alert.deleteFailed);
-  } finally {
-    if (success) {
-      updateTag("data-services");
-    }
+    console.error(error);
+    throw new Error(
+      error instanceof Error ? error.message : localization.alert.deleteFailed,
+    );
   }
 }
 
@@ -153,7 +150,6 @@ export async function updateDataService(
     throw new Error(localization.alert.noChanges);
   }
 
-  let success = false;
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
@@ -167,20 +163,20 @@ export async function updateDataService(
       `${session?.accessToken}`,
     );
     if (response.status !== 200) {
-      throw new Error(`${response.status} ${response.statusText}`);
+      throw new Error(
+        `API responded with status ${response.status} for updateDataService`,
+      );
     }
-    success = true;
+    updateTag("data-service");
+    updateTag("data-services");
 
     const updatedDataService = await response.json();
     return updatedDataService;
   } catch (error) {
-    console.error(`${localization.alert.fail} ${error}`);
-    throw new Error(`Noe gikk galt, prøv igjen...`);
-  } finally {
-    if (success) {
-      updateTag("data-service");
-      updateTag("data-services");
-    }
+    console.error(error);
+    throw new Error(
+      error instanceof Error ? error.message : localization.alert.updateFailed,
+    );
   }
 }
 
@@ -189,7 +185,6 @@ export async function publishDataService(
   dataServiceId: string,
 ) {
   const session = await getValidSession();
-  let success = false;
   try {
     const response = await publish(
       catalogId,
@@ -197,16 +192,17 @@ export async function publishDataService(
       `${session?.accessToken}`,
     );
     if (response.status !== 200) {
-      throw new Error();
+      throw new Error(
+        `API responded with status ${response.status} for publishDataService`,
+      );
     }
-    success = true;
+    updateTag("data-service");
+    updateTag("data-services");
   } catch (error) {
-    throw new Error(localization.alert.deleteFailed);
-  } finally {
-    if (success) {
-      updateTag("data-service");
-      updateTag("data-services");
-    }
+    console.error(error);
+    throw new Error(
+      error instanceof Error ? error.message : localization.alert.publishFailed,
+    );
   }
 }
 
@@ -215,7 +211,6 @@ export async function unpublishDataService(
   dataServiceId: string,
 ) {
   const session = await getValidSession();
-  let success = false;
   try {
     const response = await unpublish(
       catalogId,
@@ -223,16 +218,19 @@ export async function unpublishDataService(
       `${session?.accessToken}`,
     );
     if (response.status !== 200) {
-      throw new Error();
+      throw new Error(
+        `API responded with status ${response.status} for unpublishDataService`,
+      );
     }
-    success = true;
+    updateTag("data-service");
+    updateTag("data-services");
   } catch (error) {
-    throw new Error(localization.alert.deleteFailed);
-  } finally {
-    if (success) {
-      updateTag("data-service");
-      updateTag("data-services");
-    }
+    console.error(error);
+    throw new Error(
+      error instanceof Error
+        ? error.message
+        : localization.alert.unpublishFailed,
+    );
   }
 }
 
@@ -241,7 +239,6 @@ export async function deleteImportResult(catalogId: string, resultId: string) {
   if (!session) {
     return redirectToSignIn();
   }
-  let success = false;
   try {
     const response = await removeImportResult(
       catalogId,
@@ -249,14 +246,15 @@ export async function deleteImportResult(catalogId: string, resultId: string) {
       `${session?.accessToken}`,
     );
     if (response.status !== 204) {
-      throw new Error();
+      throw new Error(
+        `API responded with status ${response.status} for deleteImportResult`,
+      );
     }
-    success = true;
+    updateTag("import-results");
   } catch (error) {
-    throw new Error(localization.alert.deleteFailed);
-  } finally {
-    if (success) {
-      updateTag("import-results");
-    }
+    console.error(error);
+    throw new Error(
+      error instanceof Error ? error.message : localization.alert.deleteFailed,
+    );
   }
 }

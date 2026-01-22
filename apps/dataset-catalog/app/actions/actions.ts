@@ -24,7 +24,9 @@ export async function getDatasets(catalogId: string) {
   }
   const response = await getAll(catalogId, `${session?.accessToken}`);
   if (response.status !== 200) {
-    throw new Error("getDatasets failed with response code " + response.status);
+    throw new Error(
+      `API responded with status ${response.status} for getAllDatasets`,
+    );
   }
   return await response.json();
 }
@@ -45,7 +47,7 @@ export async function getDatasetById(
 
   if (response.status !== 200) {
     throw new Error(
-      "getDatasetById failed with response code " + response.status,
+      `API responded with status ${response.status} for getDatasetById`,
     );
   }
 
@@ -62,7 +64,6 @@ export async function createDataset(
   if (!session) {
     return redirectToSignIn();
   }
-  let success = false;
   let datasetId: undefined | string = undefined;
   try {
     const response = await postDataset(
@@ -71,19 +72,20 @@ export async function createDataset(
       `${session?.accessToken}`,
     );
     if (response.status !== 201) {
-      throw new Error();
+      throw new Error(
+        `API responded with status ${response.status} for createDataset`,
+      );
     }
 
     datasetId = response?.headers?.get("location")?.split("/").pop();
-    success = true;
+    updateTag("dataset");
+    updateTag("datasets");
     return datasetId;
   } catch (error) {
-    throw new Error(`${localization.alert.fail} ${error}`);
-  } finally {
-    if (success) {
-      updateTag("dataset");
-      updateTag("datasets");
-    }
+    console.error(error);
+    throw new Error(
+      error instanceof Error ? error.message : localization.alert.createFailed,
+    );
   }
 }
 
@@ -92,7 +94,6 @@ export async function deleteDataset(catalogId: string, datasetId: string) {
   if (!session) {
     return redirectToSignIn();
   }
-  let success = false;
   try {
     const response = await removeDataset(
       catalogId,
@@ -100,15 +101,16 @@ export async function deleteDataset(catalogId: string, datasetId: string) {
       `${session?.accessToken}`,
     );
     if (response.status !== 200) {
-      throw new Error();
+      throw new Error(
+        `API responded with status ${response.status} for deleteDataset`,
+      );
     }
-    success = true;
+    updateTag("datasets");
   } catch (error) {
-    throw new Error(`${localization.alert.deleteFailed} ${error}`);
-  } finally {
-    if (success) {
-      updateTag("datasets");
-    }
+    console.error(error);
+    throw new Error(
+      error instanceof Error ? error.message : localization.alert.deleteFailed,
+    );
   }
 }
 
@@ -125,7 +127,6 @@ export async function updateDataset(
     throw new Error(localization.alert.noChanges);
   }
 
-  let success = false;
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
@@ -139,17 +140,17 @@ export async function updateDataset(
       `${session?.accessToken}`,
     );
     if (response.status !== 200) {
-      throw new Error(`${response.status} ${response.statusText}`);
+      throw new Error(
+        `API responded with status ${response.status} for updateDataset`,
+      );
     }
-    success = true;
-  } catch (error) {
-    console.error(`${localization.alert.fail} ${error}`);
-    throw new Error(`Noe gikk galt, prøv igjen...`);
-  }
-
-  if (success) {
     updateTag("dataset");
     updateTag("datasets");
+  } catch (error) {
+    console.error(error);
+    throw new Error(
+      error instanceof Error ? error.message : localization.alert.updateFailed,
+    );
   }
 }
 
@@ -177,11 +178,15 @@ export async function publishDataset(
       `${session?.accessToken}`,
     );
     if (response.status !== 200) {
-      throw new Error(`${response.status} ${response.statusText}`);
+      throw new Error(
+        `API responded with status ${response.status} for updateDataset`,
+      );
     }
   } catch (error) {
-    console.error(`${localization.alert.fail} ${error}`);
-    throw new Error(`Noe gikk galt, prøv igjen...`);
+    console.error(error);
+    throw new Error(
+      error instanceof Error ? error.message : localization.alert.publishFailed,
+    );
   }
 
   updateTag("dataset");

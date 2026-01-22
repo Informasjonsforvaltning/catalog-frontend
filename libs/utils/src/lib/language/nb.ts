@@ -281,8 +281,11 @@ export const nb = {
     success: "Oppdatering vellykket!",
     unsavedChanges:
       "Du har ulagrede endringer. Er du sikker på at du vil forlate siden?",
+    createFailed: "Oppretting mislyktes. Prøv igjen senere.",
     updateFailed: "Oppdatering mislyktes. Prøv igjen senere.",
     deleteFailed: "Kunne ikke slette. Prøv igjen senere.",
+    publishFailed: "Publisering mislyktes. Prøv igjen senere.",
+    unpublishFailed: "Avpublisering mislyktes. Prøv igjen senere.",
     formUnsavedChanges: "Skjemaet har ulagrede endringer.",
     youHaveUnsavedChanges: "Det finnes endringer som ikke har blitt lagret:",
     wantToRestoreChanges: "Vil du gjenopprette?",
@@ -296,7 +299,7 @@ rettigheter, eller at det har oppstått en feil ved henting av tilganger. Vennli
 
   snackbar: {
     saveSuccessful: "Endringene ble lagret.",
-    saveFailed: "Lagring feilet. Vennligst prøv igjen.",
+    saveFailed: "Lagring feilet.",
     restoreSuccessful: "Endringene ble gjenopprettet.",
   },
 

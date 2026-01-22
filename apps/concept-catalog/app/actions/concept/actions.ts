@@ -97,7 +97,6 @@ export async function createConcept(
   if (!session) {
     return redirectToSignIn();
   }
-  let success = false;
   let conceptId: string | undefined = undefined;
   try {
     const response = await createConceptApi(
@@ -105,18 +104,18 @@ export async function createConcept(
       `${session?.accessToken}`,
     );
     if (response.status !== 201) {
-      throw new Error();
+      throw new Error(
+        `API responded with status ${response.status} for createConcept`,
+      );
     }
     conceptId = response?.headers?.get("location")?.split("/").pop();
-    success = true;
+    updateTag("concept");
+    updateTag("concepts");
   } catch (error) {
     console.error(error);
-    throw new Error(localization.alert.fail);
-  } finally {
-    if (success) {
-      updateTag("concept");
-      updateTag("concepts");
-    }
+    throw new Error(
+      error instanceof Error ? error.message : localization.alert.createFailed,
+    );
   }
 
   return conceptId;
@@ -127,23 +126,22 @@ export async function deleteConcept(catalogId: string, conceptId: string) {
   if (!session) {
     return redirectToSignIn();
   }
-  let success = false;
   try {
     const response = await deleteConceptApi(
       conceptId,
       `${session?.accessToken}`,
     );
     if (response.status !== 200) {
-      throw new Error();
+      throw new Error(
+        `API responded with status ${response.status} for deleteConcept`,
+      );
     }
-    success = true;
+    updateTag("concepts");
   } catch (error) {
     console.error(error);
-    throw new Error(localization.alert.deleteFailed);
-  } finally {
-    if (success) {
-      updateTag("concepts");
-    }
+    throw new Error(
+      error instanceof Error ? error.message : localization.alert.deleteFailed,
+    );
   }
 }
 
@@ -189,7 +187,6 @@ export async function updateConcept(
     throw new Error(localization.alert.noChanges);
   }
 
-  let success = false;
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
@@ -202,21 +199,21 @@ export async function updateConcept(
       `${session?.accessToken}`,
     );
     if (response.status !== 200 && response.status !== 201) {
-      throw new Error(`${response.status} ${response.statusText}`);
+      throw new Error(
+        `API responded with status ${response.status} for patchConceptApi`,
+      );
     }
 
-    success = true;
     if (response.status === 201) {
       conceptId = response?.headers?.get("location")?.split("/").pop();
     }
-  } catch (error) {
-    console.error(`${localization.alert.fail} ${error}`);
-    throw new Error(`Noe gikk galt, prøv igjen...`);
-  }
-
-  if (success) {
     updateTag("concept");
     updateTag("concepts");
+  } catch (error) {
+    console.error(error);
+    throw new Error(
+      error instanceof Error ? error.message : localization.alert.updateFailed,
+    );
   }
 
   return await getConcept(`${conceptId}`, `${session?.accessToken}`).then(
@@ -229,7 +226,6 @@ export async function deleteImportResult(catalogId: string, resultId: string) {
   if (!session) {
     return redirectToSignIn();
   }
-  let success = false;
   try {
     const response = await removeImportResult(
       catalogId,
@@ -237,16 +233,17 @@ export async function deleteImportResult(catalogId: string, resultId: string) {
       `${session?.accessToken}`,
     );
     if (response.status !== 204) {
-      throw new Error();
+      throw new Error(
+        `API responded with status ${response.status} for deleteImportResult`,
+      );
     }
-    success = true;
+    updateTag("import-results");
     console.log("Deleted import result", catalogId, resultId);
   } catch (error) {
-    throw new Error(localization.alert.deleteFailed);
-  } finally {
-    if (success) {
-      updateTag("import-results");
-    }
+    console.error(error);
+    throw new Error(
+      error instanceof Error ? error.message : localization.alert.deleteFailed,
+    );
   }
 }
 
@@ -268,11 +265,16 @@ export async function saveImportedConcept(
     );
 
     if (response.status !== 200 && response.status !== 201) {
-      throw new Error();
+      throw new Error(
+        `API responded with status ${response.status} for confirmImportedConcept`,
+      );
     }
     console.log("Confirmed import result", catalogId, resultId);
   } catch (error) {
     console.error(error);
+    throw new Error(
+      error instanceof Error ? error.message : localization.alert.fail,
+    );
   } finally {
     updateTag("import-result");
     updateTag("import-results");
@@ -284,7 +286,6 @@ export async function cancelImport(catalogId: string, resultId: string) {
   if (!session) {
     return redirectToSignIn();
   }
-  let success = false;
   try {
     console.log("Sending import cancellation", catalogId, resultId);
 
@@ -297,16 +298,17 @@ export async function cancelImport(catalogId: string, resultId: string) {
     console.log("Import cancellation has been sent", catalogId, resultId);
 
     if (response.status !== 200 && response.status !== 201) {
-      throw new Error();
+      throw new Error(
+        `API responded with status ${response.status} for cancelConceptImport`,
+      );
     }
-    success = true;
+    updateTag("import-result");
+    updateTag("import-results");
     console.log("Importing result has been cancelled", catalogId, resultId);
   } catch (error) {
-    throw new Error(localization.alert.fail);
-  } finally {
-    if (success) {
-      updateTag("import-result");
-      updateTag("import-results");
-    }
+    console.error(error);
+    throw new Error(
+      error instanceof Error ? error.message : localization.alert.fail,
+    );
   }
 }

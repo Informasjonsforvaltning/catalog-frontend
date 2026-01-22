@@ -28,7 +28,9 @@ export async function getServices(catalogId: string) {
 
   const response = await getAll(catalogId, `${session?.accessToken}`);
   if (response.status !== 200) {
-    throw new Error("getServices failed with response code " + response.status);
+    throw new Error(
+      `API responded with status ${response.status} for getAllServices`,
+    );
   }
   const jsonResponse = await response.json();
   return jsonResponse;
@@ -47,7 +49,7 @@ export async function getServiceById(catalogId: string, serviceId: string) {
 
   if (response.status !== 200) {
     throw new Error(
-      "getServiceById failed with response code " + response.status,
+      `API responded with status ${response.status} for getServiceById`,
     );
   }
 
@@ -64,7 +66,6 @@ export async function createService(
   if (!session) {
     return redirectToSignIn();
   }
-  let success = false;
   let serviceId = undefined;
   try {
     const response = await create(
@@ -73,18 +74,19 @@ export async function createService(
       `${session?.accessToken}`,
     );
     if (response.status !== 201) {
-      throw new Error();
+      throw new Error(
+        `API responded with status ${response.status} for createService`,
+      );
     }
     serviceId = response?.headers?.get("location")?.split("/").pop();
-    success = true;
+    updateTag("service");
+    updateTag("services");
     return serviceId;
   } catch (error) {
-    throw new Error(localization.alert.fail);
-  } finally {
-    if (success) {
-      updateTag("service");
-      updateTag("services");
-    }
+    console.error(error);
+    throw new Error(
+      error instanceof Error ? error.message : localization.alert.createFailed,
+    );
   }
 }
 
@@ -93,7 +95,6 @@ export async function deleteService(catalogId: string, serviceId: string) {
   if (!session) {
     return redirectToSignIn();
   }
-  let success = false;
   try {
     const response = await removeService(
       catalogId,
@@ -101,16 +102,17 @@ export async function deleteService(catalogId: string, serviceId: string) {
       `${session?.accessToken}`,
     );
     if (response.status !== 204) {
-      throw new Error();
+      throw new Error(
+        `API responded with status ${response.status} for deleteService`,
+      );
     }
-    success = true;
+    updateTag("services");
+    redirect(`/catalogs/${catalogId}/services`);
   } catch (error) {
-    throw new Error(localization.alert.deleteFailed);
-  } finally {
-    if (success) {
-      updateTag("services");
-      redirect(`/catalogs/${catalogId}/services`);
-    }
+    console.error(error);
+    throw new Error(
+      error instanceof Error ? error.message : localization.alert.deleteFailed,
+    );
   }
 }
 
@@ -139,7 +141,6 @@ export async function updateService(
     throw new Error(localization.alert.noChanges);
   }
 
-  let success = false;
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
@@ -153,16 +154,17 @@ export async function updateService(
       `${session?.accessToken}`,
     );
     if (response.status !== 200) {
-      throw new Error(`${response.statusText}`);
+      throw new Error(
+        `API responded with status ${response.status} for updateService`,
+      );
     }
-    success = true;
+    updateTag("service");
+    updateTag("services");
   } catch (error) {
-    throw new Error(localization.alert.fail);
-  } finally {
-    if (success) {
-      updateTag("service");
-      updateTag("services");
-    }
+    console.error(error);
+    throw new Error(
+      error instanceof Error ? error.message : localization.alert.updateFailed,
+    );
   }
 }
 
@@ -171,7 +173,6 @@ export async function publishService(catalogId: string, serviceId: string) {
   if (!session) {
     return redirectToSignIn();
   }
-  let success = false;
   try {
     const response = await publish(
       catalogId,
@@ -179,16 +180,17 @@ export async function publishService(catalogId: string, serviceId: string) {
       `${session?.accessToken}`,
     );
     if (response.status !== 200) {
-      throw new Error();
+      throw new Error(
+        `API responded with status ${response.status} for publishService`,
+      );
     }
-    success = true;
+    updateTag("service");
+    updateTag("services");
   } catch (error) {
-    throw new Error(localization.alert.fail);
-  } finally {
-    if (success) {
-      updateTag("service");
-      updateTag("services");
-    }
+    console.error(error);
+    throw new Error(
+      error instanceof Error ? error.message : localization.alert.publishFailed,
+    );
   }
 }
 
@@ -197,7 +199,6 @@ export async function unpublishService(catalogId: string, serviceId: string) {
   if (!session) {
     return redirectToSignIn();
   }
-  let success = false;
   try {
     const response = await unpublish(
       catalogId,
@@ -205,15 +206,18 @@ export async function unpublishService(catalogId: string, serviceId: string) {
       `${session?.accessToken}`,
     );
     if (response.status !== 200) {
-      throw new Error();
+      throw new Error(
+        `API responded with status ${response.status} for unpublishService`,
+      );
     }
-    success = true;
+    updateTag("service");
+    updateTag("services");
   } catch (error) {
-    throw new Error(localization.alert.fail);
-  } finally {
-    if (success) {
-      updateTag("service");
-      updateTag("services");
-    }
+    console.error(error);
+    throw new Error(
+      error instanceof Error
+        ? error.message
+        : localization.alert.unpublishFailed,
+    );
   }
 }
