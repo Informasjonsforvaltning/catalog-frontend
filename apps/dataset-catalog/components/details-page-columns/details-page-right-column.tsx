@@ -29,7 +29,7 @@ export const RightColumn = ({ dataset, hasWritePermission, language, referenceDa
             : localization.datasetForm.helptext.applicationProfileDcat
         }
       >
-        <Paragraph size="sm">
+        <Paragraph data-size="sm">
           {dataset?.applicationProfile === ApplicationProfile.MOBILITYDCATAP
             ? localization.tag.mobilityDcatAp
             : localization.tag.dcatApNo}
