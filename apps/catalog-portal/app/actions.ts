@@ -26,33 +26,35 @@ export const getDatasetCount = async (catalogId: string): Promise<number> => {
   return getDatasetCountByOrg(catalogId, session);
 };
 
-export const getDataServiceCount = async (catalogId: string) => {
+export const getDataServiceCount = async (
+  catalogId: string,
+): Promise<number> => {
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn("/catalogs");
   }
 
-  return catalogId ? getDataServiceCountByOrg(catalogId, session) : 0;
+  return getDataServiceCountByOrg(catalogId, session);
 };
 
-export const getConceptCount = async (catalogId: string) => {
+export const getConceptCount = async (catalogId: string): Promise<number> => {
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn("/catalogs");
   }
 
-  return catalogId ? getConceptCountByOrg(catalogId, session) : 0;
+  return getConceptCountByOrg(catalogId, session);
 };
 
-export const getServiceCount = async (catalogId: string) => {
+export const getServiceCount = async (
+  catalogId: string,
+): Promise<{ serviceCount: number; publicServiceCount: number }> => {
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn("/catalogs");
   }
 
-  return catalogId
-    ? await getServiceCountByOrg(catalogId, session)
-    : { serviceCount: 0, publicServiceCount: 0 };
+  return getServiceCountByOrg(catalogId, session);
 };
 
 const getServiceCountByOrg = async (
@@ -168,7 +170,9 @@ const getConceptCountByOrg = async (
   return (await response.json()) as number;
 };
 
-export async function acceptTermsAndConditions(acceptation: TermsAcceptation) {
+export async function acceptTermsAndConditions(
+  acceptation: TermsAcceptation,
+): Promise<void> {
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
