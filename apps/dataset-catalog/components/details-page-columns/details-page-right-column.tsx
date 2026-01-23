@@ -3,9 +3,9 @@ import { formatISO, getTranslateText, localization } from '@catalog-frontend/uti
 import { EnvelopeClosedIcon, PhoneIcon, LinkIcon } from '@navikt/aksel-icons';
 import { isEmpty } from 'lodash';
 import PublishSwitch from '../publish-switch';
-import { Dataset } from '@catalog-frontend/types';
+import { ApplicationProfile, Dataset } from '@catalog-frontend/types';
 import styles from './details-columns.module.css';
-import { Link } from '@digdir/designsystemet-react';
+import { Link, Paragraph } from '@digdir/designsystemet-react';
 import { VStack } from '@fellesdatakatalog/ui';
 
 type Props = {
@@ -20,6 +20,24 @@ export const RightColumn = ({ dataset, hasWritePermission, language, referenceDa
   return (
     <InfoCard>
       <InfoCard.Item
+        key={`info-data-${localization.tag.applicationProfile}`}
+        title={localization.tag.applicationProfile}
+        headingColor='light'
+        helpText={
+          dataset?.applicationProfile === ApplicationProfile.MOBILITYDCATAP
+            ? localization.datasetForm.helptext.applicationProfileMobilityDcat
+            : localization.datasetForm.helptext.applicationProfileDcat
+        }
+      >
+        <Paragraph size="sm">
+          {dataset?.applicationProfile === ApplicationProfile.MOBILITYDCATAP
+            ? localization.tag.mobilityDcatAp
+            : localization.tag.dcatApNo}
+        </Paragraph>
+      </InfoCard.Item>
+
+      <InfoCard.Item
+        key={`info-data-${localization.id}`}
         title={localization.datasetForm.fieldLabel.datasetID}
         headingColor='light'
       >
@@ -27,6 +45,7 @@ export const RightColumn = ({ dataset, hasWritePermission, language, referenceDa
       </InfoCard.Item>
 
       <InfoCard.Item
+        key={`info-data-${localization.publicationState.state}`}
         title={localization.publicationState.state}
         headingColor='light'
         helpText={
@@ -50,7 +69,8 @@ export const RightColumn = ({ dataset, hasWritePermission, language, referenceDa
 
       {dataset?.lastModified && (
         <InfoCard.Item
-          title={localization.lastUpdated}
+          key={`info-data-${localization.datasetForm.fieldLabel.lastUpdated}`}
+          title={localization.datasetForm.fieldLabel.lastUpdated}
           headingColor='light'
         >
           {formatISO(dataset?.lastModified, {

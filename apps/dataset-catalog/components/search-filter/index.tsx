@@ -2,7 +2,7 @@
 
 import { memo, useMemo } from 'react';
 import { AccordionItem, AccordionItemProps, CheckboxGroupFilter } from '@catalog-frontend/ui';
-import { DatasetsPageSettings, PublicationStatus } from '@catalog-frontend/types';
+import { ApplicationProfile, DatasetsPageSettings, PublicationStatus } from '@catalog-frontend/types';
 import { localization } from '@catalog-frontend/utils';
 import styles from './search-filter.module.css';
 
@@ -25,6 +25,7 @@ const SearchFilter = ({ pageSettings }: SearchFilterProps) => {
   // Memoize default values for query states
   const defaultFilterStatus = useMemo(() => pageSettings?.filter?.status ?? [], []);
   const defaultFilterPublicationState = useMemo(() => pageSettings?.filter?.pubState ?? [], []);
+  const defaultFilterApplicationProfile = useMemo(() => pageSettings?.filter?.applicationProfile ?? [], []);
 
   const [filterStatus, setFilterStatus] = useQueryState(
     'datasetFilter.status',
@@ -33,6 +34,10 @@ const SearchFilter = ({ pageSettings }: SearchFilterProps) => {
   const [filterPublicationState, setFilterPublicationState] = useQueryState(
     'datasetFilter.pubState',
     parseAsArrayOf(parseAsString).withDefault(defaultFilterPublicationState),
+  );
+  const [filterApplicationProfile, setFilterApplicationProfile] = useQueryState(
+    'datasetFilter.applicationProfile',
+    parseAsArrayOf(parseAsString).withDefault(defaultFilterApplicationProfile),
   );
 
   const statusItems =
@@ -46,12 +51,29 @@ const SearchFilter = ({ pageSettings }: SearchFilterProps) => {
     { value: 'UNPUBLISH', label: localization.publicationState.unpublished },
   ];
 
+  const applicationProfileItems = [
+    {
+      value: ApplicationProfile.MOBILITYDCATAP,
+      label: localization.tag.mobilityDcatAp,
+    },
+    {
+      value: ApplicationProfile.DCATAPNO,
+      label: localization.tag.dcatApNo,
+    },
+  ];
+
   const handleStatusOnChange = (names: string[]) => {
     setFilterStatus(names.map((name) => name));
   };
 
   const handlePublicationOnChange = (names: string[]) => {
     setFilterPublicationState(names.map((name) => name as PublishedFilterType));
+  };
+
+  const handleApplicationProfileOnChange = (names: string[]) => {
+    setFilterApplicationProfile(
+      names.map((name) => name as ApplicationProfile),
+    );
   };
 
   const accordionItemContents: AccordionItemProps[] = [
@@ -76,7 +98,7 @@ const SearchFilter = ({ pageSettings }: SearchFilterProps) => {
       content: (
         <>
           <p>
-            {localization.publicationState.descriptionConcept}
+            {localization.publicationState.descriptionDataset}
             <br />
             <br />
           </p>
@@ -86,6 +108,17 @@ const SearchFilter = ({ pageSettings }: SearchFilterProps) => {
             value={filterPublicationState ?? []}
           />
         </>
+      ),
+    },
+    {
+      initiallyOpen: true,
+      header: localization.tag.applicationProfile,
+      content: (
+        <CheckboxGroupFilter
+          items={applicationProfileItems}
+          onChange={handleApplicationProfileOnChange}
+          value={filterApplicationProfile ?? []}
+        />
       ),
     },
   ];

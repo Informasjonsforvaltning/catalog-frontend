@@ -89,6 +89,10 @@ export default class ConceptsPage {
 
   public async goto() {
     await this.page.goto(this.url);
+    // Wait for page to be ready - the search input indicates the page has loaded
+    await this.page
+      .getByRole("searchbox", { name: "Søk" })
+      .waitFor({ state: "visible" });
   }
 
   public async checkAccessibility() {
@@ -318,41 +322,36 @@ export default class ConceptsPage {
 
     console.log("[TEST] Clicking Importer RDF Button...");
 
-    const [fileChooser] = await Promise.all([
-      this.page.waitForEvent("filechooser", { timeout: 20000 }),
-      await importerRdfButton.click({ timeout: 20000 }),
-    ]);
+    // Ensure button is visible and enabled before clicking
+    await expect(importerRdfButton).toBeVisible();
+    await expect(importerRdfButton).toBeEnabled();
 
-    await fileChooser.setFiles(filePath);
+    // Find the hidden file input for RDF upload (accepts .ttl files)
+    // The dialog has two file inputs - one for CSV/JSON and one for RDF
+    const fileInput = dialog.locator('input[type="file"][accept=".ttl"]');
+    await fileInput.setInputFiles(filePath);
 
+    // Wait for modal state to change: import buttons disappear when upload starts
+    // This confirms the file was picked up and processing began
+    await expect(importerRdfButton).toBeHidden();
+
+    // Wait for continue button to be visible and enabled (upload complete)
     dialog = this.page.getByRole("dialog", {});
-
-    await expect(
-      dialog
-        .getByRole("button")
-        .filter({ hasText: `${localization.button.importConceptRDF}` }),
-    ).toBeHidden({ timeout: 5000 });
-    await expect(
-      dialog.getByRole("button", {
-        name: `${localization.importResult.continue}`,
-      }),
-    ).toBeVisible({
-      timeout: 5000,
+    const continueButton = dialog.getByRole("button", {
+      name: `${localization.importResult.continue}`,
     });
-
-    const sendButton = dialog
-      .getByRole("button")
-      .filter({ hasText: `${localization.importResult.continue}` });
-    expect(sendButton).not.toBeDisabled({ timeout: 30000 });
+    await expect(continueButton).toBeVisible();
+    await expect(continueButton).toBeEnabled();
 
     await Promise.all([
-      this.page.waitForURL("**/import-results/**", { timeout: 60_000 }),
-      sendButton.click({ timeout: 10000 }),
+      this.page.waitForURL("**/import-results/**"),
+      continueButton.click(),
     ]);
 
-    await expect(this.page).toHaveURL(/\/import-results\/.+/i, {
-      timeout: 100000,
-    });
+    await expect(this.page).toHaveURL(/\/import-results\/.+/i);
+
+    // Wait for network to be idle after navigation to ensure page is fully loaded
+    await this.page.waitForLoadState("networkidle");
 
     const url = this.page.url();
     console.log("Import result URL: ", url);

@@ -639,14 +639,37 @@ export default class EditPage {
   }
 
   async expectNoRestoreDialog() {
-    await this.page
-      .getByRole("dialog")
-      .waitFor({ state: "hidden", timeout: 5000 });
+    // Wait for form to be interactive (Save button visible means form is ready)
+    await expect(
+      this.page.getByRole("button", { name: "Lagre" }),
+    ).toBeVisible();
+
+    // Now verify no dialog is visible
+    await expect(this.page.getByRole("dialog")).not.toBeVisible();
   }
 
   async waitForAutoSaveToComplete() {
-    // Wait a bit for auto-save to complete
-    await this.page.waitForTimeout(1000);
+    // Wait for localStorage to have the auto-save data
+    await this.page.waitForFunction(
+      () => localStorage.getItem("conceptForm") !== null,
+      { timeout: 5000 },
+    );
+  }
+
+  async waitForAutoSaveToClear() {
+    // Wait for localStorage auto-save data to be cleared (when form matches original)
+    await this.page.waitForFunction(
+      () => localStorage.getItem("conceptForm") === null,
+      { timeout: 5000 },
+    );
+  }
+
+  async waitForRelationAutoSaveToComplete() {
+    // Wait for localStorage to have the relation modal auto-save data
+    await this.page.waitForFunction(
+      () => localStorage.getItem("conceptFormRelation") !== null,
+      { timeout: 5000 },
+    );
   }
 
   // Helper methods for concept form fields

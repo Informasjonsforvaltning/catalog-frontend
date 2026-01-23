@@ -55,47 +55,51 @@ export default class ImportResultDetailsPage {
     this.getElementByText(`${localization.importResult.failed}`);
 
   async goto(importResultId: string) {
-    await this.page.goto(`${this.url}/${importResultId}`);
+    await this.page.goto(`${this.url}/${importResultId}`, {
+      waitUntil: "networkidle",
+    });
   }
 
   async checkVisibleButtons() {
-    await expect(this.getCancelImportButton()).toBeVisible({ timeout: 5000 });
-    await expect(this.getDeleteImportButton()).toBeVisible({ timeout: 5000 });
-    await expect(this.getConfirmButton()).toBeVisible({ timeout: 5000 });
+    await expect(this.getCancelImportButton()).toBeVisible();
+    await expect(this.getDeleteImportButton()).toBeVisible();
+    await expect(this.getConfirmButton()).toBeVisible();
   }
 
   async checkDisabledDeleteButton() {
-    await expect(this.getDeleteImportButton()).toBeDisabled({ timeout: 5000 });
+    await expect(this.getDeleteImportButton()).toBeDisabled();
   }
 
   async checkSuccessfulStatus() {
-    await expect(this.getSuccessfulLabel().first()).toBeVisible({
-      timeout: 20000,
-    });
+    await expect(this.getSuccessfulLabel().first()).toBeVisible();
   }
 
   async checkCancelledStatus() {
-    await expect(this.getCancelledLabel().first()).toBeVisible({
-      timeout: 20000,
-    });
+    await expect(this.getCancelledLabel().first()).toBeVisible();
   }
 
   async checkWaitingForConfirmationStatus() {
-    await expect(this.getWaitingForConfirmationLabel().first()).toBeVisible({
-      timeout: 30000,
-    });
+    await expect(this.getWaitingForConfirmationLabel().first()).toBeVisible();
   }
 
   async checkFailedStatus() {
-    await expect(this.getFailedLabel().first()).toBeVisible({ timeout: 30000 });
+    // Wait for processing to complete first (ongoing label disappears)
+    await expect(this.getOngoingLabel().first()).toBeHidden({ timeout: 30000 });
+    await expect(this.getFailedLabel().first()).toBeVisible();
   }
 
   async confirmImport() {
-    await this.getConfirmButton().click({ timeout: 40000 });
+    const button = this.getConfirmButton();
+    await button.click();
+    // Wait for status to change to "Completed"
+    await expect(this.getSuccessfulLabel().first()).toBeVisible();
   }
 
   async cancelImport() {
-    await this.getCancelImportButton().click({ timeout: 40000 });
+    const button = this.getCancelImportButton();
+    await button.click();
+    // Wait for status to change to "Cancelled"
+    await expect(this.getCancelledLabel().first()).toBeVisible();
   }
 
   async deleteAllImportResults(apiRequestContext: APIRequestContext) {
