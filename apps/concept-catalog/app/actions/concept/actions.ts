@@ -20,7 +20,7 @@ import _ from "lodash";
 import { updateTag } from "next/cache";
 import { conceptJsonPatchOperations } from "@concept-catalog/utils/json-patch";
 
-const clearValues = (object: Concept, path: string) => {
+const clearValues = (object: Concept, path: string): void => {
   const fields = path.split(".");
   const currentField = fields.shift();
 
@@ -67,7 +67,7 @@ const preProcessValues = (
     kontaktpunkt,
     ...conceptValues
   }: Concept,
-) => ({
+): Concept => ({
   ...conceptValues,
   merknad,
   eksempel,
@@ -80,7 +80,7 @@ export async function createConcept(
   values: Concept,
   catalogId: string,
   internalFields: InternalField[],
-) {
+): Promise<string | undefined> {
   const processedValues = preProcessValues(catalogId, values);
   internalFields.forEach((field) => {
     if (
@@ -120,7 +120,10 @@ export async function createConcept(
   return conceptId;
 }
 
-export async function deleteConcept(catalogId: string, conceptId: string) {
+export async function deleteConcept(
+  catalogId: string,
+  conceptId: string,
+): Promise<void> {
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
@@ -148,7 +151,7 @@ export async function updateConcept(
   initialConcept: Concept,
   values: Concept,
   internalFields: InternalField[],
-) {
+): Promise<Concept> {
   if (!initialConcept.id) {
     throw new Error("Concept id cannot be null");
   }
@@ -183,7 +186,7 @@ export async function updateConcept(
   const diff = conceptJsonPatchOperations(initialConcept, values);
 
   if (diff.length === 0) {
-    throw new Error(localization.alert.noChanges);
+    return initialConcept;
   }
 
   const session = await getValidSession();
@@ -219,7 +222,10 @@ export async function updateConcept(
   );
 }
 
-export async function deleteImportResult(catalogId: string, resultId: string) {
+export async function deleteImportResult(
+  catalogId: string,
+  resultId: string,
+): Promise<void> {
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
@@ -249,7 +255,7 @@ export async function saveImportedConcept(
   catalogId: string,
   resultId: string,
   externalId: string,
-) {
+): Promise<void> {
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
@@ -278,7 +284,10 @@ export async function saveImportedConcept(
   updateTag("import-results");
 }
 
-export async function cancelImport(catalogId: string, resultId: string) {
+export async function cancelImport(
+  catalogId: string,
+  resultId: string,
+): Promise<void> {
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();

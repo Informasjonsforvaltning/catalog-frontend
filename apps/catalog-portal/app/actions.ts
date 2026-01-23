@@ -17,37 +17,37 @@ import { getValidSession, redirectToSignIn } from "@catalog-frontend/utils";
 import { Session } from "next-auth";
 import { updateTag } from "next/cache";
 
-export const getDatasetCount = async (catalogId: string) => {
-  const session: Session = await getValidSession();
+export const getDatasetCount = async (catalogId: string): Promise<number> => {
+  const session = await getValidSession();
   if (!session) {
-    redirectToSignIn({ callbackUrl: `/catalogs` });
+    return redirectToSignIn("/catalogs");
   }
 
-  return catalogId ? getDatasetCountByOrg(catalogId, session) : 0;
+  return getDatasetCountByOrg(catalogId, session);
 };
 
 export const getDataServiceCount = async (catalogId: string) => {
-  const session: Session = await getValidSession();
+  const session = await getValidSession();
   if (!session) {
-    redirectToSignIn({ callbackUrl: `/catalogs` });
+    return redirectToSignIn("/catalogs");
   }
 
   return catalogId ? getDataServiceCountByOrg(catalogId, session) : 0;
 };
 
 export const getConceptCount = async (catalogId: string) => {
-  const session: Session = await getValidSession();
+  const session = await getValidSession();
   if (!session) {
-    redirectToSignIn({ callbackUrl: `/catalogs` });
+    return redirectToSignIn("/catalogs");
   }
 
   return catalogId ? getConceptCountByOrg(catalogId, session) : 0;
 };
 
 export const getServiceCount = async (catalogId: string) => {
-  const session: Session = await getValidSession();
+  const session = await getValidSession();
   if (!session) {
-    redirectToSignIn({ callbackUrl: `/catalogs` });
+    return redirectToSignIn("/catalogs");
   }
 
   return catalogId

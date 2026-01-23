@@ -27,7 +27,7 @@ import {
 async function getChangeRequestAsConcept(
   catalogId: string,
   changeRequestId: string,
-) {
+): Promise<Concept> {
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
@@ -81,7 +81,7 @@ async function getChangeRequestAsConcept(
 export async function createChangeRequestAction(
   catalogId: string,
   body: ChangeRequestUpdateBody,
-) {
+): Promise<string> {
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
@@ -112,7 +112,7 @@ export async function updateChangeRequestAction(
   catalogId: string,
   changeRequestId: string,
   body: ChangeRequestUpdateBody,
-) {
+): Promise<Concept> {
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
@@ -141,7 +141,7 @@ export async function updateChangeRequestAction(
 export async function acceptChangeRequestAction(
   catalogId: string,
   changeRequestId: string,
-) {
+): Promise<void> {
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
@@ -168,7 +168,7 @@ export async function acceptChangeRequestAction(
 export async function rejectChangeRequestAction(
   catalogId: string,
   changeRequestId: string,
-) {
+): Promise<void> {
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();

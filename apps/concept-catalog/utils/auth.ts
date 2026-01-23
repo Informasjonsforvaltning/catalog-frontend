@@ -47,14 +47,14 @@ const withProtectedPage = (
 
     const session = await getValidSession();
     if (!session) {
-      return redirectToSignIn({
-        callbackUrl: pagePath({
+      return redirectToSignIn(
+        pagePath({
           catalogId,
           conceptId,
           conceptIdSearch,
           changeRequestId,
         }),
-      });
+      );
     }
 
     const hasReadPermission =
@@ -66,14 +66,14 @@ const withProtectedPage = (
     }
 
     const hasWritePermission =
-      session?.accessToken &&
+      Boolean(session?.accessToken) &&
       hasOrganizationWritePermission(session.accessToken, catalogId);
     if (!hasWritePermission && permissions === "write") {
       redirect(`/catalogs/${catalogId}/no-access`, RedirectType.replace);
     }
 
     const hasAdminPermission =
-      session?.accessToken &&
+      Boolean(session?.accessToken) &&
       hasOrganizationAdminPermission(session.accessToken, catalogId);
     if (!hasAdminPermission && permissions === "admin") {
       redirect(`/catalogs/${catalogId}/no-access`, RedirectType.replace);

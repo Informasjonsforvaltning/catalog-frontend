@@ -35,7 +35,7 @@ const CatalogsPage = async (props: {
 
   const session = await getValidSession();
   if (!session) {
-    redirectToSignIn({ callbackUrl: `/catalogs` });
+    redirectToSignIn("/catalogs");
   }
 
   let organizations: Organization[] = [];

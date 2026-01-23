@@ -20,7 +20,7 @@ import { compare } from "fast-json-patch";
 import { updateTag } from "next/cache";
 import { redirect } from "next/navigation";
 
-export async function getServices(catalogId: string) {
+export async function getServices(catalogId: string): Promise<Service[]> {
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
@@ -36,7 +36,10 @@ export async function getServices(catalogId: string) {
   return jsonResponse;
 }
 
-export async function getServiceById(catalogId: string, serviceId: string) {
+export async function getServiceById(
+  catalogId: string,
+  serviceId: string,
+): Promise<Service> {
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
@@ -60,7 +63,7 @@ export async function getServiceById(catalogId: string, serviceId: string) {
 export async function createService(
   catalogId: string,
   values: ServiceToBeCreated,
-) {
+): Promise<string | undefined> {
   const newService = removeEmptyValues(values);
   const session = await getValidSession();
   if (!session) {
@@ -90,7 +93,10 @@ export async function createService(
   return serviceId;
 }
 
-export async function deleteService(catalogId: string, serviceId: string) {
+export async function deleteService(
+  catalogId: string,
+  serviceId: string,
+): Promise<void> {
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
@@ -120,7 +126,7 @@ export async function updateService(
   catalogId: string,
   oldService: Service,
   values: Service,
-) {
+): Promise<void> {
   const updatedService = removeEmptyValues(values);
 
   const updatedServiceMerged = {
@@ -138,7 +144,7 @@ export async function updateService(
   const diff = compare(oldService, updatedServiceMerged);
 
   if (diff.length === 0) {
-    throw new Error(localization.alert.noChanges);
+    return;
   }
 
   const session = await getValidSession();
@@ -168,7 +174,10 @@ export async function updateService(
   updateTag("services");
 }
 
-export async function publishService(catalogId: string, serviceId: string) {
+export async function publishService(
+  catalogId: string,
+  serviceId: string,
+): Promise<void> {
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
@@ -194,7 +203,10 @@ export async function publishService(catalogId: string, serviceId: string) {
   updateTag("services");
 }
 
-export async function unpublishService(catalogId: string, serviceId: string) {
+export async function unpublishService(
+  catalogId: string,
+  serviceId: string,
+): Promise<void> {
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();

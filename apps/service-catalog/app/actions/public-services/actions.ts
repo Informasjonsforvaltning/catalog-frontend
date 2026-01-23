@@ -20,7 +20,7 @@ import { compare } from "fast-json-patch";
 import { updateTag } from "next/cache";
 import { redirect } from "next/navigation";
 
-export async function getPublicServices(catalogId: string) {
+export async function getPublicServices(catalogId: string): Promise<Service[]> {
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
@@ -38,7 +38,7 @@ export async function getPublicServices(catalogId: string) {
 export async function getPublicServiceById(
   catalogId: string,
   serviceId: string,
-) {
+): Promise<Service> {
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
@@ -62,7 +62,7 @@ export async function getPublicServiceById(
 export async function createPublicService(
   catalogId: string,
   values: ServiceToBeCreated,
-) {
+): Promise<string | undefined> {
   const newPublicService = removeEmptyValues(values);
   const session = await getValidSession();
   if (!session) {
@@ -95,7 +95,7 @@ export async function createPublicService(
 export async function deletePublicService(
   catalogId: string,
   serviceId: string,
-) {
+): Promise<void> {
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
@@ -126,7 +126,7 @@ export async function updatePublicService(
   catalogId: string,
   oldPublicService: Service,
   values: Service,
-) {
+): Promise<void> {
   const updatedService = removeEmptyValues(values);
 
   const updatedPublicServiceMerged = {
@@ -144,7 +144,7 @@ export async function updatePublicService(
   const diff = compare(oldPublicService, updatedPublicServiceMerged);
 
   if (diff.length === 0) {
-    throw new Error(localization.alert.noChanges);
+    return;
   }
 
   const session = await getValidSession();
@@ -176,7 +176,7 @@ export async function updatePublicService(
 export async function publishPublicService(
   catalogId: string,
   serviceId: string,
-) {
+): Promise<void> {
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
@@ -205,7 +205,7 @@ export async function publishPublicService(
 export async function unpublishPublicService(
   catalogId: string,
   serviceId: string,
-) {
+): Promise<void> {
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();

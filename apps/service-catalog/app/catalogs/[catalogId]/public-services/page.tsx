@@ -27,9 +27,7 @@ export default async function PublicServiceSearchHitsPage({
 
   const session = await getValidSession();
   if (!session) {
-    return redirectToSignIn({
-      callbackUrl: `/catalogs/${catalogId}/public-services`,
-    });
+    return redirectToSignIn(`/catalogs/${catalogId}/public-services`);
   }
 
   const services: Service[] = await getPublicServices(catalogId);

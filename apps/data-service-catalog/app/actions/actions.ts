@@ -22,7 +22,9 @@ import omit from "lodash/omit";
 
 const dataServiceMetadataFieldsToOmit = ["modified"];
 
-export async function getDataServices(catalogId: string) {
+export async function getDataServices(
+  catalogId: string,
+): Promise<DataService[]> {
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
@@ -43,7 +45,7 @@ export async function getDataServices(catalogId: string) {
 export async function createDataService(
   catalogId: string,
   values: DataServiceToBeCreated,
-) {
+): Promise<string> {
   console.log(`[createDataService] Starting creation for catalog ${catalogId}`);
   const newDataService = removeEmptyValues({
     ...values,
@@ -84,15 +86,15 @@ export async function createDataService(
     console.log(
       `[createDataService] Successfully created data service with ID: ${dataServiceId}`,
     );
-    console.log(
-      `[createDataService] Revalidating cache tags for data service ${dataServiceId}`,
-    );
   } catch (error) {
     console.error(error);
     throw new Error(
       error instanceof Error ? error.message : localization.alert.createFailed,
     );
   }
+  console.log(
+    `[createDataService] Revalidating cache tags for data service ${dataServiceId}`,
+  );
   updateTag("data-service");
   updateTag("data-services");
   return dataServiceId;
@@ -101,7 +103,7 @@ export async function createDataService(
 export async function deleteDataService(
   catalogId: string,
   dataServiceId: string,
-) {
+): Promise<void> {
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
@@ -130,7 +132,7 @@ export async function updateDataService(
   catalogId: string,
   initialDataService: DataService,
   values: DataService,
-) {
+): Promise<DataService> {
   let updatedDataService: DataService;
   const nextDataService = removeEmptyValues({
     ...values,
@@ -148,7 +150,7 @@ export async function updateDataService(
   );
 
   if (diff.length === 0) {
-    throw new Error(localization.alert.noChanges);
+    return initialDataService;
   }
 
   const session = await getValidSession();
@@ -184,7 +186,7 @@ export async function updateDataService(
 export async function publishDataService(
   catalogId: string,
   dataServiceId: string,
-) {
+): Promise<void> {
   const session = await getValidSession();
   try {
     const response = await publish(
@@ -210,7 +212,7 @@ export async function publishDataService(
 export async function unpublishDataService(
   catalogId: string,
   dataServiceId: string,
-) {
+): Promise<void> {
   const session = await getValidSession();
   try {
     const response = await unpublish(
@@ -235,7 +237,10 @@ export async function unpublishDataService(
   updateTag("data-services");
 }
 
-export async function deleteImportResult(catalogId: string, resultId: string) {
+export async function deleteImportResult(
+  catalogId: string,
+  resultId: string,
+): Promise<void> {
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
