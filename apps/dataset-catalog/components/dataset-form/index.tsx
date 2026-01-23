@@ -263,7 +263,10 @@ export const DatasetForm = ({
           const trimmedValues = trimObjectWhitespace(values);
 
           if (
-            isEqual(trimmedValues, datasetTemplate(initialValues as Dataset))
+            isEqual(
+              datasetTemplate(trimmedValues),
+              datasetTemplate(initialValues as Dataset),
+            )
           ) {
             resetForm();
             return;

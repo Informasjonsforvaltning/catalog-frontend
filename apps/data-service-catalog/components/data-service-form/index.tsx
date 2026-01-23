@@ -201,7 +201,7 @@ const DataServiceForm = ({
 
           if (
             isEqual(
-              trimmedValues,
+              dataServiceTemplate(trimmedValues),
               dataServiceTemplate(initialValues as DataService),
             )
           ) {

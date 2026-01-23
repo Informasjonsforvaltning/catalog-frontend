@@ -291,7 +291,12 @@ const ConceptForm = ({
 
           const trimmedValues = trimObjectWhitespace(values);
 
-          if (isEqual(trimmedValues, mapPropsToValues(initialConcept))) {
+          if (
+            isEqual(
+              mapPropsToValues(trimmedValues),
+              mapPropsToValues(initialConcept),
+            )
+          ) {
             resetForm();
             return;
           }
