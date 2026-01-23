@@ -26,9 +26,9 @@ export const withValidSessionForApi = async (
 };
 
 export const getValidSession = async () => {
-  const session: any = await getServerSession(authOptions);
+  const session = await getServerSession(authOptions);
   const valid = await isValidSessionAndToken(session);
-  return valid ? session : undefined;
+  return valid ? session : null;
 };
 
 export const redirectToSignIn = (
