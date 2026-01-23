@@ -1,4 +1,5 @@
 import {
+  AuthSessionModal,
   NextAuthProvider,
   ReactQueryClientProvider,
 } from "@catalog-frontend/ui";
@@ -16,6 +17,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
     <html lang={localization.getLanguage()}>
       <body>
         <NextAuthProvider>
+          <AuthSessionModal storageKey="dataServiceForm" />
           <NuqsAdapter>
             <ReactQueryClientProvider>{children}</ReactQueryClientProvider>
           </NuqsAdapter>
