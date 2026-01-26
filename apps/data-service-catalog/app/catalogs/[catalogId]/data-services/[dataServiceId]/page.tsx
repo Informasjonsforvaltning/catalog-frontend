@@ -29,9 +29,9 @@ const EditDataServicePage = withReadProtectedPage(
       return redirect(`/notfound`, RedirectType.replace);
     }
     if (!session) {
-      return redirectToSignIn({
-        callbackUrl: `/catalogs/${catalogId}/data-services/${dataServiceId}`,
-      });
+      return redirectToSignIn(
+        `/catalogs/${catalogId}/data-services/${dataServiceId}`,
+      );
     }
 
     // Fetch data service with retry mechanism

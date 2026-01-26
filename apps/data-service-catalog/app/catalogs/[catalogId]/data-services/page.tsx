@@ -20,9 +20,7 @@ const DataServicesSearchHits = withReadProtectedPage(
   ({ catalogId }) => `/catalogs/${catalogId}/data-services`,
   async ({ catalogId, session, hasWritePermission, hasAdminPermission }) => {
     if (!session) {
-      return redirectToSignIn({
-        callbackUrl: `/catalogs/${catalogId}/data-services`,
-      });
+      return redirectToSignIn(`/catalogs/${catalogId}/data-services`);
     }
     const dataServices: DataService[] = await getDataServices(catalogId);
 

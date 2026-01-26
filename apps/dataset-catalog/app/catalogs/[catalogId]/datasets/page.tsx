@@ -21,9 +21,7 @@ const DatasetSearchHitsPage = withReadProtectedPage(
   async ({ catalogId }) => {
     const session = await getValidSession();
     if (!session) {
-      return redirectToSignIn({
-        callbackUrl: `catalogs/${catalogId}/datasets`,
-      });
+      return redirectToSignIn(`/catalogs/${catalogId}/datasets`);
     }
 
     const datasets: Dataset[] = await getDatasets(catalogId);
