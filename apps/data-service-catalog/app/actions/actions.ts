@@ -112,7 +112,7 @@ export async function updateDataService(
   initialDataService: DataService,
   values: DataService,
 ): Promise<DataService> {
-  const nextDataService = removeEmptyValues({
+  const updatedDataService = removeEmptyValues({
     ...values,
     accessRights:
       values?.accessRights === "none" ? undefined : values?.accessRights,
@@ -124,7 +124,7 @@ export async function updateDataService(
 
   const diff = compare(
     omit(initialDataService, dataServiceMetadataFieldsToOmit),
-    omit(nextDataService, dataServiceMetadataFieldsToOmit),
+    omit(updatedDataService, dataServiceMetadataFieldsToOmit),
   );
 
   if (diff.length === 0) {
