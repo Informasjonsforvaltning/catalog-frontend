@@ -34,7 +34,7 @@ const EditDatasetPage = withWriteProtectedPage(
     const referenceDataEnv = process.env.FDK_BASE_URI ?? "";
 
     if (!datasetId || !validUUID(datasetId)) {
-      return redirect(`/catalogs/notfound`, RedirectType.replace);
+      return redirect("/catalogs/notfound", RedirectType.replace);
     }
     const dataset = await getDatasetById(catalogId, datasetId);
 

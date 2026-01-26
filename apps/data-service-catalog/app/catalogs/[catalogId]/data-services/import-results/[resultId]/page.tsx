@@ -14,7 +14,7 @@ const ImportResultDetailsPage = withAdminProtectedPage(
     `/catalogs/${catalogId}/data-services/import-results/${resultId}`,
   async ({ catalogId, resultId, session }) => {
     if (!resultId || !validDataServiceID(resultId)) {
-      return redirect(`/notfound`, RedirectType.replace);
+      return redirect("/notfound", RedirectType.replace);
     }
     const importResult = await getDataServiceImportResultById(
       catalogId,
@@ -24,7 +24,7 @@ const ImportResultDetailsPage = withAdminProtectedPage(
       if (response.ok) return response.json();
     });
     if (!importResult || importResult.catalogId !== catalogId) {
-      redirect(`/not-found`, RedirectType.replace);
+      redirect("/not-found", RedirectType.replace);
     }
 
     const breadcrumbList = [

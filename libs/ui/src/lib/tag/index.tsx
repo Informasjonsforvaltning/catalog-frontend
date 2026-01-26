@@ -35,8 +35,8 @@ const Tag: TagComponent = {
   DataServiceStatus: TagDataServiceStatus,
 };
 
-Tag.ConceptStatus.displayName = `Tag.ConceptStatus`;
-Tag.ChangeRequestStatus.displayName = `Tag.ChangeRequestStatus`;
+Tag.ConceptStatus.displayName = "Tag.ConceptStatus";
+Tag.ChangeRequestStatus.displayName = "Tag.ChangeRequestStatus";
 Tag.ServiceStatus.displayName = "Tag.ServiceStatus";
 Tag.ImportResultStatus.displayName = "Tag.ImportResultStatus";
 Tag.DataServiceStatus.displayName = "Tag.DataServiceStatus";

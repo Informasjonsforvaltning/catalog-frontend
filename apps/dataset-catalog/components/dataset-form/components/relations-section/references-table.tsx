@@ -115,7 +115,7 @@ export const ReferenceTable = ({
       </TitleWithHelpTextAndTag>
       {values?.references && compact(values?.references).length > 0 && (
         <div
-          className={get(errors, `references`) ? styles.errorBorder : undefined}
+          className={get(errors, "references") ? styles.errorBorder : undefined}
         >
           <Table size="sm" className={styles.table}>
             <Table.Head>
@@ -325,7 +325,7 @@ const FieldModal = ({
                     >
                       <Combobox
                         onValueChange={(value) =>
-                          setFieldValue(`referenceType`, value.toString())
+                          setFieldValue("referenceType", value.toString())
                         }
                         value={
                           values.referenceType ? [values.referenceType] : []
@@ -361,7 +361,7 @@ const FieldModal = ({
                         }
                         onValueChange={(value) => {
                           setSelectedUri(value.toString());
-                          setFieldValue(`source`, value.toString());
+                          setFieldValue("source", value.toString());
                         }}
                         loading={searching}
                         value={

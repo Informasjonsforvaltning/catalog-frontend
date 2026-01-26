@@ -402,7 +402,7 @@ runTestAsAdmin(
         },
       },
       ansvarligVirksomhet: {
-        id: `Ansvarligvirksomhet`,
+        id: "Ansvarligvirksomhet",
       },
       definisjon: {
         tekst: {

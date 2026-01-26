@@ -10,7 +10,7 @@ import { Heading } from "@digdir/designsystemet-react";
 const NoAccess = () => {
   const breadcrumbList = [
     {
-      href: `#`,
+      href: "#",
       text: localization.noAccess,
     },
   ] as BreadcrumbType[];

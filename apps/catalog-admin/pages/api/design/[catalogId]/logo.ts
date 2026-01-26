@@ -6,7 +6,7 @@ import { getServerSession } from "next-auth";
 
 export const config = {
   api: {
-    // Enable `externalResolver` option in Next.js
+    // Enable "externalResolver" option in Next.js
     externalResolver: true,
     bodyParser: false,
   },

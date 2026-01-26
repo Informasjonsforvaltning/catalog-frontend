@@ -48,7 +48,7 @@ export const TemporalModal = ({ label }: Props) => {
         name={"temporal"}
         render={(arrayHelpers) => (
           <div
-            className={get(errors, `temporal`) ? styles.errorBorder : undefined}
+            className={get(errors, "temporal") ? styles.errorBorder : undefined}
           >
             {values?.temporal && values?.temporal?.length > 0 && (
               <Table size="sm" className={styles.table}>
@@ -180,7 +180,7 @@ const FieldModal = ({
                       size="sm"
                       label={localization.from}
                       type="date"
-                      name={`startDate`}
+                      name={"startDate"}
                       error={errors.startDate}
                     />
 
@@ -191,7 +191,7 @@ const FieldModal = ({
                       size="sm"
                       label={localization.to}
                       type="date"
-                      name={`endDate`}
+                      name={"endDate"}
                       error={errors.endDate}
                       min={values.startDate}
                     />

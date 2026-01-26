@@ -305,7 +305,7 @@ const FIELD_CONFIG = [
                 props.setFocus(
                   arrayHelpers.form.values.landingPage
                     ? `landingPage[${arrayHelpers.form.values.landingPage.length}]`
-                    : `landingPage[0]`,
+                    : "landingPage[0]",
                 );
               }}
             >

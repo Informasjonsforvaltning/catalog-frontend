@@ -279,7 +279,7 @@ export const DistributionModal = ({
                   props.setFocus(
                     arrayHelpers.form.values.downloadURL
                       ? `downloadURL[${arrayHelpers.form.values.downloadURL.length}]`
-                      : `downloadURL[0]`,
+                      : "downloadURL[0]",
                   );
                 }}
               >
@@ -338,7 +338,7 @@ export const DistributionModal = ({
                 size="sm"
                 virtual
                 ref={(el: HTMLInputElement | null) =>
-                  setInputRef(`accessServices`, el)
+                  setInputRef("accessServices", el)
                 }
               >
                 {selectedAndSearchedAccessServices.map(
@@ -427,7 +427,7 @@ export const DistributionModal = ({
                 showCodeAsDescription={true}
                 hideClearButton={false}
                 ref={(el: HTMLInputElement | null) =>
-                  setInputRef(`mediaType`, el)
+                  setInputRef("mediaType", el)
                 }
               />
             </FieldsetWithDelete>
@@ -484,7 +484,7 @@ export const DistributionModal = ({
                   props.setFocus(
                     arrayHelpers.form.values.page
                       ? `page[${arrayHelpers.form.values.page.length}]`
-                      : `page[0]`,
+                      : "page[0]",
                   );
                 }}
               >
@@ -536,7 +536,7 @@ export const DistributionModal = ({
                           name={`conformsTo[${i}].prefLabel`}
                           ref={(
                             el: HTMLInputElement | HTMLTextAreaElement | null,
-                          ) => setInputRef(`conformsTo`, el)}
+                          ) => setInputRef("conformsTo", el)}
                         />
                       </div>
                       <FastField
@@ -555,7 +555,7 @@ export const DistributionModal = ({
                 <AddButton
                   onClick={() => {
                     push({ prefLabel: { nb: "", nn: "" }, uri: "" });
-                    setFocus(`conformsTo`);
+                    setFocus("conformsTo");
                   }}
                 >
                   {localization.datasetForm.button.addStandard}
@@ -823,7 +823,7 @@ export const DistributionModal = ({
                                 setFocus(
                                   arrayHelpers.form.values.accessURL
                                     ? `accessURL[${arrayHelpers.form.values.accessURL.length}]`
-                                    : `accessURL[0]`,
+                                    : "accessURL[0]",
                                 );
                               }}
                             >
@@ -870,7 +870,7 @@ export const DistributionModal = ({
                               error={errors.mobilityDataStandard}
                             >
                               <Combobox.Option
-                                key={`mobilityDataStandard`}
+                                key={"mobilityDataStandard"}
                                 value={""}
                               >
                                 {localization.none}
@@ -929,7 +929,7 @@ export const DistributionModal = ({
                               virtual
                               error={errors?.rights?.type}
                             >
-                              <Combobox.Option key={`right.type`} value={""}>
+                              <Combobox.Option key={"right.type"} value={""}>
                                 {localization.none}
                               </Combobox.Option>
                               {mobilityRights &&
@@ -991,7 +991,7 @@ export const DistributionModal = ({
                             portal={false}
                             hideClearButton={false}
                             ref={(el: HTMLInputElement | null) =>
-                              setInputRef(`format`, el)
+                              setInputRef("format", el)
                             }
                             error={errors.format}
                           />
@@ -1028,7 +1028,7 @@ export const DistributionModal = ({
                               size="sm"
                               virtual
                             >
-                              <Combobox.Option key={`license-none`} value={""}>
+                              <Combobox.Option key={"license-none"} value={""}>
                                 {localization.none}
                               </Combobox.Option>
                               {openLicenses &&

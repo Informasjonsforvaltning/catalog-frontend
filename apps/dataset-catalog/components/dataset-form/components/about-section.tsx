@@ -130,7 +130,7 @@ export const AboutSection = ({
               virtual
               error={errors.frequency}
             >
-              <Combobox.Option key={`frequency`} value={""}>
+              <Combobox.Option key={"frequency"} value={""}>
                 {localization.none}
               </Combobox.Option>
               {frequencies &&

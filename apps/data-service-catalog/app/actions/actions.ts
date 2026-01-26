@@ -175,7 +175,7 @@ export async function updateDataService(
     return updatedDataService;
   } catch (error) {
     console.error(`${localization.alert.fail} ${error}`);
-    throw new Error(`Noe gikk galt, prøv igjen...`);
+    throw new Error("Noe gikk galt, prøv igjen...");
   } finally {
     if (success) {
       updateTag("data-service");

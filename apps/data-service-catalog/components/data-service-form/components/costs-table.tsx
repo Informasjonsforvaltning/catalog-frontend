@@ -159,7 +159,7 @@ export const CostsTable = ({ currencies }: Props) => {
             setFieldValue(
               values.costs && values?.costs.length > 0
                 ? `costs[${values?.costs?.length}]`
-                : `costs[0]`,
+                : "costs[0]",
               formValues,
             )
           }

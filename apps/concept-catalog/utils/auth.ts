@@ -36,12 +36,12 @@ const withProtectedPage = (
     const { concept: conceptIdSearch } = await searchParams;
 
     if (!validOrganizationNumber(catalogId)) {
-      redirect(`/notfound`, RedirectType.replace);
+      redirect("/notfound", RedirectType.replace);
     }
 
     [conceptId, conceptIdSearch, changeRequestId].forEach((param) => {
       if (params[param] && !validUUID(params[param])) {
-        return redirect(`/notfound`, RedirectType.replace);
+        return redirect("/notfound", RedirectType.replace);
       }
     });
 
