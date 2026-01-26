@@ -6,12 +6,12 @@ describe("SearchHit", () => {
   it("should render SearchHit successfully", () => {
     const { baseElement } = render(
       <SearchHit
-        title={"Search hit title"}
-        description={"Search hit description"}
-        content={"Search hit content"}
-        statusTag={"Search hit status tag"}
-        titleHref={"Search hit title href"}
-        labels={"Search hit labels"}
+        title="Search hit title"
+        description="Search hit description"
+        content="Search hit content"
+        statusTag="Search hit status tag"
+        titleHref="Search hit title href"
+        labels="Search hit labels"
       />,
     );
     expect(baseElement).toBeTruthy();
@@ -19,7 +19,7 @@ describe("SearchHit", () => {
   });
 
   it("should render SearchHit with empty title successfully", () => {
-    const { baseElement } = render(<SearchHit title={""} />);
+    const { baseElement } = render(<SearchHit title="" />);
     expect(baseElement).toBeTruthy();
     expect(baseElement).toMatchSnapshot();
   });

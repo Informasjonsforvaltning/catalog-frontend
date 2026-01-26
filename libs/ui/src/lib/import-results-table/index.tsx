@@ -89,7 +89,7 @@ const ImportResultsTable = ({
             <div className={styles.titleTags}>
               {localization.importResult.tableHeading.status}
               {showStatusHelpText && (
-                <HelpMarkdown aria-label={"Help Status"}>
+                <HelpMarkdown aria-label="Help Status">
                   {
                     localization.importResult.tableHeading
                       .statusHelpTextConceptImport

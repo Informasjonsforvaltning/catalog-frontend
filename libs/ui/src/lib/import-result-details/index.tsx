@@ -272,7 +272,7 @@ const ImportResultDetails = ({
           </div>
           <div className={styles.titleTags}>
             <Tag
-              size={"sm"}
+              size="sm"
               color={getColorFromStatusKey(importResult.status as StatusKey)}
             >
               <div className={styles.titleTags}>
@@ -400,7 +400,7 @@ const ImportResultDetails = ({
 
                     <Table.Cell style={{ width: "10%" }}>
                       <Tag
-                        size={"sm"}
+                        size="sm"
                         color={getColorFromStatusKey(
                           conceptExtraction.conceptExtractionStatus as StatusKey,
                         )}

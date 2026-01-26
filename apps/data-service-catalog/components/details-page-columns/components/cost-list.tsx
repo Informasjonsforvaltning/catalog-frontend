@@ -14,7 +14,7 @@ export const CostList = ({ costs, language }: Props) => {
       {costs?.map((cost, i) => (
         <Card key={`costs-card-${i}`} color="neutral">
           <Card.Content>
-            <List.Root size={"sm"}>
+            <List.Root size="sm">
               <List.Unordered
                 style={{
                   listStyle: "none",
@@ -36,7 +36,7 @@ export const CostList = ({ costs, language }: Props) => {
                 ))}
               </List.Unordered>
             </List.Root>
-            <Paragraph size={"sm"}>
+            <Paragraph size="sm">
               {getTranslateText(cost.description, language)}
             </Paragraph>
           </Card.Content>

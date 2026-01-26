@@ -59,7 +59,7 @@ const FIELD_CONFIG = [
           }
         >
           <Combobox.Option
-            value={""}
+            value=""
           >{`${localization.choose}...`}</Combobox.Option>
           {props.datasetTypeOptions}
         </FastFieldWithRef>
@@ -324,7 +324,7 @@ const FIELD_CONFIG = [
     getValue: (values: Dataset) => values?.conformsTo,
     render: (props: any) => (
       <UriWithLabelFieldsetTable
-        fieldName={"conformsTo"}
+        fieldName="conformsTo"
         errors={props.errors.conformsTo}
         hideHeadWhenEmpty={true}
         showDivider={props.showDivider}

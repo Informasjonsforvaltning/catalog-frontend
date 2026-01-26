@@ -302,7 +302,7 @@ const DataServicesPageClient = ({
                           <StatusTag
                             dataServiceStatus={dataService?.status}
                             distributionStatuses={distributionStatuses}
-                            language={"nb"}
+                            language="nb"
                           />
                         }
                         content={

@@ -150,7 +150,7 @@ export const ReferenceTable = ({
                         <FieldModal
                           searchEnv={searchEnv}
                           template={ref}
-                          type={"edit"}
+                          type="edit"
                           onSuccess={(updatedItem: Reference) => {
                             handleReferenceSuccess(updatedItem, index);
                           }}
@@ -180,7 +180,7 @@ export const ReferenceTable = ({
         <FieldModal
           searchEnv={searchEnv}
           template={{ source: "", referenceType: "" }}
-          type={"new"}
+          type="new"
           onSuccess={(updatedItem: Reference) => {
             const newIndex = values.references?.length ?? 0;
             setFieldValue(`references[${newIndex}]`, updatedItem);

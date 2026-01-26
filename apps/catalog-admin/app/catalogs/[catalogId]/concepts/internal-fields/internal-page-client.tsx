@@ -51,7 +51,7 @@ export const InternalFieldsPageClient = ({
         <div className="accordionStructure">
           {showInternalFieldEditor && (
             <Accordion
-              key={"create-editor"}
+              key="create-editor"
               border={true}
               className="accordionWidth"
             >

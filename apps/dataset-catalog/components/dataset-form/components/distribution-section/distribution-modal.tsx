@@ -870,8 +870,8 @@ export const DistributionModal = ({
                               error={errors.mobilityDataStandard}
                             >
                               <Combobox.Option
-                                key={"mobilityDataStandard"}
-                                value={""}
+                                key="mobilityDataStandard"
+                                value=""
                               >
                                 {localization.none}
                               </Combobox.Option>
@@ -929,7 +929,7 @@ export const DistributionModal = ({
                               virtual
                               error={errors?.rights?.type}
                             >
-                              <Combobox.Option key={"right.type"} value={""}>
+                              <Combobox.Option key="right.type" value="">
                                 {localization.none}
                               </Combobox.Option>
                               {mobilityRights &&
@@ -1028,7 +1028,7 @@ export const DistributionModal = ({
                               size="sm"
                               virtual
                             >
-                              <Combobox.Option key={"license-none"} value={""}>
+                              <Combobox.Option key="license-none" value="">
                                 {localization.none}
                               </Combobox.Option>
                               {openLicenses &&

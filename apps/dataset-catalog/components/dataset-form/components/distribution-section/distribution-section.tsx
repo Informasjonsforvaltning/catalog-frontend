@@ -407,7 +407,7 @@ export const DistributionSection = ({
                     />
                   )}
                   {get(errors, "distribution[" + index + "]") && (
-                    <ErrorMessage size={"sm"}>
+                    <ErrorMessage size="sm">
                       {localization.validation.multipleInvalidValues}
                     </ErrorMessage>
                   )}
@@ -605,7 +605,7 @@ export const DistributionSection = ({
                       />
                     )}
                     {get(errors, "sample[" + index + "]") && (
-                      <ErrorMessage size={"sm"}>
+                      <ErrorMessage size="sm">
                         Inneholder en eller flere ugyldige verdier
                       </ErrorMessage>
                     )}

@@ -6,7 +6,7 @@ import { TitleWithTag } from "./index";
 describe("TitleWithTag", () => {
   it("should render successfully", () => {
     const { baseElement } = render(
-      <TitleWithTag title={"Title"} tagTitle={"Tag title"} />,
+      <TitleWithTag title="Title" tagTitle="Tag title" />,
     );
     expect(baseElement).toBeTruthy();
   });

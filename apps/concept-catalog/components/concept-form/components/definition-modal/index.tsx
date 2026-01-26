@@ -87,7 +87,7 @@ export const DefinitionModal = ({
                     }
                   />
                   <FieldsetDivider />
-                  <SourceDescriptionFieldset name={"kildebeskrivelse"} />
+                  <SourceDescriptionFieldset name="kildebeskrivelse" />
                 </Modal.Content>
                 <Modal.Footer>
                   <Button
