@@ -281,11 +281,7 @@ export const nb = {
     success: "Oppdatering vellykket!",
     unsavedChanges:
       "Du har ulagrede endringer. Er du sikker på at du vil forlate siden?",
-    createFailed: "Oppretting mislyktes. Prøv igjen senere.",
-    updateFailed: "Oppdatering mislyktes. Prøv igjen senere.",
     deleteFailed: "Kunne ikke slette. Prøv igjen senere.",
-    publishFailed: "Publisering mislyktes. Prøv igjen senere.",
-    unpublishFailed: "Avpublisering mislyktes. Prøv igjen senere.",
     formUnsavedChanges: "Skjemaet har ulagrede endringer.",
     youHaveUnsavedChanges: "Det finnes endringer som ikke har blitt lagret:",
     wantToRestoreChanges: "Vil du gjenopprette?",

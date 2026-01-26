@@ -10,7 +10,6 @@ import {
 import { Dataset, DatasetToBeCreated } from "@catalog-frontend/types";
 import {
   getValidSession,
-  localization,
   redirectToSignIn,
   removeEmptyValues,
 } from "@catalog-frontend/utils";
@@ -64,28 +63,19 @@ export async function createDataset(
   if (!session) {
     return redirectToSignIn();
   }
-  let datasetId: undefined | string = undefined;
-  try {
-    const response = await postDataset(
-      datasetNoEmptyValues,
-      catalogId,
-      `${session?.accessToken}`,
-    );
-    if (response.status !== 201) {
-      throw new Error(
-        `API responded with status ${response.status} for createDataset`,
-      );
-    }
-
-    datasetId = response?.headers?.get("location")?.split("/").pop();
-  } catch (error) {
-    console.error(error);
+  const response = await postDataset(
+    datasetNoEmptyValues,
+    catalogId,
+    `${session?.accessToken}`,
+  );
+  if (response.status !== 201) {
     throw new Error(
-      error instanceof Error ? error.message : localization.alert.createFailed,
+      `API responded with status ${response.status} for createDataset`,
     );
   }
   updateTag("dataset");
   updateTag("datasets");
+  const datasetId = response?.headers?.get("location")?.split("/").pop();
   return datasetId;
 }
 
@@ -97,21 +87,14 @@ export async function deleteDataset(
   if (!session) {
     return redirectToSignIn();
   }
-  try {
-    const response = await removeDataset(
-      catalogId,
-      datasetId,
-      `${session?.accessToken}`,
-    );
-    if (response.status !== 200) {
-      throw new Error(
-        `API responded with status ${response.status} for deleteDataset`,
-      );
-    }
-  } catch (error) {
-    console.error(error);
+  const response = await removeDataset(
+    catalogId,
+    datasetId,
+    `${session?.accessToken}`,
+  );
+  if (response.status !== 200) {
     throw new Error(
-      error instanceof Error ? error.message : localization.alert.deleteFailed,
+      `API responded with status ${response.status} for deleteDataset`,
     );
   }
   updateTag("datasets");
@@ -135,24 +118,18 @@ export async function updateDataset(
     return redirectToSignIn();
   }
 
-  try {
-    const response = await update(
-      catalogId,
-      initialDataset.id,
-      diff,
-      `${session?.accessToken}`,
-    );
-    if (response.status !== 200) {
-      throw new Error(
-        `API responded with status ${response.status} for updateDataset`,
-      );
-    }
-  } catch (error) {
-    console.error(error);
+  const response = await update(
+    catalogId,
+    initialDataset.id,
+    diff,
+    `${session?.accessToken}`,
+  );
+  if (response.status !== 200) {
     throw new Error(
-      error instanceof Error ? error.message : localization.alert.updateFailed,
+      `API responded with status ${response.status} for updateDataset`,
     );
   }
+
   updateTag("dataset");
   updateTag("datasets");
 }
@@ -173,22 +150,15 @@ export async function publishDataset(
     return redirectToSignIn();
   }
 
-  try {
-    const response = await update(
-      catalogId,
-      initialDataset.id,
-      diff,
-      `${session?.accessToken}`,
-    );
-    if (response.status !== 200) {
-      throw new Error(
-        `API responded with status ${response.status} for publishDataset`,
-      );
-    }
-  } catch (error) {
-    console.error(error);
+  const response = await update(
+    catalogId,
+    initialDataset.id,
+    diff,
+    `${session?.accessToken}`,
+  );
+  if (response.status !== 200) {
     throw new Error(
-      error instanceof Error ? error.message : localization.alert.publishFailed,
+      `API responded with status ${response.status} for publishDataset`,
     );
   }
 

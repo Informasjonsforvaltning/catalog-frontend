@@ -68,27 +68,19 @@ export async function createPublicService(
   if (!session) {
     return redirectToSignIn();
   }
-  let serviceId = undefined;
-  try {
-    const response = await create(
-      newPublicService,
-      catalogId,
-      `${session?.accessToken}`,
-    );
-    if (response.status !== 201) {
-      throw new Error(
-        `API responded with status ${response.status} for createPublicService`,
-      );
-    }
-    serviceId = response?.headers?.get("location")?.split("/").pop();
-  } catch (error) {
-    console.error(error);
+  const response = await create(
+    newPublicService,
+    catalogId,
+    `${session?.accessToken}`,
+  );
+  if (response.status !== 201) {
     throw new Error(
-      error instanceof Error ? error.message : localization.alert.createFailed,
+      `API responded with status ${response.status} for createPublicService`,
     );
   }
   updateTag("public-service");
   updateTag("public-services");
+  const serviceId = response?.headers?.get("location")?.split("/").pop();
   return serviceId;
 }
 
@@ -100,21 +92,14 @@ export async function deletePublicService(
   if (!session) {
     return redirectToSignIn();
   }
-  try {
-    const response = await deletePS(
-      catalogId,
-      serviceId,
-      `${session?.accessToken}`,
-    );
-    if (response.status !== 204) {
-      throw new Error(
-        `API responded with status ${response.status} for deletePublicService`,
-      );
-    }
-  } catch (error) {
-    console.error(error);
+  const response = await deletePS(
+    catalogId,
+    serviceId,
+    `${session?.accessToken}`,
+  );
+  if (response.status !== 204) {
     throw new Error(
-      error instanceof Error ? error.message : localization.alert.deleteFailed,
+      `API responded with status ${response.status} for deletePublicService`,
     );
   }
 
@@ -151,22 +136,15 @@ export async function updatePublicService(
   if (!session) {
     return redirectToSignIn();
   }
-  try {
-    const response = await update(
-      catalogId,
-      oldPublicService.id,
-      diff,
-      `${session?.accessToken}`,
-    );
-    if (response.status !== 200) {
-      throw new Error(
-        `API responded with status ${response.status} for updatePublicService`,
-      );
-    }
-  } catch (error) {
-    console.error(error);
+  const response = await update(
+    catalogId,
+    oldPublicService.id,
+    diff,
+    `${session?.accessToken}`,
+  );
+  if (response.status !== 200) {
     throw new Error(
-      error instanceof Error ? error.message : localization.alert.updateFailed,
+      `API responded with status ${response.status} for updatePublicService`,
     );
   }
   updateTag("public-service");
@@ -181,21 +159,14 @@ export async function publishPublicService(
   if (!session) {
     return redirectToSignIn();
   }
-  try {
-    const response = await publish(
-      catalogId,
-      serviceId,
-      `${session?.accessToken}`,
-    );
-    if (response.status !== 200) {
-      throw new Error(
-        `API responded with status ${response.status} for publishPublicService`,
-      );
-    }
-  } catch (error) {
-    console.error(error);
+  const response = await publish(
+    catalogId,
+    serviceId,
+    `${session?.accessToken}`,
+  );
+  if (response.status !== 200) {
     throw new Error(
-      error instanceof Error ? error.message : localization.alert.publishFailed,
+      `API responded with status ${response.status} for publishPublicService`,
     );
   }
   updateTag("public-service");
@@ -210,23 +181,14 @@ export async function unpublishPublicService(
   if (!session) {
     return redirectToSignIn();
   }
-  try {
-    const response = await unpublish(
-      catalogId,
-      serviceId,
-      `${session?.accessToken}`,
-    );
-    if (response.status !== 200) {
-      throw new Error(
-        `API responded with status ${response.status} for unpublishPublicService`,
-      );
-    }
-  } catch (error) {
-    console.error(error);
+  const response = await unpublish(
+    catalogId,
+    serviceId,
+    `${session?.accessToken}`,
+  );
+  if (response.status !== 200) {
     throw new Error(
-      error instanceof Error
-        ? error.message
-        : localization.alert.unpublishFailed,
+      `API responded with status ${response.status} for unpublishPublicService`,
     );
   }
   updateTag("public-service");

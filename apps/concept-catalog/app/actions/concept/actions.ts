@@ -12,7 +12,6 @@ import {
 import { Concept, InternalField } from "@catalog-frontend/types";
 import {
   getValidSession,
-  localization,
   redirectToSignIn,
   removeEmptyValues,
 } from "@catalog-frontend/utils";
@@ -97,51 +96,30 @@ export async function createConcept(
   if (!session) {
     return redirectToSignIn();
   }
-  let conceptId: string | undefined = undefined;
-  try {
-    const response = await createConceptApi(
-      processedValues,
-      `${session?.accessToken}`,
-    );
-    if (response.status !== 201) {
-      throw new Error(
-        `API responded with status ${response.status} for createConcept`,
-      );
-    }
-    conceptId = response?.headers?.get("location")?.split("/").pop();
-  } catch (error) {
-    console.error(error);
+  const response = await createConceptApi(
+    processedValues,
+    `${session?.accessToken}`,
+  );
+  if (response.status !== 201) {
     throw new Error(
-      error instanceof Error ? error.message : localization.alert.createFailed,
+      `API responded with status ${response.status} for createConcept`,
     );
   }
   updateTag("concept");
   updateTag("concepts");
+  const conceptId = response?.headers?.get("location")?.split("/").pop();
   return conceptId;
 }
 
-export async function deleteConcept(
-  catalogId: string,
-  conceptId: string,
-): Promise<void> {
+export async function deleteConcept(conceptId: string): Promise<void> {
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
   }
-  try {
-    const response = await deleteConceptApi(
-      conceptId,
-      `${session?.accessToken}`,
-    );
-    if (response.status !== 200) {
-      throw new Error(
-        `API responded with status ${response.status} for deleteConcept`,
-      );
-    }
-  } catch (error) {
-    console.error(error);
+  const response = await deleteConceptApi(conceptId, `${session?.accessToken}`);
+  if (response.status !== 200) {
     throw new Error(
-      error instanceof Error ? error.message : localization.alert.deleteFailed,
+      `API responded with status ${response.status} for deleteConcept`,
     );
   }
   updateTag("concepts");
@@ -194,26 +172,19 @@ export async function updateConcept(
     return redirectToSignIn();
   }
 
-  try {
-    const response = await patchConceptApi(
-      initialConcept.id,
-      diff,
-      `${session?.accessToken}`,
-    );
-    if (response.status !== 200 && response.status !== 201) {
-      throw new Error(
-        `API responded with status ${response.status} for patchConcept`,
-      );
-    }
-
-    if (response.status === 201) {
-      conceptId = response?.headers?.get("location")?.split("/").pop();
-    }
-  } catch (error) {
-    console.error(error);
+  const response = await patchConceptApi(
+    initialConcept.id,
+    diff,
+    `${session?.accessToken}`,
+  );
+  if (response.status !== 200 && response.status !== 201) {
     throw new Error(
-      error instanceof Error ? error.message : localization.alert.updateFailed,
+      `API responded with status ${response.status} for patchConcept`,
     );
+  }
+
+  if (response.status === 201) {
+    conceptId = response?.headers?.get("location")?.split("/").pop();
   }
   updateTag("concept");
   updateTag("concepts");
@@ -230,21 +201,14 @@ export async function deleteImportResult(
   if (!session) {
     return redirectToSignIn();
   }
-  try {
-    const response = await removeImportResult(
-      catalogId,
-      resultId,
-      `${session?.accessToken}`,
-    );
-    if (response.status !== 204) {
-      throw new Error(
-        `API responded with status ${response.status} for deleteImportResult`,
-      );
-    }
-  } catch (error) {
-    console.error(error);
+  const response = await removeImportResult(
+    catalogId,
+    resultId,
+    `${session?.accessToken}`,
+  );
+  if (response.status !== 204) {
     throw new Error(
-      error instanceof Error ? error.message : localization.alert.deleteFailed,
+      `API responded with status ${response.status} for deleteImportResult`,
     );
   }
   updateTag("import-results");
@@ -260,26 +224,19 @@ export async function saveImportedConcept(
   if (!session) {
     return redirectToSignIn();
   }
-  try {
-    const response = await confirmImportedConcept(
-      catalogId,
-      resultId,
-      externalId,
-      `${session?.accessToken}`,
-    );
+  const response = await confirmImportedConcept(
+    catalogId,
+    resultId,
+    externalId,
+    `${session?.accessToken}`,
+  );
 
-    if (response.status !== 200 && response.status !== 201) {
-      throw new Error(
-        `API responded with status ${response.status} for confirmImportedConcept`,
-      );
-    }
-    console.log("Confirmed import result", catalogId, resultId);
-  } catch (error) {
-    console.error(error);
+  if (response.status !== 200 && response.status !== 201) {
     throw new Error(
-      error instanceof Error ? error.message : localization.alert.fail,
+      `API responded with status ${response.status} for confirmImportedConcept`,
     );
   }
+  console.log("Confirmed import result", catalogId, resultId);
   updateTag("import-result");
   updateTag("import-results");
 }
@@ -292,26 +249,19 @@ export async function cancelImport(
   if (!session) {
     return redirectToSignIn();
   }
-  try {
-    console.log("Sending import cancellation", catalogId, resultId);
+  console.log("Sending import cancellation", catalogId, resultId);
 
-    const response = await cancelConceptImport(
-      catalogId,
-      resultId,
-      `${session?.accessToken}`,
-    );
+  const response = await cancelConceptImport(
+    catalogId,
+    resultId,
+    `${session?.accessToken}`,
+  );
 
-    console.log("Import cancellation has been sent", catalogId, resultId);
+  console.log("Import cancellation has been sent", catalogId, resultId);
 
-    if (response.status !== 200 && response.status !== 201) {
-      throw new Error(
-        `API responded with status ${response.status} for cancelConceptImport`,
-      );
-    }
-  } catch (error) {
-    console.error(error);
+  if (response.status !== 200 && response.status !== 201) {
     throw new Error(
-      error instanceof Error ? error.message : localization.alert.fail,
+      `API responded with status ${response.status} for cancelConceptImport`,
     );
   }
   updateTag("import-result");
