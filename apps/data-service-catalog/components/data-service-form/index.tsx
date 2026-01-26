@@ -197,11 +197,21 @@ const DataServiceForm = ({
             return;
           }
 
+          const trimmedValues = trimObjectWhitespace(values);
+
+          if (
+            isEqual(
+              dataServiceTemplate(trimmedValues),
+              dataServiceTemplate(initialValues as DataService),
+            )
+          ) {
+            resetForm();
+            return;
+          }
+
           if (onSubmit) {
             try {
-              const newValues = await onSubmit(
-                trimObjectWhitespace(values) as DataService,
-              );
+              const newValues = await onSubmit(trimmedValues);
 
               showSnackbarMessage({
                 message: localization.snackbar.saveSuccessful,
@@ -238,6 +248,7 @@ const DataServiceForm = ({
           isValidating,
           submitForm,
           setValues,
+
           values,
           initialValues: formInitialValues,
         }) => {
