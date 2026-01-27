@@ -59,6 +59,18 @@ export const withValidSessionForApi = async (
   console.log("[AUTH DEBUG] withValidSessionForApi: called");
   const session: any = await getServerSession(authOptions);
 
+  // Check if token was invalidated by a new login (race condition during login)
+  // Return 503 instead of 401 to avoid triggering auth modal - client will retry
+  if (session?.tokenInvalidatedByNewLogin) {
+    console.log(
+      "[AUTH DEBUG] withValidSessionForApi: token invalidated by new login, returning 503",
+    );
+    return new Response("Session refreshing", {
+      status: 503,
+      headers: { "Retry-After": "1" },
+    });
+  }
+
   const valid = await isValidSessionAndToken(session);
   if (!valid) {
     console.log("[AUTH DEBUG] withValidSessionForApi: returning 401");
@@ -84,6 +96,15 @@ export const getValidSession = async () => {
     console.log(
       "[AUTH DEBUG] getValidSession: session has error:",
       session.error,
+    );
+    return null;
+  }
+
+  // Early return if token was invalidated by new login (race condition)
+  // The next request with new cookie will succeed
+  if (session?.tokenInvalidatedByNewLogin) {
+    console.log(
+      "[AUTH DEBUG] getValidSession: token invalidated by new login, waiting for new session",
     );
     return null;
   }

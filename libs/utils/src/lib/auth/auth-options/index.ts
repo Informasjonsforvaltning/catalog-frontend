@@ -50,6 +50,23 @@ const refreshToken = async (token: any) => {
     }
   }
 
+  // Check if token was invalidated by a new login (not just expired)
+  // This happens when concurrent requests race with old cookies during login
+  const isInvalidatedByNewLogin =
+    lastError?.error === "invalid_grant" &&
+    lastError?.error_description === "Token is not active";
+
+  if (isInvalidatedByNewLogin) {
+    // Token was invalidated by new login - set a special flag instead of error
+    // This tells validation to skip this request rather than returning 401
+    console.log("[AUTH] Token invalidated by new login, setting skip flag");
+    const { error, refreshError, ...tokenWithoutError } = token;
+    return {
+      ...tokenWithoutError,
+      tokenInvalidatedByNewLogin: true,
+    };
+  }
+
   // The error property will be used client-side to handle the refresh token error
   return {
     ...token,
@@ -97,6 +114,9 @@ export const authOptions: AuthOptions = {
       session.accessTokenExpiresAt = token.expires_at;
       if (token.error) {
         session.error = token.error;
+      }
+      if (token.tokenInvalidatedByNewLogin) {
+        session.tokenInvalidatedByNewLogin = true;
       }
 
       return session;

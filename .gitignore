@@ -65,3 +65,6 @@ reports
 
 .nx/cache
 .nx/workspace-data
+
+# Agents
+.claude
