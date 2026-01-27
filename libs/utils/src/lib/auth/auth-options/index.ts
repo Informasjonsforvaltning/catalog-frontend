@@ -10,6 +10,8 @@ const refreshToken = async (token: any) => {
   let attempt = 0;
   let lastError;
 
+  console.log("[AUTH] Starting token refresh");
+
   while (attempt < maxRetries) {
     try {
       const response = await fetch(
@@ -30,6 +32,7 @@ const refreshToken = async (token: any) => {
 
       if (!response.ok) throw tokens;
 
+      console.log("[AUTH] Token refresh successful");
       return {
         ...token,
         access_token: tokens.access_token,
@@ -102,18 +105,26 @@ export const authOptions: AuthOptions = {
       return session;
     },
     async jwt({ token, user, account, trigger }) {
+      console.log("[AUTH] JWT callback - trigger:", trigger);
+
       if (trigger === "update") {
+        console.log("[AUTH] JWT callback - manual update trigger, refreshing");
         return refreshToken(token);
       }
 
       if (account) {
         // Save the access token and refresh token in the JWT on the initial login
+        const expiresAt = Math.floor(
+          Date.now() / 1000 + Number(account.expires_in),
+        );
+        console.log(
+          "[AUTH] JWT callback - initial login, expires_at:",
+          expiresAt,
+        );
         return {
           ...user,
           access_token: account.access_token,
-          expires_at: Math.floor(
-            Date.now() / 1000 + Number(account.expires_in),
-          ),
+          expires_at: expiresAt,
           refresh_token: account.refresh_token,
           id_token: account.id_token,
         };
@@ -121,6 +132,7 @@ export const authOptions: AuthOptions = {
         // If the access token has not expired yet, return it
         return token;
       } else {
+        console.log("[AUTH] JWT callback - token expired, refreshing");
         return refreshToken(token);
       }
     },

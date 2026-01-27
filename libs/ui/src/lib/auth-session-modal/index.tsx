@@ -28,7 +28,9 @@ export const AuthSessionModal = ({
   const [hasStorageData, setHasStorageData] = useState(false);
 
   const validateAuth = async () => {
-    return await isSessionValid();
+    const valid = await isSessionValid();
+    console.log("[AUTH] Session validation result:", valid);
+    return valid;
   };
 
   const handleLoginClick = () => {
@@ -49,6 +51,7 @@ export const AuthSessionModal = ({
     const interval = setInterval(() => {
       validateAuth().then((valid) => {
         if (!valid) {
+          console.log("[AUTH] Session invalid, showing modal");
           modalRef.current?.showModal();
           clearInterval(interval);
         }

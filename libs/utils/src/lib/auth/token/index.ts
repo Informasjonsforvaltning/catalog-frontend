@@ -99,18 +99,34 @@ export const isReadOnlyUser = (token: Token, orgNr: string): boolean =>
 export const validateOidcUserSession = async (
   token: Token,
 ): Promise<boolean> => {
+  if (!token) {
+    console.log("[AUTH DEBUG] validateOidcUserSession: no token provided");
+    return false;
+  }
+
   try {
     const response = await fetch(
       `${process.env.KEYCLOAK_ISSUER}/protocol/openid-connect/userinfo?scope=openid`,
       {
         headers: { Authorization: `Bearer ${token}` },
         method: "GET",
+        cache: "no-store",
       },
     );
 
+    if (!response.ok) {
+      console.log(
+        "[AUTH DEBUG] validateOidcUserSession: userinfo returned",
+        response.status,
+      );
+    }
+
     return response.ok;
   } catch (error) {
-    console.log("validateOidcUserSession failed, ignore and try again", error);
+    console.log(
+      "[AUTH DEBUG] validateOidcUserSession: network error, returning true to retry",
+      error,
+    );
     return true;
   }
 };

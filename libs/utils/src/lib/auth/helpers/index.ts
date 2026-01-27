@@ -3,10 +3,36 @@ import { redirect } from "next/navigation";
 import { authOptions } from "../auth-options";
 import { validateOidcUserSession } from "../token";
 
-export const isValidSessionAndToken = async (session: any) =>
-  session &&
-  session.accessTokenExpiresAt > Date.now() / 1000 &&
-  (await validateOidcUserSession(session?.accessToken));
+export const isValidSessionAndToken = async (session: any) => {
+  if (!session) {
+    console.log("[AUTH DEBUG] isValidSessionAndToken: no session");
+    return false;
+  }
+
+  const now = Date.now() / 1000;
+  const expiresAt = session.accessTokenExpiresAt;
+  const tokenValid = expiresAt > now;
+
+  if (!tokenValid) {
+    console.log(
+      "[AUTH DEBUG] isValidSessionAndToken: token expired",
+      "expiresAt:",
+      expiresAt,
+      "now:",
+      now,
+      "expired by (seconds):",
+      now - expiresAt,
+    );
+    return false;
+  }
+
+  const oidcValid = await validateOidcUserSession(session?.accessToken);
+  if (!oidcValid) {
+    console.log("[AUTH DEBUG] isValidSessionAndToken: OIDC validation failed");
+  }
+
+  return oidcValid;
+};
 
 export const withValidSessionForApi = async (
   next: (session: any) => Promise<Response>,
@@ -26,10 +52,20 @@ export const getValidSession = async () => {
   return valid ? session : null;
 };
 
-export const redirectToSignIn = (callbackUrl?: string): never => {
-  return redirect(
-    callbackUrl?.startsWith("/")
-      ? `/auth/signin?callbackUrl=${callbackUrl}`
-      : "/auth/signin",
-  );
+type SignInCallbackProps = {
+  callbackUrl: string;
+  callbackParams?: any;
+};
+
+export const redirectToSignIn = (
+  callback: SignInCallbackProps | undefined = undefined,
+) => {
+  if (callback) {
+    const { callbackUrl, callbackParams } = callback;
+    if (callbackUrl.startsWith("/")) {
+      const callbackUrlWithParams = `${callbackUrl}${callbackParams ? "?" + new URLSearchParams(callbackParams) : ""}`;
+      return redirect(`/auth/signin?callbackUrl=${callbackUrlWithParams}`);
+    }
+  }
+  return redirect("/auth/signin");
 };
