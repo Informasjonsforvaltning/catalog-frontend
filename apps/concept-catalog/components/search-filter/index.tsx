@@ -195,7 +195,7 @@ const SearchFilter = ({
                 value={filterAssignedUser ?? ""}
               >
                 {[
-                  <option key={"no-user-selected"} value={undefined}>
+                  <option key="no-user-selected" value={undefined}>
                     {loc.allUsers}
                   </option>,
                   ...(assignedUserItems.map((item) => (

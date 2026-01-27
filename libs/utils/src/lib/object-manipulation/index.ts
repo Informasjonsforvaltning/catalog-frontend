@@ -24,7 +24,7 @@ export const removeEmptyValues = (obj: any): any => {
   return obj;
 };
 
-export const trimObjectWhitespace = (obj: any): any => {
+export const trimObjectWhitespace = <T>(obj: T): T => {
   if (Array.isArray(obj)) {
     return obj.map((value) =>
       typeof value === "object" && value !== null
@@ -32,7 +32,7 @@ export const trimObjectWhitespace = (obj: any): any => {
         : typeof value === "string"
           ? value.trim() // Trim strings in arrays
           : value,
-    );
+    ) as T;
   }
 
   if (typeof obj === "object" && obj !== null) {
@@ -42,10 +42,10 @@ export const trimObjectWhitespace = (obj: any): any => {
         : typeof value === "string"
           ? value.trim() // Trim strings in objects
           : value,
-    );
+    ) as T;
   }
 
-  return typeof obj === "string" ? obj.trim() : obj; // Trim root-level strings if necessary
+  return (typeof obj === "string" ? obj.trim() : obj) as T; // Trim root-level strings if necessary
 };
 
 /**

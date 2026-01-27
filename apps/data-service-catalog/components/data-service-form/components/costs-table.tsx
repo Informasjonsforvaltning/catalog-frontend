@@ -88,7 +88,7 @@ export const CostsTable = ({ currencies }: Props) => {
       {values?.costs?.map((item, i) => (
         <Card key={`costs-card-${i}`} color="neutral">
           <Card.Content className={styles.costContent}>
-            <List.Root size={"sm"}>
+            <List.Root size="sm">
               <List.Unordered
                 style={{
                   listStyle: "none",
@@ -113,7 +113,7 @@ export const CostsTable = ({ currencies }: Props) => {
             <div>
               <FieldModal
                 template={item}
-                type={"edit"}
+                type="edit"
                 currencies={sortedCurrencies}
                 onSuccess={(updatedItem: DataServiceCost) =>
                   setFieldValue(`costs[${i}]`, updatedItem)
@@ -132,7 +132,7 @@ export const CostsTable = ({ currencies }: Props) => {
             </div>
           </Card.Content>
           <Card.Footer className={styles.costFooter}>
-            <Paragraph size={"sm"}>
+            <Paragraph size="sm">
               {getTranslateText(item.description)}
             </Paragraph>
             <Box>
@@ -153,13 +153,13 @@ export const CostsTable = ({ currencies }: Props) => {
       <div>
         <FieldModal
           template={{ description: {} }}
-          type={"new"}
+          type="new"
           currencies={sortedCurrencies}
           onSuccess={(formValues) =>
             setFieldValue(
               values.costs && values?.costs.length > 0
                 ? `costs[${values?.costs?.length}]`
-                : `costs[0]`,
+                : "costs[0]",
               formValues,
             )
           }
@@ -267,7 +267,7 @@ const FieldModal = ({ template, type, onSuccess, currencies }: ModalProps) => {
                             as={Textfield}
                             size="sm"
                             ref={valueRef}
-                            type={"number"}
+                            type="number"
                           />
                           <Combobox
                             value={[values?.currency ?? DEFAULT_CURRENCY]}
@@ -385,7 +385,7 @@ const FieldModal = ({ template, type, onSuccess, currencies }: ModalProps) => {
                     <FieldsetDivider />
 
                     <FormikLanguageFieldset
-                      name={"description"}
+                      name="description"
                       as={TextareaWithPrefix}
                       legend={
                         <TitleWithHelpTextAndTag

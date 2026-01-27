@@ -118,7 +118,7 @@ export const InternalSection = ({
         <Combobox
           label={<FieldLabel />}
           size="sm"
-          placeholder={"select user"}
+          placeholder="select user"
           value={
             fieldValue && userList?.find((u) => u.id === fieldValue)
               ? [fieldValue]

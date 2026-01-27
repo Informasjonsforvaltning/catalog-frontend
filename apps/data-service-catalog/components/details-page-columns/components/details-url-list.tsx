@@ -6,7 +6,7 @@ type Props = {
 
 export const DetailsUrlList = ({ urls }: Props) => {
   return (
-    <List.Root size={"sm"}>
+    <List.Root size="sm">
       <List.Unordered
         style={{
           listStyle: "none",

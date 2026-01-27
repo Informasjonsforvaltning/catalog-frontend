@@ -7,7 +7,7 @@ Andre termer som kan brukes om begrepet. Typiske eksempler er synonymer.
 
 En term skal i sin helhet skrives med små bokstaver, med unntak for egennavn. En term skal beskrives i ubestemt form entall, med mindre 
 begrepet som defineres betegnes med et flertallsord (f.eks. finansielle midler) eller det er særskilte grunner til å uttrykke termen i bestemt form.`,
-    assignedUser: `Personen som skal ha ansvaret for å følge opp begrepet.`,
+    assignedUser: "Personen som skal ha ansvaret for å følge opp begrepet.",
     hiddenLabel: `
 Termer som ikke ønskes brukt om begrepet.
 
@@ -58,7 +58,8 @@ Eksempler:
 - _Funksjon blir brukt som inndelingskriterium for å dele helhetsbegrepet datamaskin i delbegreper som hovedkort, visningsenhet, strømforsyning, lagringsenhet og inndataenhet._`,
     },
 
-    contactInfo: `Det er mulig å legge til e-post og telefonnummer som kontaktinformasjon. Minst en av disse må fylles ut.`,
+    contactInfo:
+      "Det er mulig å legge til e-post og telefonnummer som kontaktinformasjon. Minst en av disse må fylles ut.",
     labels: `
 Ord eller uttrykk som brukes for å gruppere begrep når dette er hensiktsmessig for virksomheten. Merkelapp kan brukes som et filter for å finne begrep som hører sammen.`,
     period: `
@@ -119,7 +120,8 @@ __Egendefinert:__ Definisjonen er ikke er hentet fra noen eksterne kilder.
 __Basert på kilde:__ Definisjonen bygger på en eller flere gitte kilder.
 
 __Sitat fra kilde:__ Definisjonen er en ordrett gjengivelse fra en gitt kilde.`,
-    sources: `Du må ha minst én kilde, som kan bestå av en kildebeskrivelse, en URI, eller begge deler.`,
+    sources:
+      "Du må ha minst én kilde, som kan bestå av en kildebeskrivelse, en URI, eller begge deler.",
     status: `
 Virksomheten skal ha egne rutiner på hvilke statuser som skal brukes og hva som er kriteriene for å sette de ulike statusene. Begrepsstatus er basert på EUs 
 kontrollerte vokabular [Concept status](https://op.europa.eu/en/web/eu-vocabularies/concept-scheme/-/resource?uri=http://publications.europa.eu/resource/authority/concept-status).`,
@@ -251,7 +253,8 @@ Eksempel: Versjon 2.1.3 betyr andre hovedversjon, første mindre oppdatering, og
   validation: {
     minLength: "Verdien må være minst {0} karakterer lang.",
     required: "Feltet må fylles ut.",
-    invalidUrl: `Ugyldig lenke. Vennligst sørg for at lenken starter med ‘https://’ og inneholder et gyldig toppdomene (f.eks. ‘.no’).`,
+    invalidUrl:
+      "Ugyldig lenke. Vennligst sørg for at lenken starter med ‘https://’ og inneholder et gyldig toppdomene (f.eks. ‘.no’).",
     minOneSource: "Du må ha minst en kilde",
     version: "Versjon må være større en v{min}",
     languageRequired: "{label} ({language}) er påkrevd",

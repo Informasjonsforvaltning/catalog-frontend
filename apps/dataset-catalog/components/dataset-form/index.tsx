@@ -6,6 +6,7 @@ import {
   localization,
   trimObjectWhitespace,
 } from "@catalog-frontend/utils";
+import { isEqual } from "lodash";
 import {
   Button,
   Checkbox,
@@ -259,9 +260,21 @@ export const DatasetForm = ({
         validateOnChange={validateOnChange}
         validateOnBlur={validateOnChange}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
+          const trimmedValues = trimObjectWhitespace(values);
+
+          if (
+            isEqual(
+              datasetTemplate(trimmedValues),
+              datasetTemplate(initialValues as Dataset),
+            )
+          ) {
+            resetForm();
+            return;
+          }
+
           if (onSubmit) {
             try {
-              const newValues = await onSubmit(trimObjectWhitespace(values));
+              const newValues = await onSubmit(trimmedValues);
 
               showSnackbarMessage({
                 message: localization.snackbar.saveSuccessful,
@@ -554,7 +567,7 @@ export const DatasetForm = ({
                         title={
                           localization.datasetForm.fieldLabel.registrationStatus
                         }
-                        aria-label={"statusSwitch"}
+                        aria-label="statusSwitch"
                       >
                         {localization.datasetForm.helptext.statusSwitch}
                       </HelpMarkdown>

@@ -10,7 +10,7 @@ import HomePageClient from "./home-page-client";
 const Home = async () => {
   const session = await getValidSession();
   if (!session) {
-    return redirectToSignIn(`/`);
+    return redirectToSignIn("/");
   }
 
   const resourceRoles = getResourceRoles(`${session?.accessToken}`);

@@ -450,13 +450,13 @@ export const SearchPageClient = ({
 
   return (
     <div className="container">
-      <Tabs className={styles.tabs} defaultValue={"conceptTab"} size="medium">
+      <Tabs className={styles.tabs} defaultValue="conceptTab" size="medium">
         <Tabs.List className={styles.tabsList}>
-          <Tabs.Tab value={"conceptTab"}>
+          <Tabs.Tab value="conceptTab">
             {localization.concept.concepts}
           </Tabs.Tab>
           <Tabs.Tab
-            value={"changeRequestTab"}
+            value="changeRequestTab"
             onClick={() =>
               router.push(`/catalogs/${catalogId}/change-requests`)
             }
@@ -464,7 +464,7 @@ export const SearchPageClient = ({
             {localization.changeRequest.changeRequest}
           </Tabs.Tab>
         </Tabs.List>
-        <Tabs.Content value={"conceptTab"} className={styles.tabsContent}>
+        <Tabs.Content value="conceptTab" className={styles.tabsContent}>
           <SearchHitsLayout>
             <SearchHitsLayout.SearchRow>
               <div className={styles.searchRow}>

@@ -24,7 +24,7 @@ export const DeleteServiceButton = ({
   };
 
   return (
-    <Button size="small" color={"danger"} onClick={handleDelete}>
+    <Button size="small" color="danger" onClick={handleDelete}>
       {localization.button.delete}
     </Button>
   );

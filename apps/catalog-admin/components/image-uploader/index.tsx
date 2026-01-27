@@ -62,7 +62,7 @@ export function ImageUploader(catalogId: string) {
           <TrashIcon
             title={localization.button.bin}
             onClick={resetImage}
-            fontSize={"25px"}
+            fontSize="25px"
           />
         </div>
       )}

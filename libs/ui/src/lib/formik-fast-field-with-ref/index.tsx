@@ -1,7 +1,7 @@
 "use client";
 
 import { forwardRef } from "react";
-import { FastField, FastFieldAttributes } from "formik";
+import { FastField, FastFieldAttributes, FastFieldProps } from "formik";
 import { Textfield } from "@digdir/designsystemet-react";
 import { TextareaWithPrefix } from "../textarea-with-prefix";
 
@@ -15,8 +15,18 @@ export const FastFieldWithRef = forwardRef<
   FastFieldWithRefProps
 >(({ as: Component = Textfield, ...props }, ref) => (
   <FastField {...props}>
-    {({ field }: { field: any }) => (
-      <Component {...field} {...props} ref={ref} />
+    {({ field, form }: FastFieldProps) => (
+      <Component
+        {...field}
+        {...props}
+        ref={ref}
+        onBlur={(e: React.FocusEvent) => {
+          field.onBlur(e);
+          if (typeof field.value === "string") {
+            form.setFieldValue(field.name, field.value.trim());
+          }
+        }}
+      />
     )}
   </FastField>
 ));

@@ -236,7 +236,7 @@ export function ImportModal({ catalogId }: ImportProps) {
   return (
     <Modal.Root>
       <Modal.Trigger asChild>
-        <Button variant={"secondary"}>
+        <Button variant="secondary">
           <FileImportIcon />
           {localization.importResult.import}
         </Button>
@@ -318,7 +318,7 @@ export function ImportModal({ catalogId }: ImportProps) {
             <div className={styles.buttons}>
               <>
                 <Button
-                  variant={"secondary"}
+                  variant="secondary"
                   disabled={isGoingtoImportResults || isUploading}
                   onClick={goToImporResults}
                 >
@@ -358,13 +358,13 @@ export function ImportModal({ catalogId }: ImportProps) {
               <Button
                 onClick={send}
                 disabled={isUploading || isSending}
-                variant={"primary"}
+                variant="primary"
               >
                 <TasklistSendIcon />
                 {localization.importResult.continue}
               </Button>
               <Button
-                variant={"secondary"}
+                variant="secondary"
                 onClick={cancel}
                 disabled={isSending}
               >

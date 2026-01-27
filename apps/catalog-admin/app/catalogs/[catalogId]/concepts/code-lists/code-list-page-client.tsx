@@ -122,7 +122,7 @@ const CodeListsPageClient = ({
         <div className="accordionStructure">
           {showCodeListEditor && (
             <Accordion
-              key={"codeList-create-edtior"}
+              key="codeList-create-edtior"
               border={true}
               className="accordionWidth"
             >

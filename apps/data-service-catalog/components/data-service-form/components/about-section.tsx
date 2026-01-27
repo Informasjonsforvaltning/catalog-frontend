@@ -3,6 +3,7 @@ import {
   FormikLanguageFieldset,
   TitleWithHelpTextAndTag,
   TextareaWithPrefix,
+  FastFieldWithRef,
 } from "@catalog-frontend/ui";
 import { localization } from "@catalog-frontend/utils";
 import { Box, ErrorMessage, Textfield } from "@digdir/designsystemet-react";
@@ -15,7 +16,7 @@ export const AboutSection = () => {
   return (
     <Box>
       <FormikLanguageFieldset
-        name={"title"}
+        name="title"
         as={Textfield}
         legend={
           <TitleWithHelpTextAndTag
@@ -59,7 +60,7 @@ export const AboutSection = () => {
 
       <FieldsetDivider />
 
-      <FastField
+      <FastFieldWithRef
         as={Textfield}
         name="version"
         size="sm"

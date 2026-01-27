@@ -402,7 +402,7 @@ runTestAsAdmin(
         },
       },
       ansvarligVirksomhet: {
-        id: `Ansvarligvirksomhet`,
+        id: "Ansvarligvirksomhet",
       },
       definisjon: {
         tekst: {
@@ -560,5 +560,63 @@ runTestAsAdmin(
     console.log(
       "[TEST] Test completed: test that URL fields only accept HTTPS URLs",
     );
+  },
+);
+
+runTestAsAdmin(
+  "empty submit check prevents save when only whitespace added",
+  async ({ conceptsPage, playwright }) => {
+    const apiRequestContext = await playwright.request.newContext({
+      storageState: adminAuthFile,
+    });
+
+    // Create a concept via API with structure matching form expectations
+    const id = await createConcept(apiRequestContext, {
+      anbefaltTerm: { navn: { nb: "Test whitespace", nn: "", en: "" } },
+      definisjon: {
+        tekst: { nb: "Test definition" },
+        kildebeskrivelse: { forholdTilKilde: "egendefinert", kilde: [] },
+      },
+      merknad: {},
+      tillattTerm: {},
+      frarådetTerm: {},
+      eksempel: {},
+      fagområde: {},
+      fagområdeKoder: [],
+      statusURI:
+        "http://publications.europa.eu/resource/authority/concept-status/DRAFT",
+      assignedUser: "",
+      versjonsnr: { major: 0, minor: 1, patch: 0 },
+    });
+
+    // Navigate to edit page
+    await conceptsPage.editPage.goto(id);
+
+    // Wait for form to be ready
+    await expect(
+      conceptsPage.page.getByRole("button", { name: "Lagre" }),
+    ).toBeVisible();
+
+    // Add trailing whitespace to title
+    const titleField = conceptsPage.page
+      .getByRole("group", {
+        name: "Anbefalt term Hjelp til utfylling Må fylles ut",
+      })
+      .getByLabel("Bokmål");
+    await titleField.fill("Test whitespace ");
+
+    // Click save button
+    await conceptsPage.page.getByRole("button", { name: "Lagre" }).click();
+
+    // Wait for network to settle - if empty submit check works, no request is made
+    await conceptsPage.page.waitForLoadState("networkidle");
+
+    // Verify NO snackbar appears (empty submit check should prevent save)
+    await expect(
+      conceptsPage.page.getByText("Endringene ble lagret."),
+    ).not.toBeVisible();
+    await expect(
+      conceptsPage.page.getByText("Lagring feilet"),
+    ).not.toBeVisible();
   },
 );

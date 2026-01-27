@@ -22,7 +22,7 @@ export default class LoginPage {
 
   // Helpers
   public async loginAsAdmin() {
-    await this.page.goto(`/auth/signin?callbackUrl=/`);
+    await this.page.goto("/auth/signin?callbackUrl=/");
 
     try {
       await this.signInWithKeycloakButton().waitFor({
@@ -100,7 +100,7 @@ export default class LoginPage {
   }
 
   public async loginAsReadUser() {
-    await this.page.goto(`/auth/signin?callbackUrl=/`);
+    await this.page.goto("/auth/signin?callbackUrl=/");
 
     try {
       await this.signInWithKeycloakButton().waitFor({

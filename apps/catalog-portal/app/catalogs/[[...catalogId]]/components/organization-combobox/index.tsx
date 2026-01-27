@@ -28,7 +28,7 @@ const OrganizationCombobox = (props: OrganizationComboboxProps) => {
       <Combobox
         className={styles.combobox}
         size="sm"
-        label={"Virksomhet"}
+        label="Virksomhet"
         placeholder="Velg en virksomhet"
         onValueChange={(value) => {
           const match = organizations.find(
@@ -53,7 +53,7 @@ const OrganizationCombobox = (props: OrganizationComboboxProps) => {
             </Combobox.Option>
           ))}
       </Combobox>
-      {loading && <Spinner title={"Laster virksomhet"} />}
+      {loading && <Spinner title="Laster virksomhet" />}
     </div>
   );
 };
