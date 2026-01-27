@@ -1018,8 +1018,7 @@ export const DistributionModal = ({
                           <Combobox.Option key="license-none" value="">
                             {localization.none}
                           </Combobox.Option>
-                          {openLicenses &&
-                            openLicenses.map((license: any, i: number) => (
+                          {openLicenses?.map((license, i) => (
                               <Combobox.Option
                                 key={`license-${license.uri}-${i}`}
                                 value={license.uri}
