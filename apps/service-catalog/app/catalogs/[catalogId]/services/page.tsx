@@ -27,7 +27,7 @@ export default async function ServiceSearchHitsPage({
 
   const session = await getValidSession();
   if (!session) {
-    return redirectToSignIn({ callbackUrl: `/catalogs/${catalogId}/services` });
+    return redirectToSignIn(`/catalogs/${catalogId}/services`);
   }
 
   const services: Service[] = await getServices(catalogId);

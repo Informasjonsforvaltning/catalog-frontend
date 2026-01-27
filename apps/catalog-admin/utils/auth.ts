@@ -21,9 +21,7 @@ export const withProtectedPage = (
 
     const session = await getValidSession();
     if (!session) {
-      return redirectToSignIn({
-        callbackUrl: pagePath(catalogId),
-      });
+      return redirectToSignIn(pagePath(catalogId));
     }
 
     const hasAdminPermission =

@@ -47,14 +47,14 @@ const withProtectedPage = (
 
     const session = await getValidSession();
     if (!session) {
-      return redirectToSignIn({
-        callbackUrl: pagePath({
+      return redirectToSignIn(
+        pagePath({
           catalogId,
           conceptId,
           conceptIdSearch,
           changeRequestId,
         }),
-      });
+      );
     }
 
     const hasReadPermission =

@@ -24,9 +24,9 @@ export default async function PublicServiceDetailsPage({
 
   const session = await getValidSession();
   if (!session) {
-    return redirectToSignIn({
-      callbackUrl: `/catalogs/${catalogId}/public-services/${serviceId}`,
-    });
+    return redirectToSignIn(
+      `/catalogs/${catalogId}/public-services/${serviceId}`,
+    );
   }
 
   const service: Service | null = await getPublicServiceById(

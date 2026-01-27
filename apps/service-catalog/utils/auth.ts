@@ -43,9 +43,7 @@ const withProtectedPage = (
 
     const session = await getValidSession();
     if (!session) {
-      return redirectToSignIn({
-        callbackUrl: pagePath({ catalogId, serviceId }),
-      });
+      return redirectToSignIn(pagePath({ catalogId, serviceId }));
     }
 
     const hasReadPermission =
