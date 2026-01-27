@@ -59,7 +59,7 @@ const tekstMedSpraakKodeArray = (label: string) =>
         .label(`${label} (${localization.language.en})`),
     });
 
-const kilde = (required: boolean) =>
+const kilde = (required?: boolean) =>
   Yup.array()
     .of(
       Yup.object().shape({
@@ -111,7 +111,7 @@ const kilde = (required: boolean) =>
     })
     .nullable();
 
-export const definitionSchema = (required: boolean) =>
+export const definitionSchema = (required?: boolean) =>
   Yup.object()
     .shape({
       tekst: Yup.object().shape({
@@ -219,7 +219,7 @@ export const conceptSchema = ({
   required,
 }: {
   baseUri: string;
-  required: boolean;
+  required?: boolean;
 }) =>
   Yup.object().shape({
     anbefaltTerm: Yup.object().shape({
