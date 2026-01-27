@@ -9,6 +9,8 @@ import {
   validUUID,
 } from "@catalog-frontend/utils";
 import { RedirectType, redirect } from "next/navigation";
+import { Session } from "next-auth";
+import { ReactNode } from "react";
 
 type PageParams = {
   catalogId: string;
@@ -20,18 +22,18 @@ type PageParams = {
 type PagePath = (params: PageParams) => string;
 type Render = (
   props: {
-    session: any;
+    session: Session;
     hasWritePermission: boolean;
     hasAdminPermission: boolean;
   } & PageParams,
-) => Promise<any>;
+) => Promise<ReactNode>;
 
 const withProtectedPage = (
   pagePath: PagePath,
   permissions: "read" | "write" | "admin",
   render: Render,
 ) => {
-  return async ({ params, searchParams }) => {
+  return async ({ params, searchParams }: any) => {
     const { catalogId, conceptId, resultId, changeRequestId } = await params;
     const { concept: conceptIdSearch } = await searchParams;
 
@@ -58,23 +60,24 @@ const withProtectedPage = (
     }
 
     const hasReadPermission =
-      session?.accessToken &&
-      (hasOrganizationReadPermission(session?.accessToken, catalogId) ||
-        hasSystemAdminPermission(session.accessToken));
+      hasOrganizationReadPermission(session.accessToken, catalogId) ||
+      hasSystemAdminPermission(session.accessToken);
     if (!hasReadPermission) {
       redirect(`/catalogs/${catalogId}/no-access`, RedirectType.replace);
     }
 
-    const hasWritePermission =
-      session?.accessToken &&
-      hasOrganizationWritePermission(session.accessToken, catalogId);
+    const hasWritePermission = hasOrganizationWritePermission(
+      session.accessToken,
+      catalogId,
+    );
     if (!hasWritePermission && permissions === "write") {
       redirect(`/catalogs/${catalogId}/no-access`, RedirectType.replace);
     }
 
-    const hasAdminPermission =
-      session?.accessToken &&
-      hasOrganizationAdminPermission(session.accessToken, catalogId);
+    const hasAdminPermission = hasOrganizationAdminPermission(
+      session.accessToken,
+      catalogId,
+    );
     if (!hasAdminPermission && permissions === "admin") {
       redirect(`/catalogs/${catalogId}/no-access`, RedirectType.replace);
     }
