@@ -338,7 +338,14 @@ const FieldModal = ({
                             setFieldValue('source', selectedUriValue);
                           }}
                           loading={searching}
-                          value={values?.source ? [values.source] : []}
+                          value={
+                            comboboxOptions.length > 0 &&
+                            values?.source &&
+                            values.source.trim() !== '' &&
+                            comboboxOptions.some((option) => option.uri === values.source)
+                              ? [values.source]
+                              : []
+                          }
                           availableValues={availableDatasetUris}
                           placeholder={`${localization.search.search}...`}
                           portal={false}

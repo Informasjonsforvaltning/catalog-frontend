@@ -902,6 +902,29 @@ value={
 
 **For source Combobox**: Use Option 4 - only set value when `comboboxOptions.length > 0`, ensuring options are loaded.
 
+### ✅ Solution Implemented and Working
+
+**Status**: Option 4 was successfully implemented for the source Combobox in `references-table.tsx`.
+
+**Implementation** (Line 340-346):
+```typescript
+value={
+  comboboxOptions.length > 0 &&
+  values?.source &&
+  values.source.trim() !== '' &&
+  comboboxOptions.some((option) => option.uri === values.source)
+    ? [values.source]
+    : []
+}
+```
+
+**Result**: Error resolved. The source Combobox now only sets a value when:
+1. Options are loaded (`comboboxOptions.length > 0`)
+2. Value exists and is not empty
+3. Value exists in the available options
+
+This prevents the timing/race condition by ensuring the Combobox's internal options map is ready before setting the value.
+
 ### Updated SafeCombobox Implementation
 
 ```typescript
@@ -938,3 +961,119 @@ Then use it like:
 // For source (dynamic options, wait until ready):
 <SafeCombobox ... availableValues={availableDatasetUris} requireOptionsReady />
 ```
+
+---
+
+## Assessment: Do We Still Need SafeCombobox?
+
+### Current Implementation Status
+
+After implementing Option 4 (simplest solution) for the source Combobox, the error is resolved. Let's assess whether SafeCombobox is still necessary.
+
+### What SafeCombobox Currently Provides
+
+1. **Value Sanitization**: Filters out undefined/null/empty values
+2. **Value Validation**: Checks values exist in `availableValues` array
+3. **Type Safety**: Ensures value is always an array
+
+### What Actually Fixed the Error
+
+The critical fix was **Option 4**: Only setting the value when `comboboxOptions.length > 0`. This ensures:
+- Options are loaded before value is set
+- Combobox's internal options map is ready
+- No race condition between value setting and options registration
+
+### Analysis: SafeCombobox Necessity
+
+#### Arguments FOR Keeping SafeCombobox:
+
+1. **Defense in Depth**: Provides an additional validation layer
+2. **Reusability**: Can be used across multiple Combobox instances
+3. **Consistency**: Centralizes validation logic
+4. **Future-Proofing**: Protects against other edge cases (undefined/null in arrays)
+
+#### Arguments AGAINST Keeping SafeCombobox:
+
+1. **The Real Fix Was Timing**: The error was caused by timing, not invalid values
+2. **Redundancy**: The conditional value prop already validates against `comboboxOptions`
+3. **Complexity**: Adds an extra layer that may not be necessary
+4. **Performance**: Extra useMemo calculation on every render
+
+### Recommendation
+
+**For references-table.tsx specifically**: SafeCombobox may be **optional** now that we have the timing fix. However, it still provides value:
+
+1. **For referenceType Combobox**: SafeCombobox's validation against `availableRelationCodes` is redundant since relations are static and the conditional check in the value prop is sufficient.
+
+2. **For source Combobox**: The conditional value prop already does the validation (`comboboxOptions.some((option) => option.uri === values.source)`), making SafeCombobox's `availableValues` validation redundant.
+
+### Simplified Alternative
+
+We could replace SafeCombobox with direct Combobox usage and rely on the conditional value props:
+
+```typescript
+// ReferenceType Combobox - relations are static, always available
+<Combobox
+  value={
+    values?.referenceType &&
+    values.referenceType.trim() !== '' &&
+    relations.some((relation) => relation.code === values.referenceType)
+      ? [values.referenceType]
+      : []
+  }
+  ...
+/>
+
+// Source Combobox - wait for options to load
+<Combobox
+  value={
+    comboboxOptions.length > 0 &&
+    values?.source &&
+    values.source.trim() !== '' &&
+    comboboxOptions.some((option) => option.uri === values.source)
+      ? [values.source]
+      : []
+  }
+  ...
+/>
+```
+
+### Final Recommendation
+
+**Option A: Keep SafeCombobox** (Current)
+- ✅ Provides defense in depth
+- ✅ Centralizes validation logic
+- ✅ Protects against undefined/null in arrays
+- ❌ Adds complexity
+- ❌ May be redundant with conditional value props
+
+**Option B: Remove SafeCombobox** (Simplified)
+- ✅ Simpler code
+- ✅ Less abstraction
+- ✅ Direct conditional validation in value prop
+- ❌ Validation logic duplicated in each Combobox
+- ❌ Less protection against edge cases
+
+### Suggested Approach
+
+**Keep SafeCombobox but simplify it**: Remove the `availableValues` validation since the conditional value props already handle this. Keep only the sanitization (filtering undefined/null):
+
+```typescript
+const SafeCombobox = ({ value, ...props }: SafeComboboxProps) => {
+  const safeValue = useMemo(() => {
+    if (!value || !Array.isArray(value)) return [];
+    // Only filter out undefined/null/empty - validation done in value prop
+    return value.filter((v) => v != null && v !== '' && String(v).trim() !== '');
+  }, [value]);
+
+  return <Combobox {...props} value={safeValue} />;
+};
+```
+
+This keeps the sanitization benefit while removing redundant validation logic.
+
+### Conclusion
+
+SafeCombobox is **useful but not strictly necessary** after the timing fix. The critical issue was resolved by ensuring options are ready before setting values. SafeCombobox still provides value sanitization, but the validation can be handled directly in the conditional value props.
+
+**Recommendation**: Keep SafeCombobox for sanitization, but consider simplifying it to remove redundant validation since the conditional value props already handle that.
