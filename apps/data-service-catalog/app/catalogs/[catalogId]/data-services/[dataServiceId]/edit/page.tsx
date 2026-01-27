@@ -25,7 +25,7 @@ const EditDataServicePage = withWriteProtectedPage(
     `/catalogs/${catalogId}/data-services/${dataServiceId}/edit`,
   async ({ catalogId, dataServiceId, session }) => {
     if (!dataServiceId || !validDataServiceID(dataServiceId)) {
-      return redirect(`/notfound`, RedirectType.replace);
+      return redirect("/notfound", RedirectType.replace);
     }
     if (!session) {
       return redirectToSignIn({
@@ -41,7 +41,7 @@ const EditDataServicePage = withWriteProtectedPage(
     );
 
     if (!dataService || dataService.catalogId !== catalogId) {
-      redirect(`/not-found`, RedirectType.replace);
+      redirect("/not-found", RedirectType.replace);
     }
     const searchEnv = process.env.FDK_SEARCH_SERVICE_BASE_URI ?? "";
     const referenceDataEnv = process.env.FDK_BASE_URI ?? "";

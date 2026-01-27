@@ -47,7 +47,7 @@ const ConceptPage = withReadProtectedPage(
     });
 
     if (!concept || concept.ansvarligVirksomhet?.id !== catalogId) {
-      return redirect(`/notfound`, RedirectType.replace);
+      return redirect("/notfound", RedirectType.replace);
     }
 
     const conceptStatuses = await getConceptStatuses().then((body) =>

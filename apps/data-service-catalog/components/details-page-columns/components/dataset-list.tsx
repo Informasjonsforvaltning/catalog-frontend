@@ -17,7 +17,7 @@ export const DatasetList = ({ datasetURIs, searchEnv, language }: Props) => {
   const matchDataset = (uri: string) => datasets?.find((s) => s.uri === uri);
 
   return (
-    <List.Root size={"sm"}>
+    <List.Root size="sm">
       <List.Unordered
         style={{
           listStyle: "none",

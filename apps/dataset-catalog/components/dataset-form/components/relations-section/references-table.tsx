@@ -115,7 +115,7 @@ export const ReferenceTable = ({
       </TitleWithHelpTextAndTag>
       {values?.references && compact(values?.references).length > 0 && (
         <div
-          className={get(errors, `references`) ? styles.errorBorder : undefined}
+          className={get(errors, "references") ? styles.errorBorder : undefined}
         >
           <Table size="sm" className={styles.table}>
             <Table.Head>
@@ -150,7 +150,7 @@ export const ReferenceTable = ({
                         <FieldModal
                           searchEnv={searchEnv}
                           template={ref}
-                          type={"edit"}
+                          type="edit"
                           onSuccess={(updatedItem: Reference) => {
                             handleReferenceSuccess(updatedItem, index);
                           }}
@@ -180,7 +180,7 @@ export const ReferenceTable = ({
         <FieldModal
           searchEnv={searchEnv}
           template={{ source: "", referenceType: "" }}
-          type={"new"}
+          type="new"
           onSuccess={(updatedItem: Reference) => {
             const newIndex = values.references?.length ?? 0;
             setFieldValue(`references[${newIndex}]`, updatedItem);
@@ -325,7 +325,7 @@ const FieldModal = ({
                     >
                       <Combobox
                         onValueChange={(value) =>
-                          setFieldValue(`referenceType`, value.toString())
+                          setFieldValue("referenceType", value.toString())
                         }
                         value={
                           values.referenceType ? [values.referenceType] : []
@@ -361,7 +361,7 @@ const FieldModal = ({
                         }
                         onValueChange={(value) => {
                           setSelectedUri(value.toString());
-                          setFieldValue(`source`, value.toString());
+                          setFieldValue("source", value.toString());
                         }}
                         loading={searching}
                         value={

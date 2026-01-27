@@ -34,7 +34,7 @@ export default async function PublicServiceDetailsPage({
     serviceId,
   );
   if (!service) {
-    redirect(`/notfound`, RedirectType.replace);
+    redirect("/notfound", RedirectType.replace);
   }
   const hasWritePermission =
     session && hasOrganizationWritePermission(session?.accessToken, catalogId);

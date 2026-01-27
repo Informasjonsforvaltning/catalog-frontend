@@ -48,7 +48,7 @@ export const StatusSection = ({ statuses, availabilities }: Props) => {
         legend={
           <TitleWithHelpTextAndTag
             helpText={localization.dataServiceForm.helptext.availability}
-            tagColor={"info"}
+            tagColor="info"
             tagTitle={localization.tag.recommended}
           >
             {localization.dataServiceForm.fieldLabel.availability}

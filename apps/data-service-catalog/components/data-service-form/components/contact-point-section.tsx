@@ -55,7 +55,7 @@ export const ContactPointSection = () => {
     <Box>
       <div className={styles.padding}>
         <FormikLanguageFieldset
-          name={"contactPoint.name"}
+          name="contactPoint.name"
           as={Textfield}
           legend={
             <TitleWithHelpTextAndTag

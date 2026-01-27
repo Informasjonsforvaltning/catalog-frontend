@@ -102,7 +102,7 @@ export const FormikOptionalFieldsFieldset = ({
             ))}
           </div>
           {typeof mainError === "string" && (
-            <ErrorMessage size={"sm"}>{mainError}</ErrorMessage>
+            <ErrorMessage size="sm">{mainError}</ErrorMessage>
           )}
         </Card.Content>
       </Card>

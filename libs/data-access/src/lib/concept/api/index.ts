@@ -102,7 +102,7 @@ export const getConceptRevisions = (conceptId: string, accessToken: string) => {
 };
 
 export const createConcept = (concept: Partial<Concept>, accessToken: string) =>
-  conceptCatalogApiCall("POST", `/begreper`, concept, accessToken);
+  conceptCatalogApiCall("POST", "/begreper", concept, accessToken);
 
 export const patchConcept = (
   conceptId: string,
@@ -597,7 +597,7 @@ export const getUnpublishedRelatedConcepts = async (
 };
 
 export const getAllConceptCatalogs = (accessToken: string) =>
-  conceptCatalogApiCall("GET", `/begrepssamlinger`, null, accessToken);
+  conceptCatalogApiCall("GET", "/begrepssamlinger", null, accessToken);
 
 export const getConceptCountByCatalogId = (
   catalogId: string,

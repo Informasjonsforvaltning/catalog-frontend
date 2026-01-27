@@ -937,7 +937,7 @@ export const ConceptPageClient = ({
                 </Button>
                 {!concept?.isArchived && (
                   <Button
-                    color={"danger"}
+                    color="danger"
                     variant="secondary"
                     onClick={() => setShowConfirmDelete(true)}
                   >

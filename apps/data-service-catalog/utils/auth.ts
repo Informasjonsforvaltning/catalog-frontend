@@ -33,12 +33,12 @@ const withProtectedPage = (
     const { catalogId, dataServiceId, resultId } = await params;
 
     if (!validOrganizationNumber(catalogId)) {
-      redirect(`/not-found`, RedirectType.replace);
+      redirect("/not-found", RedirectType.replace);
     }
 
     [dataServiceId].forEach((param) => {
       if (params[param] && !validDataServiceID(params[param])) {
-        return redirect(`/not-found`, RedirectType.replace);
+        return redirect("/not-found", RedirectType.replace);
       }
     });
 

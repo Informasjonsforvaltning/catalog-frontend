@@ -258,7 +258,7 @@ export const LeftColumn = ({
       {dataset?.landingPage && !isEmpty(dataset?.landingPage[0]) && (
         <InfoCard.Item title={localization.datasetForm.fieldLabel.landingPage}>
           {dataset?.landingPage.map((page: string, index: number) => (
-            <Paragraph size={"sm"} key={`landing-page-${index}`}>
+            <Paragraph size="sm" key={`landing-page-${index}`}>
               <Link href={page}>{page}</Link>
             </Paragraph>
           ))}

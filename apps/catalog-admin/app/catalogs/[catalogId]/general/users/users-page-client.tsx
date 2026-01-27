@@ -68,7 +68,7 @@ export const UsersPageClient = ({ catalogId }: UsersPageClientProps) => {
         <div className="accordionStructure">
           {showUserEditor && (
             <Accordion
-              key={"create-editor"}
+              key="create-editor"
               border={true}
               className="accordionWidth"
             >
@@ -77,7 +77,7 @@ export const UsersPageClient = ({ catalogId }: UsersPageClientProps) => {
                   <Heading size="xsmall" level={3}></Heading>
                 </Accordion.Header>
                 <Accordion.Content>
-                  <UserEditor type={"create"} catalogId={catalogId} />
+                  <UserEditor type="create" catalogId={catalogId} />
                 </Accordion.Content>
               </Accordion.Item>
             </Accordion>

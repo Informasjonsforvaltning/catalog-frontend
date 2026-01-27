@@ -7,7 +7,7 @@ const AddButton = ({ children = localization.add, ...props }: ButtonProps) => (
   <div>
     <Button variant="tertiary" className={styles.add} size="sm" {...props}>
       <span className={styles.withIcon}>
-        <PlusCircleIcon fontSize={"1.2rem"} />
+        <PlusCircleIcon fontSize="1.2rem" />
         {children}
       </span>
     </Button>

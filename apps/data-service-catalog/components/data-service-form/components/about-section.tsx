@@ -16,7 +16,7 @@ export const AboutSection = () => {
   return (
     <Box>
       <FormikLanguageFieldset
-        name={"title"}
+        name="title"
         as={Textfield}
         legend={
           <TitleWithHelpTextAndTag
