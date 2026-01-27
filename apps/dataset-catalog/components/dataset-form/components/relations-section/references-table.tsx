@@ -1,12 +1,13 @@
 import { Dataset, Reference, Search, StorageData } from '@catalog-frontend/types';
 import { getTranslateText, localization, trimObjectWhitespace, DataStorage } from '@catalog-frontend/utils';
 import { Button, Combobox, Dialog, Fieldset, Heading, Table } from '@digdir/designsystemet-react';
+import type { ComboboxProps } from '@digdir/designsystemet-react';
 import { HStack, VStack } from '@fellesdatakatalog/ui';
 import { useSearchDatasetsByUri, useSearchDatasetSuggestions } from '@catalog-frontend/ui';
 import { Formik, useFormikContext } from 'formik';
 import relations from '../../utils/relations.json';
 import { AddButton, DeleteButton, EditButton, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import { referenceSchema } from '../../utils/validation-schema';
 import { compact, get, isEmpty } from 'lodash';
 import styles from '../../dataset-form.module.css';
@@ -32,6 +33,36 @@ type ModalProps = {
 const hasNoFieldValues = (values: Reference) => {
   if (!values) return true;
   return isEmpty(values?.referenceType) && isEmpty(values?.source);
+};
+
+/**
+ * Safe wrapper around Combobox that validates values exist in available options
+ * and filters out undefined/null values to prevent runtime errors.
+ */
+type SafeComboboxProps = ComboboxProps & {
+  /**
+   * Array of valid option values to validate against
+   * If provided, only values that exist in this array will be passed to Combobox
+   */
+  availableValues?: string[];
+};
+
+const SafeCombobox = ({ value, availableValues = [], ...props }: SafeComboboxProps) => {
+  const safeValue = useMemo(() => {
+    if (!value || !Array.isArray(value)) return [];
+
+    // Filter out undefined/null/falsy values
+    const filtered = value.filter((v) => v != null && v !== '' && String(v).trim() !== '');
+
+    // If validation is enabled and we have available values, check values exist in options
+    if (availableValues.length > 0) {
+      return filtered.filter((v) => availableValues.includes(String(v)));
+    }
+
+    return filtered;
+  }, [value, availableValues]);
+
+  return <Combobox {...props} value={safeValue} />;
 };
 
 export const ReferenceTable = ({ searchEnv, autoSaveId, autoSaveStorage }: Props) => {
@@ -243,6 +274,18 @@ const FieldModal = ({
                 }
               }, [values, dirty]);
 
+              // Extract available relation codes for validation
+              const availableRelationCodes = useMemo(
+                () => relations.map((relation) => relation.code).filter(Boolean),
+                [],
+              );
+
+              // Extract available dataset URIs for validation
+              const availableDatasetUris = useMemo(
+                () => comboboxOptions.map((option) => option.uri).filter(Boolean),
+                [comboboxOptions],
+              );
+
               return (
                 <>
                   <Dialog.Block>
@@ -257,15 +300,14 @@ const FieldModal = ({
                     <VStack>
                       <Fieldset data-size='sm'>
                         <Fieldset.Legend>{localization.datasetForm.fieldLabel.relationType}</Fieldset.Legend>
-                        <Combobox
+                        <SafeCombobox
                           onValueChange={(value) => {
                             // value is string[], extract first element for single selection
                             const selectedValue = Array.isArray(value) && value.length > 0 ? value[0] : '';
                             setFieldValue('referenceType', selectedValue);
                           }}
-                          value={values?.referenceType && values.referenceType.trim() !== '' 
-                            ? [values.referenceType] 
-                            : []}
+                          value={values?.referenceType ? [values.referenceType] : []}
+                          availableValues={availableRelationCodes}
                           placeholder={`${localization.datasetForm.fieldLabel.choseRelation}...`}
                           portal={false}
                           data-size='sm'
@@ -282,12 +324,12 @@ const FieldModal = ({
                               {getTranslateText(relation?.label)}
                             </Combobox.Option>
                           ))}
-                        </Combobox>
+                        </SafeCombobox>
                       </Fieldset>
 
                       <Fieldset data-size='sm'>
                         <Fieldset.Legend>{localization.datasetForm.fieldLabel.dataset}</Fieldset.Legend>
-                        <Combobox
+                        <SafeCombobox
                           onChange={(input: any) => setSearchQuery(input.target.value)}
                           onValueChange={(value) => {
                             // value is string[], extract first element for single selection
@@ -296,7 +338,8 @@ const FieldModal = ({
                             setFieldValue('source', selectedUriValue);
                           }}
                           loading={searching}
-                          value={values?.source && values.source.trim() !== '' ? [values.source] : []}
+                          value={values?.source ? [values.source] : []}
+                          availableValues={availableDatasetUris}
                           placeholder={`${localization.search.search}...`}
                           portal={false}
                           data-size='sm'
@@ -317,7 +360,7 @@ const FieldModal = ({
                               </Combobox.Option>
                             );
                           })}
-                        </Combobox>
+                        </SafeCombobox>
                       </Fieldset>
                     </VStack>
                   </Dialog.Block>

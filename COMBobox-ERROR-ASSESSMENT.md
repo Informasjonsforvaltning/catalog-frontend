@@ -741,3 +741,200 @@ export const SafeCombobox = ({
 3. ✅ Performance:
    - [ ] Validation doesn't cause unnecessary re-renders
    - [ ] useMemo approach (if used) works correctly
+
+---
+
+## Critical Issue: SafeCombobox Still Failing
+
+### Error After SafeCombobox Implementation
+
+**Error Location:** `references-table.tsx:65` (SafeCombobox return statement)
+
+**Error Message:** `can't access property "value", value is undefined`
+
+### Root Cause Analysis
+
+Even with SafeCombobox filtering and validating values, the error persists. This indicates:
+
+1. **Timing Issue**: The Combobox's internal `useEffect` (lines 225-241 in design system) runs **before** the options are fully registered in the Combobox's internal options map.
+
+2. **Options Registration Order**: The Combobox builds its options map from the `children` (Combobox.Option components), but the `value` prop is processed in a `useEffect` that may run before all options are registered.
+
+3. **Race Condition**: When `safeValue` contains a valid value (exists in `availableValues`), but the Combobox hasn't finished processing its children yet, the lookup `options[prefix(value)]` returns `undefined`.
+
+### The Problem
+
+The SafeCombobox validates that values exist in our `availableValues` array, but the Combobox component has its own internal options map that it builds from `children`. There's a timing mismatch:
+
+1. SafeCombobox validates: ✅ Value exists in `availableValues`
+2. SafeCombobox passes to Combobox: `value={safeValue}`
+3. Combobox's useEffect runs: Tries to look up value in internal options map
+4. Options map not ready: Returns `undefined`
+5. Error: Tries to access `undefined.value`
+
+### Required Fix: Delay Value Setting Until Options Are Ready
+
+We need to ensure the `value` prop is only set when:
+1. The value is valid (exists in availableValues) ✅ (already done)
+2. The Combobox has finished processing its children/options ⚠️ (missing)
+
+### Solution Options
+
+#### Option 1: Conditional Rendering with useEffect (Recommended)
+
+Only set the value after options are confirmed to be available:
+
+```typescript
+const SafeCombobox = ({ value, availableValues = [], children, ...props }: SafeComboboxProps) => {
+  const [isOptionsReady, setIsOptionsReady] = useState(false);
+  const [delayedValue, setDelayedValue] = useState<string[]>([]);
+
+  const safeValue = useMemo(() => {
+    if (!value || !Array.isArray(value)) return [];
+
+    // Filter out undefined/null/falsy values
+    const filtered = value.filter((v) => v != null && v !== '' && String(v).trim() !== '');
+
+    // If validation is enabled and we have available values, check values exist in options
+    if (availableValues.length > 0) {
+      return filtered.filter((v) => availableValues.includes(String(v)));
+    }
+
+    return filtered;
+  }, [value, availableValues]);
+
+  // Delay setting value until after initial render (allows options to register)
+  useEffect(() => {
+    // Small delay to ensure Combobox has processed its children
+    const timer = setTimeout(() => {
+      setIsOptionsReady(true);
+      setDelayedValue(safeValue);
+    }, 0);
+
+    return () => clearTimeout(timer);
+  }, [safeValue]);
+
+  // Only set value after options are ready
+  const finalValue = isOptionsReady ? delayedValue : [];
+
+  return <Combobox {...props} value={finalValue}>{children}</Combobox>;
+};
+```
+
+#### Option 2: Only Set Value When Options Are Available
+
+Check if options exist before setting value:
+
+```typescript
+const SafeCombobox = ({ value, availableValues = [], ...props }: SafeComboboxProps) => {
+  const safeValue = useMemo(() => {
+    if (!value || !Array.isArray(value)) return [];
+
+    const filtered = value.filter((v) => v != null && v !== '' && String(v).trim() !== '');
+
+    if (availableValues.length > 0) {
+      return filtered.filter((v) => availableValues.includes(String(v)));
+    }
+
+    return filtered;
+  }, [value, availableValues]);
+
+  // Only set value if we have available values (indicating options are ready)
+  // For referenceType: relations are static, so always available
+  // For source: only set when comboboxOptions has items
+  const shouldSetValue = availableValues.length > 0 || safeValue.length === 0;
+
+  return <Combobox {...props} value={shouldSetValue ? safeValue : []} />;
+};
+```
+
+#### Option 3: Use initialValue Instead of value (Uncontrolled Initially)
+
+Start uncontrolled, then switch to controlled:
+
+```typescript
+const SafeCombobox = ({ value, availableValues = [], ...props }: SafeComboboxProps) => {
+  const safeValue = useMemo(() => {
+    if (!value || !Array.isArray(value)) return [];
+    const filtered = value.filter((v) => v != null && v !== '' && String(v).trim() !== '');
+    if (availableValues.length > 0) {
+      return filtered.filter((v) => availableValues.includes(String(v)));
+    }
+    return filtered;
+  }, [value, availableValues]);
+
+  const [useInitialValue, setUseInitialValue] = useState(true);
+
+  useEffect(() => {
+    // After first render, switch to controlled mode
+    if (useInitialValue && safeValue.length > 0) {
+      setUseInitialValue(false);
+    }
+  }, [safeValue, useInitialValue]);
+
+  if (useInitialValue && safeValue.length > 0) {
+    return <Combobox {...props} initialValue={safeValue} />;
+  }
+
+  return <Combobox {...props} value={safeValue} />;
+};
+```
+
+#### Option 4: Don't Set Value Until Options Are Confirmed (Simplest)
+
+For the source Combobox specifically, only set value when `comboboxOptions` has items:
+
+```typescript
+// In FieldModal component, for source Combobox:
+value={
+  comboboxOptions.length > 0 && 
+  values?.source && 
+  values.source.trim() !== '' &&
+  comboboxOptions.some((option) => option.uri === values.source)
+    ? [values.source] 
+    : []
+}
+```
+
+### Recommended Approach
+
+**For referenceType Combobox**: Use Option 2 or Option 4 - relations are static, so options are always available immediately.
+
+**For source Combobox**: Use Option 4 - only set value when `comboboxOptions.length > 0`, ensuring options are loaded.
+
+### Updated SafeCombobox Implementation
+
+```typescript
+const SafeCombobox = ({ 
+  value, 
+  availableValues = [], 
+  requireOptionsReady = false,
+  ...props 
+}: SafeComboboxProps & { requireOptionsReady?: boolean }) => {
+  const safeValue = useMemo(() => {
+    if (!value || !Array.isArray(value)) return [];
+
+    const filtered = value.filter((v) => v != null && v !== '' && String(v).trim() !== '');
+
+    if (availableValues.length > 0) {
+      return filtered.filter((v) => availableValues.includes(String(v)));
+    }
+
+    return filtered;
+  }, [value, availableValues]);
+
+  // If requireOptionsReady is true, only set value when options are available
+  const finalValue = requireOptionsReady && availableValues.length === 0 ? [] : safeValue;
+
+  return <Combobox {...props} value={finalValue} />;
+};
+```
+
+Then use it like:
+```typescript
+// For referenceType (static options, always ready):
+<SafeCombobox ... availableValues={availableRelationCodes} />
+
+// For source (dynamic options, wait until ready):
+<SafeCombobox ... availableValues={availableDatasetUris} requireOptionsReady />
+```
