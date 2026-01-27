@@ -212,8 +212,6 @@ const FieldModal = ({
     setComboboxOptions(options);
   }, [selectedValue, searchHits]);
 
-  return null;
-
   return (
     <>
       <Dialog.TriggerContext>
@@ -245,6 +243,11 @@ const FieldModal = ({
                 }
               }, [values, dirty]);
 
+              console.log('debug', values, values.referenceType);
+              /* 
+                output: debug Object { source: "", referenceType: "" } <empty string>
+              */
+
               return (
                 <>
                   <Dialog.Block>
@@ -261,7 +264,7 @@ const FieldModal = ({
                         <Fieldset.Legend>{localization.datasetForm.fieldLabel.relationType}</Fieldset.Legend>
                         <Combobox
                           onValueChange={(value) => setFieldValue(`referenceType`, value.toString())}
-                          value={values.referenceType ? [values.referenceType] : []}
+                          // value={values?.referenceType ? [values?.referenceType] : []}
                           placeholder={`${localization.datasetForm.fieldLabel.choseRelation}...`}
                           portal={false}
                           data-size='sm'
@@ -290,7 +293,7 @@ const FieldModal = ({
                             setFieldValue(`source`, value.toString());
                           }}
                           loading={searching}
-                          value={values?.source && !isEmpty(values.source) ? [values.source] : []}
+                          // value={values?.source && !isEmpty(values.source) ? [values.source] : []}
                           placeholder={`${localization.search.search}...`}
                           portal={false}
                           data-size='sm'
