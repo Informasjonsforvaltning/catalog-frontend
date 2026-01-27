@@ -56,7 +56,7 @@ const ChangeRequestEditPage = withReadProtectedPage(
       });
 
     if (!changeRequest || changeRequest.catalogId !== catalogId) {
-      return redirect(`/notfound`, RedirectType.replace);
+      return redirect("/notfound", RedirectType.replace);
     }
 
     if (

@@ -567,7 +567,7 @@ export const DatasetForm = ({
                         title={
                           localization.datasetForm.fieldLabel.registrationStatus
                         }
-                        aria-label={"statusSwitch"}
+                        aria-label="statusSwitch"
                       >
                         {localization.datasetForm.helptext.statusSwitch}
                       </HelpMarkdown>

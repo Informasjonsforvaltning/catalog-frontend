@@ -32,12 +32,12 @@ const withProtectedPage = (
     const { catalogId, datasetId } = await params;
 
     if (!validOrganizationNumber(catalogId)) {
-      redirect(`/notfound`, RedirectType.replace);
+      redirect("/notfound", RedirectType.replace);
     }
 
     [datasetId].forEach((param) => {
       if (params[param] && !validUUID(params[param])) {
-        return redirect(`/notfound`, RedirectType.replace);
+        return redirect("/notfound", RedirectType.replace);
       }
     });
 

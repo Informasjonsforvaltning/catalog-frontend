@@ -211,7 +211,7 @@ export async function updateConcept(
     }
   } catch (error) {
     console.error(`${localization.alert.fail} ${error}`);
-    throw new Error(`Noe gikk galt, prøv igjen...`);
+    throw new Error("Noe gikk galt, prøv igjen...");
   }
 
   if (success) {

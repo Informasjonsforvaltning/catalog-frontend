@@ -85,7 +85,7 @@ export const UriWithLabelFieldsetTable = ({
                         <FieldModal
                           fieldName={fieldName}
                           template={item}
-                          type={"edit"}
+                          type="edit"
                           onSuccess={(updatedItem: UriWithLabel) => {
                             arrayHelpers.replace(index, updatedItem);
                             setSnapshot([...(fieldValues ?? [])]);
@@ -113,7 +113,7 @@ export const UriWithLabelFieldsetTable = ({
               <FieldModal
                 fieldName={fieldName}
                 template={{ prefLabel: {}, uri: "" }}
-                type={"new"}
+                type="new"
                 onSuccess={() => setSnapshot([...(fieldValues ?? [])])}
                 onCancel={() => setFieldValue(fieldName, snapshot)}
                 onChange={(updatedItem: UriWithLabel) => {

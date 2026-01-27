@@ -30,7 +30,7 @@ const withProtectedPage = (
     const { catalogId } = await params;
 
     if (catalogId && !validOrganizationNumber(catalogId)) {
-      redirect(`/no-access`, RedirectType.replace);
+      redirect("/no-access", RedirectType.replace);
     }
 
     const session = await getValidSession();
@@ -43,14 +43,14 @@ const withProtectedPage = (
       (hasOrganizationReadPermission(session?.accessToken, catalogId) ||
         hasSystemAdminPermission(session.accessToken));
     if (!hasReadPermission) {
-      redirect(`/no-access`, RedirectType.replace);
+      redirect("/no-access", RedirectType.replace);
     }
 
     const hasWritePermission =
       session?.accessToken &&
       hasOrganizationWritePermission(session.accessToken, catalogId);
     if (!hasWritePermission && permissions === "write") {
-      redirect(`/no-access`, RedirectType.replace);
+      redirect("/no-access", RedirectType.replace);
     }
 
     const hasAdminPermission =

@@ -10,7 +10,7 @@ import { Heading } from "@digdir/designsystemet-react";
 const NotFound = async () => {
   const breadcrumbList = [
     {
-      href: `#`,
+      href: "#",
       text: localization.notFound,
     },
   ] as BreadcrumbType[];

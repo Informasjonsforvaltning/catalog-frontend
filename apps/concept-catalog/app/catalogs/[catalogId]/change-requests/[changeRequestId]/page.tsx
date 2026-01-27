@@ -50,7 +50,7 @@ const ChangeRequestDetailsPage = withReadProtectedPage(
     )
       .then((response) => {
         if (response.status === 404) {
-          return redirect(`/notfound`, RedirectType.replace);
+          return redirect("/notfound", RedirectType.replace);
         }
         return response.json();
       })
@@ -78,7 +78,7 @@ const ChangeRequestDetailsPage = withReadProtectedPage(
                   });
                 });
               } else {
-                return redirect(`/notfound`, RedirectType.replace);
+                return redirect("/notfound", RedirectType.replace);
               }
             })
           : null;

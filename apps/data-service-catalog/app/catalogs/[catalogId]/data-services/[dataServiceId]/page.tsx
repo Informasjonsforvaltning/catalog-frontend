@@ -26,7 +26,7 @@ const EditDataServicePage = withReadProtectedPage(
     `/catalogs/${catalogId}/data-services/${dataServiceId}`,
   async ({ catalogId, dataServiceId, session }) => {
     if (!dataServiceId || !validDataServiceID(dataServiceId)) {
-      return redirect(`/notfound`, RedirectType.replace);
+      return redirect("/notfound", RedirectType.replace);
     }
     if (!session) {
       return redirectToSignIn(
@@ -42,7 +42,7 @@ const EditDataServicePage = withReadProtectedPage(
     );
 
     if (!dataService || dataService.catalogId !== catalogId) {
-      redirect(`/not-found`, RedirectType.replace);
+      redirect("/not-found", RedirectType.replace);
     }
 
     const hasWritePermission =

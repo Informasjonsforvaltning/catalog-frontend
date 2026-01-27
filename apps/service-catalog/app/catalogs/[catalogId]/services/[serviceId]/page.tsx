@@ -28,7 +28,7 @@ export default async function ServiceDetailsPage({
   }
   const service: Service | null = await getServiceById(catalogId, serviceId);
   if (!service) {
-    return redirect(`/notfound`, RedirectType.replace);
+    return redirect("/notfound", RedirectType.replace);
   }
   const hasWritePermission =
     session && hasOrganizationWritePermission(session?.accessToken, catalogId);
