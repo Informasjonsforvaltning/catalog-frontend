@@ -46,7 +46,7 @@ export const AccessRightFields = ({ isMobility: isMobility }: Props) => {
         <div>
           <FieldsetDivider />
           <UriWithLabelFieldsetTable
-            fieldName={"legalBasisForRestriction"}
+            fieldName="legalBasisForRestriction"
             errors={errors.legalBasisForRestriction}
             hideHeadWhenEmpty={true}
             label={
@@ -55,7 +55,7 @@ export const AccessRightFields = ({ isMobility: isMobility }: Props) => {
                   localization.datasetForm.helptext.legalBasisForRestriction
                 }
                 tagTitle={localization.tag.recommended}
-                tagColor={"info"}
+                tagColor="info"
               >
                 {localization.datasetForm.fieldLabel.legalBasisForRestriction}
               </TitleWithHelpTextAndTag>
@@ -65,7 +65,7 @@ export const AccessRightFields = ({ isMobility: isMobility }: Props) => {
           <FieldsetDivider />
 
           <UriWithLabelFieldsetTable
-            fieldName={"legalBasisForProcessing"}
+            fieldName="legalBasisForProcessing"
             errors={errors.legalBasisForProcessing}
             hideHeadWhenEmpty={true}
             label={
@@ -74,7 +74,7 @@ export const AccessRightFields = ({ isMobility: isMobility }: Props) => {
                   localization.datasetForm.helptext.legalBasisForProcessing
                 }
                 tagTitle={localization.tag.recommended}
-                tagColor={"info"}
+                tagColor="info"
               >
                 {localization.datasetForm.fieldLabel.legalBasisForProcessing}
               </TitleWithHelpTextAndTag>
@@ -84,14 +84,14 @@ export const AccessRightFields = ({ isMobility: isMobility }: Props) => {
           <FieldsetDivider />
 
           <UriWithLabelFieldsetTable
-            fieldName={"legalBasisForAccess"}
+            fieldName="legalBasisForAccess"
             errors={errors.legalBasisForAccess}
             hideHeadWhenEmpty={true}
             label={
               <TitleWithHelpTextAndTag
                 helpText={localization.datasetForm.helptext.legalBasisForAccess}
                 tagTitle={localization.tag.recommended}
-                tagColor={"info"}
+                tagColor="info"
               >
                 {localization.datasetForm.fieldLabel.legalBasisForAccess}
               </TitleWithHelpTextAndTag>

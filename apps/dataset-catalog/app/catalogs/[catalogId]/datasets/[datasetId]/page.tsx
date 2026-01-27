@@ -34,7 +34,7 @@ const DatasetDetailPage = withReadProtectedPage(
   ({ catalogId, datasetId }) => `/catalogs/${catalogId}/datasets/${datasetId}`,
   async ({ catalogId, datasetId }) => {
     if (!datasetId || !validUUID(datasetId)) {
-      return redirect(`/catalogs/notfound`, RedirectType.replace);
+      return redirect("/catalogs/notfound", RedirectType.replace);
     }
     const dataset = await getDatasetById(catalogId, datasetId);
 
@@ -43,9 +43,7 @@ const DatasetDetailPage = withReadProtectedPage(
 
     const session = await getValidSession();
     if (!session) {
-      return redirectToSignIn({
-        callbackUrl: `/catalogs/${catalogId}/datasets/${datasetId}`,
-      });
+      return redirectToSignIn(`/catalogs/${catalogId}/datasets/${datasetId}`);
     }
     const hasWritePermission =
       session &&

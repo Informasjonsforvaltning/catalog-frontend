@@ -58,9 +58,7 @@ const FIELD_CONFIG = [
             props.setFieldValue("type", value.toString())
           }
         >
-          <Combobox.Option
-            value={""}
-          >{`${localization.choose}...`}</Combobox.Option>
+          <Combobox.Option value="">{`${localization.choose}...`}</Combobox.Option>
           {props.datasetTypeOptions}
         </FastFieldWithRef>
       </Fieldset>
@@ -305,7 +303,7 @@ const FIELD_CONFIG = [
                 props.setFocus(
                   arrayHelpers.form.values.landingPage
                     ? `landingPage[${arrayHelpers.form.values.landingPage.length}]`
-                    : `landingPage[0]`,
+                    : "landingPage[0]",
                 );
               }}
             >
@@ -324,7 +322,7 @@ const FIELD_CONFIG = [
     getValue: (values: Dataset) => values?.conformsTo,
     render: (props: any) => (
       <UriWithLabelFieldsetTable
-        fieldName={"conformsTo"}
+        fieldName="conformsTo"
         errors={props.errors.conformsTo}
         hideHeadWhenEmpty={true}
         showDivider={props.showDivider}

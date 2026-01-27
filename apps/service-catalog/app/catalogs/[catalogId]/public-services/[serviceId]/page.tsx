@@ -24,9 +24,9 @@ export default async function PublicServiceDetailsPage({
 
   const session = await getValidSession();
   if (!session) {
-    return redirectToSignIn({
-      callbackUrl: `/catalogs/${catalogId}/public-services/${serviceId}`,
-    });
+    return redirectToSignIn(
+      `/catalogs/${catalogId}/public-services/${serviceId}`,
+    );
   }
 
   const service: Service | null = await getPublicServiceById(
@@ -34,7 +34,7 @@ export default async function PublicServiceDetailsPage({
     serviceId,
   );
   if (!service) {
-    redirect(`/notfound`, RedirectType.replace);
+    redirect("/notfound", RedirectType.replace);
   }
   const hasWritePermission =
     session && hasOrganizationWritePermission(session?.accessToken, catalogId);

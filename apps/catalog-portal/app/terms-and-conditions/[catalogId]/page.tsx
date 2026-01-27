@@ -14,9 +14,7 @@ const TermsAndConditionsPage = withReadProtectedPage(
   ({ catalogId }) => `/terms-and-conditions/${catalogId}`,
   async ({ catalogId, session, hasAdminPermission }) => {
     if (!session) {
-      return redirectToSignIn({
-        callbackUrl: `terms-and-conditions/${catalogId}`,
-      });
+      return redirectToSignIn(`/terms-and-conditions/${catalogId}`);
     }
 
     const breadcrumbList = catalogId

@@ -24,13 +24,11 @@ export default async function ServiceDetailsPage({
 
   const session = await getValidSession();
   if (!session) {
-    return redirectToSignIn({
-      callbackUrl: `/catalogs/${catalogId}/services/${serviceId}`,
-    });
+    return redirectToSignIn(`/catalogs/${catalogId}/services/${serviceId}`);
   }
   const service: Service | null = await getServiceById(catalogId, serviceId);
   if (!service) {
-    return redirect(`/notfound`, RedirectType.replace);
+    return redirect("/notfound", RedirectType.replace);
   }
   const hasWritePermission =
     session && hasOrganizationWritePermission(session?.accessToken, catalogId);

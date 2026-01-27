@@ -43,7 +43,7 @@ export function ImportModal({ catalogId }: Props) {
   return (
     <Modal.Root>
       <Modal.Trigger asChild>
-        <Button variant={"secondary"} size="small">
+        <Button variant="secondary" size="small">
           <FileImportIcon fontSize="1.5rem" />
           Import
         </Button>
@@ -73,7 +73,7 @@ export function ImportModal({ catalogId }: Props) {
               <>
                 <LinkButton
                   href={`/catalogs/${catalogId}/data-services/import-results`}
-                  variant={"secondary"}
+                  variant="secondary"
                 >
                   Resultater
                 </LinkButton>

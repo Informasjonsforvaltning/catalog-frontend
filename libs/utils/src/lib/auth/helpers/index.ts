@@ -3,11 +3,6 @@ import { redirect } from "next/navigation";
 import { authOptions } from "../auth-options";
 import { validateOidcUserSession } from "../token";
 
-type SignInCallbackProps = {
-  callbackUrl: string;
-  callbackParams?: any;
-};
-
 export const isValidSessionAndToken = async (session: any) =>
   session &&
   session.accessTokenExpiresAt > Date.now() / 1000 &&
@@ -31,15 +26,10 @@ export const getValidSession = async () => {
   return valid ? session : null;
 };
 
-export const redirectToSignIn = (
-  callback: SignInCallbackProps | undefined = undefined,
-) => {
-  if (callback) {
-    const { callbackUrl, callbackParams } = callback;
-    if (callbackUrl.startsWith("/")) {
-      const callbackUrlWithParams = `${callbackUrl}${callbackParams ? "?" + new URLSearchParams(callbackParams) : ""}`;
-      return redirect(`/auth/signin?callbackUrl=${callbackUrlWithParams}`);
-    }
-  }
-  return redirect("/auth/signin");
+export const redirectToSignIn = (callbackUrl?: string): never => {
+  return redirect(
+    callbackUrl?.startsWith("/")
+      ? `/auth/signin?callbackUrl=${callbackUrl}`
+      : "/auth/signin",
+  );
 };

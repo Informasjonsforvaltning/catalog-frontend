@@ -17,7 +17,7 @@ export const CheckboxGroupFilter = <T,>({
   value,
 }: Props<T>) => {
   return (
-    <Checkbox.Group onChange={onChange} size="small" value={value} legend={""}>
+    <Checkbox.Group onChange={onChange} size="small" value={value} legend="">
       {items.map(({ value, label }) => (
         <Checkbox
           size="small"

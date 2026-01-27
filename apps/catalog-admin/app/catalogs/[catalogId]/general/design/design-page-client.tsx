@@ -175,7 +175,7 @@ const DesignPageClient = ({
               <div className={styles.label}>
                 <Label>{localization.catalogAdmin.backgroundColor}</Label>
               </div>
-              <ColorPicker catalogId={catalogId} type={"background"} />
+              <ColorPicker catalogId={catalogId} type="background" />
             </div>
             <div>
               <div className={styles.label}>

@@ -293,8 +293,8 @@ const DatasetsPageClient = ({
       <div className={styles.set}>
         {dataset.specializedType === "SERIES" && (
           <HelpMarkdown
-            aria-label={"series-not-implemented-warning"}
-            severity={"warning"}
+            aria-label="series-not-implemented-warning"
+            severity="warning"
           >
             Datasettserier har ikke blitt implementert enda
           </HelpMarkdown>

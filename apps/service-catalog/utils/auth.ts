@@ -32,20 +32,18 @@ const withProtectedPage = (
     const { catalogId, serviceId } = await params;
 
     if (!validOrganizationNumber(catalogId)) {
-      redirect(`/notfound`, RedirectType.replace);
+      redirect("/notfound", RedirectType.replace);
     }
 
     [serviceId].forEach((param) => {
       if (params[param] && !validUUID(params[param])) {
-        return redirect(`/notfound`, RedirectType.replace);
+        return redirect("/notfound", RedirectType.replace);
       }
     });
 
     const session = await getValidSession();
     if (!session) {
-      return redirectToSignIn({
-        callbackUrl: pagePath({ catalogId, serviceId }),
-      });
+      return redirectToSignIn(pagePath({ catalogId, serviceId }));
     }
 
     const hasReadPermission =

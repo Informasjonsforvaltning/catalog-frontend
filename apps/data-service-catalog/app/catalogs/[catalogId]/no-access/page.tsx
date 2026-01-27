@@ -17,7 +17,7 @@ const NoAccess = async ({
   const breadcrumbList = catalogId
     ? ([
         {
-          href: `#`,
+          href: "#",
           text: localization.noAccess,
         },
       ] as BreadcrumbType[])

@@ -60,7 +60,7 @@ export function EditableFieldsClient({ catalogId }: EditableFieldsClientProps) {
   };
 
   const codeListsOptions = [
-    <option key={"no-codelist"} value={undefined}>
+    <option key="no-codelist" value={undefined}>
       {localization.catalogAdmin.noListChosen}
     </option>,
     ...(dbCodeLists?.map((codeList: CodeList) => (
