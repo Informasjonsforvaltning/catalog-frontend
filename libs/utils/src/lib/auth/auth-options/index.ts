@@ -89,6 +89,13 @@ export const authOptions: AuthOptions = {
   },
   callbacks: {
     async session({ session, token }: any) {
+      console.log(
+        "[AUTH] Session callback - token.expires_at:",
+        token.expires_at,
+        "| token.error:",
+        token.error,
+      );
+
       session.user = {
         id: token.id ?? null,
         name: token.name,
@@ -105,7 +112,17 @@ export const authOptions: AuthOptions = {
       return session;
     },
     async jwt({ token, user, account, trigger }) {
-      console.log("[AUTH] JWT callback - trigger:", trigger);
+      const now = Math.floor(Date.now() / 1000);
+      console.log(
+        "[AUTH] JWT callback - trigger:",
+        trigger,
+        "| hasAccount:",
+        !!account,
+        "| token.expires_at:",
+        token.expires_at,
+        "| now:",
+        now,
+      );
 
       if (trigger === "update") {
         console.log("[AUTH] JWT callback - manual update trigger, refreshing");
@@ -114,13 +131,10 @@ export const authOptions: AuthOptions = {
 
       if (account) {
         // Save the access token and refresh token in the JWT on the initial login
-        const expiresAt = Math.floor(
-          Date.now() / 1000 + Number(account.expires_in),
-        );
-        console.log(
-          "[AUTH] JWT callback - initial login, expires_at:",
-          expiresAt,
-        );
+        const expiresAt = Math.floor(now + Number(account.expires_in));
+        console.log("[AUTH] JWT callback - INITIAL LOGIN");
+        console.log("[AUTH]   expires_in from Keycloak:", account.expires_in);
+        console.log("[AUTH]   calculated expires_at:", expiresAt);
         return {
           ...user,
           access_token: account.access_token,
@@ -132,7 +146,12 @@ export const authOptions: AuthOptions = {
         // If the access token has not expired yet, return it
         return token;
       } else {
-        console.log("[AUTH] JWT callback - token expired, refreshing");
+        const expiredBy = now - Number(token.expires_at);
+        console.log(
+          "[AUTH] JWT callback - token expired by",
+          expiredBy,
+          "seconds, refreshing",
+        );
         return refreshToken(token);
       }
     },
