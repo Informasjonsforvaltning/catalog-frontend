@@ -681,26 +681,20 @@ export const DistributionModal = ({
                     </Modal.Header>
 
                     <Modal.Content className={styles.modalContent}>
-                      {distributionType === "distribution" && (
-                        <>
-                          <FormikLanguageFieldset
-                            as={Textfield}
-                            name="title"
-                            legend={
-                              <TitleWithHelpTextAndTag
-                                helpText={
-                                  localization.datasetForm.helptext.title
-                                }
-                                tagTitle={localization.tag.recommended}
-                                tagColor="info"
-                              >
-                                {localization.title}
-                              </TitleWithHelpTextAndTag>
-                            }
-                          />
-                          <FieldsetDivider />
-                        </>
-                      )}
+                      <FormikLanguageFieldset
+                        as={Textfield}
+                        name="title"
+                        legend={
+                          <TitleWithHelpTextAndTag
+                            helpText={localization.datasetForm.helptext.title}
+                            tagTitle={localization.tag.recommended}
+                            tagColor="info"
+                          >
+                            {localization.title}
+                          </TitleWithHelpTextAndTag>
+                        }
+                      />
+                      <FieldsetDivider />
                       <FormikLanguageFieldset
                         as={TextareaWithPrefix}
                         legend={
@@ -1000,51 +994,42 @@ export const DistributionModal = ({
                         )}
                       </Fieldset>
                       <FieldsetDivider />
-                      {distributionType === "distribution" && (
-                        <>
-                          <Fieldset
-                            size="sm"
-                            legend={
-                              <TitleWithHelpTextAndTag
-                                tagTitle={localization.tag.recommended}
-                                tagColor="info"
-                                helpText={
-                                  localization.datasetForm.helptext.license
-                                }
-                              >
-                                {localization.datasetForm.fieldLabel.license}
-                              </TitleWithHelpTextAndTag>
-                            }
+                      <Fieldset
+                        size="sm"
+                        legend={
+                          <TitleWithHelpTextAndTag
+                            tagTitle={localization.tag.recommended}
+                            tagColor="info"
+                            helpText={localization.datasetForm.helptext.license}
                           >
-                            <Combobox
-                              value={values?.license ? [values?.license] : [""]}
-                              portal={false}
-                              onValueChange={(selectedValues) => {
-                                setFieldValue(
-                                  "license",
-                                  selectedValues.toString(),
-                                );
-                              }}
-                              size="sm"
-                              virtual
-                            >
-                              <Combobox.Option key="license-none" value="">
-                                {localization.none}
+                            {localization.datasetForm.fieldLabel.license}
+                          </TitleWithHelpTextAndTag>
+                        }
+                      >
+                        <Combobox
+                          value={values?.license ? [values?.license] : [""]}
+                          portal={false}
+                          onValueChange={(selectedValues) => {
+                            setFieldValue("license", selectedValues.toString());
+                          }}
+                          size="sm"
+                          virtual
+                        >
+                          <Combobox.Option key="license-none" value="">
+                            {localization.none}
+                          </Combobox.Option>
+                          {openLicenses &&
+                            openLicenses.map((license: any, i: number) => (
+                              <Combobox.Option
+                                key={`license-${license.uri}-${i}`}
+                                value={license.uri}
+                              >
+                                {getTranslateText(license.label)}
                               </Combobox.Option>
-                              {openLicenses &&
-                                openLicenses.map((license: any, i: number) => (
-                                  <Combobox.Option
-                                    key={`license-${license.uri}-${i}`}
-                                    value={license.uri}
-                                  >
-                                    {getTranslateText(license.label)}
-                                  </Combobox.Option>
-                                ))}
-                            </Combobox>
-                          </Fieldset>
-                          <FieldsetDivider />
-                        </>
-                      )}
+                            ))}
+                        </Combobox>
+                      </Fieldset>
+                      <FieldsetDivider />
                       {expandedFields.map((f, index) =>
                         renderField(
                           f,
