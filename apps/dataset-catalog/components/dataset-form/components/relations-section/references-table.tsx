@@ -212,6 +212,8 @@ const FieldModal = ({
     setComboboxOptions(options);
   }, [selectedValue, searchHits]);
 
+  return null;
+
   return (
     <>
       <Dialog.TriggerContext>

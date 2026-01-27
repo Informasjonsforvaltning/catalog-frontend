@@ -16,6 +16,8 @@ export const ThemeSection = ({ losThemes, euDataThemes }: Props) => {
     return option.label.toLowerCase().includes(inputValue.toLowerCase());
   };
 
+  return null;
+
   return (
     <>
       <FastField
