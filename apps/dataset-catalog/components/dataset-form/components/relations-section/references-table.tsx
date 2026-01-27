@@ -243,11 +243,6 @@ const FieldModal = ({
                 }
               }, [values, dirty]);
 
-              console.log('debug', values, values.referenceType);
-              /* 
-                output: debug Object { source: "", referenceType: "" } <empty string>
-              */
-
               return (
                 <>
                   <Dialog.Block>
@@ -263,8 +258,14 @@ const FieldModal = ({
                       <Fieldset data-size='sm'>
                         <Fieldset.Legend>{localization.datasetForm.fieldLabel.relationType}</Fieldset.Legend>
                         <Combobox
-                          onValueChange={(value) => setFieldValue(`referenceType`, value.toString())}
-                          // value={values?.referenceType ? [values?.referenceType] : []}
+                          onValueChange={(value) => {
+                            // value is string[], extract first element for single selection
+                            const selectedValue = Array.isArray(value) && value.length > 0 ? value[0] : '';
+                            setFieldValue('referenceType', selectedValue);
+                          }}
+                          value={values?.referenceType && values.referenceType.trim() !== '' 
+                            ? [values.referenceType] 
+                            : []}
                           placeholder={`${localization.datasetForm.fieldLabel.choseRelation}...`}
                           portal={false}
                           data-size='sm'
@@ -289,11 +290,13 @@ const FieldModal = ({
                         <Combobox
                           onChange={(input: any) => setSearchQuery(input.target.value)}
                           onValueChange={(value) => {
-                            setSelectedUri(value.toString());
-                            setFieldValue(`source`, value.toString());
+                            // value is string[], extract first element for single selection
+                            const selectedUriValue = Array.isArray(value) && value.length > 0 ? value[0] : '';
+                            setSelectedUri(selectedUriValue);
+                            setFieldValue('source', selectedUriValue);
                           }}
                           loading={searching}
-                          // value={values?.source && !isEmpty(values.source) ? [values.source] : []}
+                          value={values?.source && values.source.trim() !== '' ? [values.source] : []}
                           placeholder={`${localization.search.search}...`}
                           portal={false}
                           data-size='sm'

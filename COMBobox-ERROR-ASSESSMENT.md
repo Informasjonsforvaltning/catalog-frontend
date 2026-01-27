@@ -102,7 +102,9 @@ These are optional arrays of strings, but the API may return arrays with undefin
 
 3. **Combobox Library Expectation**: The Combobox library might expect objects with `.value` properties in certain modes, but receives plain strings (though this is less likely given the `multiple` prop usage)
 
-## Recommended Fix Strategy
+## Recommended Fix Strategy (Application-Level Only)
+
+**⚠️ Constraint**: Since we cannot modify the Combobox component in the design system, all fixes must be implemented in our application code.
 
 ### Option 1: Filter at Component Level (Immediate Fix)
 Add defensive filtering in `theme-section.tsx`:
@@ -124,6 +126,35 @@ losTheme: (dataset.losTheme ?? []).filter(Boolean),
 Implement both:
 1. Clean initial values at the template level
 2. Add defensive checks in the component for runtime safety
+3. Validate values exist in available options before passing to Combobox
+
+### Option 4: Create Utility Functions (Reusable Solution)
+Create helper functions to safely prepare values for Combobox:
+
+```typescript
+// utils/combobox-helpers.ts
+export const sanitizeComboboxValue = (value: string | undefined | null): string[] => {
+  if (!value || typeof value !== 'string' || value.trim() === '') {
+    return [];
+  }
+  return [value];
+};
+
+export const validateAndSanitizeComboboxValue = (
+  value: string | undefined | null,
+  availableOptions: Array<{ value: string } | string>,
+  getValue?: (option: any) => string
+): string[] => {
+  if (!value || typeof value !== 'string' || value.trim() === '') {
+    return [];
+  }
+  
+  const valueExtractor = getValue || ((option: any) => typeof option === 'string' ? option : option.value);
+  const exists = availableOptions.some((option) => valueExtractor(option) === value);
+  
+  return exists ? [value] : [];
+};
+```
 
 ## Additional Considerations
 
@@ -234,11 +265,14 @@ This is a **data sanitization problem** where arrays containing undefined/null v
 ### Design System Issue
 The Combobox component in `@digdir/designsystemet-react` has a **defensive coding gap** in its `useEffect` hook (lines 225-241). It should filter out undefined/null values before processing, or add a guard clause to check if `value` exists before accessing `value.value`.
 
-### Recommended Actions
+**⚠️ Important Constraint**: We **cannot modify** the Combobox component in the design system. All fixes must be implemented at the application level.
 
-1. **Immediate Fix**: Filter values at the component level in all Combobox usages
+### Recommended Actions (Application-Level Only)
+
+1. **Immediate Fix**: Filter and validate values at the component level in all Combobox usages
 2. **Data Layer Fix**: Clean initial values in `dataset-initial-values.tsx`
-3. **Long-term**: Consider contributing a fix to the design system to handle undefined/null values gracefully
+3. **Value Validation**: Ensure all values passed to Combobox exist in available options before passing them
+4. **Defensive Wrappers**: Consider creating wrapper components or utility functions to safely handle Combobox values
 
 ---
 
@@ -440,3 +474,270 @@ After implementing fixes, verify:
    - [ ] Empty strings are handled correctly
    - [ ] Undefined/null values don't cause errors
    - [ ] Modal can be opened/closed without errors
+
+---
+
+## Additional Issue Discovered: Value Not Found in Options
+
+### Error After Initial Fix
+After implementing the fixes, a new error occurred:
+
+**Error Location:** `references-table.tsx:260` (referenceType Combobox)
+
+**Error Message:** `can't access property "value", value is undefined`
+
+### Root Cause Analysis
+
+The issue occurs because:
+
+1. **Value Validation Missing**: The `value` prop is being set to `[values.referenceType]` without verifying that `values.referenceType` actually exists in the available options (the `relations` array).
+
+2. **Combobox Internal Lookup Failure**: 
+   - The Combobox's internal `useEffect` (lines 225-241 in design system) tries to look up the value in its options map
+   - If `values.referenceType` doesn't match any `relation.code` in the `relations` array, the lookup returns `undefined`
+   - When the reduce function tries to access `value.value` on `undefined`, it throws the error
+
+3. **Possible Scenarios**:
+   - `values.referenceType` might be an old/invalid value that no longer exists in relations
+   - `values.referenceType` might be `undefined` or an empty string that passes the `.trim() !== ''` check but doesn't exist in options
+   - The value might be from a different data source that doesn't match the relations codes
+
+### The Problem in Code
+
+Current code (line 266-268):
+```typescript
+value={values?.referenceType && values.referenceType.trim() !== '' 
+  ? [values.referenceType] 
+  : []}
+```
+
+**Issue**: This checks if the value is non-empty, but doesn't verify it exists in the `relations` array.
+
+### Required Fix: Validate Value Against Available Options
+
+The `value` prop should only be set if the value exists in the available options. For the referenceType Combobox, we need to check if `values.referenceType` matches any `relation.code` in the `relations` array.
+
+#### Fix for referenceType Combobox
+
+```typescript
+value={
+  values?.referenceType && 
+  values.referenceType.trim() !== '' &&
+  relations.some((relation) => relation.code === values.referenceType)
+    ? [values.referenceType] 
+    : []
+}
+```
+
+Or using a helper function for clarity:
+
+```typescript
+const isValidReferenceType = (refType: string | undefined): boolean => {
+  if (!refType || refType.trim() === '') return false;
+  return relations.some((relation) => relation.code === refType);
+};
+
+// Then in the component:
+value={isValidReferenceType(values?.referenceType) ? [values.referenceType] : []}
+```
+
+#### Fix for source Combobox
+
+Similarly, for the source Combobox, we should validate that the URI exists in `comboboxOptions`:
+
+```typescript
+value={
+  values?.source && 
+  values.source.trim() !== '' &&
+  comboboxOptions.some((option) => option.uri === values.source)
+    ? [values.source] 
+    : []
+}
+```
+
+Or using a helper:
+
+```typescript
+const isValidSourceUri = (uri: string | undefined): boolean => {
+  if (!uri || uri.trim() === '') return false;
+  return comboboxOptions.some((option) => option.uri === uri);
+};
+
+// Then in the component:
+value={isValidSourceUri(values?.source) ? [values.source] : []}
+```
+
+### Why This Happens
+
+1. **Data Inconsistency**: The form might have a `referenceType` value that was valid when saved, but the relations list might have changed, or the value might be from a different source.
+
+2. **Initial Render Timing**: When the modal first opens, `comboboxOptions` might not be fully populated yet, causing the lookup to fail.
+
+3. **Form State vs Options State**: The form values might be set before the options are available, or the options might change after the form values are set.
+
+### Complete Fixed Code
+
+#### Updated referenceType Combobox (Lines 260-285)
+
+```typescript
+<Combobox
+  onValueChange={(value) => {
+    // value is string[], extract first element for single selection
+    const selectedValue = Array.isArray(value) && value.length > 0 ? value[0] : '';
+    setFieldValue('referenceType', selectedValue);
+  }}
+  value={
+    values?.referenceType && 
+    values.referenceType.trim() !== '' &&
+    relations.some((relation) => relation.code === values.referenceType)
+      ? [values.referenceType] 
+      : []
+  }
+  placeholder={`${localization.datasetForm.fieldLabel.choseRelation}...`}
+  portal={false}
+  data-size='sm'
+  error={errors?.referenceType}
+  virtual
+>
+  <Combobox.Empty>{localization.search.noHits}</Combobox.Empty>
+  {relations.map((relation) => (
+    <Combobox.Option
+      key={relation?.code}
+      value={relation?.code}
+      description={`${relation?.uriAsPrefix} (${relation?.uri})`}
+    >
+      {getTranslateText(relation?.label)}
+    </Combobox.Option>
+  ))}
+</Combobox>
+```
+
+#### Updated source Combobox (Lines 290-304)
+
+```typescript
+<Combobox
+  onChange={(input: any) => setSearchQuery(input.target.value)}
+  onValueChange={(value) => {
+    // value is string[], extract first element for single selection
+    const selectedUriValue = Array.isArray(value) && value.length > 0 ? value[0] : '';
+    setSelectedUri(selectedUriValue);
+    setFieldValue('source', selectedUriValue);
+  }}
+  loading={searching}
+  value={
+    values?.source && 
+    values.source.trim() !== '' &&
+    comboboxOptions.some((option) => option.uri === values.source)
+      ? [values.source] 
+      : []
+  }
+  placeholder={`${localization.search.search}...`}
+  portal={false}
+  data-size='sm'
+  error={errors?.source}
+>
+  <Combobox.Empty>{localization.search.noHits}</Combobox.Empty>
+  {comboboxOptions?.map((dataset) => {
+    return (
+      <Combobox.Option
+        key={dataset.uri}
+        value={dataset.uri}
+        displayValue={dataset.title ? getTranslateText(dataset.title) : dataset.uri}
+      >
+        <div className={styles.comboboxOptionTwoColumns}>
+          <div>{dataset.title ? getTranslateText(dataset.title) : dataset.uri}</div>
+          <div>{getTranslateText(dataset.organization?.prefLabel) ?? ''}</div>
+        </div>
+      </Combobox.Option>
+    );
+  })}
+</Combobox>
+```
+
+### Alternative Approach: Use useMemo for Validation
+
+For better performance and cleaner code, consider using `useMemo` to compute valid values:
+
+```typescript
+const validReferenceType = useMemo(() => {
+  if (!values?.referenceType || values.referenceType.trim() === '') return null;
+  const exists = relations.some((relation) => relation.code === values.referenceType);
+  return exists ? values.referenceType : null;
+}, [values?.referenceType]);
+
+const validSourceUri = useMemo(() => {
+  if (!values?.source || values.source.trim() === '') return null;
+  const exists = comboboxOptions.some((option) => option.uri === values.source);
+  return exists ? values.source : null;
+}, [values?.source, comboboxOptions]);
+
+// Then in the Comboboxes:
+value={validReferenceType ? [validReferenceType] : []}
+value={validSourceUri ? [validSourceUri] : []}
+```
+
+### Application-Level Workaround Strategy
+
+Since we **cannot modify the design system component**, we must implement all fixes in our application code:
+
+1. **Always validate values exist in options** before passing to Combobox
+2. **Filter out undefined/null values** at the data preparation stage
+3. **Use defensive checks** at every Combobox usage point
+4. **Consider creating wrapper components** that handle validation automatically
+5. **Document the pattern** so all developers follow the same approach
+
+### Recommended Wrapper Component Pattern
+
+To avoid repeating validation logic, consider creating a safe wrapper:
+
+```typescript
+// components/SafeCombobox.tsx
+import { Combobox, ComboboxProps } from '@digdir/designsystemet-react';
+import { useMemo } from 'react';
+
+type SafeComboboxProps = ComboboxProps & {
+  validateValue?: boolean;
+  availableValues?: string[];
+};
+
+export const SafeCombobox = ({ 
+  value, 
+  validateValue = true, 
+  availableValues = [],
+  ...props 
+}: SafeComboboxProps) => {
+  const safeValue = useMemo(() => {
+    if (!value || !Array.isArray(value)) return [];
+    
+    // Filter out undefined/null values
+    const filtered = value.filter(Boolean);
+    
+    // If validation is enabled, check values exist in available options
+    if (validateValue && availableValues.length > 0) {
+      return filtered.filter((v) => availableValues.includes(v));
+    }
+    
+    return filtered;
+  }, [value, validateValue, availableValues]);
+
+  return <Combobox {...props} value={safeValue} />;
+};
+```
+
+### Testing Checklist for This Fix
+
+1. ✅ Value Validation:
+   - [ ] Invalid referenceType values are ignored (empty array passed)
+   - [ ] Valid referenceType values are displayed correctly
+   - [ ] Invalid source URIs are ignored (empty array passed)
+   - [ ] Valid source URIs are displayed correctly
+
+2. ✅ Edge Cases:
+   - [ ] Form opens with invalid stored values (should not crash)
+   - [ ] Form opens with valid stored values (should display correctly)
+   - [ ] Options load after form values are set (should update correctly)
+   - [ ] Value changes from valid to invalid (should clear selection)
+
+3. ✅ Performance:
+   - [ ] Validation doesn't cause unnecessary re-renders
+   - [ ] useMemo approach (if used) works correctly
