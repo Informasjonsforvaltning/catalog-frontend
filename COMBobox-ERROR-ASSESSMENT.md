@@ -239,3 +239,204 @@ The Combobox component in `@digdir/designsystemet-react` has a **defensive codin
 1. **Immediate Fix**: Filter values at the component level in all Combobox usages
 2. **Data Layer Fix**: Clean initial values in `dataset-initial-values.tsx`
 3. **Long-term**: Consider contributing a fix to the design system to handle undefined/null values gracefully
+
+---
+
+## Specific Fix Plan for references-table.tsx
+
+### File: `apps/dataset-catalog/components/dataset-form/components/relations-section/references-table.tsx`
+
+#### Issues Identified
+
+1. **Line 267**: `value` prop is commented out for the referenceType Combobox
+   - Current: `// value={values?.referenceType ? [values?.referenceType] : []}`
+   - Problem: Component is uncontrolled, loses form state synchronization
+
+2. **Line 296**: `value` prop is commented out for the source Combobox
+   - Current: `// value={values?.source && !isEmpty(values.source) ? [values.source] : []}`
+   - Problem: Component is uncontrolled, loses form state synchronization
+
+3. **Line 266**: `onValueChange` handler uses `.toString()` on array
+   - Current: `onValueChange={(value) => setFieldValue('referenceType', value.toString())}`
+   - Problem: `value` is already a `string[]` from Combobox, `.toString()` converts array to comma-separated string
+
+4. **Line 291-293**: `onValueChange` handler uses `.toString()` on array
+   - Current: `onValueChange={(value) => { setSelectedUri(value.toString()); setFieldValue('source', value.toString()); }}`
+   - Problem: Same issue - `value` is `string[]`, should extract first element
+
+5. **Line 246**: Debug console.log should be removed in production
+
+6. **Line 191-194**: `useEffect` dependency array missing `selectedValue`
+   - Current: `}, [selectedUri, searchHits, initialDatasets]);`
+   - Problem: Missing `selectedValue` in dependencies could cause stale state
+
+### Specific Fixes
+
+#### Fix 1: Restore and Fix referenceType Combobox (Line 265-284)
+
+```typescript
+<Combobox
+  onValueChange={(value) => {
+    // value is string[], extract first element for single selection
+    const selectedValue = Array.isArray(value) && value.length > 0 ? value[0] : '';
+    setFieldValue('referenceType', selectedValue);
+  }}
+  value={values?.referenceType && values.referenceType.trim() !== '' 
+    ? [values.referenceType] 
+    : []}
+  placeholder={`${localization.datasetForm.fieldLabel.choseRelation}...`}
+  portal={false}
+  data-size='sm'
+  error={errors?.referenceType}
+  virtual
+>
+```
+
+**Changes:**
+- Restore `value` prop with proper sanitization (check for empty strings)
+- Fix `onValueChange` to properly extract string from array
+- Ensure empty strings are treated as no selection
+
+#### Fix 2: Restore and Fix source Combobox (Line 289-317)
+
+```typescript
+<Combobox
+  onChange={(input: any) => setSearchQuery(input.target.value)}
+  onValueChange={(value) => {
+    // value is string[], extract first element for single selection
+    const selectedUriValue = Array.isArray(value) && value.length > 0 ? value[0] : '';
+    setSelectedUri(selectedUriValue);
+    setFieldValue('source', selectedUriValue);
+  }}
+  loading={searching}
+  value={values?.source && values.source.trim() !== '' ? [values.source] : []}
+  placeholder={`${localization.search.search}...`}
+  portal={false}
+  data-size='sm'
+  error={errors?.source}
+>
+```
+
+**Changes:**
+- Restore `value` prop with proper sanitization (check for empty strings)
+- Fix `onValueChange` to properly extract string from array
+- Use `.trim()` to handle whitespace-only strings
+
+#### Fix 3: Remove Debug Console.log (Line 246)
+
+```typescript
+// Remove this line:
+// console.log('debug', values, values.referenceType);
+```
+
+#### Fix 4: Fix useEffect Dependency Array (Line 191-194)
+
+```typescript
+useEffect(() => {
+  const allDatasets = [...(searchHits ?? []), ...initialDatasets, ...(selectedValue ? [selectedValue] : [])];
+  setSelectedValue(allDatasets.find((dataset) => dataset.uri === selectedUri));
+}, [selectedUri, searchHits, initialDatasets, selectedValue]); // Add selectedValue to dependencies
+```
+
+**Note:** Adding `selectedValue` might cause re-renders. Consider using `useCallback` or restructuring if performance issues occur.
+
+### Complete Fixed Code Sections
+
+#### Section 1: referenceType Combobox (Lines 263-285)
+
+```typescript
+<Fieldset data-size='sm'>
+  <Fieldset.Legend>{localization.datasetForm.fieldLabel.relationType}</Fieldset.Legend>
+  <Combobox
+    onValueChange={(value) => {
+      const selectedValue = Array.isArray(value) && value.length > 0 ? value[0] : '';
+      setFieldValue('referenceType', selectedValue);
+    }}
+    value={values?.referenceType && values.referenceType.trim() !== '' 
+      ? [values.referenceType] 
+      : []}
+    placeholder={`${localization.datasetForm.fieldLabel.choseRelation}...`}
+    portal={false}
+    data-size='sm'
+    error={errors?.referenceType}
+    virtual
+  >
+    <Combobox.Empty>{localization.search.noHits}</Combobox.Empty>
+    {relations.map((relation) => (
+      <Combobox.Option
+        key={relation?.code}
+        value={relation?.code}
+        description={`${relation?.uriAsPrefix} (${relation?.uri})`}
+      >
+        {getTranslateText(relation?.label)}
+      </Combobox.Option>
+    ))}
+  </Combobox>
+</Fieldset>
+```
+
+#### Section 2: source Combobox (Lines 287-318)
+
+```typescript
+<Fieldset data-size='sm'>
+  <Fieldset.Legend>{localization.datasetForm.fieldLabel.dataset}</Fieldset.Legend>
+  <Combobox
+    onChange={(input: any) => setSearchQuery(input.target.value)}
+    onValueChange={(value) => {
+      const selectedUriValue = Array.isArray(value) && value.length > 0 ? value[0] : '';
+      setSelectedUri(selectedUriValue);
+      setFieldValue('source', selectedUriValue);
+    }}
+    loading={searching}
+    value={values?.source && values.source.trim() !== '' ? [values.source] : []}
+    placeholder={`${localization.search.search}...`}
+    portal={false}
+    data-size='sm'
+    error={errors?.source}
+  >
+    <Combobox.Empty>{localization.search.noHits}</Combobox.Empty>
+    {comboboxOptions?.map((dataset) => {
+      return (
+        <Combobox.Option
+          key={dataset.uri}
+          value={dataset.uri}
+          displayValue={dataset.title ? getTranslateText(dataset.title) : dataset.uri}
+        >
+          <div className={styles.comboboxOptionTwoColumns}>
+            <div>{dataset.title ? getTranslateText(dataset.title) : dataset.uri}</div>
+            <div>{getTranslateText(dataset.organization?.prefLabel) ?? ''}</div>
+          </div>
+        </Combobox.Option>
+      );
+    })}
+  </Combobox>
+</Fieldset>
+```
+
+### Testing Checklist
+
+After implementing fixes, verify:
+
+1. ✅ Reference Type Combobox:
+   - [ ] Displays selected value when editing existing reference
+   - [ ] Updates form state when value changes
+   - [ ] Clears properly when value is removed
+   - [ ] Shows error state when validation fails
+
+2. ✅ Source/Dataset Combobox:
+   - [ ] Displays selected dataset when editing existing reference
+   - [ ] Updates form state when value changes
+   - [ ] Clears properly when value is removed
+   - [ ] Shows error state when validation fails
+   - [ ] Search functionality still works
+   - [ ] Loading state displays correctly
+
+3. ✅ Form Submission:
+   - [ ] Both fields submit correctly
+   - [ ] Validation works as expected
+   - [ ] Auto-save functionality works
+
+4. ✅ Edge Cases:
+   - [ ] Empty strings are handled correctly
+   - [ ] Undefined/null values don't cause errors
+   - [ ] Modal can be opened/closed without errors
