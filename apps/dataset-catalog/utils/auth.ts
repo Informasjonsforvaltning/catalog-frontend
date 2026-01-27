@@ -30,7 +30,7 @@ const withProtectedPage = (
   permissions: "read" | "write",
   render: Render,
 ) => {
-  return async ({ params }: any) => {
+  return async ({ params }: { params: Promise<PageParams> }) => {
     const { catalogId, datasetId } = await params;
 
     if (!validOrganizationNumber(catalogId)) {
@@ -38,7 +38,7 @@ const withProtectedPage = (
     }
 
     [datasetId].forEach((param) => {
-      if (params[param] && !validUUID(params[param])) {
+      if (param && !validUUID(param)) {
         redirect("/notfound", RedirectType.replace);
       }
     });

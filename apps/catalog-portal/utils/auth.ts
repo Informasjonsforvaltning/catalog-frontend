@@ -28,7 +28,7 @@ const withProtectedPage = (
   permissions: "read" | "write",
   render: Render,
 ) => {
-  return async ({ params }: { params: PageParams }) => {
+  return async ({ params }: { params: Promise<PageParams> }) => {
     const { catalogId } = await params;
 
     if (catalogId && !validOrganizationNumber(catalogId)) {

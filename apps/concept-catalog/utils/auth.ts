@@ -33,7 +33,13 @@ const withProtectedPage = (
   permissions: "read" | "write" | "admin",
   render: Render,
 ) => {
-  return async ({ params, searchParams }: any) => {
+  return async ({
+    params,
+    searchParams,
+  }: {
+    params: Promise<PageParams>;
+    searchParams: Promise<any>;
+  }) => {
     const { catalogId, conceptId, resultId, changeRequestId } = await params;
     const { concept: conceptIdSearch } = await searchParams;
 
@@ -42,7 +48,7 @@ const withProtectedPage = (
     }
 
     [conceptId, conceptIdSearch, changeRequestId].forEach((param) => {
-      if (params[param] && !validUUID(params[param])) {
+      if (param && !validUUID(param)) {
         return redirect("/notfound", RedirectType.replace);
       }
     });
