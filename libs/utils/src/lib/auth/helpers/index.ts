@@ -52,20 +52,10 @@ export const getValidSession = async () => {
   return valid ? session : null;
 };
 
-type SignInCallbackProps = {
-  callbackUrl: string;
-  callbackParams?: any;
-};
-
-export const redirectToSignIn = (
-  callback: SignInCallbackProps | undefined = undefined,
-) => {
-  if (callback) {
-    const { callbackUrl, callbackParams } = callback;
-    if (callbackUrl.startsWith("/")) {
-      const callbackUrlWithParams = `${callbackUrl}${callbackParams ? "?" + new URLSearchParams(callbackParams) : ""}`;
-      return redirect(`/auth/signin?callbackUrl=${callbackUrlWithParams}`);
-    }
-  }
-  return redirect("/auth/signin");
+export const redirectToSignIn = (callbackUrl?: string): never => {
+  return redirect(
+    callbackUrl?.startsWith("/")
+      ? `/auth/signin?callbackUrl=${callbackUrl}`
+      : "/auth/signin",
+  );
 };
