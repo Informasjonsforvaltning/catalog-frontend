@@ -73,6 +73,7 @@ export const nb = {
   type: "Type",
   lastChanged: "Sist endret",
   noName: "Uten navn",
+  noTitle: "Uten tittel",
   choose: "Velg",
   relation: "Relasjon",
   relations: "Relasjoner",

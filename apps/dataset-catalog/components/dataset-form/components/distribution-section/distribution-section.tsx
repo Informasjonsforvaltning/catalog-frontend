@@ -203,17 +203,13 @@ export const DistributionSection = ({
                 <Card key={`distribusjon-${index}`}>
                   <div className={styles.heading}>
                     <div className={styles.field}>
-                      {!isEmpty(item?.title) && (
-                        <>
-                          <Heading
-                            data-size='xs'
-                            level={3}
-                          >
-                            {localization.datasetForm.fieldLabel.title}
-                          </Heading>
-                          <Paragraph data-size='sm'>{getTranslateText(item.title)}</Paragraph>
-                        </>
-                      )}
+                      <Heading
+                        data-size='xxs'
+                        level={3}
+                      >
+                        {localization.datasetForm.fieldLabel.title}
+                      </Heading>
+                      <Paragraph data-size='sm'>{getTranslateText(item?.title) || localization.noTitle}</Paragraph>
                     </div>
                     <div className={styles.buttons}>
                       <DistributionModal
