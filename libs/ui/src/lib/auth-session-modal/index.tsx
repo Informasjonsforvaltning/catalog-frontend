@@ -35,7 +35,11 @@ export const AuthSessionModal = ({
     if (pathName.includes(signInPath)) {
       return (window.location.href = signInPath);
     } else {
-      return router.push(`${signInPath}?callbackUrl=${window.location.href}`);
+      // Use relative path (pathname + search) instead of full URL
+      const callbackUrl = window.location.pathname + window.location.search;
+      return router.push(
+        `${signInPath}?callbackUrl=${encodeURIComponent(callbackUrl)}`,
+      );
     }
   };
 
