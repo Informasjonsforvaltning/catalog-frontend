@@ -38,7 +38,7 @@ Datasett som har en distribusjon der det er lagt til en åpen lisens vil bli mar
 Dersom dette er en lenke hvor datasettet lastes ned direkte, og datasettet ikke tilbyr noen annen form for distribusjon: legg inn lenken i dette feltet, legg til feltet 'nedlastingslenke' i tillegg, og fyll inn samme lenke her.`,
     downloadURL: "Direktelenke (URL) til en nedlastbar fil av datasettet.",
     fileType:
-      "Filtypen til distribusjonen. Velges fra EU’s kontrollerte vokabular [file type](https://op.europa.eu/en/web/eu-vocabularies/concept-scheme/-/resource?uri=http://publications.europa.eu/resource/authority/file-type).",
+      "Filtypen til distribusjonen. Velges fra EU's kontrollerte vokabular [file type](https://op.europa.eu/en/web/eu-vocabularies/concept-scheme/-/resource?uri=http://publications.europa.eu/resource/authority/file-type).",
     mediaType:
       "Innholdets spesifikke type. Medietype velges fra listen [IANA Media Types](https://www.iana.org/assignments/media-types/media-types.xhtml).",
     accessServices:
@@ -56,11 +56,11 @@ Dersom man velger en åpen lisens, vil datasettet bli merket med "Åpne data".`,
     lastUpdated: "Dato for siste oppdatering av innholdet i datasettet.",
     landingPage:
       "Lenke til en nettside som gir tilgang til datasettet, dets distribusjoner og/eller tilleggsinformasjon.",
-    type: "Datasettets spesifikke type. Dette kan velges blant EU’s kontrollerte vokabular [dataset type](https://op.europa.eu/en/web/eu-vocabularies/concept-scheme/-/resource?uri=http://publications.europa.eu/resource/authority/dataset-type).",
+    type: "Datasettets spesifikke type. Dette kan velges blant EU's kontrollerte vokabular [dataset type](https://op.europa.eu/en/web/eu-vocabularies/concept-scheme/-/resource?uri=http://publications.europa.eu/resource/authority/dataset-type).",
     provenance:
       "Endringer i eierskap eller forvaltning av datasettet, dersom dette har betydning for autentisitet, integritet og fortolkning.",
     frequency:
-      "Hvor ofte datasettet har nytt innhold. Verdien velges fra EU’s kontrollerte vokabular [frequency](https://op.europa.eu/en/web/eu-vocabularies/concept-scheme/-/resource?uri=http://publications.europa.eu/resource/authority/frequency)",
+      "Hvor ofte datasettet har nytt innhold. Verdien velges fra EU's kontrollerte vokabular [frequency](https://op.europa.eu/en/web/eu-vocabularies/concept-scheme/-/resource?uri=http://publications.europa.eu/resource/authority/frequency)",
     modified: "Dato for siste oppdatering av datasettet.",
     currentness: "Tilleggsopplysninger om oppdateringsfrekvens.",
     completeness:
@@ -123,7 +123,7 @@ Dersom man velger en åpen lisens, vil datasettet bli merket med "Åpne data".`,
     theme:
       "Det eller de mest sentrale områdene innholdet i datasettet kan kategoriseres under. Tema kan hjelpe andre med å finne presise resultater i filtrerte søk.",
     distributions:
-      "Informasjon som gjør det mulig for andre å ta i bruk selve datasettet. ",
+      "Informasjon som gjør det mulig for andre å ta i bruk selve datasettet.",
     details:
       "Opplysninger som videre beskriver datasettet. Dette vil hjelpe datakonsumenter med å vurdere om datasettet er aktuelt for deres formål.",
     relations:
@@ -204,16 +204,16 @@ Dersom man velger en åpen lisens, vil datasettet bli merket med "Åpne data".`,
     ignoreRequired:
       "I utgangspunktet er det krav om at alle påkrevde felt må fylles ut for å få lagret. Når avhukingsboksen er aktiv, må bare tittel være fylt ut.",
     unpublishBeforeUnapprove:
-      "Datasettet må være avpublisert før status kan endres fra ‘Godkjent’. Avpublisering gjøres fra detaljsiden.",
+      "Datasettet må være avpublisert før status kan endres fra 'Godkjent'. Avpublisering gjøres fra detaljsiden.",
     unpublishBeforeIgnoreRequired:
-      "Datasettet må være avpublisert for å kunne aktivere ‘Ignorer påkrevde felt’. Avpublisering gjøres fra detaljsiden.",
+      "Datasettet må være avpublisert for å kunne aktivere 'Ignorer påkrevde felt'. Avpublisering gjøres fra detaljsiden.",
   },
   validation: {
     title: "Tittelen må være minst 3 karakterer lang.",
     titleRequired: "Tittel er påkrevd.",
     descriptionRequired: "Beskrivelse er påkrevd.",
     description: "Beskrivelsen må være minst 5 karakterer lang.",
-    url: "Ugyldig lenke. Vennligst sørg for at lenken starter med ‘https://’ og inneholder et gyldig toppdomene (f.eks. ‘.no’).",
+    url: "Ugyldig lenke. Vennligst sørg for at lenken starter med 'https://' og inneholder et gyldig toppdomene (f.eks. '.no').",
     euDataTheme: "Minst ett EU-tema må være valgt.",
     searchString: "Ingen treff. Søkestrengen må inneholde minst to bokstaver.",
     accessURL: "Tilgangslenke er påkrevd.",
