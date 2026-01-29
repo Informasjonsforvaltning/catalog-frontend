@@ -15,14 +15,14 @@ export const conceptHelptextsNb = {
     "En definisjon av begrepet som er rettet mot allmennheten. Det forventes ikke at denne målgruppen har noe forkunnskap i det/de aktuelle fagområdet/fagområdene for begrepet.",
   definisjonForAllmennhetenKildeTitle: "Kilde til definisjon for allmennheten",
   definisjonForAllmennhetenKildeDescription:
-    "Her oppgir du hvor du har hentet definisjonen fra. ",
+    "Her oppgir du hvor du har hentet definisjonen fra.",
 
   definisjonForSpesialisterTitle: "Definisjon for spesialister",
   definisjonForSpesialisterDescription:
     "En definisjon av begrepet som er rettet mot spesialister. for jurister skal være en kort beskrivelse som tydelig avgrenser til andre, nærliggende begrep, eventuelt tydeliggjør forskjellen mellom dette begrepet og andre nærliggende begrep.",
   definisjonForSpesialisterKildeTitle: "Kilde til definisjon for spesialister",
   definisjonForSpesialisterKildeDescription:
-    "Her registrerer du hvor du har hentet definisjonen fra. ",
+    "Her registrerer du hvor du har hentet definisjonen fra.",
 
   merknadTitle: "Merknad",
   merknadDescription:

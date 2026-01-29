@@ -254,7 +254,7 @@ Eksempel: Versjon 2.1.3 betyr andre hovedversjon, første mindre oppdatering, og
     minLength: "Verdien må være minst {0} karakterer lang.",
     required: "Feltet må fylles ut.",
     invalidUrl:
-      "Ugyldig lenke. Vennligst sørg for at lenken starter med ‘https://’ og inneholder et gyldig toppdomene (f.eks. ‘.no’).",
+      "Ugyldig lenke. Vennligst sørg for at lenken starter med 'https://' og inneholder et gyldig toppdomene (f.eks. '.no').",
     minOneSource: "Du må ha minst en kilde",
     version: "Versjon må være større en v{min}",
     languageRequired: "{label} ({language}) er påkrevd",
