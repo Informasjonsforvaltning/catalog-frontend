@@ -395,7 +395,7 @@ const FieldModal = ({ template, type, onSuccess, currencies }: ModalProps) => {
                               .costDescription
                           }
                         >
-                          {localization.dataServiceForm.fieldLabel.description}
+                          {localization.dataServiceForm.fieldLabel.costDescription}
                         </TitleWithHelpTextAndTag>
                       }
                     />
