@@ -22,7 +22,6 @@ import {
   localization as loc,
 } from "@catalog-frontend/utils";
 import styles from "./search-filter.module.css";
-import { useGetUsers } from "../../hooks/users";
 import { CheckboxTreeFilter } from "./checkbox-tree-filter";
 import {
   parseAsArrayOf,
@@ -41,16 +40,16 @@ interface Props {
   internalFields?: InternalField[];
   subjectCodeList?: CodeList;
   conceptStatuses?: ReferenceDataCode[];
-  catalogId: string;
   pageSettings?: ConceptsPageSettings;
+  users?: AssignedUser[];
 }
 
 const SearchFilter = ({
-  catalogId,
   internalFields,
   subjectCodeList,
   conceptStatuses,
   pageSettings,
+  users,
 }: Props) => {
   // Memoize default values for query states
   const defaultFilterStatus = useMemo(
@@ -117,8 +116,7 @@ const SearchFilter = ({
     },
   ];
 
-  const { data: getUsers } = useGetUsers(catalogId);
-  const assignedUserItems: AssignedUser[] = getUsers?.users;
+  const assignedUserItems: AssignedUser[] = users ?? [];
 
   const handleOnStatusChange = (names: string[]) => {
     setFilterStatus(names.map((name) => name));

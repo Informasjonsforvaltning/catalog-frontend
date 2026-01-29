@@ -22,14 +22,14 @@ export const dataServiceFormNb = {
     license:
       "Lisensen som API-et er gjort tilgjengelig under. Velges fra EUs kontrollerte vokabular _License_.",
     status:
-      "Brukes til å oppgi tjenestens modenhet, velges fra EU’s kontrollerte vokabular _Distribution status_.",
+      "Brukes til å oppgi tjenestens modenhet, velges fra EU's kontrollerte vokabular _Distribution status_.",
     keywords:
       "Oppgi emneord (eller tag) som beskriver datatjenesten, f.eks. _eksempel_, _datatjeneste_ (bokmål) / _example_, _data service_ (Engelsk).",
     version: "Versjon av API-et, f.eks. 1.0.0 eller v2.",
     servesDataset:
       "Brukes til å referere til datasett som datatjenesten kan distribuere.",
     availability:
-      "Brukes til å angi hvor lenge det er planlagt å holde datatjenesten tilgjengelig, verdien velges fra EU’s kontrollerte vokabular _Planned availability_.",
+      "Brukes til å angi hvor lenge det er planlagt å holde datatjenesten tilgjengelig, verdien velges fra EU's kontrollerte vokabular _Planned availability_.",
     costs:
       "Brukes til å oppgi prisinfomasjonen og utrekningsgrunnlaget for ett eller flere gebyr for bruk av APIet.",
     costDescription: "Brukes til å oppgi en tekstlig beskrivelse av gebyret.",

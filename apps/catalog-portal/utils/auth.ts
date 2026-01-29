@@ -7,9 +7,9 @@ import {
   redirectToSignIn,
   validOrganizationNumber,
 } from "@catalog-frontend/utils";
-import { RedirectType, redirect } from "next/navigation";
 import { Session } from "next-auth";
-import type { ReactNode } from "react";
+import { RedirectType, redirect } from "next/navigation";
+import { ReactNode } from "react";
 
 type PageParams = {
   catalogId: string;

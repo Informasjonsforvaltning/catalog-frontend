@@ -521,11 +521,11 @@ export const SearchPageClient = ({
             </SearchHitsLayout.SearchRow>
             <SearchHitsLayout.LeftColumn>
               <SearchFilter
-                catalogId={catalogId}
                 internalFields={fieldsResult?.internal}
                 subjectCodeList={subjectCodeList}
                 conceptStatuses={conceptStatuses}
                 pageSettings={pageSettings}
+                users={usersResult?.users}
               />
             </SearchHitsLayout.LeftColumn>
             <SearchHitsLayout.MainColumn>
