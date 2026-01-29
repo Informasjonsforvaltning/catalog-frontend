@@ -2,7 +2,7 @@
 
 Monorepo powering the web frontend for all [registration solutions](https://catalog-portal.fellesdatakatalog.digdir.no/). Built with [NX](https://nx.dev/), it includes Next.js web applications (catalogs, portal and admin), reusable React UI components and other related libraries.
 
-For a broader understanding of the system’s context, refer to the [architecture documentation](https://github.com/Informasjonsforvaltning/architecture-documentation) wiki. For more specific
+For a broader understanding of the system's context, refer to the [architecture documentation](https://github.com/Informasjonsforvaltning/architecture-documentation) wiki. For more specific
 context on this application, see the [Registration](https://github.com/Informasjonsforvaltning/architecture-documentation/wiki/Architecture-documentation#registration) subsystem section.
 
 ## Getting started
@@ -67,3 +67,12 @@ yarn nx e2e dataset-catalog-e2e
 ```
 
 Use the options `--ui` and `--debug` during test development.
+
+## AI Agent Instructions
+
+This repository includes instruction files for AI coding assistants:
+
+- **CLAUDE.md** - Instructions for Claude Code (claude.ai/code)
+- **AGENTS.md** - Instructions for other AI agents (Copilot, Cursor, etc.)
+
+These files contain project structure, commands, architecture patterns, and coding conventions. Keep them updated when the project evolves.

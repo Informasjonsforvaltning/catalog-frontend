@@ -9,6 +9,8 @@ import {
   validOrganizationNumber,
 } from "@catalog-frontend/utils";
 import { RedirectType, redirect } from "next/navigation";
+import { Session } from "next-auth";
+import { ReactNode } from "react";
 
 type PageParams = {
   catalogId: string;
@@ -18,18 +20,18 @@ type PageParams = {
 type PagePath = (params: PageParams) => string;
 type Render = (
   props: {
-    session: any;
+    session: Session;
     hasWritePermission: boolean;
     hasAdminPermission: boolean;
   } & PageParams,
-) => Promise<any>;
+) => Promise<ReactNode>;
 
 const withProtectedPage = (
   pagePath: PagePath,
   permissions: "read" | "write" | "admin",
   render: Render,
 ) => {
-  return async ({ params }) => {
+  return async ({ params }: { params: Promise<PageParams> }) => {
     const { catalogId, dataServiceId, resultId } = await params;
 
     if (!validOrganizationNumber(catalogId)) {
@@ -37,8 +39,8 @@ const withProtectedPage = (
     }
 
     [dataServiceId].forEach((param) => {
-      if (params[param] && !validDataServiceID(params[param])) {
-        return redirect("/not-found", RedirectType.replace);
+      if (param && !validDataServiceID(param)) {
+        redirect("/not-found", RedirectType.replace);
       }
     });
 
@@ -48,16 +50,16 @@ const withProtectedPage = (
     }
 
     const hasReadPermission =
-      session?.accessToken &&
-      (hasOrganizationReadPermission(session?.accessToken, catalogId) ||
-        hasSystemAdminPermission(session.accessToken));
+      hasOrganizationReadPermission(session.accessToken, catalogId) ||
+      hasSystemAdminPermission(session.accessToken);
     if (!hasReadPermission) {
       redirect(`/catalogs/${catalogId}/no-access`, RedirectType.replace);
     }
 
-    const hasWritePermission =
-      Boolean(session?.accessToken) &&
-      hasOrganizationWritePermission(session.accessToken, catalogId);
+    const hasWritePermission = hasOrganizationWritePermission(
+      session.accessToken,
+      catalogId,
+    );
     if (
       !hasWritePermission &&
       (permissions === "write" || permissions === "admin")
@@ -65,9 +67,10 @@ const withProtectedPage = (
       redirect(`/catalogs/${catalogId}/no-access`, RedirectType.replace);
     }
 
-    const hasAdminPermission =
-      Boolean(session?.accessToken) &&
-      hasOrganizationAdminPermission(session.accessToken, catalogId);
+    const hasAdminPermission = hasOrganizationAdminPermission(
+      session.accessToken,
+      catalogId,
+    );
     if (!hasAdminPermission && permissions === "admin") {
       redirect(`/catalogs/${catalogId}/no-access`, RedirectType.replace);
     }

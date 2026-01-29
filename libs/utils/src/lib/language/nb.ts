@@ -385,7 +385,8 @@ rettigheter, eller at det har oppstått en feil ved henting av tilganger. Vennli
     basedOnSource: "Basert på kilde",
     concept: "Begrep",
     concepts: "Begreper",
-    confirmDelete: "Du er i ferd med å slette begrepet **{0}**. All historikk og endringsforslag knyttet til begrepet vil bli permanent slettet, og slettingen kan ikke angres. Er du sikker på at du vil fortsette?",
+    confirmDelete:
+      "Du er i ferd med å slette begrepet **{0}**. All historikk og endringsforslag knyttet til begrepet vil bli permanent slettet, og slettingen kan ikke angres. Er du sikker på at du vil fortsette?",
     confirmEditWithChangeRequest:
       "Det finnes et åpent endringsforslag for dette begrepet. Er du sikker på at du vil redigere begrepet?",
     contactInformation: "Kontaktinformasjon for eksterne",
@@ -560,8 +561,10 @@ ___Merk:__ Maksimal filstørrelse for opplastning er {0} MB. CSV/JSON-filer kan 
   validation: {
     invalidValue: "Ugyldig verdi",
     invalidEmail: "Ugyldig epostadresse",
-    invalidUrl: "Ugyldig lenke. Vennligst sørg for at lenken har en gyldig adresse, og ender med et toppdomene (f.eks. ‘.no’).",
-    invalidProtocol: "Ugyldig lenke. Vennligst sørg for at lenken starter med ‘https://’.",
+    invalidUrl:
+      "Ugyldig lenke. Vennligst sørg for at lenken har en gyldig adresse, og ender med et toppdomene (f.eks. '.no').",
+    invalidProtocol:
+      "Ugyldig lenke. Vennligst sørg for at lenken starter med 'https://'.",
     invalidPhone: "Ugyldig telefonnummer.",
     multipleInvalidValues: "Inneholder en eller flere ugyldige verdier",
     nameRequired: "Må ha navn",
@@ -642,7 +645,8 @@ ___Merk:__ Maksimal filstørrelse for opplastning er {0} MB. CSV/JSON-filer kan 
     pageTitle: "Vilkår og betingelser",
     heading: "Bruksvilkår for registrering i Felles datakatalog",
     notAcceptedTitle: "Bruksvilkår ikke akseptert",
-    notAcceptedContent: "Bruksvilkår må aksepteres for å kunne ta i bruk katalogtjenestene. Hvis vilkårene nylig har blitt akseptert må du logge ut og inn igjen for at det skal tre i kraft. ",
+    notAcceptedContent:
+      "Bruksvilkår må aksepteres for å kunne ta i bruk katalogtjenestene. Hvis vilkårene nylig har blitt akseptert må du logge ut og inn igjen for at det skal tre i kraft.",
     gotoTermsOfUse: "Gå til bruksvilkår",
     cancel: "Avbryt",
     adminPermissionNeeded:
@@ -675,9 +679,10 @@ ___Merk:__ Maksimal filstørrelse for opplastning er {0} MB. CSV/JSON-filer kan 
     deleteImport: "Slett",
     confirmImport: "Legg til i katalog",
     tryAgain: "Prøv igjen",
-    deleteCanResultInDuplicates: "Sletting av denne kan resultere i duplikater hvis samme import gjennomføres senere.",
+    deleteCanResultInDuplicates:
+      "Sletting av denne kan resultere i duplikater hvis samme import gjennomføres senere.",
     cancelledImport: "Importen ble avvist før den ble fullført.",
-    conceptId: "Begreps-ID ",
+    conceptId: "Begreps-ID",
     recordStatus: {
       addToCatalog: "Klar til i katalog",
       addedToCatalog: "Lagt til i katalog",
