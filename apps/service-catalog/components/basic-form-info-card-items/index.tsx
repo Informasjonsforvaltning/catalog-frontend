@@ -105,6 +105,15 @@ export const BasicServiceFormInfoCardItems = (props: Props) => {
           </Table>
         </InfoCard.Item>
       )}
+
+      {
+        // todo: get proper dctType labels from reference data
+        !isEmpty(service.dctType) && (
+          <InfoCard.Item title={localization.serviceForm.fieldLabel.dctType}>
+            {service.dctType?.join(", ")}
+          </InfoCard.Item>
+        )
+      }
     </InfoCard>
   );
 };
