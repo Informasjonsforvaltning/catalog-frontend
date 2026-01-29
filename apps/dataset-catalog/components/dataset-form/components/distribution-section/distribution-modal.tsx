@@ -1018,14 +1018,14 @@ export const DistributionModal = ({
                           <Combobox.Option key="license-none" value="">
                             {localization.none}
                           </Combobox.Option>
-                          {openLicenses?.map((license, i) => (
-                              <Combobox.Option
-                                key={`license-${license.uri}-${i}`}
-                                value={license.uri}
-                              >
-                                {getTranslateText(license.label)}
-                              </Combobox.Option>
-                            ))}
+                          {openLicenses?.map((license, i: number) => (
+                            <Combobox.Option
+                              key={`license-${license.uri}-${i}`}
+                              value={license.uri}
+                            >
+                              {getTranslateText(license.label)}
+                            </Combobox.Option>
+                          ))}
                         </Combobox>
                       </Fieldset>
                       <FieldsetDivider />
