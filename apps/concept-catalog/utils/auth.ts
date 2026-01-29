@@ -48,7 +48,7 @@ const withProtectedPage = (
     }
 
     [conceptId, conceptIdSearch, changeRequestId].forEach((param) => {
-      if (params[param] && !validUUID(params[param])) {
+      if (param && !validUUID(param)) {
         return redirect("/notfound", RedirectType.replace);
       }
     });
@@ -66,23 +66,24 @@ const withProtectedPage = (
     }
 
     const hasReadPermission =
-      session?.accessToken &&
-      (hasOrganizationReadPermission(session?.accessToken, catalogId) ||
-        hasSystemAdminPermission(session.accessToken));
+      hasOrganizationReadPermission(session.accessToken, catalogId) ||
+      hasSystemAdminPermission(session.accessToken);
     if (!hasReadPermission) {
       redirect(`/catalogs/${catalogId}/no-access`, RedirectType.replace);
     }
 
-    const hasWritePermission =
-      session?.accessToken &&
-      hasOrganizationWritePermission(session.accessToken, catalogId);
+    const hasWritePermission = hasOrganizationWritePermission(
+      session.accessToken,
+      catalogId,
+    );
     if (!hasWritePermission && permissions === "write") {
       redirect(`/catalogs/${catalogId}/no-access`, RedirectType.replace);
     }
 
-    const hasAdminPermission =
-      session?.accessToken &&
-      hasOrganizationAdminPermission(session.accessToken, catalogId);
+    const hasAdminPermission = hasOrganizationAdminPermission(
+      session.accessToken,
+      catalogId,
+    );
     if (!hasAdminPermission && permissions === "admin") {
       redirect(`/catalogs/${catalogId}/no-access`, RedirectType.replace);
     }

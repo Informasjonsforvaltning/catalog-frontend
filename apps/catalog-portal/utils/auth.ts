@@ -41,23 +41,24 @@ const withProtectedPage = (
     }
 
     const hasReadPermission =
-      session?.accessToken &&
-      (hasOrganizationReadPermission(session?.accessToken, catalogId) ||
-        hasSystemAdminPermission(session.accessToken));
+      hasOrganizationReadPermission(session?.accessToken, catalogId) ||
+      hasSystemAdminPermission(session.accessToken);
     if (!hasReadPermission) {
       redirect("/no-access", RedirectType.replace);
     }
 
-    const hasWritePermission =
-      session?.accessToken &&
-      hasOrganizationWritePermission(session.accessToken, catalogId);
+    const hasWritePermission = hasOrganizationWritePermission(
+      session.accessToken,
+      catalogId,
+    );
     if (!hasWritePermission && permissions === "write") {
       redirect("/no-access", RedirectType.replace);
     }
 
-    const hasAdminPermission =
-      session?.accessToken &&
-      hasOrganizationAdminPermission(session.accessToken, catalogId);
+    const hasAdminPermission = hasOrganizationAdminPermission(
+      session.accessToken,
+      catalogId,
+    );
 
     return await render({
       catalogId,
