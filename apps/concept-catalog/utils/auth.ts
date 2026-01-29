@@ -9,6 +9,8 @@ import {
   validUUID,
 } from "@catalog-frontend/utils";
 import { RedirectType, redirect } from "next/navigation";
+import { Session } from "next-auth";
+import { ReactNode } from "react";
 
 type PageParams = {
   catalogId: string;
@@ -20,18 +22,24 @@ type PageParams = {
 type PagePath = (params: PageParams) => string;
 type Render = (
   props: {
-    session: any;
+    session: Session;
     hasWritePermission: boolean;
     hasAdminPermission: boolean;
   } & PageParams,
-) => Promise<any>;
+) => Promise<ReactNode>;
 
 const withProtectedPage = (
   pagePath: PagePath,
   permissions: "read" | "write" | "admin",
   render: Render,
 ) => {
-  return async ({ params, searchParams }) => {
+  return async ({
+    params,
+    searchParams,
+  }: {
+    params: Promise<PageParams>;
+    searchParams: Promise<any>;
+  }) => {
     const { catalogId, conceptId, resultId, changeRequestId } = await params;
     const { concept: conceptIdSearch } = await searchParams;
 
