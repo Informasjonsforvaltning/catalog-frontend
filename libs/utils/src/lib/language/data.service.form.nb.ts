@@ -64,6 +64,7 @@ export const dataServiceFormNb = {
   },
   fieldLabel: {
     description: "Beskrivelse av API-et",
+    costDescription: "Beskrivelse av gebyret",
     title: "Tittel",
     endpoint: "EndepunktsURL",
     endpointDescriptions: "Endepunktsbeskrivelse",
