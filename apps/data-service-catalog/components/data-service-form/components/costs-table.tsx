@@ -95,13 +95,13 @@ export const CostsTable = ({ currencies }: Props) => {
                   paddingLeft: 0,
                 }}
               >
-                {item.value && (
+                {item?.value && (
                   <List.Item>
                     {item.value} {item.currency?.split("/")?.reverse()[0] ?? ""}
                   </List.Item>
                 )}
 
-                {item.documentation?.map((doc, docIndex) => (
+                {item?.documentation?.map((doc, docIndex) => (
                   <List.Item key={`costs-${i}-doc-${docIndex}`}>
                     <Link href={doc} target="_blank">
                       {doc}
@@ -133,12 +133,17 @@ export const CostsTable = ({ currencies }: Props) => {
           </Card.Content>
           <Card.Footer className={styles.costFooter}>
             <Paragraph size="sm">
-              {getTranslateText(item.description)}
+              {getTranslateText(item?.description)}
             </Paragraph>
             <Box>
               {allowedLanguages
-                .filter((lang) =>
-                  Object.prototype.hasOwnProperty.call(item.description, lang),
+                .filter(
+                  (lang) =>
+                    item?.description &&
+                    Object.prototype.hasOwnProperty.call(
+                      item.description,
+                      lang,
+                    ),
                 )
                 .map((lang) => (
                   <Tag key={lang} size="sm" color="third">
@@ -395,7 +400,10 @@ const FieldModal = ({ template, type, onSuccess, currencies }: ModalProps) => {
                               .costDescription
                           }
                         >
-                          {localization.dataServiceForm.fieldLabel.costDescription}
+                          {
+                            localization.dataServiceForm.fieldLabel
+                              .costDescription
+                          }
                         </TitleWithHelpTextAndTag>
                       }
                     />
