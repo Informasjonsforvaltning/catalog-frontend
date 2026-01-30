@@ -78,6 +78,11 @@ export const CostsTable = ({ currencies }: Props) => {
   const sortedCurrencies = sortCurrencies(currencies);
   const allowedLanguages = Object.freeze<ISOLanguage[]>(["nb", "nn", "en"]);
 
+  const handleDeleteCost = (index: number) => () => {
+    const newCosts = values.costs?.filter((_, i) => i !== index);
+    setFieldValue("costs", newCosts?.length ? newCosts : []);
+  };
+
   return (
     <div className={styles.fieldContainer}>
       <TitleWithHelpTextAndTag
@@ -124,7 +129,7 @@ export const CostsTable = ({ currencies }: Props) => {
                 variant="tertiary"
                 size="sm"
                 color="danger"
-                onClick={() => setFieldValue(`costs[${i}]`, undefined)}
+                onClick={handleDeleteCost(i)}
               >
                 <TrashIcon title="Slett" fontSize="1.5rem" />
                 {localization.button.delete}
