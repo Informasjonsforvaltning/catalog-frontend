@@ -12,7 +12,6 @@ import {
 import { Concept, InternalField } from "@catalog-frontend/types";
 import {
   getValidSession,
-  localization,
   redirectToSignIn,
   removeEmptyValues,
 } from "@catalog-frontend/utils";
@@ -20,7 +19,7 @@ import _ from "lodash";
 import { updateTag } from "next/cache";
 import { conceptJsonPatchOperations } from "@concept-catalog/utils/json-patch";
 
-const clearValues = (object: Concept, path: string) => {
+const clearValues = (object: Concept, path: string): void => {
   const fields = path.split(".");
   const currentField = fields.shift();
 
@@ -67,7 +66,7 @@ const preProcessValues = (
     kontaktpunkt,
     ...conceptValues
   }: Concept,
-) => ({
+): Concept => ({
   ...conceptValues,
   merknad,
   eksempel,
@@ -80,7 +79,7 @@ export async function createConcept(
   values: Concept,
   catalogId: string,
   internalFields: InternalField[],
-) {
+): Promise<string | undefined> {
   const processedValues = preProcessValues(catalogId, values);
   internalFields.forEach((field) => {
     if (
@@ -97,61 +96,40 @@ export async function createConcept(
   if (!session) {
     return redirectToSignIn();
   }
-  let success = false;
-  let conceptId: string | undefined = undefined;
-  try {
-    const response = await createConceptApi(
-      processedValues,
-      `${session?.accessToken}`,
+  const response = await createConceptApi(
+    processedValues,
+    `${session?.accessToken}`,
+  );
+  if (response.status !== 201) {
+    throw new Error(
+      `API responded with status ${response.status} for createConcept`,
     );
-    if (response.status !== 201) {
-      throw new Error();
-    }
-    conceptId = response?.headers?.get("location")?.split("/").pop();
-    success = true;
-  } catch (error) {
-    console.error(error);
-    throw new Error(localization.alert.fail);
-  } finally {
-    if (success) {
-      updateTag("concept");
-      updateTag("concepts");
-    }
   }
-
+  updateTag("concept");
+  updateTag("concepts");
+  const conceptId = response?.headers?.get("location")?.split("/").pop();
   return conceptId;
 }
 
-export async function deleteConcept(catalogId: string, conceptId: string) {
+export async function deleteConcept(conceptId: string): Promise<void> {
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
   }
-  let success = false;
-  try {
-    const response = await deleteConceptApi(
-      conceptId,
-      `${session?.accessToken}`,
+  const response = await deleteConceptApi(conceptId, `${session?.accessToken}`);
+  if (response.status !== 200) {
+    throw new Error(
+      `API responded with status ${response.status} for deleteConcept`,
     );
-    if (response.status !== 200) {
-      throw new Error();
-    }
-    success = true;
-  } catch (error) {
-    console.error(error);
-    throw new Error(localization.alert.deleteFailed);
-  } finally {
-    if (success) {
-      updateTag("concepts");
-    }
   }
+  updateTag("concepts");
 }
 
 export async function updateConcept(
   initialConcept: Concept,
   values: Concept,
   internalFields: InternalField[],
-) {
+): Promise<Concept> {
   if (!initialConcept.id) {
     throw new Error("Concept id cannot be null");
   }
@@ -186,127 +164,107 @@ export async function updateConcept(
   const diff = conceptJsonPatchOperations(initialConcept, values);
 
   if (diff.length === 0) {
-    throw new Error(localization.alert.noChanges);
+    return initialConcept;
   }
 
-  let success = false;
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
   }
 
-  try {
-    const response = await patchConceptApi(
-      initialConcept.id,
-      diff,
-      `${session?.accessToken}`,
+  const response = await patchConceptApi(
+    initialConcept.id,
+    diff,
+    `${session?.accessToken}`,
+  );
+  if (response.status !== 200 && response.status !== 201) {
+    throw new Error(
+      `API responded with status ${response.status} for patchConcept`,
     );
-    if (response.status !== 200 && response.status !== 201) {
-      throw new Error(`${response.status} ${response.statusText}`);
-    }
-
-    success = true;
-    if (response.status === 201) {
-      conceptId = response?.headers?.get("location")?.split("/").pop();
-    }
-  } catch (error) {
-    console.error(`${localization.alert.fail} ${error}`);
-    throw new Error("Noe gikk galt, prøv igjen...");
   }
 
-  if (success) {
-    updateTag("concept");
-    updateTag("concepts");
+  if (response.status === 201) {
+    conceptId = response?.headers?.get("location")?.split("/").pop();
   }
-
+  updateTag("concept");
+  updateTag("concepts");
   return await getConcept(`${conceptId}`, `${session?.accessToken}`).then(
     (response) => (response.ok ? response.json() : undefined),
   );
 }
 
-export async function deleteImportResult(catalogId: string, resultId: string) {
+export async function deleteImportResult(
+  catalogId: string,
+  resultId: string,
+): Promise<void> {
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
   }
-  let success = false;
-  try {
-    const response = await removeImportResult(
-      catalogId,
-      resultId,
-      `${session?.accessToken}`,
+  const response = await removeImportResult(
+    catalogId,
+    resultId,
+    `${session?.accessToken}`,
+  );
+  if (response.status !== 204) {
+    throw new Error(
+      `API responded with status ${response.status} for deleteImportResult`,
     );
-    if (response.status !== 204) {
-      throw new Error();
-    }
-    success = true;
-    console.log("Deleted import result", catalogId, resultId);
-  } catch (error) {
-    throw new Error(localization.alert.deleteFailed);
-  } finally {
-    if (success) {
-      updateTag("import-results");
-    }
   }
+  updateTag("import-results");
+  console.log("Deleted import result", catalogId, resultId);
 }
 
 export async function saveImportedConcept(
   catalogId: string,
   resultId: string,
   externalId: string,
-) {
+): Promise<void> {
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
   }
-  try {
-    const response = await confirmImportedConcept(
-      catalogId,
-      resultId,
-      externalId,
-      `${session?.accessToken}`,
-    );
+  const response = await confirmImportedConcept(
+    catalogId,
+    resultId,
+    externalId,
+    `${session?.accessToken}`,
+  );
 
-    if (response.status !== 200 && response.status !== 201) {
-      throw new Error();
-    }
-    console.log("Confirmed import result", catalogId, resultId);
-  } catch (error) {
-    console.error(error);
-  } finally {
-    updateTag("import-result");
-    updateTag("import-results");
+  if (response.status !== 200 && response.status !== 201) {
+    throw new Error(
+      `API responded with status ${response.status} for confirmImportedConcept`,
+    );
   }
+  console.log("Confirmed import result", catalogId, resultId);
+  updateTag("import-result");
+  updateTag("import-results");
 }
 
-export async function cancelImport(catalogId: string, resultId: string) {
+export async function cancelImport(
+  catalogId: string,
+  resultId: string,
+): Promise<void> {
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
   }
-  let success = false;
-  try {
-    console.log("Sending import cancellation", catalogId, resultId);
+  console.log("Sending import cancellation", catalogId, resultId);
 
-    const response = await cancelConceptImport(
-      catalogId,
-      resultId,
-      `${session?.accessToken}`,
+  const response = await cancelConceptImport(
+    catalogId,
+    resultId,
+    `${session?.accessToken}`,
+  );
+
+  console.log("Import cancellation has been sent", catalogId, resultId);
+
+  if (response.status !== 200 && response.status !== 201) {
+    throw new Error(
+      `API responded with status ${response.status} for cancelConceptImport`,
     );
-
-    console.log("Import cancellation has been sent", catalogId, resultId);
-
-    if (response.status !== 200 && response.status !== 201) {
-      throw new Error();
-    }
-    success = true;
-    console.log("Importing result has been cancelled", catalogId, resultId);
-  } catch (error) {
-    throw new Error(localization.alert.fail);
-  } finally {
-    if (success) {
-      updateTag("import-result");
-      updateTag("import-results");
-    }
   }
+  updateTag("import-result");
+  updateTag("import-results");
+  console.log("Importing result has been cancelled", catalogId, resultId);
 }

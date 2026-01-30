@@ -27,7 +27,7 @@ import {
 async function getChangeRequestAsConcept(
   catalogId: string,
   changeRequestId: string,
-) {
+): Promise<Concept> {
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
@@ -81,7 +81,7 @@ async function getChangeRequestAsConcept(
 export async function createChangeRequestAction(
   catalogId: string,
   body: ChangeRequestUpdateBody,
-) {
+): Promise<string> {
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
@@ -112,7 +112,7 @@ export async function updateChangeRequestAction(
   catalogId: string,
   changeRequestId: string,
   body: ChangeRequestUpdateBody,
-) {
+): Promise<Concept> {
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
@@ -141,7 +141,7 @@ export async function updateChangeRequestAction(
 export async function acceptChangeRequestAction(
   catalogId: string,
   changeRequestId: string,
-) {
+): Promise<void> {
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
@@ -151,24 +151,19 @@ export async function acceptChangeRequestAction(
   if (!hasOrganizationWritePermission(session.accessToken, catalogId))
     throw new Error("User does not have write permission for this catalog");
 
-  try {
-    await acceptChangeRequest(
-      catalogId,
-      changeRequestId,
-      `${session?.accessToken}`,
-    );
-  } catch (error) {
-    throw new Error(error);
-  } finally {
-    updateTag("concept-change-requests");
-    updateTag("concept-change-request");
-  }
+  await acceptChangeRequest(
+    catalogId,
+    changeRequestId,
+    `${session?.accessToken}`,
+  );
+  updateTag("concept-change-requests");
+  updateTag("concept-change-request");
 }
 
 export async function rejectChangeRequestAction(
   catalogId: string,
   changeRequestId: string,
-) {
+): Promise<void> {
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
@@ -178,16 +173,11 @@ export async function rejectChangeRequestAction(
   if (!hasOrganizationWritePermission(session.accessToken, catalogId))
     throw new Error("User does not have write permission for this catalog");
 
-  try {
-    await rejectChangeRequest(
-      catalogId,
-      changeRequestId,
-      `${session?.accessToken}`,
-    );
-  } catch (error) {
-    throw new Error(error);
-  } finally {
-    updateTag("concept-change-requests");
-    updateTag("concept-change-request");
-  }
+  await rejectChangeRequest(
+    catalogId,
+    changeRequestId,
+    `${session?.accessToken}`,
+  );
+  updateTag("concept-change-requests");
+  updateTag("concept-change-request");
 }
