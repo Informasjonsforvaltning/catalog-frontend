@@ -2,8 +2,9 @@ import {
   NextAuthProvider,
   ReactQueryClientProvider,
 } from "@catalog-frontend/ui";
-import { localization } from "@catalog-frontend/utils";
+import { authOptions, localization } from "@catalog-frontend/utils";
 import { Metadata } from "next";
+import { getServerSession } from "next-auth";
 import "./global.css";
 import { AdminContextProvider } from "../context/admin";
 
@@ -12,11 +13,13 @@ export const metadata: Metadata = {
   description: localization.catalogType.admin,
 };
 
-const RootLayout = ({ children }: { children: React.ReactNode }) => {
+const RootLayout = async ({ children }: { children: React.ReactNode }) => {
+  const session = await getServerSession(authOptions);
+
   return (
     <html lang={localization.getLanguage()}>
       <body>
-        <NextAuthProvider>
+        <NextAuthProvider session={session}>
           <AdminContextProvider>
             <ReactQueryClientProvider>{children}</ReactQueryClientProvider>
           </AdminContextProvider>
