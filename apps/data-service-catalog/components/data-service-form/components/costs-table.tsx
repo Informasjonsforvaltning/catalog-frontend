@@ -80,7 +80,7 @@ export const CostsTable = ({ currencies }: Props) => {
 
   const handleDeleteCost = (index: number) => () => {
     const newCosts = values.costs?.filter((_, i) => i !== index);
-    setFieldValue("costs", newCosts?.length ? newCosts : undefined);
+    setFieldValue("costs", newCosts?.length ? newCosts : []);
   };
 
   return (
