@@ -17,7 +17,7 @@ import {
 import { compare } from "fast-json-patch";
 import { updateTag } from "next/cache";
 
-export async function getDatasets(catalogId: string) {
+export async function getDatasets(catalogId: string): Promise<Dataset[]> {
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
@@ -55,7 +55,7 @@ export async function getDatasetById(
 export async function createDataset(
   values: DatasetToBeCreated,
   catalogId: string,
-) {
+): Promise<string | undefined> {
   const datasetNoEmptyValues = removeEmptyValues(values);
 
   const session = await getValidSession();
@@ -87,7 +87,10 @@ export async function createDataset(
   }
 }
 
-export async function deleteDataset(catalogId: string, datasetId: string) {
+export async function deleteDataset(
+  catalogId: string,
+  datasetId: string,
+): Promise<void> {
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
@@ -116,7 +119,7 @@ export async function updateDataset(
   catalogId: string,
   initialDataset: Dataset,
   values: Dataset,
-) {
+): Promise<void> {
   const updatedDataset = removeEmptyValues(values);
 
   const diff = compare(initialDataset, updatedDataset);
@@ -157,7 +160,7 @@ export async function publishDataset(
   catalogId: string,
   initialDataset: Dataset,
   values: Dataset,
-) {
+): Promise<void> {
   const diff = compare(initialDataset, values);
 
   if (diff.length === 0) {
