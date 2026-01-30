@@ -43,7 +43,10 @@
 
 .set {
   display: flex;
-  gap: 0.5rem;
+  gap: 1rem;
+  justify-content: space-between;
+  font-size:0.9em;
+  opacity:0.75;
 }
 
 .greyFont {
