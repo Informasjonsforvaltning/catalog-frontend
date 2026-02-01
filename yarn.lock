@@ -2552,10 +2552,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@digdir/designsystemet-theme@npm:^0.15.3":
-  version: 0.15.3
-  resolution: "@digdir/designsystemet-theme@npm:0.15.3"
-  checksum: 10/0c9760ffbc42ed736ebcd1ee9069b2a8dd9312de08263d8beee74438933df736280c07fba2568d05f202ea88687b3309c40bf55be3d7d8e57f54cf84cc33af96
+"@digdir/designsystemet-theme@npm:^1.11.0":
+  version: 1.11.0
+  resolution: "@digdir/designsystemet-theme@npm:1.11.0"
+  dependencies:
+    "@digdir/designsystemet-types": "npm:^1.11.0"
+  checksum: 10/a7e6d2ce36cd358d97424388e0c1b32e03d300a1b169a7b0b236d100b406df09e6cd09111efa8615b838ce85b7dcb06fe332ade63f7ce9c7fe8b024bf47c6b4a
+  languageName: node
+  linkType: hard
+
+"@digdir/designsystemet-types@npm:^1.11.0":
+  version: 1.11.0
+  resolution: "@digdir/designsystemet-types@npm:1.11.0"
+  checksum: 10/21db526b4f0960a45c8cc049cc603ab22e1640082ff4af5195448c7020025efca2254b23a4fe301ce36381152e878ae64a42a4b4aab0134b0d89065d6f804b86
   languageName: node
   linkType: hard
 
@@ -9403,7 +9412,7 @@ __metadata:
     "@babel/preset-react": "npm:^7.28.5"
     "@digdir/designsystemet-css": "npm:0.10.0"
     "@digdir/designsystemet-react": "npm:0.63.1"
-    "@digdir/designsystemet-theme": "npm:^0.15.3"
+    "@digdir/designsystemet-theme": "npm:^1.11.0"
     "@eslint/eslintrc": "npm:^3.3.3"
     "@eslint/js": "npm:^9.39.2"
     "@fellesdatakatalog/icons": "npm:^0.8.5"
