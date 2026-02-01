@@ -9558,7 +9558,7 @@ __metadata:
     eslint-config-prettier: "npm:10.1.8"
     eslint-plugin-import: "npm:^2.32.0"
     eslint-plugin-jsx-a11y: "npm:^6.10.2"
-    eslint-plugin-playwright: "npm:^2.3.0"
+    eslint-plugin-playwright: "npm:^2.5.1"
     eslint-plugin-react: "npm:^7.37.5"
     eslint-plugin-react-hooks: "npm:7.0.1"
     fast-json-patch: "npm:^3.1.1"
@@ -11613,14 +11613,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-playwright@npm:^2.3.0":
-  version: 2.3.0
-  resolution: "eslint-plugin-playwright@npm:2.3.0"
+"eslint-plugin-playwright@npm:^2.5.1":
+  version: 2.5.1
+  resolution: "eslint-plugin-playwright@npm:2.5.1"
   dependencies:
     globals: "npm:^16.4.0"
   peerDependencies:
     eslint: ">=8.40.0"
-  checksum: 10/eeed534fa66be9ff31cd262331e485661a8950bb97633ae95ad6c16b60e63ddb43011b33082403bc513dc7edf0819b4bc26e99ed2f7450af64d52845cdc7d8ba
+  checksum: 10/d6700cc5ef729a756c1c0956f98bf9822d8a2f74e7c2bc130ea15ebed41648cd2b4e0d50225dcb7b5c1c3a796d718c6592bc67fa1fe70cb7b818b147ee93b56f
   languageName: node
   linkType: hard
 
