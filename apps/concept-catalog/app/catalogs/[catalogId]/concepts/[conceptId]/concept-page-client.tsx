@@ -54,7 +54,7 @@ import {
   useGetComments,
   useUpdateComment,
 } from "@concept-catalog/hooks/comments";
-import { useGetHistory } from "@concept-catalog/hooks/history";
+import { useGetConceptHistory } from "@concept-catalog/hooks/concept-history";
 import {
   useDeleteConcept,
   usePublishConcept,
@@ -660,11 +660,12 @@ export const ConceptPageClient = ({
 
   const HistoryTab: FC = () => {
     const [historyCurrentPage, setHistoryCurrentPage] = useState(1);
-    const { status: getHistoryStatus, data: getHistoryData } = useGetHistory({
-      catalogId,
-      resourceId: concept?.id,
-      page: historyCurrentPage,
-    });
+    const { status: getHistoryStatus, data: getHistoryData } =
+      useGetConceptHistory({
+        catalogId,
+        resourceId: concept?.id,
+        page: historyCurrentPage,
+      });
 
     const handleHistoryPageChange = (page) => {
       setHistoryCurrentPage(page);
