@@ -31,18 +31,18 @@ export const ActivityLog = async ({ catalogId, accessToken }: Props) => {
   const historyData: UpdateList = await historyResponse.json();
   const conceptsData: Concept[] = await conceptsResponse.json();
 
-  const enrichedUpdates = mapHistoryWithConcepts(
+  const updatesWithConcepts = mapHistoryWithConcepts(
     historyData.updates ?? [],
     conceptsData,
   );
 
-  if (enrichedUpdates.length === 0) {
+  if (updatesWithConcepts.length === 0) {
     return <p className={styles.noHits}>{localization.search.noHits}</p>;
   }
 
   return (
     <ul className={styles.list}>
-      {enrichedUpdates.map((update) => (
+      {updatesWithConcepts.map((update) => (
         <li key={update.id} className={styles.listItem}>
           <div className={styles.listContent}>
             <Heading level={3} size="xsmall">
