@@ -21,13 +21,13 @@ export const CostList = ({ costs, language }: Props) => {
                   paddingLeft: 0,
                 }}
               >
-                {cost.value && (
+                {cost?.value && (
                   <List.Item>
                     {cost.value} {cost.currency?.split("/")?.reverse()[0] ?? ""}
                   </List.Item>
                 )}
 
-                {cost.documentation?.map((doc, docIndex) => (
+                {cost?.documentation?.map((doc, docIndex) => (
                   <List.Item key={`costs-${i}-doc-${docIndex}`}>
                     <Link href={doc} target="_blank">
                       {doc}
@@ -37,7 +37,7 @@ export const CostList = ({ costs, language }: Props) => {
               </List.Unordered>
             </List.Root>
             <Paragraph size="sm">
-              {getTranslateText(cost.description, language)}
+              {getTranslateText(cost?.description, language)}
             </Paragraph>
           </Card.Content>
         </Card>
