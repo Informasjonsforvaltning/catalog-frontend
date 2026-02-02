@@ -24,7 +24,7 @@ export const serviceFormNb = {
     contactPoint:
       "Informasjon om en organisasjon eller enhet som kan kontaktes for spørsmål eller kommentarer om tjenesten. Minst ett av feltene må fylles ut for å oppfylle kravet til kontaktpunkt.",
     dctType:
-      "Tjenestens hovedformål. Dette kan velges blant EU’s kontrollerte vokabular [main activity](https://op.europa.eu/en/web/eu-vocabularies/concept-scheme/-/resource?uri=http://publications.europa.eu/resource/authority/main-activity).",
+      "Tjenestens hovedformål. Dette kan velges blant EU's kontrollerte vokabular [main activity](https://op.europa.eu/en/web/eu-vocabularies/concept-scheme/-/resource?uri=http://publications.europa.eu/resource/authority/main-activity).",
     description:
       "Beskrivelsen skal være kortfattet og formålet med tjenesten bør fremgå.",
     homepage:
