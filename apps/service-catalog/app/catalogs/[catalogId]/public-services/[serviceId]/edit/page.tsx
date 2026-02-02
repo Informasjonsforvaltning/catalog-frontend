@@ -1,5 +1,6 @@
 import {
   getAdmsStatuses,
+  getMainActivities,
   getOrganization,
 } from "@catalog-frontend/data-access";
 import { Breadcrumbs, PageBanner } from "@catalog-frontend/ui";
@@ -13,11 +14,13 @@ export default async function EditServicePage({
   params: Promise<{ catalogId: string; serviceId: string }>;
 }) {
   const { catalogId, serviceId } = await params;
-  const [service, organization, statusesResponse] = await Promise.all([
-    getPublicServiceById(catalogId, serviceId),
-    getOrganization(catalogId),
-    getAdmsStatuses(),
-  ]);
+  const [service, organization, statusesResponse, mainActivities] =
+    await Promise.all([
+      getPublicServiceById(catalogId, serviceId),
+      getOrganization(catalogId),
+      getAdmsStatuses(),
+      getMainActivities(),
+    ]);
 
   const breadcrumbList = [
     {
@@ -45,6 +48,7 @@ export default async function EditServicePage({
         subtitle={getTranslateText(organization?.prefLabel)}
       />
       <EditPage
+        mainActivities={mainActivities.mainActivities}
         referenceDataEnv={process.env.FDK_BASE_URI || ""}
         searchEnv={process.env.FDK_SEARCH_SERVICE_BASE_URI || ""}
         service={service}

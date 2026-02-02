@@ -17,6 +17,7 @@ import styles from "./public-service-details-page.module.css";
 interface PublicServiceDetailsPageProps {
   catalogId: string;
   hasWritePermission: boolean;
+  mainActivities: ReferenceDataCode[];
   referenceDataEnv: string;
   searchEnv: string;
   service: Service;
@@ -27,6 +28,7 @@ interface PublicServiceDetailsPageProps {
 const PublicServiceDetailsPageClient = ({
   catalogId,
   hasWritePermission,
+  mainActivities,
   referenceDataEnv,
   searchEnv,
   service,
@@ -58,6 +60,7 @@ const PublicServiceDetailsPageClient = ({
       <DetailsPageLayout.Left>
         <BasicServiceFormInfoCardItems
           language={language}
+          mainActivities={mainActivities}
           searchEnv={searchEnv}
           referenceDataEnv={referenceDataEnv}
           service={service}

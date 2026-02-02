@@ -61,7 +61,7 @@ interface ServiceFormProps {
   afterSubmit?: () => void;
   autoSaveStorage: DataStorage<StorageData>;
   initialValues: ServiceToBeCreated;
-  mainActivities: ReferenceDataCode[];
+  mainActivities?: ReferenceDataCode[];
   onCancel?: () => void;
   onSubmit?: (values: Service) => Promise<Service | undefined>;
   referenceDataEnv: string;
@@ -499,7 +499,7 @@ export const ServiceForm = (props: ServiceFormProps) => {
                               size="sm"
                               value={values.dctType || []}
                             >
-                              {mainActivities.map((item) => (
+                              {mainActivities?.map((item) => (
                                 <Combobox.Option
                                   key={item.uri}
                                   value={item.uri}
