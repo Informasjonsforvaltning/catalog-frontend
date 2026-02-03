@@ -142,7 +142,7 @@ export async function updateService(
   const diff = compare(oldService, updatedServiceMerged);
 
   if (diff.length === 0) {
-    throw new Error(localization.alert.noChanges);
+    return;
   }
 
   let success = false;
