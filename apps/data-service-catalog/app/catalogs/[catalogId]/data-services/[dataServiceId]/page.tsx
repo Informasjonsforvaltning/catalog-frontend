@@ -101,7 +101,7 @@ const EditDataServicePage = withReadProtectedPage(
             referenceData={referenceData}
             referenceDataEnv={referenceDataEnv}
             searchEnv={searchEnv}
-          ></DataServiceDetailsPageClient>
+          />
         </div>
       </>
     );

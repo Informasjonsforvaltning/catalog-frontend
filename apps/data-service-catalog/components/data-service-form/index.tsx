@@ -521,7 +521,7 @@ const DataServiceForm = ({
                   >
                     {localization.button.cancel}
                   </Button>
-                  <div className={styles.verticalLine}></div>
+                  <div className={styles.verticalLine} />
                   <div
                     className={classNames(
                       styles.flex,

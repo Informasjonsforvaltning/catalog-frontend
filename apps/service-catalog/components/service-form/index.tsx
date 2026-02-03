@@ -638,7 +638,7 @@ export const ServiceForm = (props: ServiceFormProps) => {
                   >
                     {localization.button.cancel}
                   </Button>
-                  <div className={styles.verticalLine}></div>
+                  <div className={styles.verticalLine} />
                   <div className={cn(styles.flex, styles.gap2, styles.noWrap)}>
                     <Checkbox
                       size="sm"
