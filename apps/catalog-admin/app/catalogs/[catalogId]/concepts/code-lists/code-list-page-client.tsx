@@ -128,7 +128,7 @@ const CodeListsPageClient = ({
             >
               <Accordion.Item defaultOpen={showCodeListEditor}>
                 <Accordion.Header>
-                  <Heading size="small"></Heading>
+                  <Heading size="small" />
                 </Accordion.Header>
 
                 <Accordion.Content>
