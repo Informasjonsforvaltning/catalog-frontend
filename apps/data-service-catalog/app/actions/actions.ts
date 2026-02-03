@@ -152,7 +152,7 @@ export async function updateDataService(
   );
 
   if (diff.length === 0) {
-    throw new Error(localization.alert.noChanges);
+    return initialDataService;
   }
 
   let success = false;

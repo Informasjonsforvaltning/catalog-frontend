@@ -186,7 +186,7 @@ export async function updateConcept(
   const diff = conceptJsonPatchOperations(initialConcept, values);
 
   if (diff.length === 0) {
-    throw new Error(localization.alert.noChanges);
+    return initialConcept;
   }
 
   let success = false;
