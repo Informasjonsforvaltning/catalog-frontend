@@ -118,6 +118,7 @@ export async function updatePublicService(
     ...oldPublicService,
     title: updatedService.title,
     description: updatedService.description,
+    dctType: updatedService.dctType,
     produces: updatedService.produces,
     contactPoints: updatedService.contactPoints,
     homepage: updatedService.homepage,

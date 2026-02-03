@@ -3,6 +3,7 @@
 import {
   Box,
   Checkbox,
+  Combobox,
   Fieldset,
   Paragraph,
   Spinner,
@@ -60,6 +61,7 @@ interface ServiceFormProps {
   afterSubmit?: () => void;
   autoSaveStorage: DataStorage<StorageData>;
   initialValues: ServiceToBeCreated;
+  mainActivities?: ReferenceDataCode[];
   onCancel?: () => void;
   onSubmit?: (values: Service) => Promise<Service | undefined>;
   referenceDataEnv: string;
@@ -98,6 +100,7 @@ export const ServiceForm = (props: ServiceFormProps) => {
     afterSubmit,
     autoSaveStorage,
     initialValues,
+    mainActivities,
     onCancel,
     onSubmit,
     referenceDataEnv,
@@ -261,6 +264,7 @@ export const ServiceForm = (props: ServiceFormProps) => {
           isValidating,
           submitForm,
           errors,
+          setFieldValue,
           setValues,
           values,
         }) => {
@@ -317,6 +321,7 @@ export const ServiceForm = (props: ServiceFormProps) => {
               "contactPoints",
               "spatial",
               "subject",
+              "dctType",
             ].forEach((name) => {
               if (isDirty(name)) {
                 dirtyFields.push(name);
@@ -350,6 +355,7 @@ export const ServiceForm = (props: ServiceFormProps) => {
                         "status",
                         "spatial",
                         "subject",
+                        "dctType",
                       ].includes(field),
                     )}
                     error={hasError([
@@ -359,6 +365,7 @@ export const ServiceForm = (props: ServiceFormProps) => {
                       "status",
                       "spatial",
                       "subject",
+                      "dctType",
                     ])}
                   >
                     <Box>
@@ -464,6 +471,46 @@ export const ServiceForm = (props: ServiceFormProps) => {
                           searchEnv={searchEnv}
                         />
                       </Fieldset>
+
+                      {type === "public-services" && (
+                        <>
+                          <FieldsetDivider />
+                          <Fieldset
+                            size="sm"
+                            legend={
+                              <TitleWithHelpTextAndTag
+                                tagTitle={localization.tag.recommended}
+                                tagColor="info"
+                                helpText={
+                                  localization.serviceForm.helptext.dctType
+                                }
+                              >
+                                {localization.serviceForm.fieldLabel.dctType}
+                              </TitleWithHelpTextAndTag>
+                            }
+                          >
+                            <Combobox
+                              error={Boolean(errors.dctType)}
+                              multiple
+                              onValueChange={(value) =>
+                                setFieldValue("dctType", value)
+                              }
+                              placeholder={`${localization.search.search}...`}
+                              size="sm"
+                              value={values.dctType || []}
+                            >
+                              {mainActivities?.map((item) => (
+                                <Combobox.Option
+                                  key={item.uri}
+                                  value={item.uri}
+                                >
+                                  {getTranslateText(item.label)}
+                                </Combobox.Option>
+                              ))}
+                            </Combobox>
+                          </Fieldset>
+                        </>
+                      )}
                     </Box>
                   </FormLayout.Section>
 
