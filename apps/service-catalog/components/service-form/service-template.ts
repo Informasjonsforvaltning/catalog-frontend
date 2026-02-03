@@ -68,21 +68,22 @@ export const serviceTemplate = (
     : emptyContactpoint;
 
   return {
-    title: {
-      nb: service?.title?.nb,
-      nn: service?.title?.nn,
-      en: service?.title?.en,
-    },
+    contactPoints,
+    dctType: service?.dctType || [],
     description: {
       nb: service?.description?.nb,
       nn: service?.description?.nn,
       en: service?.description?.en,
     },
-    produces,
-    contactPoints,
     homepage: service?.homepage,
-    status: service?.status,
+    produces,
     spatial: service?.spatial || [],
+    status: service?.status,
     subject: service?.subject || [],
+    title: {
+      nb: service?.title?.nb,
+      nn: service?.title?.nn,
+      en: service?.title?.en,
+    },
   };
 };
