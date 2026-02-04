@@ -28,7 +28,7 @@ import { EditPage } from "./edit-page.client";
 
 export default withWriteProtectedPage(
   ({ catalogId, conceptId }) =>
-    `/catalogs//${catalogId}/concepts/${conceptId}/edit`,
+    `/catalogs/${catalogId}/concepts/${conceptId}/edit`,
   async ({ catalogId, conceptId, session }) => {
     const concept: Concept = await getConcept(
       `${conceptId}`,
