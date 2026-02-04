@@ -552,7 +552,7 @@ export const DatasetForm = ({
                   >
                     {localization.button.cancel}
                   </Button>
-                  <div className={styles.verticalLine}></div>
+                  <div className={styles.verticalLine} />
                   <Switch
                     position="left"
                     size="sm"
@@ -573,7 +573,7 @@ export const DatasetForm = ({
                       </HelpMarkdown>
                     </div>
                   </Switch>
-                  <div className={styles.verticalLine}></div>
+                  <div className={styles.verticalLine} />
                   <div
                     className={classNames(
                       styles.flex,

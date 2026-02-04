@@ -13,6 +13,9 @@ const conceptMetaDataFieldsToOmit = [
   "originaltBegrep",
   "id",
   "revisjonAv",
+  "erPublisert",
+  "isArchived",
+  "publiseringsTidspunkt",
 ];
 
 export const conceptJsonPatchOperations = (

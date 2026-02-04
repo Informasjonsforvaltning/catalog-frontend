@@ -74,7 +74,7 @@ export const UsersPageClient = ({ catalogId }: UsersPageClientProps) => {
             >
               <Accordion.Item defaultOpen={showUserEditor}>
                 <Accordion.Header>
-                  <Heading size="xsmall" level={3}></Heading>
+                  <Heading size="xsmall" level={3} />
                 </Accordion.Header>
                 <Accordion.Content>
                   <UserEditor type="create" catalogId={catalogId} />
