@@ -46,7 +46,7 @@ const ChangeRequestEditPage = withReadProtectedPage(
     const changeRequest: ChangeRequest = await getChangeRequest(
       catalogId,
       `${changeRequestId}`,
-      `${session.accessToken}`,
+      session.accessToken,
     )
       .then((response) => {
         return response.json();
@@ -77,7 +77,7 @@ const ChangeRequestEditPage = withReadProtectedPage(
       changeRequest.conceptId && validUUID(changeRequest.conceptId)
         ? await getConceptRevisions(
             `${changeRequest.conceptId}`,
-            `${session.accessToken}`,
+            session.accessToken,
           ).then((response) => {
             if (response.ok) {
               return response.json().then((revisions: Concept[]) => {
@@ -120,15 +120,15 @@ const ChangeRequestEditPage = withReadProtectedPage(
 
     const codeListsResult: CodeListsResult = await getAllCodeLists(
       catalogId,
-      `${session?.accessToken}`,
+      session.accessToken,
     ).then((response) => response.json());
     const fieldsResult: FieldsResult = await getFields(
       catalogId,
-      `${session?.accessToken}`,
+      session.accessToken,
     ).then((response) => response.json());
     const usersResult: UsersResult = await getUsers(
       catalogId,
-      `${session?.accessToken}`,
+      session.accessToken,
     ).then((response) => response.json());
 
     return (

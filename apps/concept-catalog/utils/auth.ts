@@ -6,10 +6,10 @@ import {
   hasSystemAdminPermission,
   redirectToSignIn,
   validOrganizationNumber,
+  ValidSession,
   validUUID,
 } from "@catalog-frontend/utils";
 import { RedirectType, redirect } from "next/navigation";
-import { Session } from "next-auth";
 import { ReactNode } from "react";
 
 type PageParams = {
@@ -22,7 +22,7 @@ type PageParams = {
 type PagePath = (params: PageParams) => string;
 type Render = (
   props: {
-    session: Session;
+    session: ValidSession;
     hasWritePermission: boolean;
     hasAdminPermission: boolean;
   } & PageParams,

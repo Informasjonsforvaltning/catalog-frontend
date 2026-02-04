@@ -18,7 +18,7 @@ export const GET = async (
         const response = await getHistory(
           catalogId,
           resourceId,
-          `${session?.accessToken}`,
+          session.accessToken,
           +page,
           +size,
         );

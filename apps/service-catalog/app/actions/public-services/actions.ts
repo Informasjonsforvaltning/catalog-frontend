@@ -25,7 +25,7 @@ export async function getPublicServices(catalogId: string): Promise<Service[]> {
   if (!session) {
     return redirectToSignIn();
   }
-  const response = await getAll(catalogId, `${session?.accessToken}`);
+  const response = await getAll(catalogId, session.accessToken);
   if (response.status !== 200) {
     throw new Error(
       "getPublicServices failed with response code " + response.status,
@@ -43,11 +43,7 @@ export async function getPublicServiceById(
   if (!session) {
     return redirectToSignIn();
   }
-  const response = await getById(
-    catalogId,
-    serviceId,
-    `${session?.accessToken}`,
-  );
+  const response = await getById(catalogId, serviceId, session.accessToken);
 
   if (response.status !== 200) {
     throw new Error(
@@ -74,7 +70,7 @@ export async function createPublicService(
     const response = await create(
       newPublicService,
       catalogId,
-      `${session?.accessToken}`,
+      session.accessToken,
     );
     if (response.status !== 201) {
       throw new Error();
@@ -102,11 +98,7 @@ export async function deletePublicService(
   }
   let success = false;
   try {
-    const response = await deletePS(
-      catalogId,
-      serviceId,
-      `${session?.accessToken}`,
-    );
+    const response = await deletePS(catalogId, serviceId, session.accessToken);
     if (response.status !== 204) {
       throw new Error();
     }
@@ -158,7 +150,7 @@ export async function updatePublicService(
       catalogId,
       oldPublicService.id,
       diff,
-      `${session?.accessToken}`,
+      session.accessToken,
     );
     if (response.status !== 200) {
       throw new Error();
@@ -184,11 +176,7 @@ export async function publishPublicService(
   }
   let success = false;
   try {
-    const response = await publish(
-      catalogId,
-      serviceId,
-      `${session?.accessToken}`,
-    );
+    const response = await publish(catalogId, serviceId, session.accessToken);
     if (response.status !== 200) {
       throw new Error();
     }
@@ -213,11 +201,7 @@ export async function unpublishPublicService(
   }
   let success = false;
   try {
-    const response = await unpublish(
-      catalogId,
-      serviceId,
-      `${session?.accessToken}`,
-    );
+    const response = await unpublish(catalogId, serviceId, session.accessToken);
     if (response.status !== 200) {
       throw new Error();
     }

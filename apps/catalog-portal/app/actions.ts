@@ -13,8 +13,11 @@ import {
   DataServiceCatalog,
   TermsAcceptation,
 } from "@catalog-frontend/types";
-import { getValidSession, redirectToSignIn } from "@catalog-frontend/utils";
-import { Session } from "next-auth";
+import {
+  getValidSession,
+  redirectToSignIn,
+  ValidSession,
+} from "@catalog-frontend/utils";
 import { updateTag } from "next/cache";
 
 export const getDatasetCount = async (catalogId: string): Promise<number> => {
@@ -58,17 +61,10 @@ export const getServiceCount = async (
 };
 
 const getServiceCountByOrg = async (
-  orgId: string | null | undefined,
-  session: Session,
+  orgId: string,
+  session: ValidSession,
 ): Promise<{ serviceCount: number; publicServiceCount: number }> => {
-  if (!orgId || !session) {
-    return {
-      serviceCount: 0,
-      publicServiceCount: 0,
-    };
-  }
-
-  const response = await getAllServiceCatalogs(`${session?.accessToken}`);
+  const response = await getAllServiceCatalogs(session.accessToken);
   if (response.status !== 200) {
     throw new Error(
       "getServiceCatalogs failed with response code " + response.status,
@@ -100,13 +96,10 @@ const getServiceCountByOrg = async (
 };
 
 const getDatasetCountByOrg = async (
-  orgId: string | null | undefined,
-  session: Session,
+  orgId: string,
+  session: ValidSession,
 ): Promise<number> => {
-  if (!orgId || !session) {
-    return 0;
-  }
-  const response = await getAllDatasetCatalogs(`${session?.accessToken}`);
+  const response = await getAllDatasetCatalogs(session.accessToken);
   if (response.status !== 200) {
     console.error(
       "getAllDatasetCatalogs failed with response code " + response.status,
@@ -124,15 +117,10 @@ const getDatasetCountByOrg = async (
 };
 
 const getDataServiceCountByOrg = async (
-  orgId: string | null | undefined,
-  session: Session,
+  orgId: string,
+  session: ValidSession,
 ): Promise<number> => {
-  if (!orgId || !session) {
-    return 0;
-  }
-  const response = await oldGetAllDataServiceCatalogs(
-    `${session?.accessToken}`,
-  );
+  const response = await oldGetAllDataServiceCatalogs(session.accessToken);
   if (response.status !== 200) {
     console.error(
       "oldGetAllDataServiceCatalogs failed with response code " +
@@ -151,16 +139,10 @@ const getDataServiceCountByOrg = async (
 };
 
 const getConceptCountByOrg = async (
-  orgId: string | null | undefined,
-  session: Session,
+  orgId: string,
+  session: ValidSession,
 ): Promise<number> => {
-  if (!orgId || !session) {
-    return 0;
-  }
-  const response = await getConceptCountByCatalogId(
-    orgId,
-    `${session?.accessToken}`,
-  );
+  const response = await getConceptCountByCatalogId(orgId, session.accessToken);
   if (response.status !== 200) {
     console.error(
       "getConceptCountByCatalogId failed with response code " + response.status,
@@ -177,7 +159,7 @@ export async function acceptTermsAndConditions(
   if (!session) {
     return redirectToSignIn();
   }
-  const response = await acceptTerms(acceptation, `${session?.accessToken}`);
+  const response = await acceptTerms(acceptation, session.accessToken);
   if (response.status !== 201) {
     console.error("status: " + response.status);
     throw new Error("acceptTerms failed with response code " + response.status);

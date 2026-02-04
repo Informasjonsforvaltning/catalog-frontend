@@ -7,7 +7,7 @@ export const DELETE = async (req: NextRequest, props) => {
   return withValidSessionForApi(async (session) => {
     const { conceptId } = params;
     try {
-      const response = await deleteConcept(conceptId, session?.accessToken);
+      const response = await deleteConcept(conceptId, session.accessToken);
       if (!response.ok) {
         throw new Error();
       }

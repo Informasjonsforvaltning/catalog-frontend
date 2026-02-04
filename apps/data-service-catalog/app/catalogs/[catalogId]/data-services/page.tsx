@@ -6,7 +6,6 @@ import {
 } from "@catalog-frontend/ui";
 import {
   localization,
-  redirectToSignIn,
   getServerDataServicesPageSettings,
 } from "@catalog-frontend/utils";
 
@@ -18,10 +17,7 @@ import { cookies } from "next/headers";
 
 const DataServicesSearchHits = withReadProtectedPage(
   ({ catalogId }) => `/catalogs/${catalogId}/data-services`,
-  async ({ catalogId, session, hasWritePermission, hasAdminPermission }) => {
-    if (!session) {
-      return redirectToSignIn(`/catalogs/${catalogId}/data-services`);
-    }
+  async ({ catalogId, hasWritePermission, hasAdminPermission }) => {
     const dataServices: DataService[] = await getDataServices(catalogId);
 
     const distributionStatuses = await getDistributionStatuses().then(

@@ -17,7 +17,7 @@ export const GET = async (
     try {
       const response = await getConceptsForCatalog(
         catalogId,
-        session?.accessToken,
+        session.accessToken,
       );
       if (response.status !== 200) {
         throw new Error();
@@ -47,7 +47,7 @@ export const POST = async (
     };
 
     try {
-      const response = await createConcept(concept, session?.accessToken);
+      const response = await createConcept(concept, session.accessToken);
       if (response.status !== 201) {
         console.log(
           "Failed to create concept with status " + response.status,

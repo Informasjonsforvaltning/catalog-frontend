@@ -26,7 +26,7 @@ export async function getServices(catalogId: string): Promise<Service[]> {
     return redirectToSignIn();
   }
 
-  const response = await getAll(catalogId, `${session?.accessToken}`);
+  const response = await getAll(catalogId, session.accessToken);
   if (response.status !== 200) {
     throw new Error("getServices failed with response code " + response.status);
   }
@@ -42,11 +42,7 @@ export async function getServiceById(
   if (!session) {
     return redirectToSignIn();
   }
-  const response = await getById(
-    catalogId,
-    serviceId,
-    `${session?.accessToken}`,
-  );
+  const response = await getById(catalogId, serviceId, session.accessToken);
 
   if (response.status !== 200) {
     throw new Error(
@@ -70,11 +66,7 @@ export async function createService(
   let success = false;
   let serviceId = undefined;
   try {
-    const response = await create(
-      newService,
-      catalogId,
-      `${session?.accessToken}`,
-    );
+    const response = await create(newService, catalogId, session.accessToken);
     if (response.status !== 201) {
       throw new Error();
     }
@@ -104,7 +96,7 @@ export async function deleteService(
     const response = await removeService(
       catalogId,
       serviceId,
-      `${session?.accessToken}`,
+      session.accessToken,
     );
     if (response.status !== 204) {
       throw new Error();
@@ -156,7 +148,7 @@ export async function updateService(
       catalogId,
       oldService.id,
       diff,
-      `${session?.accessToken}`,
+      session.accessToken,
     );
     if (response.status !== 200) {
       throw new Error(`${response.statusText}`);
@@ -182,11 +174,7 @@ export async function publishService(
   }
   let success = false;
   try {
-    const response = await publish(
-      catalogId,
-      serviceId,
-      `${session?.accessToken}`,
-    );
+    const response = await publish(catalogId, serviceId, session.accessToken);
     if (response.status !== 200) {
       throw new Error();
     }
@@ -211,11 +199,7 @@ export async function unpublishService(
   }
   let success = false;
   try {
-    const response = await unpublish(
-      catalogId,
-      serviceId,
-      `${session?.accessToken}`,
-    );
+    const response = await unpublish(catalogId, serviceId, session.accessToken);
     if (response.status !== 200) {
       throw new Error();
     }

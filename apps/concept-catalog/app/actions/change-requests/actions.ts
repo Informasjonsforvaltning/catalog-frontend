@@ -37,8 +37,8 @@ async function getChangeRequestAsConcept(
 
   const changeRequest: ChangeRequest = await getChangeRequest(
     catalogId,
-    `${changeRequestId}`,
-    `${session.accessToken}`,
+    changeRequestId,
+    session.accessToken,
   )
     .then((response) => {
       return response.json();
@@ -56,8 +56,8 @@ async function getChangeRequestAsConcept(
   const originalConcept =
     changeRequest.conceptId && validUUID(changeRequest.conceptId)
       ? await getConceptRevisions(
-          `${changeRequest.conceptId}`,
-          `${session.accessToken}`,
+          changeRequest.conceptId,
+          session.accessToken,
         ).then((response) => {
           if (response.ok) {
             return response.json().then((revisions: Concept[]) => {
@@ -90,8 +90,8 @@ export async function createChangeRequestAction(
 
   const response = await createChangeRequest(
     body,
-    `${catalogId}`,
-    `${session?.accessToken}`,
+    catalogId,
+    session.accessToken,
   );
   if (response.status !== 201) {
     const errorMsg = `Error when creating change request. Response status: ${
@@ -122,9 +122,9 @@ export async function updateChangeRequestAction(
 
   const response = await updateChangeRequest(
     body,
-    `${catalogId}`,
-    `${changeRequestId}`,
-    `${session?.accessToken}`,
+    catalogId,
+    changeRequestId,
+    session.accessToken,
   );
 
   if (response.status !== 200) {
@@ -152,11 +152,7 @@ export async function acceptChangeRequestAction(
     throw new Error("User does not have write permission for this catalog");
 
   try {
-    await acceptChangeRequest(
-      catalogId,
-      changeRequestId,
-      `${session?.accessToken}`,
-    );
+    await acceptChangeRequest(catalogId, changeRequestId, session.accessToken);
   } catch (error) {
     throw new Error(error);
   } finally {
@@ -179,11 +175,7 @@ export async function rejectChangeRequestAction(
     throw new Error("User does not have write permission for this catalog");
 
   try {
-    await rejectChangeRequest(
-      catalogId,
-      changeRequestId,
-      `${session?.accessToken}`,
-    );
+    await rejectChangeRequest(catalogId, changeRequestId, session.accessToken);
   } catch (error) {
     throw new Error(error);
   } finally {
