@@ -5,44 +5,22 @@ import {
   getTranslateText,
 } from "@catalog-frontend/utils";
 import { Heading } from "@digdir/designsystemet-react";
-import {
-  getCatalogHistory,
-  getConceptsForCatalog,
-} from "@catalog-frontend/data-access";
-import { UpdateList, Concept } from "@catalog-frontend/types";
-import { mapHistoryWithConcepts } from "@concept-catalog/utils/activity-log";
+import { EnrichedUpdate } from "@concept-catalog/utils/activity-log";
 import styles from "./activity-log-page.module.css";
 
 type Props = {
   catalogId: string;
-  accessToken?: string;
+  updates: EnrichedUpdate[];
 };
 
-export const ActivityLog = async ({ catalogId, accessToken }: Props) => {
-  if (!accessToken) {
-    return null;
-  }
-
-  const [historyResponse, conceptsResponse] = await Promise.all([
-    getCatalogHistory(catalogId, accessToken),
-    getConceptsForCatalog(catalogId, accessToken),
-  ]);
-
-  const historyData: UpdateList = await historyResponse.json();
-  const conceptsData: Concept[] = await conceptsResponse.json();
-
-  const updatesWithConcepts = mapHistoryWithConcepts(
-    historyData.updates ?? [],
-    conceptsData,
-  );
-
-  if (updatesWithConcepts.length === 0) {
+export const ActivityLog = ({ catalogId, updates }: Props) => {
+  if (updates.length === 0) {
     return <p className={styles.noHits}>{localization.search.noHits}</p>;
   }
 
   return (
     <ul className={styles.list}>
-      {updatesWithConcepts.map((update) => (
+      {updates.map((update) => (
         <li key={update.id} className={styles.listItem}>
           <div className={styles.listContent}>
             <Heading level={3} size="xsmall">

@@ -8,13 +8,18 @@ import {
 } from "@catalog-frontend/ui";
 import { ActivityLogPageClient } from "./activity-log-page-client";
 import { ActivityLog } from "./activity-log";
+import { getActivityLogData } from "@concept-catalog/utils/activity-log";
+import { ActivityLogPagination } from "./activity-log-pagination";
 
 const ActivityLogPage = withReadProtectedPage(
   ({ catalogId }) => `/catalogs/${catalogId}/activity-log`,
-  async ({ catalogId, session }) => {
+  async ({ catalogId, session, searchParams }) => {
     if (process.env.NEXT_PUBLIC_ACTIVITY_LOG_ENABLED !== "true") {
       redirect(`/catalogs/${catalogId}/concepts`);
     }
+
+    const currentPage = Number(searchParams.page) || 1;
+
     const breadcrumbList = catalogId
       ? ([
           {
@@ -28,6 +33,13 @@ const ActivityLogPage = withReadProtectedPage(
         ] as BreadcrumbType[])
       : [];
 
+    const { updates, pagination } = await getActivityLogData(
+      catalogId,
+      session.accessToken,
+      currentPage,
+    );
+    const totalPages = pagination?.totalPages ?? 0;
+
     return (
       <>
         <Breadcrumbs
@@ -39,10 +51,14 @@ const ActivityLogPage = withReadProtectedPage(
           catalogId={catalogId}
         />
         <ActivityLogPageClient catalogId={catalogId}>
-          <ActivityLog
-            catalogId={catalogId}
-            accessToken={session.accessToken}
-          />
+          <ActivityLog catalogId={catalogId} updates={updates} />
+          {totalPages > 1 && (
+            <ActivityLogPagination
+              catalogId={catalogId}
+              totalPages={totalPages}
+              currentPage={currentPage}
+            />
+          )}
         </ActivityLogPageClient>
       </>
     );
