@@ -8,19 +8,7 @@ import {
   validateAndEncodeUrlSafe,
 } from "@catalog-frontend/utils";
 
-const oldPath = `${process.env.DATASERVICE_CATALOG_BASE_URI}`;
 const path = `${process.env.DATA_SERVICE_CATALOG_BASE_URI}`;
-
-export const oldGetAllDataServiceCatalogs = async (accessToken: string) => {
-  const resource = `${oldPath}/catalogs`;
-  const options = {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-      "Content-Type": "application/json",
-    },
-  };
-  return await fetch(resource, options);
-};
 
 export const getAllDataServices = async (
   catalogId: string,
