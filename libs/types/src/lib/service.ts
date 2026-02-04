@@ -8,6 +8,7 @@ export interface Service extends ServiceToBeCreated {
 
 export interface ServiceToBeCreated {
   contactPoints?: ContactPoint[];
+  dctType?: string[];
   description?: LocalizedStrings;
   homepage?: string;
   produces?: Output[];

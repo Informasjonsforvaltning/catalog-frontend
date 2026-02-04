@@ -1,5 +1,5 @@
 import { isEmpty } from "lodash";
-import { Service } from "@catalog-frontend/types";
+import { ReferenceDataCode, Service } from "@catalog-frontend/types";
 import { Heading, Link, Paragraph, Table } from "@digdir/designsystemet-react";
 import {
   DividerLine,
@@ -13,13 +13,15 @@ import styles from "./basic-form-info-card-items.module.css";
 
 type Props = {
   language: string;
+  mainActivities?: ReferenceDataCode[];
   referenceDataEnv: string;
   searchEnv: string;
   service: Service;
 };
 
 export const BasicServiceFormInfoCardItems = (props: Props) => {
-  const { language, referenceDataEnv, searchEnv, service } = props;
+  const { language, mainActivities, referenceDataEnv, searchEnv, service } =
+    props;
 
   const { data: spatial } = useSearchAdministrativeUnitsByUri(
     service.spatial,
@@ -103,6 +105,12 @@ export const BasicServiceFormInfoCardItems = (props: Props) => {
               })}
             </Table.Body>
           </Table>
+        </InfoCard.Item>
+      )}
+
+      {!isEmpty(service.dctType) && (
+        <InfoCard.Item title={localization.serviceForm.fieldLabel.dctType}>
+          <ReferenceDataTags values={service.dctType} data={mainActivities} />
         </InfoCard.Item>
       )}
     </InfoCard>

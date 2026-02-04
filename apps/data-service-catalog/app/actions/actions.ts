@@ -22,7 +22,9 @@ import omit from "lodash/omit";
 
 const dataServiceMetadataFieldsToOmit = ["modified"];
 
-export async function getDataServices(catalogId: string) {
+export async function getDataServices(
+  catalogId: string,
+): Promise<DataService[]> {
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
@@ -43,7 +45,7 @@ export async function getDataServices(catalogId: string) {
 export async function createDataService(
   catalogId: string,
   values: DataServiceToBeCreated,
-) {
+): Promise<string> {
   console.log(`[createDataService] Starting creation for catalog ${catalogId}`);
   const newDataService = removeEmptyValues({
     ...values,
@@ -104,7 +106,7 @@ export async function createDataService(
 export async function deleteDataService(
   catalogId: string,
   dataServiceId: string,
-) {
+): Promise<void> {
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
@@ -133,7 +135,7 @@ export async function updateDataService(
   catalogId: string,
   initialDataService: DataService,
   values: DataService,
-) {
+): Promise<DataService> {
   const updatedDataService = removeEmptyValues({
     ...values,
     accessRights:
@@ -187,7 +189,7 @@ export async function updateDataService(
 export async function publishDataService(
   catalogId: string,
   dataServiceId: string,
-) {
+): Promise<void> {
   const session = await getValidSession();
   let success = false;
   try {
@@ -213,7 +215,7 @@ export async function publishDataService(
 export async function unpublishDataService(
   catalogId: string,
   dataServiceId: string,
-) {
+): Promise<void> {
   const session = await getValidSession();
   let success = false;
   try {
@@ -236,7 +238,10 @@ export async function unpublishDataService(
   }
 }
 
-export async function deleteImportResult(catalogId: string, resultId: string) {
+export async function deleteImportResult(
+  catalogId: string,
+  resultId: string,
+): Promise<void> {
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
