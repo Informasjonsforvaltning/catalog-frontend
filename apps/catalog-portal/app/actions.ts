@@ -61,7 +61,7 @@ const getServiceCountByOrg = async (
   orgId: string,
   session: Session,
 ): Promise<{ serviceCount: number; publicServiceCount: number }> => {
-  const response = await getAllServiceCatalogs(`${session?.accessToken}`);
+  const response = await getAllServiceCatalogs(`${session.accessToken}`);
   if (response.status !== 200) {
     throw new Error(
       "getServiceCatalogs failed with response code " + response.status,
@@ -96,7 +96,7 @@ const getDatasetCountByOrg = async (
   orgId: string,
   session: Session,
 ): Promise<number> => {
-  const response = await getAllDatasetCatalogs(`${session?.accessToken}`);
+  const response = await getAllDatasetCatalogs(`${session.accessToken}`);
   if (response.status !== 200) {
     console.error(
       "getAllDatasetCatalogs failed with response code " + response.status,
@@ -117,7 +117,7 @@ const getDataServiceCountByOrg = async (
   orgId: string,
   session: Session,
 ): Promise<number> => {
-  const response = await getAllDataServiceCatalogs(`${session?.accessToken}`);
+  const response = await getAllDataServiceCatalogs(`${session.accessToken}`);
   if (response.status !== 200) {
     console.error(
       "getAllDataServiceCatalogs failed with response code " + response.status,
@@ -140,7 +140,7 @@ const getConceptCountByOrg = async (
 ): Promise<number> => {
   const response = await getConceptCountByCatalogId(
     orgId,
-    `${session?.accessToken}`,
+    `${session.accessToken}`,
   );
   if (response.status !== 200) {
     console.error(
@@ -158,7 +158,7 @@ export async function acceptTermsAndConditions(
   if (!session) {
     return redirectToSignIn();
   }
-  const response = await acceptTerms(acceptation, `${session?.accessToken}`);
+  const response = await acceptTerms(acceptation, `${session.accessToken}`);
   if (response.status !== 201) {
     console.error("status: " + response.status);
     throw new Error("acceptTerms failed with response code " + response.status);
