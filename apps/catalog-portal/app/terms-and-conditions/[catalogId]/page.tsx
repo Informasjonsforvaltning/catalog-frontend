@@ -1,6 +1,6 @@
 "use server";
 
-import { localization, redirectToSignIn } from "@catalog-frontend/utils";
+import { localization } from "@catalog-frontend/utils";
 import { withReadProtectedPage } from "@catalog-portal/utils/auth";
 import TermsAndConditionsPageClient from "./terms-and-conditions-page-client";
 import { Breadcrumbs, BreadcrumbType } from "@catalog-frontend/ui";
@@ -13,10 +13,6 @@ import { Terms, TermsAcceptation } from "@catalog-frontend/types";
 const TermsAndConditionsPage = withReadProtectedPage(
   ({ catalogId }) => `/terms-and-conditions/${catalogId}`,
   async ({ catalogId, session, hasAdminPermission }) => {
-    if (!session) {
-      return redirectToSignIn(`/terms-and-conditions/${catalogId}`);
-    }
-
     const breadcrumbList = catalogId
       ? ([
           {
