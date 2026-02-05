@@ -2,10 +2,10 @@
 
 import {
   acceptTerms,
+  getAllDataServiceCatalogs,
   getAllDatasetCatalogs,
   getAllServiceCatalogs,
   getConceptCountByCatalogId,
-  oldGetAllDataServiceCatalogs,
 } from "@catalog-frontend/data-access";
 import {
   ServiceCatalogItem,
@@ -123,17 +123,16 @@ const getDataServiceCountByOrg = async (
   const response = await oldGetAllDataServiceCatalogs(session.accessToken);
   if (response.status !== 200) {
     console.error(
-      "oldGetAllDataServiceCatalogs failed with response code " +
-        response.status,
+      "getAllDataServiceCatalogs failed with response code " + response.status,
     );
     return 0;
   }
   try {
     const result = (await response.json()) as DataServiceCatalog[];
-    const catalog = result.find((catalog) => catalog.id === orgId);
+    const catalog = result.find((catalog) => catalog.catalogId === orgId);
     return catalog?.dataServiceCount ?? 0;
   } catch (e) {
-    console.log("Failed to fetch json from dataservice response", e);
+    console.log("Failed to fetch json from data service response", e);
   }
   return 0;
 };

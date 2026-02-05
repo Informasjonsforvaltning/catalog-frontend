@@ -11,7 +11,7 @@ const catalogTests = [
   {
     name: "data service catalog",
     locator: "dataServiceCatalog",
-    url: `https://dataservice-catalog.staging.fellesdatakatalog.digdir.no/${orgId}`,
+    url: `https://datatjenestekatalog.staging.fellesdatakatalog.digdir.no/catalogs/${orgId}/data-services`,
   },
   {
     name: "concept catalog",

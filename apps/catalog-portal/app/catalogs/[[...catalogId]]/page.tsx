@@ -114,7 +114,7 @@ const CatalogsPage = async (props: {
               <CatalogCard
                 variant="data-service"
                 organizationId={currentOrganization.organizationId}
-                href={`${process.env.DATASERVICE_CATALOG_BASE_URI}/${currentOrganization.organizationId}`}
+                href={`${process.env.DATA_SERVICE_CATALOG_FRONTEND}/catalogs/${currentOrganization.organizationId}/data-services`}
               />
             </div>
 
