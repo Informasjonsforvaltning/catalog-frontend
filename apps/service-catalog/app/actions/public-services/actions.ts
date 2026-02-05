@@ -144,7 +144,7 @@ export async function updatePublicService(
   const diff = compare(oldPublicService, updatedPublicServiceMerged);
 
   if (diff.length === 0) {
-    throw new Error(localization.alert.noChanges);
+    return;
   }
 
   let success = false;

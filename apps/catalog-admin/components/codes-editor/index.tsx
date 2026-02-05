@@ -142,7 +142,7 @@ export const CodesEditor = ({ codeList: dbCodeList, dirty }: Props) => {
           {new Array(Math.floor(indentSize / INDENT_STEP))
             .fill(0)
             .map((_, index) => {
-              return <div key={index}></div>;
+              return <div key={index} />;
             })}
         </div>
 
@@ -155,7 +155,7 @@ export const CodesEditor = ({ codeList: dbCodeList, dirty }: Props) => {
   };
 
   function Input({ node }: { node: NodeApi<TreeNode> }) {
-    if (node.isLeaf) return <span className={styles.noFolderIcon}></span>;
+    if (node.isLeaf) return <span className={styles.noFolderIcon} />;
 
     return (
       <input
@@ -173,7 +173,7 @@ export const CodesEditor = ({ codeList: dbCodeList, dirty }: Props) => {
   }
 
   function FolderIcon({ node }: { node: NodeApi<TreeNode> }) {
-    if (node.isLeaf) return <span className={styles.noFolderIcon}></span>;
+    if (node.isLeaf) return <span className={styles.noFolderIcon} />;
     return (
       <span>
         <button

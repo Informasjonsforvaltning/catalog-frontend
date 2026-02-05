@@ -125,7 +125,7 @@ export async function updateDataset(
   const diff = compare(initialDataset, updatedDataset);
 
   if (diff.length === 0) {
-    throw new Error(localization.alert.noChanges);
+    return;
   }
 
   let success = false;
@@ -164,7 +164,7 @@ export async function publishDataset(
   const diff = compare(initialDataset, values);
 
   if (diff.length === 0) {
-    throw new Error(localization.alert.noChanges);
+    return;
   }
 
   const session = await getValidSession();
