@@ -1,7 +1,7 @@
 import {
   createComment,
   deleteComment,
-  getComments,
+  getCommentsByTopicId,
   updateComment,
 } from "@catalog-frontend/data-access";
 import { withValidSessionForApi } from "@catalog-frontend/utils";
@@ -18,7 +18,7 @@ export const GET = async (
     if (slug?.length >= 2 && slug?.length <= 3) {
       const [orgNumber, topicId] = slug;
       try {
-        const response = await getComments(
+        const response = await getCommentsByTopicId(
           orgNumber,
           topicId,
           `${session?.accessToken}`,

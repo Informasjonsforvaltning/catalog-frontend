@@ -80,7 +80,12 @@ export const nb = {
     "Kunne ikke laste inn tjenestemeldinger. Vennligst prøv igjen senere.",
   serviceMessageSeeMore: "Se detaljert driftsmelding for mer informasjon.",
   newConcept: "Nytt begrep",
-  activityLog: "Aktivitetslogg",
+  activityLog: {
+    title: "Aktivitetslogg",
+    conceptActivity: "Begrepaktivitet",
+    commentActivity: "Kommentaraktivitet",
+    noComments: "Ingen kommentarer",
+  },
   helpText: "Hjelpetekst",
   publisher: "Utgiver",
   helpWithCompleting: "Hjelp til utfylling",

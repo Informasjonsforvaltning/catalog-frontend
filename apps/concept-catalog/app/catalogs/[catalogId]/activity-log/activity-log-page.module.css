@@ -51,6 +51,16 @@
   color: #2d3741;
 }
 
+.commentHeader {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+}
+
+.commentHeader > span {
+  color: var(--fds-colors-grey-600);
+}
+
 .noHits {
   justify-self: center;
   align-self: center;
@@ -62,4 +72,8 @@
   display: flex;
   justify-content: center;
   padding: var(--fds-spacing-4) 0;
+}
+
+.toggleGroup {
+  margin-bottom: var(--fds-spacing-4);
 }

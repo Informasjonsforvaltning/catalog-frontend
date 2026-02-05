@@ -8,12 +8,15 @@ import { Heading } from "@digdir/designsystemet-react";
 import { EnrichedUpdate } from "@concept-catalog/utils/activity-log";
 import styles from "./activity-log-page.module.css";
 
-type Props = {
+type ConceptActivityLogProps = {
   catalogId: string;
   updates: EnrichedUpdate[];
 };
 
-export const ActivityLog = ({ catalogId, updates }: Props) => {
+export const ConceptActivityLog = ({
+  catalogId,
+  updates,
+}: ConceptActivityLogProps) => {
   if (updates.length === 0) {
     return <p className={styles.noHits}>{localization.search.noHits}</p>;
   }
