@@ -58,16 +58,9 @@ export const getServiceCount = async (
 };
 
 const getServiceCountByOrg = async (
-  orgId: string | null | undefined,
+  orgId: string,
   session: Session,
 ): Promise<{ serviceCount: number; publicServiceCount: number }> => {
-  if (!orgId || !session) {
-    return {
-      serviceCount: 0,
-      publicServiceCount: 0,
-    };
-  }
-
   const response = await getAllServiceCatalogs(`${session?.accessToken}`);
   if (response.status !== 200) {
     throw new Error(
@@ -100,12 +93,9 @@ const getServiceCountByOrg = async (
 };
 
 const getDatasetCountByOrg = async (
-  orgId: string | null | undefined,
+  orgId: string,
   session: Session,
 ): Promise<number> => {
-  if (!orgId || !session) {
-    return 0;
-  }
   const response = await getAllDatasetCatalogs(`${session?.accessToken}`);
   if (response.status !== 200) {
     console.error(
@@ -124,12 +114,9 @@ const getDatasetCountByOrg = async (
 };
 
 const getDataServiceCountByOrg = async (
-  orgId: string | null | undefined,
+  orgId: string,
   session: Session,
 ): Promise<number> => {
-  if (!orgId || !session) {
-    return 0;
-  }
   const response = await getAllDataServiceCatalogs(`${session?.accessToken}`);
   if (response.status !== 200) {
     console.error(
@@ -148,12 +135,9 @@ const getDataServiceCountByOrg = async (
 };
 
 const getConceptCountByOrg = async (
-  orgId: string | null | undefined,
+  orgId: string,
   session: Session,
 ): Promise<number> => {
-  if (!orgId || !session) {
-    return 0;
-  }
   const response = await getConceptCountByCatalogId(
     orgId,
     `${session?.accessToken}`,
