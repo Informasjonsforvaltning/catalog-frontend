@@ -3,7 +3,6 @@ import type { ParseResult } from "papaparse";
 import { Concept } from "@catalog-frontend/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { validOrganizationNumber } from "@catalog-frontend/utils";
-import { useSession } from "next-auth/react";
 import {
   importRdfConcepts,
   importConceptsCSV,
@@ -196,17 +195,9 @@ const attemptToParseCsvFile = (text: string): Promise<ConceptImport[]> => {
 };
 
 export const useImportRdf = (catalogId: string) => {
-  const { data: session } = useSession();
-  const router = useRouter();
-  const accessToken = session?.accessToken ?? "";
   return useMutation({
     mutationKey: ["import-Concepts-RDF"],
-    mutationFn: async ({
-      ...mutationProps
-    }: {
-      fileContent: string;
-      contentType: string;
-    }) => {
+    mutationFn: async () => {
       if (!validOrganizationNumber(catalogId)) {
         console.log("Invalid organization number", catalogId);
         return Promise.reject("Invalid organization number");
@@ -215,16 +206,14 @@ export const useImportRdf = (catalogId: string) => {
     onSuccess: () => {
       console.log("Concept RDF file has been uploaded successfully!");
     },
-    onError: (error: any) => {
+    onError: () => {
       console.error("Error uploading concept RDF file");
     },
   });
 };
 
 export const useSendRdf = (catalogId: string) => {
-  const { data: session } = useSession();
   const router = useRouter();
-  const accessToken = session?.accessToken ?? "";
   return useMutation({
     mutationKey: ["sendConceptsRDF"],
     mutationFn: async ({
@@ -264,7 +253,7 @@ export const useSendRdf = (catalogId: string) => {
     onSuccess: () => {
       console.log("Concept RDF file has been sent!");
     },
-    onError: (error: any) => {
+    onError: () => {
       console.error("Error sending concept RDF file");
     },
   });
@@ -343,8 +332,6 @@ export const useImportConceptsCSV = (
 
       if (setIsUploaded) setIsUploaded(true);
       return concepts;
-
-      return Promise.reject("Canceled");
     },
     onSuccess: () => {
       // Invalidate and refetch

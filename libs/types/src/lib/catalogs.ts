@@ -17,7 +17,7 @@ export interface DatasetCatalog {
 }
 
 export interface DataServiceCatalog {
-  id: string;
+  catalogId: string;
   dataServiceCount: number;
 }
 
