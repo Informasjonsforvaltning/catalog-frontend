@@ -51,10 +51,6 @@
   color: #2d3741;
 }
 
-.commentHeader {
-  gap: 5rem;
-}
-
 .commentHeader > span {
   color: var(--fds-colors-grey-600);
 }
@@ -64,13 +60,6 @@
   align-self: center;
   font-size: 1.5rem;
   padding: var(--fds-spacing-8);
-}
-
-.commentText {
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
 }
 
 .pagination {

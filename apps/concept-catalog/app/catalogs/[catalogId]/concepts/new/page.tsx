@@ -20,7 +20,7 @@ import { withWriteProtectedPage } from "@concept-catalog/utils/auth";
 import { NewPage } from "./new-page.client";
 
 export default withWriteProtectedPage(
-  ({ catalogId }) => `/catalogs//${catalogId}/concepts/new`,
+  ({ catalogId }) => `/catalogs/${catalogId}/concepts/new`,
   async ({ catalogId, session }) => {
     const conceptStatuses = await getConceptStatuses().then((body) =>
       prepareStatusList(body.conceptStatuses),
