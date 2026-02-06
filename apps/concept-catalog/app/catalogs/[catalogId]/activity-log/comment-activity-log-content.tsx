@@ -1,5 +1,4 @@
-import { getComments } from "@catalog-frontend/data-access";
-import { Comment } from "@catalog-frontend/types";
+import { getCommentActivityLogData } from "@concept-catalog/utils/activity-log";
 import { CommentActivityLog } from "./comment-activity-log";
 
 type Props = {
@@ -11,9 +10,7 @@ export const CommentActivityLogContent = async ({
   catalogId,
   accessToken,
 }: Props) => {
-  const response = await getComments(catalogId, accessToken);
-  const comments: Comment[] = response.ok ? await response.json() : [];
-  console.info("🚀 ~ CommentActivityLogContent ~ comments:", comments);
+  const { comments } = await getCommentActivityLogData(catalogId, accessToken);
 
   return <CommentActivityLog catalogId={catalogId} comments={comments} />;
 };

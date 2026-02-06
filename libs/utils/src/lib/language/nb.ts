@@ -85,6 +85,7 @@ export const nb = {
     conceptActivity: "Begrepaktivitet",
     commentActivity: "Kommentaraktivitet",
     noComments: "Ingen kommentarer",
+    selectType: "Velg type",
   },
   helpText: "Hjelpetekst",
   publisher: "Utgiver",

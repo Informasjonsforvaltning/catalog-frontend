@@ -1,4 +1,4 @@
-import { getActivityLogData } from "@concept-catalog/utils/activity-log";
+import { getConceptActivityLogData } from "@concept-catalog/utils/activity-log";
 import { ConceptActivityLog } from "./concept-activity-log";
 import { ActivityLogPagination } from "./activity-log-pagination";
 
@@ -13,7 +13,7 @@ export const ConceptActivityLogContent = async ({
   accessToken,
   currentPage,
 }: Props) => {
-  const { updates, pagination } = await getActivityLogData(
+  const { updates, pagination } = await getConceptActivityLogData(
     catalogId,
     accessToken,
     currentPage,
