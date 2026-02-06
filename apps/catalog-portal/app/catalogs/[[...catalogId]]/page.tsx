@@ -35,14 +35,14 @@ const CatalogsPage = async (props: {
 
   const session = await getValidSession();
   if (!session) {
-    redirectToSignIn("/catalogs");
+    return redirectToSignIn("/catalogs");
   }
 
   let organizations: Organization[] = [];
-  if (hasSystemAdminPermission(`${session?.accessToken}`)) {
+  if (hasSystemAdminPermission(session.accessToken)) {
     organizations = await getOrganizations();
   } else {
-    const resourceRoles = getResourceRoles(`${session?.accessToken}`);
+    const resourceRoles = getResourceRoles(session.accessToken);
     const organiztionIdsWithAdminRole = resourceRoles
       .filter((role) => role.resource === "organization")
       .map((role) => role.resourceId);
@@ -60,7 +60,7 @@ const CatalogsPage = async (props: {
     (org) => org.organizationId === catalogId?.[0],
   );
   const hasNonSystemAccess = catalogId
-    ? hasNonSystemAccessForOrg(`${session?.accessToken}`, catalogId?.[0])
+    ? hasNonSystemAccessForOrg(session.accessToken, catalogId?.[0])
     : false;
   const serviceMessages = await getServiceMessages();
 

@@ -14,7 +14,7 @@ export const PATCH = async (
       const { diff } = await req.json();
       const response = await patchEditableFields(
         catalogId,
-        `${session?.accessToken}`,
+        session.accessToken,
         diff,
       );
 

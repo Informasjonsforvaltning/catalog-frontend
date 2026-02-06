@@ -12,7 +12,7 @@ export const GET = async (
     try {
       const response = await getConceptRevisions(
         conceptId,
-        session?.accessToken as string,
+        session.accessToken,
       );
       if (response.status !== 200) {
         throw new Error();

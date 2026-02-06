@@ -13,7 +13,7 @@ const Home = async () => {
     return redirectToSignIn("/");
   }
 
-  const resourceRoles = getResourceRoles(`${session?.accessToken}`);
+  const resourceRoles = getResourceRoles(session.accessToken);
   const organiztionIdsWithAdminRole = resourceRoles
     .filter((role) => role.resource === "organization" && role.role === "admin")
     .map((role) => role.resourceId);

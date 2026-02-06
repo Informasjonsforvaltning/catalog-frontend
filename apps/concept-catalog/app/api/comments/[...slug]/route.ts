@@ -21,7 +21,7 @@ export const GET = async (
         const response = await getComments(
           orgNumber,
           topicId,
-          `${session?.accessToken}`,
+          session.accessToken,
         );
         if (response.status !== 200) {
           throw new Error();
@@ -59,7 +59,7 @@ export const POST = async (
           orgNumber,
           topicId,
           comment,
-          `${session?.accessToken}`,
+          session.accessToken,
         );
         if (response.status !== 201) {
           throw new Error();
@@ -97,7 +97,7 @@ export const PUT = async (
           topicId,
           commentId,
           comment,
-          `${session?.accessToken}`,
+          session.accessToken,
         );
         if (response.status !== 200) {
           throw new Error();
@@ -134,7 +134,7 @@ export const DELETE = async (
           orgNumber,
           topicId,
           commentId,
-          `${session?.accessToken}`,
+          session.accessToken,
         );
         if (response.status !== 204) {
           throw new Error();

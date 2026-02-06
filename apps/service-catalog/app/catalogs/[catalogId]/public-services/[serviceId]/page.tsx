@@ -37,8 +37,10 @@ export default async function PublicServiceDetailsPage({
   if (!service) {
     redirect("/notfound", RedirectType.replace);
   }
-  const hasWritePermission =
-    session && hasOrganizationWritePermission(session?.accessToken, catalogId);
+  const hasWritePermission = hasOrganizationWritePermission(
+    session.accessToken,
+    catalogId,
+  );
   const [organization, statusesResponse, mainActivities] = await Promise.all([
     getOrganization(catalogId),
     getAdmsStatuses(),

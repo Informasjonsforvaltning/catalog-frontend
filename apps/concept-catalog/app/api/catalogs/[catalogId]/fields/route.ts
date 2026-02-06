@@ -1,4 +1,4 @@
-import { getFields, getUsers } from "@catalog-frontend/data-access";
+import { getFields } from "@catalog-frontend/data-access";
 import { withValidSessionForApi } from "@catalog-frontend/utils";
 import { NextRequest } from "next/server";
 
@@ -11,7 +11,7 @@ export const GET = async (
     const { catalogId } = params;
 
     try {
-      const response = await getFields(catalogId, `${session?.accessToken}`);
+      const response = await getFields(catalogId, session.accessToken);
       if (response.status !== 200) {
         return new Response(
           JSON.stringify({ message: "Failed to get fields" }),

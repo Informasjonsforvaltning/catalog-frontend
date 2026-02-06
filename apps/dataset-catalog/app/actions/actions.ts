@@ -22,7 +22,7 @@ export async function getDatasets(catalogId: string): Promise<Dataset[]> {
   if (!session) {
     return redirectToSignIn();
   }
-  const response = await getAll(catalogId, `${session?.accessToken}`);
+  const response = await getAll(catalogId, session.accessToken);
   if (response.status !== 200) {
     throw new Error("getDatasets failed with response code " + response.status);
   }
@@ -37,11 +37,7 @@ export async function getDatasetById(
   if (!session) {
     return redirectToSignIn();
   }
-  const response = await getById(
-    catalogId,
-    datasetId,
-    `${session?.accessToken}`,
-  );
+  const response = await getById(catalogId, datasetId, session.accessToken);
 
   if (response.status !== 200) {
     throw new Error(
@@ -68,7 +64,7 @@ export async function createDataset(
     const response = await postDataset(
       datasetNoEmptyValues,
       catalogId,
-      `${session?.accessToken}`,
+      session.accessToken,
     );
     if (response.status !== 201) {
       throw new Error();
@@ -100,7 +96,7 @@ export async function deleteDataset(
     const response = await removeDataset(
       catalogId,
       datasetId,
-      `${session?.accessToken}`,
+      session.accessToken,
     );
     if (response.status !== 200) {
       throw new Error();
@@ -139,7 +135,7 @@ export async function updateDataset(
       catalogId,
       initialDataset.id,
       diff,
-      `${session?.accessToken}`,
+      session.accessToken,
     );
     if (response.status !== 200) {
       throw new Error(`${response.status} ${response.statusText}`);
@@ -177,7 +173,7 @@ export async function publishDataset(
       catalogId,
       initialDataset.id,
       diff,
-      `${session?.accessToken}`,
+      session.accessToken,
     );
     if (response.status !== 200) {
       throw new Error(`${response.status} ${response.statusText}`);

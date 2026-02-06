@@ -19,7 +19,7 @@ const ImportResultDetailsPage = withAdminProtectedPage(
     const importResult = await getConceptImportResultById(
       catalogId,
       resultId,
-      `${session?.accessToken}`,
+      session.accessToken,
     ).then((response) => {
       if (response.ok) {
         return response.json();

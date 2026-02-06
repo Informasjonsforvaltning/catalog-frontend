@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@catalog-frontend/utils";
+import { withValidSessionForApi } from "@catalog-frontend/utils";
 import {
   getAllDataServices,
   getDataServiceById,
@@ -11,14 +10,8 @@ export async function GET(
   request: NextRequest,
   context: { params: Promise<{ catalogId: string }> },
 ) {
-  try {
-    const session = await getServerSession(authOptions);
-    if (!session) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    const { catalogId } = await context.params;
-
+  const { catalogId } = await context.params;
+  return await withValidSessionForApi(async (session) => {
     if (!catalogId) {
       return NextResponse.json(
         { error: "Catalog ID is required" },
@@ -26,10 +19,7 @@ export async function GET(
       );
     }
 
-    const response = await getAllDataServices(
-      catalogId,
-      `${session.accessToken}`,
-    );
+    const response = await getAllDataServices(catalogId, session.accessToken);
     if (!response.ok) {
       console.error(
         "[GET DATA SERVICES] API call failed with status:",
@@ -43,25 +33,14 @@ export async function GET(
 
     const dataServices = await response.json();
     return NextResponse.json(dataServices, { status: 200 });
-  } catch (error) {
-    console.error("[GET DATA SERVICES] Error:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch data services" },
-      { status: 500 },
-    );
-  }
+  });
 }
 
 export async function POST(
   request: NextRequest,
   context: { params: Promise<{ catalogId: string }> },
 ) {
-  try {
-    const session = await getServerSession(authOptions);
-    if (!session) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
+  return await withValidSessionForApi(async (session) => {
     const { catalogId } = await context.params;
 
     if (!catalogId) {
@@ -83,7 +62,7 @@ export async function POST(
     const response = await postDataService(
       dataService,
       catalogId,
-      `${session.accessToken}`,
+      session.accessToken,
     );
     if (!response.ok) {
       console.error(
@@ -107,7 +86,7 @@ export async function POST(
     const newDataServiceResponse = await getDataServiceById(
       catalogId,
       dataServiceId,
-      `${session?.accessToken}`,
+      session.accessToken,
     );
     if (!newDataServiceResponse.ok) {
       console.error(
@@ -124,11 +103,5 @@ export async function POST(
         Location: locationHeader || "",
       },
     });
-  } catch (error) {
-    console.error("[POST DATA SERVICE] Error:", error);
-    return NextResponse.json(
-      { error: "Failed to create data service" },
-      { status: 500 },
-    );
-  }
+  });
 }

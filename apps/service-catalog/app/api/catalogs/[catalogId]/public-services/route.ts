@@ -17,7 +17,7 @@ export const GET = async (
     try {
       const response = await getAllPublicServices(
         catalogId,
-        session?.accessToken,
+        session.accessToken,
       );
       if (response.status !== 200) {
         throw new Error();
@@ -44,7 +44,7 @@ export const POST = async (
       const response = await createPublicService(
         service,
         catalogId,
-        session?.accessToken,
+        session.accessToken,
       );
       if (response.status !== 201) {
         console.log(

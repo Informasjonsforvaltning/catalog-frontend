@@ -24,9 +24,10 @@ export const withProtectedPage = (
       return redirectToSignIn(pagePath(catalogId));
     }
 
-    const hasAdminPermission =
-      session?.accessToken &&
-      hasOrganizationAdminPermission(session.accessToken, catalogId);
+    const hasAdminPermission = hasOrganizationAdminPermission(
+      session.accessToken,
+      catalogId,
+    );
     if (!hasAdminPermission) {
       return redirect(`/catalogs/${catalogId}/no-access`);
     }

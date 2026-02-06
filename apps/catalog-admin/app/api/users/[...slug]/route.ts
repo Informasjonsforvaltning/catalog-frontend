@@ -19,7 +19,7 @@ export const GET = async (req: NextRequest, props: Props) => {
     const { slug } = params;
     const [catalogId] = slug;
     try {
-      const response = await getUsers(catalogId, `${session?.accessToken}`);
+      const response = await getUsers(catalogId, session.accessToken);
       if (response.status !== 200) {
         throw new Error();
       }
@@ -40,11 +40,7 @@ export const POST = async (req: NextRequest, props: Props) => {
     const [catalogId] = slug;
     try {
       const { user } = await req.json();
-      const response = await createUser(
-        user,
-        `${session?.accessToken}`,
-        catalogId,
-      );
+      const response = await createUser(user, session.accessToken, catalogId);
       if (response.status !== 201) {
         throw new Error();
       }
@@ -66,7 +62,7 @@ export const PATCH = async (req: NextRequest, props: Props) => {
       const response = await patchUser(
         catalogId,
         userId,
-        `${session?.accessToken}`,
+        session.accessToken,
         diff,
       );
       if (response?.status !== 200) {
@@ -88,11 +84,7 @@ export const DELETE = async (req: NextRequest, props: Props) => {
     const { slug } = params;
     const [catalogId, userId] = slug;
     try {
-      const response = await deleteUser(
-        catalogId,
-        userId,
-        `${session?.accessToken}`,
-      );
+      const response = await deleteUser(catalogId, userId, session.accessToken);
       if (response.status !== 204) {
         throw new Error();
       }

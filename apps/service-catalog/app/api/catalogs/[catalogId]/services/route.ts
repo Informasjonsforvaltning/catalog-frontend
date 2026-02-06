@@ -12,7 +12,7 @@ export const GET = async (
     const { catalogId } = params;
 
     try {
-      const response = await getAllServices(catalogId, session?.accessToken);
+      const response = await getAllServices(catalogId, session.accessToken);
       if (response.status !== 200) {
         throw new Error();
       }
@@ -38,7 +38,7 @@ export const POST = async (
       const response = await createService(
         service,
         catalogId,
-        session?.accessToken,
+        session.accessToken,
       );
       if (response.status !== 201) {
         console.log(

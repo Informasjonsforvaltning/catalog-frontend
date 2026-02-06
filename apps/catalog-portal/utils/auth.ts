@@ -6,8 +6,8 @@ import {
   hasSystemAdminPermission,
   redirectToSignIn,
   validOrganizationNumber,
+  ValidSession,
 } from "@catalog-frontend/utils";
-import { Session } from "next-auth";
 import { RedirectType, redirect } from "next/navigation";
 import { ReactNode } from "react";
 
@@ -17,7 +17,7 @@ type PageParams = {
 type PagePath = (params: PageParams) => string;
 type Render = (
   props: {
-    session: Session;
+    session: ValidSession;
     hasWritePermission: boolean;
     hasAdminPermission: boolean;
   } & PageParams,
@@ -41,7 +41,7 @@ const withProtectedPage = (
     }
 
     const hasReadPermission =
-      hasOrganizationReadPermission(session?.accessToken, catalogId) ||
+      hasOrganizationReadPermission(session.accessToken, catalogId) ||
       hasSystemAdminPermission(session.accessToken);
     if (!hasReadPermission) {
       redirect("/no-access", RedirectType.replace);

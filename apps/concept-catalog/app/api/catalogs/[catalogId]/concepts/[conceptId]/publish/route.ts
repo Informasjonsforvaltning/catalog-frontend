@@ -10,10 +10,7 @@ export const POST = async (
   return await withValidSessionForApi(async (session) => {
     const { conceptId } = params;
     try {
-      const response = await publishConcept(
-        conceptId,
-        session?.accessToken as string,
-      );
+      const response = await publishConcept(conceptId, session.accessToken);
       if (response.status !== 200) {
         throw new Error();
       }

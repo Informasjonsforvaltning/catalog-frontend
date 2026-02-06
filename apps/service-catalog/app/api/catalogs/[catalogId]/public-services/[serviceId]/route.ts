@@ -10,7 +10,7 @@ export const DELETE = async (req: NextRequest, props: { params: any }) => {
       const response = await deletePublicService(
         catalogId,
         serviceId,
-        session?.accessToken,
+        session.accessToken,
       );
       if (response.status !== 204) {
         throw new Error();
