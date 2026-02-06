@@ -19,12 +19,17 @@ type PageParams = {
   changeRequestId?: string | undefined | null;
   conceptIdSearch?: string | undefined | null;
 };
+type SearchParams = {
+  concept?: string;
+  page?: string;
+};
 type PagePath = (params: PageParams) => string;
 type Render = (
   props: {
     session: Session;
     hasWritePermission: boolean;
     hasAdminPermission: boolean;
+    searchParams: SearchParams;
   } & PageParams,
 ) => Promise<ReactNode>;
 
@@ -38,10 +43,11 @@ const withProtectedPage = (
     searchParams,
   }: {
     params: Promise<PageParams>;
-    searchParams: Promise<any>;
+    searchParams: Promise<SearchParams>;
   }) => {
     const { catalogId, conceptId, resultId, changeRequestId } = await params;
-    const { concept: conceptIdSearch } = await searchParams;
+    const { concept: conceptIdSearch, ...restSearchParams } =
+      await searchParams;
 
     if (!validOrganizationNumber(catalogId)) {
       redirect("/notfound", RedirectType.replace);
@@ -94,6 +100,7 @@ const withProtectedPage = (
       resultId,
       changeRequestId,
       conceptIdSearch,
+      searchParams: restSearchParams,
       session,
       hasWritePermission,
       hasAdminPermission,

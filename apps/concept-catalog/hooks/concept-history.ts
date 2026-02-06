@@ -1,9 +1,9 @@
 import { validOrganizationNumber, validUUID } from "@catalog-frontend/utils";
 import { useQuery } from "@tanstack/react-query";
 
-export const useGetHistory = ({ catalogId, resourceId, page = 1 }) => {
+export const useGetConceptHistory = ({ catalogId, resourceId, page = 1 }) => {
   return useQuery({
-    queryKey: ["getHistory", resourceId, page],
+    queryKey: ["getConceptHistory", resourceId, page],
     queryFn: async () => {
       if (!validOrganizationNumber(catalogId)) {
         return Promise.reject("Invalid catalog id");

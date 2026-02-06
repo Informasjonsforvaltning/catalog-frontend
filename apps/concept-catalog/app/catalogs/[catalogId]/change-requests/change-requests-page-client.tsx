@@ -209,6 +209,14 @@ export const ChangeRequestsPageClient = ({
           <Tabs.Tab value="changeRequestTab">
             {localization.changeRequest.changeRequest}
           </Tabs.Tab>
+          {process.env.NEXT_PUBLIC_ACTIVITY_LOG_ENABLED === "true" && (
+            <Tabs.Tab
+              value="activityLogTab"
+              onClick={() => router.push(`/catalogs/${catalogId}/activity-log`)}
+            >
+              {localization.activityLog}
+            </Tabs.Tab>
+          )}
         </Tabs.List>
         <Tabs.Content value="changeRequestTab" className={styles.tabsContent}>
           <SearchHitsLayout>
