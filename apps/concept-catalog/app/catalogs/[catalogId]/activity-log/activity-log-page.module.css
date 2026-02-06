@@ -66,6 +66,13 @@
   padding: var(--fds-spacing-8);
 }
 
+.commentText {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
 .pagination {
   display: flex;
   justify-content: center;

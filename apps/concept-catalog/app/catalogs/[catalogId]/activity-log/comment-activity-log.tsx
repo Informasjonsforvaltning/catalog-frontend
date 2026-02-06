@@ -13,8 +13,6 @@ type CommentActivityLogProps = {
   comments: EnrichedComment[];
 };
 
-const MAX_COMMENT_LENGTH = 100;
-
 export const CommentActivityLog = ({
   catalogId,
   comments,
@@ -42,17 +40,14 @@ export const CommentActivityLog = ({
             <span>
               {`Opprettet: ${convertTimestampToDateAndTime(comment.createdDate)} av ${comment.user?.name ?? localization.unknown}`}
             </span>
-            {(comment.comment.length > MAX_COMMENT_LENGTH
-              ? comment.comment.slice(0, MAX_COMMENT_LENGTH) + "..."
-              : comment.comment
-            )
-              .split("\n")
-              .map((line, index) => (
+            <div className={styles.commentText}>
+              {comment.comment.split("\n").map((line, index) => (
                 <span key={`comment-${comment.id}-${index}`}>
                   {line}
                   <br />
                 </span>
               ))}
+            </div>
           </div>
         </li>
       ))}
