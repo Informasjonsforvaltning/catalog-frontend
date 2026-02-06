@@ -6,10 +6,8 @@ import {
 } from "@catalog-frontend/ui";
 import {
   getServerDatasetsPageSettings,
-  getValidSession,
   hasOrganizationWritePermission,
   localization,
-  redirectToSignIn,
 } from "@catalog-frontend/utils";
 import { getDatasets } from "../../../actions/actions";
 import DatasetsPageClient from "./datasets-page-client";
@@ -18,12 +16,7 @@ import { withReadProtectedPage } from "@dataset-catalog/utils/auth";
 
 const DatasetSearchHitsPage = withReadProtectedPage(
   ({ catalogId }) => `/catalogs/${catalogId}/datasets`,
-  async ({ catalogId }) => {
-    const session = await getValidSession();
-    if (!session) {
-      return redirectToSignIn(`/catalogs/${catalogId}/datasets`);
-    }
-
+  async ({ catalogId, session }) => {
     const datasets: Dataset[] = await getDatasets(catalogId);
     const hasWritePermission = hasOrganizationWritePermission(
       session.accessToken,

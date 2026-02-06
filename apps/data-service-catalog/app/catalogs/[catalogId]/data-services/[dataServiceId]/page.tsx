@@ -7,7 +7,6 @@ import {
   getTranslateText,
   hasOrganizationWritePermission,
   localization,
-  redirectToSignIn,
   validDataServiceID,
 } from "@catalog-frontend/utils";
 import {
@@ -28,26 +27,22 @@ const EditDataServicePage = withReadProtectedPage(
     if (!dataServiceId || !validDataServiceID(dataServiceId)) {
       return redirect("/notfound", RedirectType.replace);
     }
-    if (!session) {
-      return redirectToSignIn(
-        `/catalogs/${catalogId}/data-services/${dataServiceId}`,
-      );
-    }
 
     // Fetch data service with retry mechanism
     const dataService = await fetchDataServiceWithRetry(
       catalogId,
       dataServiceId,
-      `${session?.accessToken}`,
+      session.accessToken,
     );
 
     if (!dataService || dataService.catalogId !== catalogId) {
       redirect("/not-found", RedirectType.replace);
     }
 
-    const hasWritePermission =
-      session &&
-      hasOrganizationWritePermission(session?.accessToken, catalogId);
+    const hasWritePermission = hasOrganizationWritePermission(
+      session.accessToken,
+      catalogId,
+    );
 
     const referenceDataEnv = process.env.FDK_BASE_URI ?? "";
     const searchEnv = process.env.FDK_SEARCH_SERVICE_BASE_URI ?? "";

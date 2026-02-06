@@ -12,7 +12,6 @@ import {
 import {
   getTranslateText,
   localization,
-  redirectToSignIn,
   validDataServiceID,
 } from "@catalog-frontend/utils";
 import { redirect, RedirectType } from "next/navigation";
@@ -27,17 +26,12 @@ const EditDataServicePage = withWriteProtectedPage(
     if (!dataServiceId || !validDataServiceID(dataServiceId)) {
       return redirect("/notfound", RedirectType.replace);
     }
-    if (!session) {
-      return redirectToSignIn(
-        `/catalogs/${catalogId}/data-services/${dataServiceId}/edit`,
-      );
-    }
 
     // Fetch data service with retry mechanism
     const dataService = await fetchDataServiceWithRetry(
       catalogId,
       dataServiceId,
-      `${session?.accessToken}`,
+      session.accessToken,
     );
 
     if (!dataService || dataService.catalogId !== catalogId) {
