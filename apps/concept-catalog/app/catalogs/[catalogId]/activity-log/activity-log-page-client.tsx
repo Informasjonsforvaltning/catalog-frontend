@@ -1,9 +1,11 @@
 "use client";
 
 import { ReactNode } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Tabs } from "@digdir/designsystemet-react";
+import { SearchHitsLayout } from "@catalog-frontend/ui";
 import { localization } from "@catalog-frontend/utils";
+import ActivityLogFilter from "../../../../components/activity-log-filter";
 import styles from "./activity-log-page.module.css";
 
 type Props = {
@@ -13,6 +15,8 @@ type Props = {
 
 export const ActivityLogPageClient = ({ catalogId, children }: Props) => {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const view = searchParams.get("view") || "concepts";
 
   return (
     <div className="container">
@@ -32,10 +36,19 @@ export const ActivityLogPageClient = ({ catalogId, children }: Props) => {
           >
             {localization.changeRequest.changeRequest}
           </Tabs.Tab>
-          <Tabs.Tab value="activityLogTab">{localization.activityLog}</Tabs.Tab>
+          <Tabs.Tab value="activityLogTab">
+            {localization.activityLog.title}
+          </Tabs.Tab>
         </Tabs.List>
         <Tabs.Content value="activityLogTab" className={styles.tabsContent}>
-          {children}
+          <SearchHitsLayout>
+            <SearchHitsLayout.LeftColumn>
+              <ActivityLogFilter catalogId={catalogId} view={view} />
+            </SearchHitsLayout.LeftColumn>
+            <SearchHitsLayout.MainColumn>
+              {children}
+            </SearchHitsLayout.MainColumn>
+          </SearchHitsLayout>
         </Tabs.Content>
       </Tabs>
     </div>

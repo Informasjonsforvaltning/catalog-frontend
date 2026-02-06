@@ -7,9 +7,8 @@ import {
   DesignBanner,
 } from "@catalog-frontend/ui";
 import { ActivityLogPageClient } from "./activity-log-page-client";
-import { ActivityLog } from "./activity-log";
-import { getActivityLogData } from "@concept-catalog/utils/activity-log";
-import { ActivityLogPagination } from "./activity-log-pagination";
+import { ConceptActivityLogContent } from "./concept-activity-log-content";
+import { CommentActivityLogContent } from "./comment-activity-log-content";
 
 const ActivityLogPage = withReadProtectedPage(
   ({ catalogId }) => `/catalogs/${catalogId}/activity-log`,
@@ -19,6 +18,7 @@ const ActivityLogPage = withReadProtectedPage(
     }
 
     const currentPage = Number(searchParams.page) || 1;
+    const view = searchParams.view || "concepts";
 
     const breadcrumbList = catalogId
       ? ([
@@ -28,17 +28,10 @@ const ActivityLogPage = withReadProtectedPage(
           },
           {
             href: `/catalogs/${catalogId}/activity-log`,
-            text: localization.activityLog,
+            text: localization.activityLog.title,
           },
         ] as BreadcrumbType[])
       : [];
-
-    const { updates, pagination } = await getActivityLogData(
-      catalogId,
-      session.accessToken,
-      currentPage,
-    );
-    const totalPages = pagination?.totalPages ?? 0;
 
     return (
       <>
@@ -51,12 +44,16 @@ const ActivityLogPage = withReadProtectedPage(
           catalogId={catalogId}
         />
         <ActivityLogPageClient catalogId={catalogId}>
-          <ActivityLog catalogId={catalogId} updates={updates} />
-          {totalPages > 1 && (
-            <ActivityLogPagination
+          {view === "concepts" ? (
+            <ConceptActivityLogContent
               catalogId={catalogId}
-              totalPages={totalPages}
+              accessToken={session.accessToken}
               currentPage={currentPage}
+            />
+          ) : (
+            <CommentActivityLogContent
+              catalogId={catalogId}
+              accessToken={session.accessToken}
             />
           )}
         </ActivityLogPageClient>

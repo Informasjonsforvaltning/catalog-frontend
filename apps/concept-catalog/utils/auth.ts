@@ -22,6 +22,7 @@ type PageParams = {
 type SearchParams = {
   concept?: string;
   page?: string;
+  view?: string;
 };
 type PagePath = (params: PageParams) => string;
 type Render = (

@@ -6,20 +6,43 @@ import {
 
 export const getComments = async (
   orgNumber: string,
-  topicId: string,
-  accessToken: string,
+  accessToken: string | undefined,
 ) => {
   validateOrganizationNumber(orgNumber, "getComments");
-  validateUUID(topicId, "getComments");
   const encodedOrgNumber = validateAndEncodeUrlSafe(
     orgNumber,
     "organization number",
     "getComments",
   );
+
+  const resource = `${process.env.CATALOG_COMMENTS_SERVICE_BASE_URI}/${encodedOrgNumber}`;
+  const options = {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json",
+    },
+    method: "GET",
+  };
+
+  return await fetch(resource, options);
+};
+
+export const getCommentsByTopicId = async (
+  orgNumber: string,
+  topicId: string,
+  accessToken: string,
+) => {
+  validateOrganizationNumber(orgNumber, "getCommentsByTopicId");
+  validateUUID(topicId, "getCommentsByTopicId");
+  const encodedOrgNumber = validateAndEncodeUrlSafe(
+    orgNumber,
+    "organization number",
+    "getCommentsByTopicId",
+  );
   const encodedTopicId = validateAndEncodeUrlSafe(
     topicId,
     "topic ID",
-    "getComments",
+    "getCommentsByTopicId",
   );
 
   const resource = `${process.env.CATALOG_COMMENTS_SERVICE_BASE_URI}/${encodedOrgNumber}/${encodedTopicId}/comment`;

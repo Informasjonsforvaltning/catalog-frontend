@@ -51,6 +51,10 @@
   color: #2d3741;
 }
 
+.commentHeader > span {
+  color: var(--fds-colors-grey-600);
+}
+
 .noHits {
   justify-self: center;
   align-self: center;

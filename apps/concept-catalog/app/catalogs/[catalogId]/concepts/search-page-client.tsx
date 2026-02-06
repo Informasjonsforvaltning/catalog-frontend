@@ -468,7 +468,7 @@ export const SearchPageClient = ({
               value="activityLogTab"
               onClick={() => router.push(`/catalogs/${catalogId}/activity-log`)}
             >
-              {localization.activityLog}
+              {localization.activityLog.title}
             </Tabs.Tab>
           )}
         </Tabs.List>
