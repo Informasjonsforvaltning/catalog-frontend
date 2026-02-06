@@ -64,7 +64,7 @@ const getServiceCountByOrg = async (
   const response = await getAllServiceCatalogs(`${session.accessToken}`);
   if (response.status !== 200) {
     throw new Error(
-      "getServiceCatalogs failed with response code " + response.status,
+      `API responded with status ${response.status} for getAllServiceCatalogs`,
     );
   }
 
@@ -99,7 +99,7 @@ const getDatasetCountByOrg = async (
   const response = await getAllDatasetCatalogs(`${session.accessToken}`);
   if (response.status !== 200) {
     console.error(
-      "getAllDatasetCatalogs failed with response code " + response.status,
+      `API responded with status ${response.status} for getAllDatasetCatalogs`,
     );
     return 0;
   }
@@ -108,7 +108,7 @@ const getDatasetCountByOrg = async (
     const catalog = result.find((catalog) => catalog.id === orgId);
     return catalog?.datasetCount ?? 0;
   } catch (e) {
-    console.log("Failed to fetch json from dataset response", e);
+    console.error("Failed to fetch json from dataset response", e);
   }
   return 0;
 };
@@ -120,7 +120,7 @@ const getDataServiceCountByOrg = async (
   const response = await getAllDataServiceCatalogs(`${session.accessToken}`);
   if (response.status !== 200) {
     console.error(
-      "getAllDataServiceCatalogs failed with response code " + response.status,
+      `API responded with status ${response.status} for oldGetAllDataServiceCatalogs`,
     );
     return 0;
   }
@@ -129,7 +129,7 @@ const getDataServiceCountByOrg = async (
     const catalog = result.find((catalog) => catalog.catalogId === orgId);
     return catalog?.dataServiceCount ?? 0;
   } catch (e) {
-    console.log("Failed to fetch json from data service response", e);
+    console.error("Failed to fetch json from dataservice response", e);
   }
   return 0;
 };
@@ -144,7 +144,7 @@ const getConceptCountByOrg = async (
   );
   if (response.status !== 200) {
     console.error(
-      "getConceptCountByCatalogId failed with response code " + response.status,
+      `API responded with status ${response.status} for getConceptCountByCatalogId`,
     );
     return 0;
   }
@@ -160,8 +160,9 @@ export async function acceptTermsAndConditions(
   }
   const response = await acceptTerms(acceptation, `${session.accessToken}`);
   if (response.status !== 201) {
-    console.error("status: " + response.status);
-    throw new Error("acceptTerms failed with response code " + response.status);
+    throw new Error(
+      `API responded with status ${response.status} for acceptTerms`,
+    );
   }
   updateTag("terms-acceptation");
 }
