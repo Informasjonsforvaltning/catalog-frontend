@@ -6,7 +6,7 @@ import {
 
 export const getComments = async (
   orgNumber: string,
-  accessToken: string | undefined,
+  accessToken: string,
   page?: number,
   size?: number,
 ) => {
