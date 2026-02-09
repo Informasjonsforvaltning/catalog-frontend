@@ -9,6 +9,7 @@ export * from "./lib/checkbox-group-filter";
 export * from "./lib/concept-combobox";
 export * from "./lib/confirm-modal";
 export * from "./lib/custom-error";
+export * from "./lib/dataset-combobox";
 export * from "./lib/detail-heading";
 export * from "./lib/details-page-layout";
 export * from "./lib/divider-line";
