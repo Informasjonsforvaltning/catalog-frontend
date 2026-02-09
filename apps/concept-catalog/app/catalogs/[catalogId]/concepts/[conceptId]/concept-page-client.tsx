@@ -679,7 +679,7 @@ export const ConceptPageClient = ({
       <>
         <Accordion>
           {getHistoryData.updates?.length > 0 &&
-            getHistoryData.updates.map((update: Update, i) => (
+            getHistoryData.updates.map((update: Update) => (
               <Accordion.Item key={`history-${update.id}`}>
                 <Accordion.Header className={classes.historyHeader}>
                   <span>{update.person.name}</span>

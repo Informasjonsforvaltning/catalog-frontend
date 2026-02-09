@@ -9,3 +9,14 @@ export interface Comment {
   user?: AssignedUser | null;
   comment: string;
 }
+
+export interface CommentPagination {
+  totalPages: number;
+  page: number;
+  size: number;
+}
+
+export interface CommentList {
+  items: Comment[];
+  pagination?: CommentPagination;
+}
