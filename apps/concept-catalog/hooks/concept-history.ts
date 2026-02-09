@@ -18,7 +18,7 @@ export const useGetConceptHistory = ({ catalogId, resourceId, page = 1 }) => {
       }
 
       const response = await fetch(
-        `/api/history/${catalogId}/${resourceId}?size=10&page=${page}`,
+        `/api/history/${catalogId}/${resourceId}?size=10&page=${page - 1}`,
         {
           method: "GET",
         },
