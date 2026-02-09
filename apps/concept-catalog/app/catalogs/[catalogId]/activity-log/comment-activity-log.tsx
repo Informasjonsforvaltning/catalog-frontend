@@ -38,7 +38,11 @@ export const CommentActivityLog = ({
               </Link>
             </Heading>
             <span>
-              {`Opprettet: ${convertTimestampToDateAndTime(comment.createdDate)} av ${comment.user?.name ?? localization.unknown}`}
+              {localization.formatString(
+                localization.activityLog.createdByAt,
+                convertTimestampToDateAndTime(comment.createdDate),
+                comment.user?.name ?? localization.unknown,
+              )}
             </span>
             <div className={styles.commentText}>
               {comment.comment.split("\n").map((line, index) => (

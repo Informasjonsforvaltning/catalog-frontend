@@ -36,7 +36,11 @@ export const ConceptActivityLog = ({
               </Link>
             </Heading>
             <p className={styles.text}>
-              {convertTimestampToDateAndTime(update.datetime)}
+              {localization.formatString(
+                localization.activityLog.createdByAt,
+                convertTimestampToDateAndTime(update.datetime),
+                update.person?.name ?? localization.unknown,
+              )}
             </p>
           </div>
         </li>
