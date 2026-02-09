@@ -65,11 +65,11 @@ export const PublishSwitch = ({ catalogId, dataService, disabled }: Props) => {
       {showPublishConfirm && (
         <ConfirmModal
           title={
-            localization.dataServiceForm.alert.confirmPublishTitle ||
+            localization.dataServiceForm.alert.confirmPublish ||
             "Bekreft publisering"
           }
           content={localization.dataServiceForm.alert.confirmPublish}
-          successButtonText={localization.button.publish || "Publiser"}
+          successButtonText={localization.button.publish}
           onSuccess={handleConfirmPublish}
           onCancel={() => setShowPublishConfirm(false)}
         />
@@ -78,11 +78,11 @@ export const PublishSwitch = ({ catalogId, dataService, disabled }: Props) => {
       {showUnpublishConfirm && (
         <ConfirmModal
           title={
-            localization.dataServiceForm.alert.confirmUnpublishTitle ||
+            localization.dataServiceForm.alert.confirmUnpublish ||
             "Bekreft avpublisering"
           }
           content={localization.dataServiceForm.alert.confirmUnpublish}
-          successButtonText={localization.button.unpublish || "Avpubliser"}
+          successButtonText={localization.button.unpublish}
           onSuccess={handleConfirmUnpublish}
           onCancel={() => setShowUnpublishConfirm(false)}
         />
