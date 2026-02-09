@@ -8,7 +8,7 @@ export const getConceptHistory = async (
   catalogId: string,
   resourceId: string,
   accessToken: string,
-  page = 1,
+  page = 0,
   size = 10,
 ) => {
   validateOrganizationNumber(catalogId, "getConceptHistory");

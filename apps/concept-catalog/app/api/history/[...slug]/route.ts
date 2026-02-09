@@ -11,7 +11,7 @@ export const GET = async (
     const { slug } = params;
     if (slug?.length == 2) {
       const [catalogId, resourceId] = slug;
-      const page = req.nextUrl.searchParams.get("page") ?? 1;
+      const page = req.nextUrl.searchParams.get("page") ?? 0;
       const size = req.nextUrl.searchParams.get("size") ?? 10;
 
       try {
