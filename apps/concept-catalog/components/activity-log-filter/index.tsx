@@ -1,17 +1,17 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Accordion, Radio } from "@digdir/designsystemet-react";
 import { localization } from "@catalog-frontend/utils";
 import styles from "./activity-log-filter.module.css";
 
 type Props = {
   catalogId: string;
-  view: string;
 };
 
-const ActivityLogFilter = ({ catalogId, view }: Props) => {
+const ActivityLogFilter = ({ catalogId }: Props) => {
   const router = useRouter();
+  const view = useSearchParams().get("view") || "concepts";
 
   const handleViewChange = (value: string) => {
     router.push(`/catalogs/${catalogId}/activity-log?view=${value}`);
