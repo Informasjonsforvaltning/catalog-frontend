@@ -8,17 +8,22 @@ type Props = {
   catalogId: string;
   totalPages: number;
   currentPage: number;
+  view?: string;
 };
 
 export const ActivityLogPagination = ({
   catalogId,
   totalPages,
   currentPage,
+  view,
 }: Props) => {
   const router = useRouter();
 
   const handlePageChange = (page: number) => {
-    router.push(`/catalogs/${catalogId}/activity-log?page=${page}`);
+    const params = new URLSearchParams();
+    params.set("page", String(page - 1));
+    if (view) params.set("view", view);
+    router.push(`/catalogs/${catalogId}/activity-log?${params.toString()}`);
   };
 
   if (totalPages <= 1) {
@@ -29,7 +34,7 @@ export const ActivityLogPagination = ({
     <div className={styles.pagination}>
       <Pagination
         totalPages={totalPages}
-        currentPage={currentPage}
+        currentPage={currentPage + 1}
         onChange={handlePageChange}
       />
     </div>

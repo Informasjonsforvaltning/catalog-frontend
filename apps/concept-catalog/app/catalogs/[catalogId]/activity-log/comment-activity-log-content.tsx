@@ -1,17 +1,36 @@
 import { getCommentActivityLogData } from "@concept-catalog/utils/activity-log";
 import { CommentActivityLog } from "./comment-activity-log";
+import { ActivityLogPagination } from "./activity-log-pagination";
 
 type Props = {
   catalogId: string;
   accessToken: string | undefined;
+  currentPage: number;
 };
 
 export const CommentActivityLogContent = async ({
   catalogId,
   accessToken,
+  currentPage,
 }: Props) => {
-  const { comments } = await getCommentActivityLogData(catalogId, accessToken);
-  /* TODO Add pagination https://github.com/Informasjonsforvaltning/catalog-frontend/issues/1660 */
+  const { comments, pagination } = await getCommentActivityLogData(
+    catalogId,
+    accessToken,
+    currentPage,
+  );
+  const totalPages = pagination?.totalPages ?? 0;
 
-  return <CommentActivityLog catalogId={catalogId} comments={comments} />;
+  return (
+    <>
+      <CommentActivityLog catalogId={catalogId} comments={comments} />
+      {totalPages > 1 && (
+        <ActivityLogPagination
+          catalogId={catalogId}
+          totalPages={totalPages}
+          currentPage={currentPage}
+          view="comments"
+        />
+      )}
+    </>
+  );
 };

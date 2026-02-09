@@ -17,7 +17,7 @@ const ActivityLogPage = withReadProtectedPage(
       redirect(`/catalogs/${catalogId}/concepts`);
     }
 
-    const currentPage = Number(searchParams.page) || 1;
+    const currentPage = Number(searchParams.page) || 0;
     const view = searchParams.view || "concepts";
 
     const breadcrumbList = catalogId
@@ -54,6 +54,7 @@ const ActivityLogPage = withReadProtectedPage(
             <CommentActivityLogContent
               catalogId={catalogId}
               accessToken={session.accessToken}
+              currentPage={currentPage}
             />
           )}
         </ActivityLogPageClient>

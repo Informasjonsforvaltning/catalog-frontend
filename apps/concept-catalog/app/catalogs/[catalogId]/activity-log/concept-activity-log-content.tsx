@@ -28,6 +28,7 @@ export const ConceptActivityLogContent = async ({
           catalogId={catalogId}
           totalPages={totalPages}
           currentPage={currentPage}
+          view="concepts"
         />
       )}
     </>

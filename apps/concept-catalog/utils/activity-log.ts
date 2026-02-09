@@ -5,6 +5,8 @@ import {
 } from "@catalog-frontend/data-access";
 import {
   Comment,
+  CommentList,
+  CommentPagination,
   Concept,
   HistoryPagination,
   Update,
@@ -52,19 +54,20 @@ export type ActivityLogData = {
 
 export type CommentActivityLogData = {
   comments: EnrichedComment[];
+  pagination?: CommentPagination;
 };
 
 export async function getConceptActivityLogData(
   catalogId: string,
   accessToken: string | undefined,
-  page: number = 1,
+  page: number = 0,
 ): Promise<ActivityLogData> {
   if (!accessToken) {
     return { updates: [] };
   }
 
   const [historyResponse, conceptsResponse] = await Promise.all([
-    getCatalogHistory(catalogId, accessToken, page, PAGE_SIZE),
+    getCatalogHistory(catalogId, accessToken, page + 1, PAGE_SIZE),
     getConceptsForCatalog(catalogId, accessToken),
   ]);
 
@@ -85,22 +88,26 @@ export async function getConceptActivityLogData(
 export async function getCommentActivityLogData(
   catalogId: string,
   accessToken: string | undefined,
+  page: number = 0,
 ): Promise<CommentActivityLogData> {
   if (!accessToken) {
     return { comments: [] };
   }
 
   const [commentsResponse, conceptsResponse] = await Promise.all([
-    getComments(catalogId, accessToken),
+    getComments(catalogId, accessToken, page, PAGE_SIZE),
     getConceptsForCatalog(catalogId, accessToken),
   ]);
 
-  const commentsData: Comment[] = commentsResponse.ok
+  const commentsData: CommentList = commentsResponse.ok
     ? await commentsResponse.json()
-    : [];
+    : { items: [] };
   const conceptsData: Concept[] = await conceptsResponse.json();
 
-  const comments = mapCommentsWithConcepts(commentsData, conceptsData);
+  const comments = mapCommentsWithConcepts(
+    commentsData.items ?? [],
+    conceptsData,
+  );
 
-  return { comments };
+  return { comments, pagination: commentsData.pagination };
 }

@@ -7,6 +7,8 @@ import {
 export const getComments = async (
   orgNumber: string,
   accessToken: string | undefined,
+  page?: number,
+  size?: number,
 ) => {
   validateOrganizationNumber(orgNumber, "getComments");
   const encodedOrgNumber = validateAndEncodeUrlSafe(
@@ -15,7 +17,12 @@ export const getComments = async (
     "getComments",
   );
 
-  const resource = `${process.env.CATALOG_COMMENTS_SERVICE_BASE_URI}/${encodedOrgNumber}`;
+  const params = new URLSearchParams();
+  if (page !== undefined) params.set("page", String(page));
+  if (size !== undefined) params.set("size", String(size));
+  const query = params.toString();
+
+  const resource = `${process.env.CATALOG_COMMENTS_SERVICE_BASE_URI}/${encodedOrgNumber}${query ? `?${query}` : ""}`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
