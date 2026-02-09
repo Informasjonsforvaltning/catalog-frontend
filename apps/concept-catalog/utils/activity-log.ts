@@ -69,7 +69,7 @@ export async function getConceptActivityLogData(
 
   const { accessToken } = session;
   const [historyResponse, conceptsResponse] = await Promise.all([
-    getCatalogHistory(catalogId, accessToken, page + 1, PAGE_SIZE),
+    getCatalogHistory(catalogId, accessToken, page, PAGE_SIZE),
     getConceptsForCatalog(catalogId, accessToken),
   ]);
 
