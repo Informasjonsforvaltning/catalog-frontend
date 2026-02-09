@@ -4,18 +4,15 @@ import { ActivityLogPagination } from "./activity-log-pagination";
 
 type Props = {
   catalogId: string;
-  accessToken: string | undefined;
   currentPage: number;
 };
 
 export const CommentActivityLogContent = async ({
   catalogId,
-  accessToken,
   currentPage,
 }: Props) => {
   const { comments, pagination } = await getCommentActivityLogData(
     catalogId,
-    accessToken,
     currentPage,
   );
   const totalPages = pagination?.totalPages ?? 0;

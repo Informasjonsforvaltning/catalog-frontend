@@ -12,6 +12,7 @@ import {
   Update,
   UpdateList,
 } from "@catalog-frontend/types";
+import { getValidSession } from "@catalog-frontend/utils";
 
 export type EnrichedUpdate = Update & {
   concept?: Concept;
@@ -59,13 +60,14 @@ export type CommentActivityLogData = {
 
 export async function getConceptActivityLogData(
   catalogId: string,
-  accessToken: string | undefined,
   page: number = 0,
 ): Promise<ActivityLogData> {
-  if (!accessToken) {
+  const session = await getValidSession();
+  if (!session?.accessToken) {
     return { updates: [] };
   }
 
+  const { accessToken } = session;
   const [historyResponse, conceptsResponse] = await Promise.all([
     getCatalogHistory(catalogId, accessToken, page + 1, PAGE_SIZE),
     getConceptsForCatalog(catalogId, accessToken),
@@ -87,13 +89,14 @@ export async function getConceptActivityLogData(
 
 export async function getCommentActivityLogData(
   catalogId: string,
-  accessToken: string | undefined,
   page: number = 0,
 ): Promise<CommentActivityLogData> {
-  if (!accessToken) {
+  const session = await getValidSession();
+  if (!session?.accessToken) {
     return { comments: [] };
   }
 
+  const { accessToken } = session;
   const [commentsResponse, conceptsResponse] = await Promise.all([
     getComments(catalogId, accessToken, page, PAGE_SIZE),
     getConceptsForCatalog(catalogId, accessToken),

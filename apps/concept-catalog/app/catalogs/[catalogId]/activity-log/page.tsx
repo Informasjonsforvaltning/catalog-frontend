@@ -12,7 +12,7 @@ import { CommentActivityLogContent } from "./comment-activity-log-content";
 
 const ActivityLogPage = withReadProtectedPage(
   ({ catalogId }) => `/catalogs/${catalogId}/activity-log`,
-  async ({ catalogId, session, searchParams }) => {
+  async ({ catalogId, searchParams }) => {
     if (process.env.NEXT_PUBLIC_ACTIVITY_LOG_ENABLED !== "true") {
       redirect(`/catalogs/${catalogId}/concepts`);
     }
@@ -47,13 +47,11 @@ const ActivityLogPage = withReadProtectedPage(
           {view === "concepts" ? (
             <ConceptActivityLogContent
               catalogId={catalogId}
-              accessToken={session.accessToken}
               currentPage={currentPage}
             />
           ) : (
             <CommentActivityLogContent
               catalogId={catalogId}
-              accessToken={session.accessToken}
               currentPage={currentPage}
             />
           )}
