@@ -82,7 +82,6 @@ export const dataServiceFormNb = {
     costDocumentation: "Dokumentasjon",
     costValue: "Beløp",
     dataServiceID: "API-ID",
-    modified: "Sist oppdatert",
     contactName: "Navn",
     contactFields: "Kontaktinformasjon",
     ignoreRequired: "Ignorer påkrevde felt",

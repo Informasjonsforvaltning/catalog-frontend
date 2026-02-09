@@ -4,8 +4,6 @@ import {
   adminAuthFile,
   createDataService,
   uniqueString,
-  dateStringToDate,
-  formatDate,
 } from "../../utils/helpers";
 import { getRandomDataService } from "../../utils/dataService";
 
@@ -131,10 +129,6 @@ runTestAsAdmin(
     await dataServicesPage.verifyDataServiceText(
       dataServices[0].title.nb as string,
       "Ikke publisert",
-    );
-    await dataServicesPage.verifyDataServiceText(
-      dataServices[0].title.nb as string,
-      `Sist endret ${formatDate(dateStringToDate(new Date().toISOString()))}`,
     );
   },
 );
