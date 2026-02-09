@@ -89,7 +89,7 @@ runTestAsAdmin("should show published filter", async ({ dataServicesPage }) => {
 });
 
 runTestAsAdmin(
-  "should be able to search data services @solo",
+  "should be able to search data services",
   async ({ dataServicesPage, playwright }) => {
     // Create a request context with the admin storage state (includes next-auth cookie)
     const apiRequestContext = await playwright.request.newContext({
