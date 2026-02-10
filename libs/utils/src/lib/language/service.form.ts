@@ -12,12 +12,17 @@ export const serviceFormNb = {
     email: "E-post",
     homepage: "Hjemmeside",
     ignoreRequired: "Ignorer påkrevde felt",
+    language: "Språk",
+    page: "Relatert informasjon",
     produces: "Produserer",
+    requiredEvidence: "Påkrevd dokumentasjon",
     spatial: "Dekningsområde",
     status: "Status",
     subject: "Begrep",
     telephone: "Telefon",
     title: "Tittel",
+    type: "Type",
+    validityDuration: "Gyldighetsperiode",
   },
   helptext: {
     category: "Brukes til å oppgi navnet til kontaktpunktet.",
@@ -31,13 +36,21 @@ export const serviceFormNb = {
       "Lenke til en nettside som gir tilgang til tjenesten og/eller tilleggsinformasjon.",
     ignoreRequired:
       "I utgangspunktet er det krav om at alle påkrevde felt må fylles ut for å få lagret. Når avhukingsboksen er aktiv, må bare tittel være fylt ut.",
+    language:
+      "Egenskapen brukes til å oppgi språk som den påkrevde dokumentasjonen skal være på.",
+    page: "Egenskapen brukes til å referere til mer informasjon om den påkrevde dokumentasjonen, f.eks. en bestemt mal til dokumentasjonen eller en veiledning for hvordan man skal formatere dokumentasjonen.",
     produces:
       "Egenskapen brukes til å referere til en eller flere instanser av tjenesteresultat som beskriver resultat av tjenesten.",
+    requiredEvidence:
+      "For å kunne levere en tjeneste kan det kreves dokumentasjon. Hvis dokumentasjon som kreves varierer avhengig av kanal tjenesten tilbys gjennom, BØR tilsvarende egenskap i klassen Tjenestekanal benyttes.",
     spatial: "Geografiske områder som tjenesten dekker.",
     status: "Velg tjenestens nåværende status.",
     subject:
       "Velg begrep registrert i [begrepskatalogen til data.norge](https://data.norge.no/concepts). Ved å henvise til gjennomarbeidede beskrivelser som virksomheten selv er ansvarlig for å vedlikeholde, sikrer vi at det er tydelig hvordan et begrep brukt i tjenesten skal forstås og at denne forståelsen er riktig og oppdatert.",
     title: "Navnet skal være kortfattet, kunne stå alene og gi mening.",
+    type: "Egenskapen brukes til å referere til begrepet som representerer typen dokumentasjonen tilhører.",
+    validityDuration:
+      "Egenskapen brukes til å angi en tidsperiode som den påkrevd dokumentasjonen skal være gyldig innenfor.",
   },
   section: {
     about: {
@@ -53,6 +66,10 @@ export const serviceFormNb = {
       subtitle:
         "Referanser til tjenesteresultater som beskriver tjenestens resultat.",
       title: "Produserer",
+    },
+    requiredEvidence: {
+      subtitle: "Dokumentasjon som er påkrevd av tjenesten.",
+      title: "Påkrevd dokumentasjon",
     },
   },
   validation: {

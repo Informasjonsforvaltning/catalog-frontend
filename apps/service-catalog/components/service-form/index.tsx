@@ -51,16 +51,21 @@ import { useEffect, useRef, useState } from "react";
 import { ProducesField } from "./components/produces-field";
 import {
   confirmedProducesSchema,
+  confirmedRequiredEvidenceSchema,
   confirmedServiceSchema,
   draftProducesSchema,
+  draftRequiredEvidenceSchema,
   draftServiceSchema,
 } from "./validation-schema";
 import { get, isEmpty, isEqual } from "lodash";
+import { RequiredEvidenceField } from "./components/required-evidence-field";
 
 interface ServiceFormProps {
   afterSubmit?: () => void;
   autoSaveStorage: DataStorage<StorageData>;
+  evidenceTypes: ReferenceDataCode[];
   initialValues: ServiceToBeCreated;
+  languages: ReferenceDataCode[];
   mainActivities?: ReferenceDataCode[];
   onCancel?: () => void;
   onSubmit?: (values: Service) => Promise<Service | undefined>;
@@ -99,7 +104,9 @@ export const ServiceForm = (props: ServiceFormProps) => {
   const {
     afterSubmit,
     autoSaveStorage,
+    evidenceTypes,
     initialValues,
+    languages,
     mainActivities,
     onCancel,
     onSubmit,
@@ -537,6 +544,41 @@ export const ServiceForm = (props: ServiceFormProps) => {
                           ignoreRequired
                             ? draftProducesSchema
                             : confirmedProducesSchema
+                        }
+                      />
+                    </div>
+                  </FormLayout.Section>
+
+                  <FormLayout.Section
+                    id="required-evidence-section"
+                    title={
+                      localization.serviceForm.section.requiredEvidence.title
+                    }
+                    subtitle={
+                      localization.serviceForm.section.requiredEvidence.subtitle
+                    }
+                    required
+                    error={hasError(["requiredEvidence"])}
+                    changed={dirtyFields.includes("requiredEvidence")}
+                  >
+                    <div className={styles.fieldSet}>
+                      <TitleWithHelpTextAndTag
+                        helpText={
+                          localization.serviceForm.helptext.requiredEvidence
+                        }
+                        tagColor="info"
+                        tagTitle={localization.tag.recommended}
+                      >
+                        {localization.serviceForm.fieldLabel.requiredEvidence}
+                      </TitleWithHelpTextAndTag>
+                      <RequiredEvidenceField
+                        errors={errors.requiredEvidence}
+                        evidenceTypes={evidenceTypes}
+                        languages={languages}
+                        validationSchema={
+                          ignoreRequired
+                            ? draftRequiredEvidenceSchema
+                            : confirmedRequiredEvidenceSchema
                         }
                       />
                     </div>

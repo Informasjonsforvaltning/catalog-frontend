@@ -92,6 +92,103 @@ export const confirmedProducesSchema = Yup.object().shape({
     ),
 });
 
+export const draftRequiredEvidenceSchema = Yup.object().shape({
+  title: Yup.object().shape({
+    nb: Yup.string()
+      .min(3, localization.serviceForm.validation.title)
+      .label(
+        `${localization.serviceForm.fieldLabel.title} (${localization.language.nb})`,
+      )
+      .notRequired(),
+    nn: Yup.string()
+      .min(3, localization.serviceForm.validation.title)
+      .label(
+        `${localization.serviceForm.fieldLabel.title} (${localization.language.nn})`,
+      )
+      .notRequired(),
+    en: Yup.string()
+      .min(3, localization.serviceForm.validation.title)
+      .label(
+        `${localization.serviceForm.fieldLabel.title} (${localization.language.en})`,
+      )
+      .notRequired(),
+  }),
+  description: Yup.object().shape({
+    nb: Yup.string(),
+    nn: Yup.string(),
+    en: Yup.string(),
+  }),
+  validityDuration: Yup.string().notRequired(),
+  language: Yup.string().notRequired(),
+  identifier: Yup.string().notRequired(),
+  page: Yup.string().notRequired(),
+  type: Yup.string().notRequired(),
+});
+
+export const confirmedRequiredEvidenceSchema = Yup.object().shape({
+  title: Yup.object()
+    .shape({
+      nb: Yup.string()
+        .min(3, localization.serviceForm.validation.title)
+        .label(
+          `${localization.serviceForm.fieldLabel.title} (${localization.language.nb})`,
+        )
+        .notRequired(),
+      nn: Yup.string()
+        .min(3, localization.serviceForm.validation.title)
+        .label(
+          `${localization.serviceForm.fieldLabel.title} (${localization.language.nn})`,
+        )
+        .notRequired(),
+      en: Yup.string()
+        .min(3, localization.serviceForm.validation.title)
+        .label(
+          `${localization.serviceForm.fieldLabel.title} (${localization.language.en})`,
+        )
+        .notRequired(),
+    })
+    .test(
+      "title-test",
+      localization.validation.oneLanguageRequired,
+      (title) => {
+        return Boolean(title.nb || title.nn || title.en);
+      },
+    ),
+  description: Yup.object()
+    .shape({
+      nb: Yup.string()
+        .min(3, localization.serviceForm.validation.description)
+        .label(
+          `${localization.serviceForm.fieldLabel.description} (${localization.language.nb})`,
+        )
+        .notRequired(),
+      nn: Yup.string()
+        .min(3, localization.serviceForm.validation.description)
+        .label(
+          `${localization.serviceForm.fieldLabel.description} (${localization.language.nn})`,
+        )
+        .notRequired(),
+      en: Yup.string()
+        .min(3, localization.serviceForm.validation.description)
+        .label(
+          `${localization.serviceForm.fieldLabel.description} (${localization.language.en})`,
+        )
+        .notRequired(),
+    })
+    .test(
+      "description-test",
+      localization.validation.oneLanguageRequired,
+      (description) => {
+        return Boolean(description.nb || description.nn || description.en);
+      },
+    ),
+  validityDuration: Yup.string().notRequired(),
+  language: Yup.string().notRequired(),
+  identifier: Yup.string().notRequired(),
+  page: Yup.string().notRequired(),
+  type: Yup.string().notRequired(),
+});
+
 const titleSchema = Yup.object()
   .shape({
     nb: Yup.string()

@@ -23,6 +23,8 @@ import {
 import { useEffect, useState } from "react";
 
 type EditPageProps = {
+  evidenceTypes: ReferenceDataCode[];
+  languages: ReferenceDataCode[];
   referenceDataEnv: string;
   searchEnv: string;
   service: Service;
@@ -30,7 +32,14 @@ type EditPageProps = {
 };
 
 export const EditPage = (props: EditPageProps) => {
-  const { referenceDataEnv, searchEnv, service, statuses } = props;
+  const {
+    evidenceTypes,
+    languages,
+    referenceDataEnv,
+    searchEnv,
+    service,
+    statuses,
+  } = props;
   const router = useRouter();
   const { catalogId, serviceId } = useParams<{
     catalogId: string;
@@ -102,6 +111,8 @@ export const EditPage = (props: EditPageProps) => {
       </ButtonBar>
       <ServiceForm
         autoSaveStorage={dataStorage}
+        evidenceTypes={evidenceTypes}
+        languages={languages}
         onCancel={handleCancel}
         onSubmit={handleUpdate}
         initialValues={serviceTemplate(service)}

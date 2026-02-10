@@ -1,5 +1,6 @@
 import {
   getAdmsStatuses,
+  getEvidenceTypes,
   getMainActivities,
   getOrganization,
 } from "@catalog-frontend/data-access";
@@ -41,10 +42,16 @@ export default async function PublicServiceDetailsPage({
     session.accessToken,
     catalogId,
   );
-  const [organization, statusesResponse, mainActivities] = await Promise.all([
+  const [
+    organization,
+    statusesResponse,
+    mainActivities,
+    evidenceTypesResponse,
+  ] = await Promise.all([
     getOrganization(catalogId),
     getAdmsStatuses(),
     getMainActivities(),
+    getEvidenceTypes(),
   ]);
 
   const breadcrumbList: BreadcrumbType[] = [
@@ -70,6 +77,7 @@ export default async function PublicServiceDetailsPage({
       />
       <PublicServiceDetailsPageClient
         catalogId={catalogId}
+        evidenceTypes={evidenceTypesResponse.evidenceTypes}
         hasWritePermission={hasWritePermission}
         mainActivities={mainActivities.mainActivities}
         referenceDataEnv={process.env.FDK_BASE_URI ?? ""}

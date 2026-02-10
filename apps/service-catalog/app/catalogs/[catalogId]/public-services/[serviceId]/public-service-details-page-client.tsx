@@ -16,6 +16,7 @@ import styles from "./public-service-details-page.module.css";
 
 interface PublicServiceDetailsPageProps {
   catalogId: string;
+  evidenceTypes: ReferenceDataCode[];
   hasWritePermission: boolean;
   mainActivities: ReferenceDataCode[];
   referenceDataEnv: string;
@@ -27,6 +28,7 @@ interface PublicServiceDetailsPageProps {
 
 const PublicServiceDetailsPageClient = ({
   catalogId,
+  evidenceTypes,
   hasWritePermission,
   mainActivities,
   referenceDataEnv,
@@ -41,6 +43,8 @@ const PublicServiceDetailsPageClient = ({
   const handleLanguageChange = (value: string) => {
     setLanguage(value);
   };
+
+  console.log("todo", evidenceTypes);
 
   return (
     <DetailsPageLayout

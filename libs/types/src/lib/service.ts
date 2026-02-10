@@ -12,6 +12,7 @@ export interface ServiceToBeCreated {
   description?: LocalizedStrings;
   homepage?: string;
   produces?: Output[];
+  requiredEvidence?: RequiredEvidence[];
   spatial?: string[];
   status?: string;
   subject?: string[];
@@ -23,6 +24,16 @@ export interface Output {
   title?: LocalizedStrings;
   description?: LocalizedStrings;
   language?: string[];
+}
+
+export interface RequiredEvidence {
+  title: LocalizedStrings;
+  description: LocalizedStrings;
+  validityDuration?: string;
+  language?: string[];
+  identifier?: string;
+  page?: string;
+  type?: string;
 }
 
 export interface ContactPoint {

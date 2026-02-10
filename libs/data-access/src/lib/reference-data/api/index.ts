@@ -24,6 +24,21 @@ export const getDatasetTypes = async (): Promise<{
   return response.json();
 };
 
+export const getEvidenceTypes = async (): Promise<{
+  evidenceTypes: ReferenceDataCode[];
+}> => {
+  const path = `${process.env.FDK_BASE_URI}/reference-data/digdir/evidence-types`;
+  const options = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "GET",
+    cache: "no-cache" as RequestCache,
+  };
+  const response = await fetch(path, options);
+  return response.json();
+};
+
 export const getDistributionStatuses = async (): Promise<{
   distributionStatuses: ReferenceDataCode[];
 }> => {

@@ -15,13 +15,16 @@ import { createService } from "@service-catalog/app/actions/services/actions";
 import { serviceTemplate } from "@service-catalog/components/service-form/service-template";
 
 type NewPageProps = {
+  evidenceTypes: ReferenceDataCode[];
+  languages: ReferenceDataCode[];
   referenceDataEnv: string;
   searchEnv: string;
   statuses: ReferenceDataCode[];
 };
 
 export const NewPage = (props: NewPageProps) => {
-  const { referenceDataEnv, searchEnv, statuses } = props;
+  const { evidenceTypes, referenceDataEnv, searchEnv, statuses, languages } =
+    props;
   const router = useRouter();
   const { catalogId } = useParams<{ catalogId: string }>();
   const serviceIdRef = useRef<string | undefined>(undefined); // Ref to store the service id
@@ -81,6 +84,8 @@ export const NewPage = (props: NewPageProps) => {
       <ServiceForm
         afterSubmit={handleAfterSubmit}
         autoSaveStorage={dataStorage}
+        evidenceTypes={evidenceTypes}
+        languages={languages}
         onCancel={handleCancel}
         onSubmit={handleCreate}
         initialValues={serviceTemplate(undefined)}

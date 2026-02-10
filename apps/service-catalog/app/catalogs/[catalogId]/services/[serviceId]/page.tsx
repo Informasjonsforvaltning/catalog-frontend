@@ -1,5 +1,6 @@
 import {
   getAdmsStatuses,
+  getEvidenceTypes,
   getOrganization,
 } from "@catalog-frontend/data-access";
 import { Service } from "@catalog-frontend/types";
@@ -35,10 +36,12 @@ export default async function ServiceDetailsPage({
     catalogId,
   );
 
-  const [organization, statusesResponse] = await Promise.all([
-    getOrganization(catalogId),
-    getAdmsStatuses(),
-  ]);
+  const [organization, statusesResponse, evidenceTypesResponse] =
+    await Promise.all([
+      getOrganization(catalogId),
+      getAdmsStatuses(),
+      getEvidenceTypes(),
+    ]);
 
   const breadcrumbList: BreadcrumbType[] = [
     {
@@ -63,6 +66,7 @@ export default async function ServiceDetailsPage({
       />
       <ServiceDetailsPageClient
         catalogId={catalogId}
+        evidenceTypes={evidenceTypesResponse.evidenceTypes}
         hasWritePermission={hasWritePermission}
         referenceDataEnv={process.env.FDK_BASE_URI ?? ""}
         searchEnv={process.env.FDK_SEARCH_SERVICE_BASE_URI ?? ""}

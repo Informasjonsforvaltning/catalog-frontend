@@ -19,6 +19,7 @@ import { Link } from "@digdir/designsystemet-react";
 
 interface ServiceDetailsPageProps {
   catalogId: string;
+  evidenceTypes: ReferenceDataCode[];
   hasWritePermission: boolean;
   referenceDataEnv: string;
   searchEnv: string;
@@ -29,6 +30,7 @@ interface ServiceDetailsPageProps {
 
 const ServiceDetailsPageClient = ({
   catalogId,
+  evidenceTypes,
   hasWritePermission,
   referenceDataEnv,
   searchEnv,
@@ -43,6 +45,8 @@ const ServiceDetailsPageClient = ({
   const handleLanguageChange = (value: string) => {
     setLanguage(value);
   };
+
+  console.log("todo", evidenceTypes);
 
   return (
     <DetailsPageLayout
