@@ -17,7 +17,7 @@ export const GET = async (
     try {
       const response = await getConceptsForCatalog(
         catalogId,
-        session?.accessToken,
+        session.accessToken,
       );
       if (response.status !== 200) {
         throw new Error();
@@ -47,7 +47,7 @@ export const POST = async (
     };
 
     try {
-      const response = await createConcept(concept, session?.accessToken);
+      const response = await createConcept(concept, session.accessToken);
       if (response.status !== 201) {
         console.log(
           "Failed to create concept with status " + response.status,
@@ -57,7 +57,7 @@ export const POST = async (
           "Failed to create concept with status " + response.status,
         );
       }
-      const conceptId = response?.headers?.get("location")?.split("/").pop();
+      const conceptId = response.headers.get("location")?.split("/").pop();
       return new Response(JSON.stringify(conceptId), { status: 200 });
     } catch (err) {
       console.log(err);

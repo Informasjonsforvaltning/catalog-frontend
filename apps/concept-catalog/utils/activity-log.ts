@@ -63,7 +63,7 @@ export async function getConceptActivityLogData(
   page: number = 0,
 ): Promise<ActivityLogData> {
   const session = await getValidSession();
-  if (!session?.accessToken) {
+  if (!session) {
     return { updates: [] };
   }
 
@@ -92,7 +92,7 @@ export async function getCommentActivityLogData(
   page: number = 0,
 ): Promise<CommentActivityLogData> {
   const session = await getValidSession();
-  if (!session?.accessToken) {
+  if (!session) {
     return { comments: [] };
   }
 

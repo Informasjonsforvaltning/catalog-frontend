@@ -17,7 +17,7 @@ export const DELETE = async (
       const response = await removeImportResultConcept(
         catalogId,
         resultId,
-        session?.accessToken,
+        session.accessToken,
       );
       if (response.status !== 200) {
         throw new Error();
@@ -45,7 +45,7 @@ export const GET = async (
       const response = await getConceptImportResultById(
         catalogId,
         resultId,
-        session?.accessToken,
+        session.accessToken,
       );
 
       const jsonResponse = await response.json();

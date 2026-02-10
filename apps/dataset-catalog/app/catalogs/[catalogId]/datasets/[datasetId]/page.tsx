@@ -97,7 +97,7 @@ const DatasetDetailPage = withReadProtectedPage(
 
     const datasetSeries = await getAllDatasetSeries(
       catalogId,
-      `${session.accessToken}`,
+      session.accessToken,
     ).then((res) => res.json());
 
     return (

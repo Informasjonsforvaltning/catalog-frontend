@@ -25,7 +25,7 @@ const TermsAndConditionsPage = withReadProtectedPage(
     const latestTerms: Terms = await getLatestTerms().then((res) => res.json());
     const acceptation: TermsAcceptation | undefined = await getOrgAcceptation(
       catalogId,
-      `${session.accessToken}`,
+      session.accessToken,
     ).then((response) => {
       if (response.ok) {
         return response.json();
