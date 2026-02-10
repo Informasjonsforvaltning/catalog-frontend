@@ -46,7 +46,7 @@ const ChangeRequestDetailsPage = withReadProtectedPage(
     const changeRequest: ChangeRequest = await getChangeRequest(
       catalogId,
       `${changeRequestId}`,
-      `${session.accessToken}`,
+      session.accessToken,
     )
       .then((response) => {
         if (response.status === 404) {
@@ -66,8 +66,8 @@ const ChangeRequestDetailsPage = withReadProtectedPage(
       originalConcept =
         changeRequest.conceptId && validUUID(changeRequest.conceptId)
           ? await getConceptRevisions(
-              `${changeRequest.conceptId}`,
-              `${session.accessToken}`,
+              changeRequest.conceptId,
+              session.accessToken,
             ).then((response) => {
               if (response.ok) {
                 return response.json().then((revisions: Concept[]) => {
@@ -111,15 +111,15 @@ const ChangeRequestDetailsPage = withReadProtectedPage(
 
     const codeListsResult: CodeListsResult = await getAllCodeLists(
       catalogId,
-      `${session?.accessToken}`,
+      session.accessToken,
     ).then((response) => response.json());
     const fieldsResult: FieldsResult = await getFields(
       catalogId,
-      `${session?.accessToken}`,
+      session.accessToken,
     ).then((response) => response.json());
     const usersResult: UsersResult = await getUsers(
       catalogId,
-      `${session?.accessToken}`,
+      session.accessToken,
     ).then((response) => response.json());
 
     const allowApprove = hasWritePermission;

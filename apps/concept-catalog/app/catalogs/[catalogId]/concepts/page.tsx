@@ -28,16 +28,16 @@ const SearchPage = withReadProtectedPage(
   async ({ catalogId, session, hasWritePermission, hasAdminPermission }) => {
     const fieldsResult: FieldsResult = await getFields(
       catalogId,
-      `${session?.accessToken}`,
+      session.accessToken,
     ).then((response) => response.json());
     const codeListsResult: CodeListsResult = await getAllCodeLists(
       catalogId,
-      `${session?.accessToken}`,
+      session.accessToken,
     ).then((response) => response.json());
 
     const usersResult: UsersResult = await getUsers(
       catalogId,
-      `${session?.accessToken}`,
+      session.accessToken,
     ).then((response) => response.json());
 
     const conceptStatuses = await getConceptStatuses().then((body) =>

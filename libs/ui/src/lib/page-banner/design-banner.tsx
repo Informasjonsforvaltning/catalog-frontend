@@ -19,16 +19,18 @@ export interface BannerProps {
 const DesignBanner = async ({ catalogId, title }: BannerProps) => {
   const session = await getValidSession();
 
-  if (!session?.accessToken) {
+  if (!session) {
     return redirectToSignIn();
   }
-  const accessToken = session?.accessToken;
 
-  const design = await getDesign(catalogId, accessToken).then((res) =>
+  const design = await getDesign(catalogId, session.accessToken).then((res) =>
     res.json(),
   );
   const organization: Organization = await getOrganization(catalogId);
-  const logoResponse = await getBase64DesignLogo(catalogId, accessToken);
+  const logoResponse = await getBase64DesignLogo(
+    catalogId,
+    session.accessToken,
+  );
   const logo = logoResponse ? logoResponse : "undefined";
 
   return (

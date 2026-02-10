@@ -102,12 +102,12 @@ export async function createConcept(
   try {
     const response = await createConceptApi(
       processedValues,
-      `${session?.accessToken}`,
+      session.accessToken,
     );
     if (response.status !== 201) {
       throw new Error();
     }
-    conceptId = response?.headers?.get("location")?.split("/").pop();
+    conceptId = response.headers.get("location")?.split("/").pop();
     success = true;
   } catch (error) {
     console.error(error);
@@ -129,10 +129,7 @@ export async function deleteConcept(conceptId: string): Promise<void> {
   }
   let success = false;
   try {
-    const response = await deleteConceptApi(
-      conceptId,
-      `${session?.accessToken}`,
-    );
+    const response = await deleteConceptApi(conceptId, session.accessToken);
     if (response.status !== 200) {
       throw new Error();
     }
@@ -199,7 +196,7 @@ export async function updateConcept(
     const response = await patchConceptApi(
       initialConcept.id,
       diff,
-      `${session?.accessToken}`,
+      session.accessToken,
     );
     if (response.status !== 200 && response.status !== 201) {
       throw new Error(`${response.status} ${response.statusText}`);
@@ -207,7 +204,7 @@ export async function updateConcept(
 
     success = true;
     if (response.status === 201) {
-      conceptId = response?.headers?.get("location")?.split("/").pop();
+      conceptId = response.headers.get("location")?.split("/").pop();
     }
   } catch (error) {
     console.error(`${localization.alert.fail} ${error}`);
@@ -219,7 +216,7 @@ export async function updateConcept(
     updateTag("concepts");
   }
 
-  return await getConcept(`${conceptId}`, `${session?.accessToken}`).then(
+  return await getConcept(`${conceptId}`, session.accessToken).then(
     (response) => (response.ok ? response.json() : undefined),
   );
 }
@@ -237,7 +234,7 @@ export async function deleteImportResult(
     const response = await removeImportResult(
       catalogId,
       resultId,
-      `${session?.accessToken}`,
+      session.accessToken,
     );
     if (response.status !== 204) {
       throw new Error();
@@ -267,7 +264,7 @@ export async function saveImportedConcept(
       catalogId,
       resultId,
       externalId,
-      `${session?.accessToken}`,
+      session.accessToken,
     );
 
     if (response.status !== 200 && response.status !== 201) {
@@ -297,7 +294,7 @@ export async function cancelImport(
     const response = await cancelConceptImport(
       catalogId,
       resultId,
-      `${session?.accessToken}`,
+      session.accessToken,
     );
 
     console.log("Import cancellation has been sent", catalogId, resultId);

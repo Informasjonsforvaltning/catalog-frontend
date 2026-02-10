@@ -18,7 +18,6 @@ export const importConceptsCSV = async (
   if (!session) {
     return redirectToSignIn();
   }
-  const accessToken = await session?.accessToken;
 
   validateOrganizationNumber(catalogId, "importConceptsCSV");
   validateUUID(importId, "importConceptsCSV");
@@ -40,7 +39,7 @@ export const importConceptsCSV = async (
 
   const options = {
     headers: {
-      Authorization: `Bearer ${accessToken}`,
+      Authorization: `Bearer ${session.accessToken}`,
       "Content-Type": "application/json",
     },
     method: "POST",

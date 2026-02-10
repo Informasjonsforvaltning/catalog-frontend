@@ -32,7 +32,7 @@ export default withWriteProtectedPage(
   async ({ catalogId, conceptId, session }) => {
     const concept: Concept = await getConcept(
       `${conceptId}`,
-      `${session?.accessToken}`,
+      session.accessToken,
     ).then((response) => {
       if (response.ok) return response.json();
     });
@@ -43,7 +43,7 @@ export default withWriteProtectedPage(
     const changeRequests = await searchChangeRequest(
       catalogId,
       `${conceptId}`,
-      `${session?.accessToken}`,
+      session.accessToken,
       "OPEN",
     ).then((response) => {
       if (response.ok) {
@@ -62,15 +62,15 @@ export default withWriteProtectedPage(
 
     const codeListsResult: CodeListsResult = await getAllCodeLists(
       catalogId,
-      `${session?.accessToken}`,
+      session.accessToken,
     ).then((response) => response.json());
     const fieldsResult: FieldsResult = await getFields(
       catalogId,
-      `${session?.accessToken}`,
+      session.accessToken,
     ).then((response) => response.json());
     const usersResult: UsersResult = await getUsers(
       catalogId,
-      `${session?.accessToken}`,
+      session.accessToken,
     ).then((response) => response.json());
 
     const getTitle = (text: string | string[]) =>

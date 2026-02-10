@@ -12,7 +12,7 @@ export const GET = async (
     const { catalogId } = params;
 
     try {
-      const response = await getAllServices(catalogId, session?.accessToken);
+      const response = await getAllServices(catalogId, session.accessToken);
       if (response.status !== 200) {
         throw new Error();
       }
@@ -38,7 +38,7 @@ export const POST = async (
       const response = await createService(
         service,
         catalogId,
-        session?.accessToken,
+        session.accessToken,
       );
       if (response.status !== 201) {
         console.log(
@@ -49,7 +49,7 @@ export const POST = async (
           "Failed to create service with status " + response.status,
         );
       }
-      const serviceId = response?.headers?.get("location")?.split("/").pop();
+      const serviceId = response.headers.get("location")?.split("/").pop();
       return new Response(JSON.stringify(serviceId), { status: 200 });
     } catch (err) {
       console.log(err);

@@ -30,10 +30,7 @@ export async function getDataServices(
     return redirectToSignIn();
   }
 
-  const response = await getAllDataServices(
-    catalogId,
-    `${session?.accessToken}`,
-  );
+  const response = await getAllDataServices(catalogId, session.accessToken);
   if (response.status !== 200) {
     throw new Error(
       "getDataServices failed with response code " + response.status,
@@ -66,7 +63,7 @@ export async function createDataService(
     const response = await postDataService(
       newDataService,
       catalogId,
-      `${session?.accessToken}`,
+      session.accessToken,
     );
     if (response.status !== 201) {
       throw new Error(
@@ -74,7 +71,7 @@ export async function createDataService(
       );
     }
 
-    const locationHeader = response?.headers?.get("location");
+    const locationHeader = response.headers.get("location");
     if (!locationHeader) {
       throw new Error("No location header returned from server");
     }
@@ -116,7 +113,7 @@ export async function deleteDataService(
     const response = await removeDataService(
       catalogId,
       dataServiceId,
-      `${session?.accessToken}`,
+      session.accessToken,
     );
     if (response.status !== 204) {
       throw new Error();
@@ -166,7 +163,7 @@ export async function updateDataService(
       catalogId,
       initialDataService.id,
       diff,
-      `${session?.accessToken}`,
+      session.accessToken,
     );
     if (response.status !== 200) {
       throw new Error(`${response.status} ${response.statusText}`);
@@ -191,12 +188,15 @@ export async function publishDataService(
   dataServiceId: string,
 ): Promise<void> {
   const session = await getValidSession();
+  if (!session) {
+    return redirectToSignIn();
+  }
   let success = false;
   try {
     const response = await publish(
       catalogId,
       dataServiceId,
-      `${session?.accessToken}`,
+      session.accessToken,
     );
     if (response.status !== 200) {
       throw new Error();
@@ -217,12 +217,15 @@ export async function unpublishDataService(
   dataServiceId: string,
 ): Promise<void> {
   const session = await getValidSession();
+  if (!session) {
+    return redirectToSignIn();
+  }
   let success = false;
   try {
     const response = await unpublish(
       catalogId,
       dataServiceId,
-      `${session?.accessToken}`,
+      session.accessToken,
     );
     if (response.status !== 200) {
       throw new Error();
@@ -251,7 +254,7 @@ export async function deleteImportResult(
     const response = await removeImportResult(
       catalogId,
       resultId,
-      `${session?.accessToken}`,
+      session.accessToken,
     );
     if (response.status !== 204) {
       throw new Error();
