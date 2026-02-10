@@ -90,5 +90,5 @@ spec:
                 secretKeyRef:
                   name: commonurl
                   key: CATALOG_PORTAL_BASE_URI
-            - name: NEXT_PUBLIC_ACTIVITY_LOG_ENABLED
+            - name: ACTIVITY_LOG_ENABLED
               value: "false"
