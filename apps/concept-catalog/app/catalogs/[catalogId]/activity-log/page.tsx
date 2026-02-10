@@ -13,7 +13,7 @@ import { CommentActivityLogContent } from "./comment-activity-log-content";
 const ActivityLogPage = withReadProtectedPage(
   ({ catalogId }) => `/catalogs/${catalogId}/activity-log`,
   async ({ catalogId, searchParams }) => {
-    if (process.env.NEXT_PUBLIC_ACTIVITY_LOG_ENABLED !== "true") {
+    if (process.env.ACTIVITY_LOG_ENABLED !== "true") {
       redirect(`/catalogs/${catalogId}/concepts`);
     }
 

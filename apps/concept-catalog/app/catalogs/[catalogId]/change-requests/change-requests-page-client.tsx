@@ -29,6 +29,7 @@ import {
   ChangeRequest,
   ChangeRequestsPageSettings,
 } from "@catalog-frontend/types";
+import { useFeatureFlags } from "@concept-catalog/context/feature-flags";
 import styles from "./change-requests-page.module.css";
 import { useEffect, useMemo } from "react";
 
@@ -77,6 +78,7 @@ export const ChangeRequestsPageClient = ({
   }));
 
   const router = useRouter();
+  const { activityLogEnabled } = useFeatureFlags();
 
   // Memoize default values for query states
   const defaultSelectedSortOption = useMemo(
@@ -209,7 +211,7 @@ export const ChangeRequestsPageClient = ({
           <Tabs.Tab value="changeRequestTab">
             {localization.changeRequest.changeRequest}
           </Tabs.Tab>
-          {process.env.NEXT_PUBLIC_ACTIVITY_LOG_ENABLED === "true" && (
+          {activityLogEnabled && (
             <Tabs.Tab
               value="activityLogTab"
               onClick={() => router.push(`/catalogs/${catalogId}/activity-log`)}
