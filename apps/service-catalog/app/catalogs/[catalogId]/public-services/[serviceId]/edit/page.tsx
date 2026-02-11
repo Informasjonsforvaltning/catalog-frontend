@@ -44,7 +44,7 @@ export default async function EditServicePage({
         catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
       />
       <PageBanner
-        title={localization.catalogType.service}
+        title={localization.catalogType.publicService}
         subtitle={getTranslateText(organization?.prefLabel)}
       />
       <EditPage
