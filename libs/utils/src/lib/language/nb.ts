@@ -230,6 +230,8 @@ export const nb = {
     addUrl: "Legg til lenke",
     backToOverview: "Tilbake til oversikten",
     gotoConcept: "Gå til begrepet",
+    publish: "Publiser",
+    unpublish: "Avpubliser",
   },
 
   dropdown: {

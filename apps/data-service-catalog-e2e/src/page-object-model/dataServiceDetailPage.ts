@@ -13,9 +13,7 @@ export default class DataServiceDetailPage {
   readonly endpointUrl: Locator;
   readonly contactPoint: Locator;
   readonly publicationState: Locator;
-  readonly publicationDate: Locator;
   readonly dataServiceId: Locator;
-  readonly modifiedDate: Locator;
   readonly accessRights: Locator;
   readonly availability: Locator;
   readonly contactName: Locator;
@@ -42,9 +40,7 @@ export default class DataServiceDetailPage {
     this.endpointUrl = page.getByTestId("data-service-endpoint-url");
     this.contactPoint = page.getByTestId("data-service-contact-point");
     this.publicationState = page.getByTestId("data-service-publication-state");
-    this.publicationDate = page.getByTestId("data-service-publication-date");
     this.dataServiceId = page.getByTestId("data-service-id");
-    this.modifiedDate = page.getByTestId("data-service-modified-date");
     this.accessRights = page.getByTestId("data-service-access-rights");
     this.availability = page.getByTestId("data-service-availability");
     this.contactName = page.getByTestId("data-service-contact-name");
@@ -150,9 +146,9 @@ export default class DataServiceDetailPage {
 
   async expectPublishedStatusToBe(published: boolean) {
     if (published) {
-      await expect(this.publicationDate).toContainText("Publisert");
+      await expect(this.publishSwitch).toBeChecked();
     } else {
-      await expect(this.publicationDate).not.toContainText("Publisert");
+      await expect(this.publishSwitch).not.toBeChecked();
     }
   }
 
@@ -183,10 +179,6 @@ export default class DataServiceDetailPage {
 
   async expectDataServiceIdToBe(id: string) {
     await expect(this.dataServiceId).toContainText(id);
-  }
-
-  async expectModifiedDateToBe(date: string) {
-    await expect(this.modifiedDate).toContainText(date);
   }
 
   async expectAccessRightsToBe(accessRights: string) {

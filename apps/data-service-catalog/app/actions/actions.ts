@@ -18,10 +18,6 @@ import {
 import { DataService, DataServiceToBeCreated } from "@catalog-frontend/types";
 import { updateTag } from "next/cache";
 import { compare } from "fast-json-patch";
-import omit from "lodash/omit";
-
-const dataServiceMetadataFieldsToOmit = ["modified"];
-
 export async function getDataServices(
   catalogId: string,
 ): Promise<DataService[]> {
@@ -143,10 +139,7 @@ export async function updateDataService(
       values?.availability === "none" ? undefined : values?.availability,
   });
 
-  const diff = compare(
-    omit(initialDataService, dataServiceMetadataFieldsToOmit),
-    omit(updatedDataService, dataServiceMetadataFieldsToOmit),
-  );
+  const diff = compare(initialDataService, updatedDataService);
 
   if (diff.length === 0) {
     return initialDataService;
