@@ -107,7 +107,7 @@ export async function createConcept(
     if (response.status !== 201) {
       throw new Error();
     }
-    conceptId = response?.headers?.get("location")?.split("/").pop();
+    conceptId = response.headers.get("location")?.split("/").pop();
     success = true;
   } catch (error) {
     console.error(error);
@@ -204,7 +204,7 @@ export async function updateConcept(
 
     success = true;
     if (response.status === 201) {
-      conceptId = response?.headers?.get("location")?.split("/").pop();
+      conceptId = response.headers.get("location")?.split("/").pop();
     }
   } catch (error) {
     console.error(`${localization.alert.fail} ${error}`);

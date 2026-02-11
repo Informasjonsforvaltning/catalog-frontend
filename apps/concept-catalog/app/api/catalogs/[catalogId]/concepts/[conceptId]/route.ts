@@ -11,7 +11,7 @@ export const DELETE = async (req: NextRequest, props) => {
       if (!response.ok) {
         throw new Error();
       }
-      return new Response(response?.text?.toString(), { status: 200 });
+      return new Response(await response.text(), { status: 200 });
     } catch (err) {
       console.log("Error", err);
       return new Response(

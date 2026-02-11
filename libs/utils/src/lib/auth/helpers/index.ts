@@ -1,9 +1,12 @@
-import { getServerSession, Session } from "next-auth";
+import { getServerSession, type Session } from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "../auth-options";
 import { validateOidcUserSession } from "../token";
 
-export type ValidSession = Session & { accessToken: string };
+export type ValidSession = Session & {
+  accessToken: string;
+  accessTokenExpiresAt: number;
+};
 
 export const isValidSessionAndToken = async (
   session: Session | null,

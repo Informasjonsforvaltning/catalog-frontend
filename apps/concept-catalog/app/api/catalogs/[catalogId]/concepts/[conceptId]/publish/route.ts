@@ -16,7 +16,7 @@ export const POST = async (
       }
       const jsonResponse = await response.json();
       return new Response(JSON.stringify(jsonResponse), {
-        status: response?.status,
+        status: response.status,
       });
     } catch (err) {
       return new Response(

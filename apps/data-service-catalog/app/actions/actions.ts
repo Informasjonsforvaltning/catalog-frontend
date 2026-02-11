@@ -71,7 +71,7 @@ export async function createDataService(
       );
     }
 
-    const locationHeader = response?.headers?.get("location");
+    const locationHeader = response.headers.get("location");
     if (!locationHeader) {
       throw new Error("No location header returned from server");
     }

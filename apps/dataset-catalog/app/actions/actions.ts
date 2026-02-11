@@ -70,7 +70,7 @@ export async function createDataset(
       throw new Error();
     }
 
-    datasetId = response?.headers?.get("location")?.split("/").pop();
+    datasetId = response.headers.get("location")?.split("/").pop();
     success = true;
     return datasetId;
   } catch (error) {

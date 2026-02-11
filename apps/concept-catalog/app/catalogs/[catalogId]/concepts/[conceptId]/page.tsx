@@ -45,7 +45,11 @@ const ConceptPage = withReadProtectedPage(
       },
     );
 
-    if (!concept || !conceptId || concept.ansvarligVirksomhet?.id !== catalogId) {
+    if (
+      !concept ||
+      !conceptId ||
+      concept.ansvarligVirksomhet?.id !== catalogId
+    ) {
       return redirect("/notfound", RedirectType.replace);
     }
 

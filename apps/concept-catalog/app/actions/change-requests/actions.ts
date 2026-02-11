@@ -100,7 +100,7 @@ export async function createChangeRequestAction(
     console.error(errorMsg);
     throw new Error(errorMsg);
   }
-  const changeRequestId = response?.headers?.get("location")?.split("/").pop();
+  const changeRequestId = response.headers.get("location")?.split("/").pop();
   if (!changeRequestId) {
     console.error("Failed to fetch change request id");
     throw new Error("Failed to fetch change request id");

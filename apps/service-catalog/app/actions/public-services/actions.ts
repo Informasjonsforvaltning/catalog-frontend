@@ -75,7 +75,7 @@ export async function createPublicService(
     if (response.status !== 201) {
       throw new Error();
     }
-    serviceId = response?.headers?.get("location")?.split("/").pop();
+    serviceId = response.headers.get("location")?.split("/").pop();
     success = true;
     return serviceId;
   } catch (error) {

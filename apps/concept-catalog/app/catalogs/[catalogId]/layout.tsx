@@ -1,5 +1,6 @@
 import { TermsOfUseModal } from "@catalog-frontend/ui";
 import { CatalogLayout } from "@concept-catalog/components/catalog-layout";
+import { FeatureFlagsProvider } from "@concept-catalog/context/feature-flags";
 
 const Layout = async (props: {
   children: React.ReactNode;
@@ -20,8 +21,12 @@ const Layout = async (props: {
       fdkCommunityBaseUrl={process.env.FDK_COMMUNITY_BASE_URI}
       fdkBaseUrl={process.env.FDK_BASE_URI}
     >
-      <TermsOfUseModal catalogId={catalogId} />
-      {children}
+      <FeatureFlagsProvider
+        activityLogEnabled={process.env.ACTIVITY_LOG_ENABLED === "true"}
+      >
+        <TermsOfUseModal catalogId={catalogId} />
+        {children}
+      </FeatureFlagsProvider>
     </CatalogLayout>
   );
 };

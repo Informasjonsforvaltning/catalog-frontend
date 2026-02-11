@@ -120,7 +120,7 @@ const getDataServiceCountByOrg = async (
   orgId: string,
   session: ValidSession,
 ): Promise<number> => {
-  const response = await oldGetAllDataServiceCatalogs(session.accessToken);
+  const response = await getAllDataServiceCatalogs(session.accessToken);
   if (response.status !== 200) {
     console.error(
       "getAllDataServiceCatalogs failed with response code " + response.status,

@@ -16,8 +16,12 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  const session: any = await getServerSession(req, res, authOptions);
-  if (!session || session?.accessTokenExpiresAt < Date.now() / 1000) {
+  const session = await getServerSession(req, res, authOptions);
+  if (
+    !session?.accessToken ||
+    !session.accessTokenExpiresAt ||
+    session.accessTokenExpiresAt < Date.now() / 1000
+  ) {
     return res.status(401).send("Unauthorized");
   }
 
@@ -25,10 +29,7 @@ export default async function handler(
 
   if (req.method === "GET") {
     try {
-      const response = await getDesignLogo(
-        `${catalogId}`,
-        `${session?.accessToken}`,
-      );
+      const response = await getDesignLogo(`${catalogId}`, session.accessToken);
       if (response.status !== 200) {
         return res.status(response.status).send("Failed to get design logo");
       }

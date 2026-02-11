@@ -1,4 +1,4 @@
-import { getHistory } from "@catalog-frontend/data-access";
+import { getConceptHistory } from "@catalog-frontend/data-access";
 import { withValidSessionForApi } from "@catalog-frontend/utils";
 import { NextRequest } from "next/server";
 
@@ -11,11 +11,11 @@ export const GET = async (
     const { slug } = params;
     if (slug?.length == 2) {
       const [catalogId, resourceId] = slug;
-      const page = req.nextUrl.searchParams.get("page") ?? 1;
+      const page = req.nextUrl.searchParams.get("page") ?? 0;
       const size = req.nextUrl.searchParams.get("size") ?? 10;
 
       try {
-        const response = await getHistory(
+        const response = await getConceptHistory(
           catalogId,
           resourceId,
           session.accessToken,
