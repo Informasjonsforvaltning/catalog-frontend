@@ -34,6 +34,9 @@
     "graphql:codegen": "graphql-codegen --config codegen.ts"
   },
   "private": true,
+  "workspaces": [
+    "libs/ui-v2"
+  ],
   "dependencies": {
     "@digdir/designsystemet-css": "0.10.0",
     "@digdir/designsystemet-react": "0.63.1",

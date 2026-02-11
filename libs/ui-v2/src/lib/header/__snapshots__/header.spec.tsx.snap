@@ -1,0 +1,49 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`Header should render successfully 1`] = `
+<body>
+  <div>
+    <header
+      class="header"
+      style="color: rgb(255, 255, 255); background: rgb(45, 55, 65);"
+    >
+      <div
+        class="headerContainer"
+      >
+        <a
+          class="logo"
+          title="Gå til hovedsiden"
+        >
+          <svgrurl />
+        </a>
+        <button
+          aria-expanded="false"
+          aria-haspopup="menu"
+          class="fds-btn fds-focus fds-btn--md fds-btn--tertiary fds-btn--first menuButton"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            fill="none"
+            focusable="false"
+            font-size="1.5rem"
+            height="1em"
+            role="img"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              clip-rule="evenodd"
+              d="M2.75 6a.75.75 0 0 1 .75-.75h17a.75.75 0 0 1 0 1.5h-17A.75.75 0 0 1 2.75 6m0 6a.75.75 0 0 1 .75-.75h17a.75.75 0 0 1 0 1.5h-17a.75.75 0 0 1-.75-.75m.75 5.25a.75.75 0 0 0 0 1.5h17a.75.75 0 0 0 0-1.5z"
+              fill="currentColor"
+              fill-rule="evenodd"
+            />
+          </svg>
+          Meny
+        </button>
+      </div>
+    </header>
+  </div>
+</body>
+`;

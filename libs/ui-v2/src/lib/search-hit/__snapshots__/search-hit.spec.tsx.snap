@@ -1,0 +1,73 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`SearchHit should render SearchHit successfully 1`] = `
+<body>
+  <div>
+    <div
+      class="container"
+    >
+      <div
+        class="rowSpaceBetween"
+      >
+        <div
+          class="titleRow"
+        >
+          <a
+            class="titleLink"
+            href="Search hit title href"
+          >
+            <h2
+              class="title"
+            >
+              Search hit title
+            </h2>
+          </a>
+          <div>
+            Search hit status tag
+          </div>
+        </div>
+      </div>
+      Search hit content
+      <div
+        class="description"
+      >
+        <emptymock
+          remarkplugins="EmptyMock"
+        >
+          Search hit description
+        </emptymock>
+      </div>
+      Search hit labels
+    </div>
+  </div>
+</body>
+`;
+
+exports[`SearchHit should render SearchHit with empty title successfully 1`] = `
+<body>
+  <div>
+    <div
+      class="container"
+    >
+      <div
+        class="rowSpaceBetween"
+      >
+        <div
+          class="titleRow"
+        >
+          <a
+            class="titleLink"
+            href=""
+          >
+            <h2
+              class="title"
+            >
+              Uten navn
+            </h2>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+`;
