@@ -20,7 +20,7 @@ import { withWriteProtectedPage } from "@concept-catalog/utils/auth";
 import { NewPage } from "./new-page.client";
 
 export default withWriteProtectedPage(
-  ({ catalogId }) => `/catalogs//${catalogId}/concepts/new`,
+  ({ catalogId }) => `/catalogs/${catalogId}/concepts/new`,
   async ({ catalogId, session }) => {
     const conceptStatuses = await getConceptStatuses().then((body) =>
       prepareStatusList(body.conceptStatuses),
@@ -28,15 +28,15 @@ export default withWriteProtectedPage(
 
     const codeListsResult: CodeListsResult = await getAllCodeLists(
       catalogId,
-      `${session?.accessToken}`,
+      session.accessToken,
     ).then((response) => response.json());
     const fieldsResult: FieldsResult = await getFields(
       catalogId,
-      `${session?.accessToken}`,
+      session.accessToken,
     ).then((response) => response.json());
     const usersResult: UsersResult = await getUsers(
       catalogId,
-      `${session?.accessToken}`,
+      session.accessToken,
     ).then((response) => response.json());
 
     const concept = {

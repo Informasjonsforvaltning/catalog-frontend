@@ -30,7 +30,7 @@ const NoAccess = async ({ params }: Props) => {
         catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
       />
       <PageBanner
-        title={localization.catalogType.concept}
+        title={localization.catalogType.service}
         subtitle={localization.error}
       />
       <CenterContainer>

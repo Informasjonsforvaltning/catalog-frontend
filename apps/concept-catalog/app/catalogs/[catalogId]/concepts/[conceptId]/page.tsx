@@ -39,12 +39,11 @@ import ConceptPageClient from "./concept-page-client";
 const ConceptPage = withReadProtectedPage(
   ({ catalogId, conceptId }) => `/catalogs/${catalogId}/concepts/${conceptId}`,
   async ({ catalogId, conceptId, session, hasWritePermission }) => {
-    const concept = await getConcept(
-      `${conceptId}`,
-      `${session?.accessToken}`,
-    ).then((response) => {
-      if (response.ok) return response.json();
-    });
+    const concept = await getConcept(`${conceptId}`, session.accessToken).then(
+      (response) => {
+        if (response.ok) return response.json();
+      },
+    );
 
     if (!concept || concept.ansvarligVirksomhet?.id !== catalogId) {
       return redirect("/notfound", RedirectType.replace);
@@ -54,24 +53,24 @@ const ConceptPage = withReadProtectedPage(
       prepareStatusList(body.conceptStatuses),
     );
 
-    const username = session && getUsername(session?.accessToken);
+    const username = getUsername(session.accessToken);
 
     const organization: Organization = await getOrganization(catalogId);
     const revisions: Concept[] | null = await getConceptRevisions(
       `${conceptId}`,
-      `${session?.accessToken}`,
+      session.accessToken,
     ).then((response) => response.json() || null);
     const fieldsResult: FieldsResult = await getFields(
       catalogId,
-      `${session?.accessToken}`,
+      session.accessToken,
     ).then((response) => response.json());
     const codeListsResult: CodeListsResult = await getAllCodeLists(
       catalogId,
-      `${session?.accessToken}`,
+      session.accessToken,
     ).then((response) => response.json());
     const usersResult: UsersResult = await getUsers(
       catalogId,
-      `${session?.accessToken}`,
+      session.accessToken,
     ).then((response) => response.json());
 
     const conceptRelations: UnionRelation[] =
@@ -80,10 +79,10 @@ const ConceptPage = withReadProtectedPage(
       getUnpublishedConceptRelations(concept);
     const relatedConcepts: RelatedConcept[] = await getPublishedRelatedConcepts(
       concept,
-      session?.accessToken,
+      session.accessToken,
     );
     const internalRelatedConcepts: RelatedConcept[] =
-      await getUnpublishedRelatedConcepts(concept, session?.accessToken);
+      await getUnpublishedRelatedConcepts(concept, session.accessToken);
 
     const isValid = await conceptSchema({
       required: true,

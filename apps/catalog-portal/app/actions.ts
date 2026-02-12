@@ -13,8 +13,11 @@ import {
   DataServiceCatalog,
   TermsAcceptation,
 } from "@catalog-frontend/types";
-import { getValidSession, redirectToSignIn } from "@catalog-frontend/utils";
-import { Session } from "next-auth";
+import {
+  getValidSession,
+  redirectToSignIn,
+  ValidSession,
+} from "@catalog-frontend/utils";
 import { updateTag } from "next/cache";
 
 export const getDatasetCount = async (catalogId: string): Promise<number> => {
@@ -59,9 +62,9 @@ export const getServiceCount = async (
 
 const getServiceCountByOrg = async (
   orgId: string,
-  session: Session,
+  session: ValidSession,
 ): Promise<{ serviceCount: number; publicServiceCount: number }> => {
-  const response = await getAllServiceCatalogs(`${session.accessToken}`);
+  const response = await getAllServiceCatalogs(session.accessToken);
   if (response.status !== 200) {
     throw new Error(
       `API responded with status ${response.status} for getAllServiceCatalogs`,
@@ -94,9 +97,9 @@ const getServiceCountByOrg = async (
 
 const getDatasetCountByOrg = async (
   orgId: string,
-  session: Session,
+  session: ValidSession,
 ): Promise<number> => {
-  const response = await getAllDatasetCatalogs(`${session.accessToken}`);
+  const response = await getAllDatasetCatalogs(session.accessToken);
   if (response.status !== 200) {
     console.error(
       `API responded with status ${response.status} for getAllDatasetCatalogs`,
@@ -115,9 +118,9 @@ const getDatasetCountByOrg = async (
 
 const getDataServiceCountByOrg = async (
   orgId: string,
-  session: Session,
+  session: ValidSession,
 ): Promise<number> => {
-  const response = await getAllDataServiceCatalogs(`${session.accessToken}`);
+  const response = await getAllDataServiceCatalogs(session.accessToken);
   if (response.status !== 200) {
     console.error(
       `API responded with status ${response.status} for oldGetAllDataServiceCatalogs`,
@@ -136,12 +139,9 @@ const getDataServiceCountByOrg = async (
 
 const getConceptCountByOrg = async (
   orgId: string,
-  session: Session,
+  session: ValidSession,
 ): Promise<number> => {
-  const response = await getConceptCountByCatalogId(
-    orgId,
-    `${session.accessToken}`,
-  );
+  const response = await getConceptCountByCatalogId(orgId, session.accessToken);
   if (response.status !== 200) {
     console.error(
       `API responded with status ${response.status} for getConceptCountByCatalogId`,
@@ -158,7 +158,7 @@ export async function acceptTermsAndConditions(
   if (!session) {
     return redirectToSignIn();
   }
-  const response = await acceptTerms(acceptation, `${session.accessToken}`);
+  const response = await acceptTerms(acceptation, session.accessToken);
   if (response.status !== 201) {
     throw new Error(
       `API responded with status ${response.status} for acceptTerms`,

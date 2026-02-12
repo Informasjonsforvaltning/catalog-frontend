@@ -22,7 +22,7 @@ const NotFound = async () => {
         catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
       />
       <PageBanner
-        title={localization.catalogType.dataset}
+        title={localization.catalogType.dataService}
         subtitle={localization.notFound}
       />
       <CenterContainer>

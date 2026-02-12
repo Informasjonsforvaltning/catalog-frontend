@@ -1,0 +1,16 @@
+{
+  "name": "@catalog-frontend/ui-v2",
+  "version": "0.0.0",
+  "private": true,
+  "dependencies": {
+    "@digdir/designsystemet-css": "0.10.0",
+    "@digdir/designsystemet-react": "0.63.1",
+    "@digdir/designsystemet-theme": "^0.15.3",
+    "@fellesdatakatalog/icons": "^0.8.5",
+    "@navikt/aksel-icons": "^7.35.0"
+  },
+  "peerDependencies": {
+    "react": ">=19",
+    "react-dom": ">=19"
+  }
+}

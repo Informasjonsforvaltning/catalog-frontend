@@ -13,14 +13,14 @@ export const POST = async (
       const response = await publishService(
         catalogId,
         serviceId,
-        session?.accessToken as string,
+        session.accessToken,
       );
       if (response.status !== 200) {
         throw new Error();
       }
       const jsonResponse = await response.json();
       return new Response(JSON.stringify(jsonResponse), {
-        status: response?.status,
+        status: response.status,
       });
     } catch (err) {
       return new Response("Failed to publish service", { status: 500 });

@@ -25,7 +25,7 @@ export async function getPublicServices(catalogId: string): Promise<Service[]> {
   if (!session) {
     return redirectToSignIn();
   }
-  const response = await getAll(catalogId, `${session?.accessToken}`);
+  const response = await getAll(catalogId, session.accessToken);
   if (response.status !== 200) {
     throw new Error(
       `API responded with status ${response.status} for getAllPublicServices`,
@@ -43,11 +43,7 @@ export async function getPublicServiceById(
   if (!session) {
     return redirectToSignIn();
   }
-  const response = await getById(
-    catalogId,
-    serviceId,
-    `${session?.accessToken}`,
-  );
+  const response = await getById(catalogId, serviceId, session.accessToken);
 
   if (response.status !== 200) {
     throw new Error(

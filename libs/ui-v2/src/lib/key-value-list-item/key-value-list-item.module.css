@@ -1,0 +1,19 @@
+.listItem {
+  display: flex;
+  padding: 10px 0;
+  word-break: break-word;
+}
+
+.listItem:nth-of-type(n + 2) {
+  border-top: 1px solid #dfe1e2;
+}
+
+.property {
+  flex-basis: 50%;
+  margin-right: 0.1rem;
+  line-height: 1.6rem;
+}
+
+.value {
+  width: 50%;
+}

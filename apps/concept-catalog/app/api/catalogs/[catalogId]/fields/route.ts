@@ -11,7 +11,7 @@ export const GET = async (
     const { catalogId } = params;
 
     try {
-      const response = await getFields(catalogId, `${session?.accessToken}`);
+      const response = await getFields(catalogId, session.accessToken);
       if (response.status !== 200) {
         return new Response(
           JSON.stringify({ message: "Failed to get fields" }),

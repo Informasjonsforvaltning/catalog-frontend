@@ -68,6 +68,12 @@ yarn nx e2e dataset-catalog-e2e
 
 Use the options `--ui` and `--debug` during test development.
 
+## Feature flags
+
+To expose a feature flag to client components, add it to the `FeatureFlagsProvider` context in the relevant app's catalog layout. Client components can then access it via the `useFeatureFlags()` hook.
+
+Configure flag values in `.env.local` for local development and in the deploy env YAMLs (`deploy/<environment>/<app>/<app>-env.yaml`) per environment.
+
 ## AI Agent Instructions
 
 This repository includes instruction files for AI coding assistants:

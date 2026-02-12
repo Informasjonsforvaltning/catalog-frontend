@@ -1,0 +1,11 @@
+.button {
+  --component-button-filled-primary-color-background-default: #2d3741;
+  --component-button-outline-primary-color-text-default: #2d3741;
+  --component-button-outline-primary-color-border-default: #2d3741;
+}
+
+.withIcon {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}

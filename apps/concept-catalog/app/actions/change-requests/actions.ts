@@ -37,8 +37,8 @@ async function getChangeRequestAsConcept(
 
   const changeRequest: ChangeRequest = await getChangeRequest(
     catalogId,
-    `${changeRequestId}`,
-    `${session.accessToken}`,
+    changeRequestId,
+    session.accessToken,
   )
     .then((response) => {
       return response.json();
@@ -57,7 +57,7 @@ async function getChangeRequestAsConcept(
     changeRequest.conceptId && validUUID(changeRequest.conceptId)
       ? await getConceptRevisions(
           `${changeRequest.conceptId}`,
-          `${session.accessToken}`,
+          session.accessToken,
         ).then((response) => {
           if (response.ok) {
             return response.json().then((revisions: Concept[]) => {
@@ -90,8 +90,8 @@ export async function createChangeRequestAction(
 
   const response = await createChangeRequest(
     body,
-    `${catalogId}`,
-    `${session?.accessToken}`,
+    catalogId,
+    session.accessToken,
   );
   if (response.status !== 201) {
     const errorMsg = `Error when creating change request. Response status: ${
@@ -100,7 +100,7 @@ export async function createChangeRequestAction(
     console.error(errorMsg);
     throw new Error(errorMsg);
   }
-  const changeRequestId = response?.headers?.get("location")?.split("/").pop();
+  const changeRequestId = response.headers.get("location")?.split("/").pop();
   if (!changeRequestId) {
     console.error("Failed to fetch change request id");
     throw new Error("Failed to fetch change request id");
@@ -122,9 +122,9 @@ export async function updateChangeRequestAction(
 
   const response = await updateChangeRequest(
     body,
-    `${catalogId}`,
-    `${changeRequestId}`,
-    `${session?.accessToken}`,
+    catalogId,
+    changeRequestId,
+    session.accessToken,
   );
 
   if (response.status !== 200) {

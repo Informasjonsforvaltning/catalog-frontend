@@ -80,6 +80,14 @@ export const nb = {
     "Kunne ikke laste inn tjenestemeldinger. Vennligst prøv igjen senere.",
   serviceMessageSeeMore: "Se detaljert driftsmelding for mer informasjon.",
   newConcept: "Nytt begrep",
+  activityLog: {
+    title: "Aktivitetslogg",
+    conceptActivity: "Begrepaktivitet",
+    commentActivity: "Kommentaraktivitet",
+    noComments: "Ingen kommentarer",
+    selectType: "Velg type",
+    createdByAt: "Opprettet: {0} av {1}",
+  },
   helpText: "Hjelpetekst",
   publisher: "Utgiver",
   helpWithCompleting: "Hjelp til utfylling",
@@ -222,6 +230,8 @@ export const nb = {
     addUrl: "Legg til lenke",
     backToOverview: "Tilbake til oversikten",
     gotoConcept: "Gå til begrepet",
+    publish: "Publiser",
+    unpublish: "Avpubliser",
   },
 
   dropdown: {

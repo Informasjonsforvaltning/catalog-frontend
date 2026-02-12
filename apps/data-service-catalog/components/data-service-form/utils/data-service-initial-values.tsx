@@ -22,7 +22,6 @@ export const dataServiceToBeCreatedTemplate = (): DataServiceToBeCreated => {
   return {
     title: {},
     description: {},
-    modified: "",
     status: "",
     endpointUrl: "",
     endpointDescriptions: [],
