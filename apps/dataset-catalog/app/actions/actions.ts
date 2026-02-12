@@ -62,7 +62,7 @@ export async function createDataset(
   const response = await postDataset(
     datasetNoEmptyValues,
     catalogId,
-    `${session?.accessToken}`,
+    session.accessToken,
   );
   if (response.status !== 201) {
     throw new Error(
@@ -86,7 +86,7 @@ export async function deleteDataset(
   const response = await removeDataset(
     catalogId,
     datasetId,
-    `${session?.accessToken}`,
+    session.accessToken,
   );
   if (response.status !== 200) {
     throw new Error(
@@ -118,7 +118,7 @@ export async function updateDataset(
     catalogId,
     initialDataset.id,
     diff,
-    `${session?.accessToken}`,
+    session.accessToken,
   );
   if (response.status !== 200) {
     throw new Error(
@@ -150,7 +150,7 @@ export async function publishDataset(
     catalogId,
     initialDataset.id,
     diff,
-    `${session?.accessToken}`,
+    session.accessToken,
   );
   if (response.status !== 200) {
     throw new Error(

@@ -56,7 +56,7 @@ export async function createDataService(
   const response = await postDataService(
     newDataService,
     catalogId,
-    `${session?.accessToken}`,
+    session.accessToken,
   );
   if (response.status !== 201) {
     throw new Error(
@@ -90,7 +90,7 @@ export async function deleteDataService(
   const response = await removeDataService(
     catalogId,
     dataServiceId,
-    `${session?.accessToken}`,
+    session.accessToken,
   );
   if (response.status !== 204) {
     throw new Error(
@@ -130,7 +130,7 @@ export async function updateDataService(
     catalogId,
     initialDataService.id,
     diff,
-    `${session?.accessToken}`,
+    session.accessToken,
   );
   if (response.status !== 200) {
     throw new Error(
@@ -148,11 +148,7 @@ export async function publishDataService(
   dataServiceId: string,
 ): Promise<void> {
   const session = await getValidSession();
-  const response = await publish(
-    catalogId,
-    dataServiceId,
-    `${session?.accessToken}`,
-  );
+  const response = await publish(catalogId, dataServiceId, session.accessToken);
   if (response.status !== 200) {
     throw new Error(
       `API responded with status ${response.status} for publishDataService`,
@@ -170,7 +166,7 @@ export async function unpublishDataService(
   const response = await unpublish(
     catalogId,
     dataServiceId,
-    `${session?.accessToken}`,
+    session.accessToken,
   );
   if (response.status !== 200) {
     throw new Error(
@@ -192,7 +188,7 @@ export async function deleteImportResult(
   const response = await removeImportResult(
     catalogId,
     resultId,
-    `${session?.accessToken}`,
+    session.accessToken,
   );
   if (response.status !== 204) {
     throw new Error(

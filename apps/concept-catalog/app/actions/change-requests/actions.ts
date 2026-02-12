@@ -151,11 +151,7 @@ export async function acceptChangeRequestAction(
   if (!hasOrganizationWritePermission(session.accessToken, catalogId))
     throw new Error("User does not have write permission for this catalog");
 
-  await acceptChangeRequest(
-    catalogId,
-    changeRequestId,
-    `${session?.accessToken}`,
-  );
+  await acceptChangeRequest(catalogId, changeRequestId, session?.accessToken);
   updateTag("concept-change-requests");
   updateTag("concept-change-request");
 }
@@ -173,11 +169,7 @@ export async function rejectChangeRequestAction(
   if (!hasOrganizationWritePermission(session.accessToken, catalogId))
     throw new Error("User does not have write permission for this catalog");
 
-  await rejectChangeRequest(
-    catalogId,
-    changeRequestId,
-    `${session?.accessToken}`,
-  );
+  await rejectChangeRequest(catalogId, changeRequestId, session.accessToken);
   updateTag("concept-change-requests");
   updateTag("concept-change-request");
 }

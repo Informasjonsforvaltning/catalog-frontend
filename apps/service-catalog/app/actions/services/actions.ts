@@ -65,11 +65,7 @@ export async function createService(
   if (!session) {
     return redirectToSignIn();
   }
-  const response = await create(
-    newService,
-    catalogId,
-    `${session?.accessToken}`,
-  );
+  const response = await create(newService, catalogId, session.accessToken);
   if (response.status !== 201) {
     throw new Error(
       `API responded with status ${response.status} for createService`,
@@ -92,7 +88,7 @@ export async function deleteService(
   const response = await removeService(
     catalogId,
     serviceId,
-    `${session?.accessToken}`,
+    session.accessToken,
   );
   if (response.status !== 204) {
     throw new Error(
@@ -137,7 +133,7 @@ export async function updateService(
     catalogId,
     oldService.id,
     diff,
-    `${session?.accessToken}`,
+    session.accessToken,
   );
   if (response.status !== 200) {
     throw new Error(
@@ -156,11 +152,7 @@ export async function publishService(
   if (!session) {
     return redirectToSignIn();
   }
-  const response = await publish(
-    catalogId,
-    serviceId,
-    `${session?.accessToken}`,
-  );
+  const response = await publish(catalogId, serviceId, session.accessToken);
   if (response.status !== 200) {
     throw new Error(
       `API responded with status ${response.status} for publishService`,
@@ -178,11 +170,7 @@ export async function unpublishService(
   if (!session) {
     return redirectToSignIn();
   }
-  const response = await unpublish(
-    catalogId,
-    serviceId,
-    `${session?.accessToken}`,
-  );
+  const response = await unpublish(catalogId, serviceId, session.accessToken);
   if (response.status !== 200) {
     throw new Error(
       `API responded with status ${response.status} for unpublishService`,
