@@ -41,12 +41,12 @@ export function TitleWithHelpTextAndTag({
         </HelpMarkdown>
       )}
       {tagTitle && (
-        <Tag color={tagColor} size={tagSize}>
+        <Tag data-color={tagColor} data-size={tagSize}>
           {tagTitle}
         </Tag>
       )}
       {changed && (
-        <Tag size="sm" color="warning">{`${localization.changed}`}</Tag>
+        <Tag data-size="sm" color="warning">{`${localization.changed}`}</Tag>
       )}
     </div>
   );

@@ -2,10 +2,8 @@
 
 import styles from "./import-record-accordion-item.module.css";
 import {
-  AccordionContent,
-  AccordionHeader,
-  AccordionItem,
   Card,
+  Details,
   Heading,
   List,
   Tag,
@@ -55,18 +53,18 @@ const ImportRecordAccordionItem = ({
         </div>
         {errors.length > 0 && (
           <Tag
-            size="sm"
-            color="danger"
+            data-size="sm"
+            data-color="danger"
           >{`${localization.importResult.errors}: ${errors.length}`}</Tag>
         )}
         {warnings.length > 0 && (
           <Tag
-            size="sm"
-            color="warning"
+            data-size="sm"
+            data-color="warning"
           >{`${localization.importResult.warnings}: ${warnings.length}`}</Tag>
         )}
         {errors.length === 0 && warnings.length === 0 && (
-          <Tag size="sm" color="success">
+          <Tag data-size="sm" data-color="success">
             {localization.ok}
           </Tag>
         )}
@@ -75,11 +73,11 @@ const ImportRecordAccordionItem = ({
   };
 
   return (
-    <AccordionItem>
-      <AccordionHeader>
+    <Details>
+      <Details.Summary>
         {renderHeader(conceptExtraction.extractionRecord)}
-      </AccordionHeader>
-      <AccordionContent>
+      </Details.Summary>
+      <Details.Content>
         {errors.length === 0 && enableOpening && (
           <div className={styles.buttonRow}>
             {(isCompleted ||
@@ -97,8 +95,8 @@ const ImportRecordAccordionItem = ({
         <div className={styles.issuesContainer}>
           {errors.length > 0 && (
             <Card key="error-card">
-              <Card.Content>
-                <Heading level={3} size="xs">
+              <Card.Block>
+                <Heading level={3} data-size="xs">
                   <div className={styles.issuesHeader}>
                     <XMarkOctagonIcon className={styles.errorIcon} />
                     <span>{localization.importResult.errors}</span>
@@ -109,13 +107,13 @@ const ImportRecordAccordionItem = ({
                     <List.Item key={`error-${i}`}>{issue.message}</List.Item>
                   ))}
                 </List.Unordered>
-              </Card.Content>
+              </Card.Block>
             </Card>
           )}
           {warnings.length > 0 && (
             <Card key="warning-card">
-              <Card.Content>
-                <Heading level={3} size="xs">
+              <Card.Block>
+                <Heading level={3} data-size="xs">
                   <div className={styles.issuesHeader}>
                     <ExclamationmarkTriangleIcon
                       className={styles.warningIcon}
@@ -128,12 +126,12 @@ const ImportRecordAccordionItem = ({
                     <List.Item key={`warning-${i}`}>{issue.message}</List.Item>
                   ))}
                 </List.Unordered>
-              </Card.Content>
+              </Card.Block>
             </Card>
           )}
         </div>
-      </AccordionContent>
-    </AccordionItem>
+      </Details.Content>
+    </Details>
   );
 };
 

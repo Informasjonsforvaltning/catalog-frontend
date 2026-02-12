@@ -27,22 +27,11 @@ export const ChangeRequestStatusTag = forwardRef<
   ChangeRequestStatusTagProps
 >(
   (
-    {
-      children,
-      statusKey,
-      statusLabel,
-      size = "medium",
-      ...rest
-    }: ChangeRequestStatusTagProps,
+    { children, statusKey, statusLabel, ...rest }: ChangeRequestStatusTagProps,
     ref,
   ) => {
     return (
-      <DSTag
-        ref={ref}
-        color={getColorFromStatusKey(statusKey)}
-        size={size}
-        {...rest}
-      >
+      <DSTag ref={ref} data-color={getColorFromStatusKey(statusKey)} {...rest}>
         {statusLabel}
       </DSTag>
     );

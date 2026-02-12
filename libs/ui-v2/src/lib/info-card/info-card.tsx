@@ -25,7 +25,7 @@ export interface InfoCardProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export const InfoCard = forwardRef<HTMLDivElement, InfoCardProps>(
-  ({ size = "large", className, ...rest }, ref) => (
+  ({ size = "lg", className, ...rest }, ref) => (
     <div
       {...rest}
       className={cn(classes.infoCard, classes[size], className)}

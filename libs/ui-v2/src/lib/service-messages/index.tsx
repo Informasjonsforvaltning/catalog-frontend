@@ -49,8 +49,8 @@ export const ServiceMessages = ({ serviceMessages }: ServiceMessagesProps) => {
         }
 
         return (
-          <Alert severity={getSeverity(message_type)} key={documentId}>
-            <Heading level={2} size="xs" spacing>
+          <Alert data-color={getSeverity(message_type)} key={documentId}>
+            <Heading level={2} data-size="xs">
               {title}
             </Heading>
             <Paragraph>

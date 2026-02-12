@@ -18,7 +18,7 @@ export const ReferenceDataTags = ({ values, data }: Props) => {
     const label = dataMap.get(uri);
     const displayText = capitalizeFirstLetter(getTranslateText(label) || uri);
     return (
-      <Tag size="sm" color="info" key={uri}>
+      <Tag data-size="sm" data-color="info" key={uri}>
         {displayText}
       </Tag>
     );

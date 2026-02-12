@@ -30,22 +30,11 @@ export const ConceptStatusTag = forwardRef<
   ConceptStatusTagProps
 >(
   (
-    {
-      children,
-      statusKey,
-      statusLabel,
-      size = "medium",
-      ...rest
-    }: ConceptStatusTagProps,
+    { children, statusKey, statusLabel, ...rest }: ConceptStatusTagProps,
     ref,
   ) => {
     return (
-      <DSTag
-        ref={ref}
-        color={getColorFromStatusKey(statusKey)}
-        size={size}
-        {...rest}
-      >
+      <DSTag ref={ref} data-color={getColorFromStatusKey(statusKey)} {...rest}>
         {statusLabel}
       </DSTag>
     );

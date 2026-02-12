@@ -8,7 +8,7 @@ import {
 } from "@catalog-frontend/types";
 import styles from "./import-result-details.module.css";
 import {
-  Accordion,
+  Details,
   Heading,
   Spinner,
   Table,
@@ -234,7 +234,7 @@ const ImportResultDetails = ({
             checkIfSavingExternalIdMatches(
               conceptExtraction,
               savingExternalId,
-            ) && <Spinner title={localization.loading} size="small" />}
+            ) && <Spinner aria-label={localization.loading} data-size="sm" />}
         </>
       </Button>
     );
@@ -264,7 +264,7 @@ const ImportResultDetails = ({
             cancelMutation?.isPending ||
             deleteImportMutation?.isPending) && (
             <div className={styles.spinnerOverlay}>
-              <Spinner title={localization.loading} size="large" />
+              <Spinner aria-label={localization.loading} data-size="lg" />
             </div>
           )}
           <div className={styles.title}>
@@ -272,8 +272,10 @@ const ImportResultDetails = ({
           </div>
           <div className={styles.titleTags}>
             <Tag
-              size="sm"
-              color={getColorFromStatusKey(importResult.status as StatusKey)}
+              data-size="sm"
+              data-color={getColorFromStatusKey(
+                importResult.status as StatusKey,
+              )}
             >
               <div className={styles.titleTags}>
                 {getImportStatusDisplay(importResult.status)}
@@ -313,7 +315,7 @@ const ImportResultDetails = ({
         <div className={styles.buttonContainer}>
           <Button
             variant="tertiary"
-            size="sm"
+            data-size="sm"
             color="danger"
             disabled={
               isDeleting ||
@@ -336,8 +338,8 @@ const ImportResultDetails = ({
           {showCancellationButton && (
             <Button
               variant="secondary"
-              size="small"
-              color="first"
+              data-size="sm"
+              data-color="first"
               disabled={
                 saveConceptMutation?.isPending ||
                 importResult?.status === ImportResultStatus.CANCELLED ||
@@ -358,7 +360,7 @@ const ImportResultDetails = ({
       {(!importResult.conceptExtractions ||
         importResult.conceptExtractions?.length === 0) && (
         <CenterContainer>
-          <Heading level={2} size="lg">
+          <Heading level={2} data-size="lg">
             {getMessage()}
           </Heading>
         </CenterContainer>
@@ -380,7 +382,7 @@ const ImportResultDetails = ({
                     key={conceptExtraction?.extractionRecord?.internalId}
                   >
                     <Table.Cell style={{ width: "70%" }}>
-                      <Accordion>
+                      <Details>
                         <ImportRecordAccordionItem
                           key={`result-${conceptExtraction?.extractionRecord?.internalId}`}
                           targetBaseHref={targetBaseHref}
@@ -395,12 +397,12 @@ const ImportResultDetails = ({
                             importResult.status === ImportResultStatus.COMPLETED
                           }
                         />
-                      </Accordion>
+                      </Details>
                     </Table.Cell>
 
                     <Table.Cell style={{ width: "10%" }}>
                       <Tag
-                        size="sm"
+                        data-size="sm"
                         color={getColorFromStatusKey(
                           conceptExtraction.conceptExtractionStatus as StatusKey,
                         )}
