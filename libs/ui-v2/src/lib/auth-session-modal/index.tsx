@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Button, Modal, Paragraph } from "@digdir/designsystemet-react";
+import { Button, Dialog, Paragraph } from "@digdir/designsystemet-react";
 import {
   LocalDataStorage,
   localization,
@@ -59,25 +59,23 @@ export const AuthSessionModal = ({
   }, []);
 
   return (
-    <Modal ref={modalRef}>
-      <Modal.Header closeButton={false}>
-        {localization.auth.sessionExpiredTitle}
-      </Modal.Header>
-      <Modal.Content>
-        <Paragraph size="sm">
+    <Dialog ref={modalRef}>
+      <Dialog.Block>{localization.auth.sessionExpiredTitle}</Dialog.Block>
+      <Dialog.Block>
+        <Paragraph data-size="sm">
           {hasStorageData
             ? localization.auth.sessionExpiredWithStorage
             : localization.auth.sessionExpired}
         </Paragraph>
-      </Modal.Content>
-      <Modal.Footer>
-        <Button size="sm" onClick={handleLoginClick}>
+      </Dialog.Block>
+      <Dialog.Block>
+        <Button data-size="sm" onClick={handleLoginClick}>
           {localization.auth.login}
         </Button>
-        <Button size="sm" variant="secondary" onClick={handleCancelClick}>
+        <Button data-size="sm" variant="secondary" onClick={handleCancelClick}>
           {localization.button.cancel}
         </Button>
-      </Modal.Footer>
-    </Modal>
+      </Dialog.Block>
+    </Dialog>
   );
 };

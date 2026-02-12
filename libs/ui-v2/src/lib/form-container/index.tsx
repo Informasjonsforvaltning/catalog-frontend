@@ -1,4 +1,4 @@
-import React, { FC, PropsWithChildren, ReactElement } from "react";
+import React, { FC, PropsWithChildren } from "react";
 import styles from "./form-container.module.css";
 import cn from "classnames";
 import { Heading, Paragraph } from "@digdir/designsystemet-react";

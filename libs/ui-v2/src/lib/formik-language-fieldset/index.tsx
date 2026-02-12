@@ -4,10 +4,9 @@ import { ReactNode, Ref, useEffect, useRef, useState } from "react";
 import { getTranslateText, localization } from "@catalog-frontend/utils";
 import {
   Fieldset,
-  Box,
   Paragraph,
   Textfield,
-  ErrorMessage,
+  ValidationMessage,
 } from "@digdir/designsystemet-react";
 import { useFormikContext } from "formik";
 
@@ -106,10 +105,10 @@ export const FormikLanguageFieldset = ({
     }
 
     if (get(errors, name)) {
-      return get(errors, name);
+      return getTranslateText(get(errors, name));
     }
 
-    return null;
+    return "";
   };
 
   useEffect(() => {
@@ -122,12 +121,8 @@ export const FormikLanguageFieldset = ({
   }, [focus]);
 
   return (
-    <Fieldset
-      className={styles.fieldset}
-      legend={legend}
-      readOnly={readOnly}
-      size="sm"
-    >
+    <Fieldset className={styles.fieldset} data-size="sm">
+      <Fieldset.Legend className={styles.legend}>{legend}</Fieldset.Legend>
       {visibleLanguageFields.map((lang) => (
         <div key={lang}>
           {multiple ? (
@@ -142,14 +137,13 @@ export const FormikLanguageFieldset = ({
               }
               name={`${name}.${lang}`}
               prefix={localization.language[lang]}
-              aria-label={localization.language[lang]}
               showDeleteButton
               onDeleteButtonClicked={() => handleRemoveLanguage(lang)}
               readOnly={readOnly}
               error={hasError(lang)}
             />
           ) : (
-            <Box key={lang} className={styles.languageField}>
+            <div key={lang} className={styles.languageField}>
               <FastFieldWithRef
                 as={renderAs}
                 ref={languageRefs.current[lang]}
@@ -162,15 +156,15 @@ export const FormikLanguageFieldset = ({
                       cols: 110,
                       prefix: (
                         <>
-                          <Paragraph size="sm" variant="short">
+                          <Paragraph data-size="sm" variant="short">
                             {localization.language[lang]}
                           </Paragraph>
                           {!requiredLanguages?.includes(lang) && !readOnly && (
-                            <Box>
+                            <div>
                               <DeleteButton
                                 onClick={() => handleRemoveLanguage(lang)}
                               />
-                            </Box>
+                            </div>
                           )}
                         </>
                       ),
@@ -184,7 +178,7 @@ export const FormikLanguageFieldset = ({
                 !readOnly && (
                   <DeleteButton onClick={() => handleRemoveLanguage(lang)} />
                 )}
-            </Box>
+            </div>
           )}
         </div>
       ))}
@@ -200,9 +194,7 @@ export const FormikLanguageFieldset = ({
       )}
 
       {showError && getError() && (
-        <ErrorMessage size="sm" error>
-          {getError()}
-        </ErrorMessage>
+        <ValidationMessage data-size="sm">{getError()}</ValidationMessage>
       )}
     </Fieldset>
   );

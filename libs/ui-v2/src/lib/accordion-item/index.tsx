@@ -1,6 +1,6 @@
 "use client";
 
-import { Accordion } from "@digdir/designsystemet-react";
+import { Details } from "@digdir/designsystemet-react";
 import { ReactNode, useState } from "react";
 
 export type AccordionItemProps = {
@@ -17,12 +17,10 @@ const AccordionItem = ({
   const [isOpen, setIsOpen] = useState(initiallyOpen);
 
   return (
-    <Accordion.Item open={isOpen}>
-      <Accordion.Header onHeaderClick={() => setIsOpen(!isOpen)}>
-        {header}
-      </Accordion.Header>
-      <Accordion.Content>{content}</Accordion.Content>
-    </Accordion.Item>
+    <Details open={isOpen} onToggle={() => setIsOpen(isOpen)}>
+      <Details.Summary>{header}</Details.Summary>
+      <Details.Content>{content}</Details.Content>
+    </Details>
   );
 };
 

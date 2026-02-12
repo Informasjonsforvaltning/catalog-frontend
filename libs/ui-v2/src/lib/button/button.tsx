@@ -13,7 +13,7 @@ export interface ButtonProps extends DsButtonProps {
 }
 
 export const Button = ({ children, ...props }: ButtonProps) => (
-  <DigdirButton {...props} className={cn.button} size={props.size ?? "small"}>
+  <DigdirButton className={cn.button} {...props}>
     {children}
   </DigdirButton>
 );

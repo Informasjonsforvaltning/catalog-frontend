@@ -7,7 +7,7 @@ const EditButton = ({
   children = localization.button.edit,
   ...props
 }: ButtonProps) => (
-  <Button variant="tertiary" size="sm" {...props}>
+  <Button variant="tertiary" data-size="sm" {...props}>
     <span className={styles.withIcon}>
       <PencilWritingIcon fontSize="1.3rem" />
       {children}

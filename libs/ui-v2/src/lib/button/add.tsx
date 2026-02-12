@@ -5,7 +5,7 @@ import styles from "./button.module.css";
 
 const AddButton = ({ children = localization.add, ...props }: ButtonProps) => (
   <div>
-    <Button variant="tertiary" className={styles.add} size="sm" {...props}>
+    <Button variant="tertiary" className={styles.add} data-size="sm" {...props}>
       <span className={styles.withIcon}>
         <PlusCircleIcon fontSize="1.2rem" />
         {children}
