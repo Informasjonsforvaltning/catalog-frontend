@@ -1,0 +1,46 @@
+.snackbar {
+  position: fixed;
+  bottom: 65px;
+  margin: var(--fds-spacing-2);
+}
+
+.snackbarItem {
+  position: relative;
+  min-width: 200px;
+  max-width: 400px;
+  display: flex;
+  align-items: center;
+
+  & > span > div {
+    flex-grow: 1;
+  }
+
+  :global(.fds-alert__content) {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    flex-grow: 1;
+    gap: var(--fds-spacing-4);
+  }
+
+  :global(.fds-btn) {
+    &:hover {
+      background: rgba(0, 0, 0, 0.125);
+    }
+  }
+}
+
+.fadeIn {
+  animation: fadeInFromBottom 0.5s ease-out;
+
+  @keyframes fadeInFromBottom {
+    from {
+      opacity: 0;
+      transform: translateY(50%);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}

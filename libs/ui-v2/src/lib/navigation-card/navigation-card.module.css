@@ -1,0 +1,33 @@
+.card {
+  max-width: 30rem;
+  min-width: 26.3rem;
+  min-height: 13.6rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1.5rem;
+}
+
+.cardBase {
+  height: 100%;
+}
+
+.body {
+  padding-top: 1rem;
+  text-align: center;
+}
+
+.icon {
+  padding-bottom: 1rem;
+}
+
+.heading {
+  text-align: center;
+  padding-bottom: 0.3rem;
+}
+
+.subtitle {
+  font-weight: 500;
+  text-decoration: none;
+}

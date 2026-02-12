@@ -1951,6 +1951,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@catalog-frontend/ui-v2@workspace:libs/ui-v2":
+  version: 0.0.0-use.local
+  resolution: "@catalog-frontend/ui-v2@workspace:libs/ui-v2"
+  dependencies:
+    "@digdir/designsystemet-css": "npm:0.10.0"
+    "@digdir/designsystemet-react": "npm:0.63.1"
+    "@digdir/designsystemet-theme": "npm:^0.15.3"
+    "@fellesdatakatalog/icons": "npm:^0.8.5"
+    "@navikt/aksel-icons": "npm:^7.35.0"
+  peerDependencies:
+    react: ">=19"
+    react-dom: ">=19"
+  languageName: unknown
+  linkType: soft
+
 "@cspotcode/source-map-support@npm:^0.8.0":
   version: 0.8.1
   resolution: "@cspotcode/source-map-support@npm:0.8.1"

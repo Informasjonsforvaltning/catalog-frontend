@@ -1,0 +1,83 @@
+/* This is a global stylesheet */
+
+@layer reset, fds;
+
+@import url("./reset.css");
+@import url("@digdir/designsystemet-theme");
+@import url("@digdir/designsystemet-css");
+
+html * {
+  font-display: swap;
+  font-size: 16;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
+}
+
+body {
+  font-family: inherit;
+  line-height: inherit;
+  background-color: #fafafa;
+  margin: 0;
+  padding: 0;
+}
+
+.container,
+.formContainer {
+  width: 100%;
+  box-sizing: border-box;
+  padding-right: 0.75rem;
+  padding-left: 0.75rem;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.grow {
+  flex-grow: 1;
+}
+
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1140px;
+  }
+
+  .formContainer {
+    max-width: 864px;
+  }
+}
+
+@media (min-width: 1400px) {
+  .container {
+    max-width: 1320px;
+  }
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.error {
+  font-size: 1.5rem;
+}
+
+.hide-text {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+  white-space: nowrap;
+}
