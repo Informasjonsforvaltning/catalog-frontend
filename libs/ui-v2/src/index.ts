@@ -44,6 +44,7 @@ export * from "./lib/page-banner";
 export * from "./lib/pagination";
 export * from "./lib/react-query-client-provider";
 export * from "./lib/reference-data-tags";
+export * from "./lib/safe-combobox";
 export * from "./lib/search-field";
 export * from "./lib/search-hit";
 export * from "./lib/search-hit-container";
