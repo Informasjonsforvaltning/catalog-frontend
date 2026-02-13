@@ -68,7 +68,7 @@ const DetailsPageLayout = ({
                     handleLanguageChange?.(event.target.value)
                   }
                   value={language}
-                  size="small"
+                  data-size="sm"
                   aria-label="Velg språk"
                 >
                   {languageOptions.map((item) => (

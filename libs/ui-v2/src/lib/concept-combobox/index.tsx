@@ -7,7 +7,7 @@ import {
   useDebounce,
   useSearchConceptsByUri,
   useSearchConceptSuggestions,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import {
   localization,
   getTranslateText,

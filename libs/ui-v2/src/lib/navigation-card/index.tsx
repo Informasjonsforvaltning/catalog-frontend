@@ -13,7 +13,11 @@ interface CardProps {
 
 const NavigationCard = ({ title, body, href, icon, subtitle }: CardProps) => {
   return (
-    <Card color="third" asChild={Boolean(href)} className={styles.cardBase}>
+    <Card
+      data-color="third"
+      asChild={Boolean(href)}
+      className={styles.cardBase}
+    >
       {href ? (
         <Link className={styles.card} href={href}>
           <div className={styles.icon}>{icon}</div>

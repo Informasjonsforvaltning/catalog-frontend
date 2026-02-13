@@ -30,7 +30,7 @@ import {
   ImportResultStatusColors,
   StatusKey,
 } from "../tag/import-result-status/ImportResultStatus";
-import { Button, CenterContainer, HelpMarkdown } from "@catalog-frontend/ui";
+import { Button, CenterContainer, HelpMarkdown } from "@catalog-frontend/ui-v2";
 import { useMutation } from "@tanstack/react-query";
 
 interface Props {
@@ -214,8 +214,8 @@ const ImportResultDetails = ({
     return (
       <Button
         variant="primary"
-        size="sm"
-        color={getButtonColor(conceptExtraction)}
+        data-size="sm"
+        data-color={getButtonColor(conceptExtraction)}
         disabled={
           isDeleting ||
           isCancelling ||
@@ -316,7 +316,7 @@ const ImportResultDetails = ({
           <Button
             variant="tertiary"
             data-size="sm"
-            color="danger"
+            data-color="danger"
             disabled={
               isDeleting ||
               saveConceptMutation?.isPending ||
@@ -403,7 +403,7 @@ const ImportResultDetails = ({
                     <Table.Cell style={{ width: "10%" }}>
                       <Tag
                         data-size="sm"
-                        color={getColorFromStatusKey(
+                        data-color={getColorFromStatusKey(
                           conceptExtraction.conceptExtractionStatus as StatusKey,
                         )}
                       >

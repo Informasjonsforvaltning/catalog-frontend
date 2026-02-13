@@ -4,7 +4,7 @@ import {
   useDebounce,
   useSearchAdministrativeUnits,
   useSearchAdministrativeUnitsByUri,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import { localization, getTranslateText } from "@catalog-frontend/utils";
 import { Combobox } from "@digdir/designsystemet-react";
 import { Dataset, ReferenceDataCode } from "@catalog-frontend/types";
