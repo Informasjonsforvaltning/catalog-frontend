@@ -88,7 +88,7 @@
     "@nx/eslint": "22.4.5",
     "@nx/eslint-plugin": "22.4.5",
     "@nx/jest": "22.4.5",
-    "@nx/js": "22.4.5",
+    "@nx/js": "22.5.1",
     "@nx/next": "22.4.5",
     "@nx/playwright": "22.4.5",
     "@nx/react": "22.4.5",
