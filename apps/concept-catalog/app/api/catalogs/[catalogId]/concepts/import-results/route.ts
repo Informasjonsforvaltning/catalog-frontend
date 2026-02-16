@@ -16,8 +16,6 @@ export const GET = async (
         session.accessToken,
       );
 
-      console.log("Import results", response);
-
       const importResults = await response.json();
       return new Response(JSON.stringify(importResults), { status: 200 });
     } catch (err) {

@@ -13,7 +13,6 @@ export const DELETE = async (req: NextRequest, props) => {
       }
       return new Response(await response.text(), { status: 200 });
     } catch (err) {
-      console.log("Error", err);
       return new Response(
         JSON.stringify({ message: "Failed to delete concept" }),
         { status: 500 },

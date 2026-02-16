@@ -240,7 +240,6 @@ export async function deleteImportResult(
       throw new Error();
     }
     success = true;
-    console.log("Deleted import result", catalogId, resultId);
   } catch (error) {
     throw new Error(localization.alert.deleteFailed);
   } finally {
@@ -270,7 +269,6 @@ export async function saveImportedConcept(
     if (response.status !== 200 && response.status !== 201) {
       throw new Error();
     }
-    console.log("Confirmed import result", catalogId, resultId);
   } catch (error) {
     console.error(error);
   } finally {
@@ -289,21 +287,16 @@ export async function cancelImport(
   }
   let success = false;
   try {
-    console.log("Sending import cancellation", catalogId, resultId);
-
     const response = await cancelConceptImport(
       catalogId,
       resultId,
       session.accessToken,
     );
 
-    console.log("Import cancellation has been sent", catalogId, resultId);
-
     if (response.status !== 200 && response.status !== 201) {
       throw new Error();
     }
     success = true;
-    console.log("Importing result has been cancelled", catalogId, resultId);
   } catch (error) {
     throw new Error(localization.alert.fail);
   } finally {

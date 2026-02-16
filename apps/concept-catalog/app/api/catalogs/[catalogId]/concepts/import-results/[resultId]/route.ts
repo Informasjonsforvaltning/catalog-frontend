@@ -51,7 +51,6 @@ export const GET = async (
       const jsonResponse = await response.json();
       return new Response(JSON.stringify(jsonResponse), { status: 200 });
     } catch (err) {
-      console.log(err);
       return new Response(
         JSON.stringify({ message: "Failed to fetch concepts" }),
         { status: 500 },
