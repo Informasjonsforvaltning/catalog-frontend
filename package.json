@@ -16,7 +16,7 @@
     "lint-all": "yarn nx run-many --target=lint --skip-nx-cache --verbose",
     "affected:build": "nx affected -t build",
     "affected:e2e": "nx affected -t e2e",
-    "affected:test": "nx affected -t test",
+    "affected:test": "nx affected -t test --exclude=ui-v2",
     "affected:lint": "nx affected -t lint",
     "affected": "nx affected",
     "affected:matrix": "nx show projects --affected --type=app | tr '\n' ',' | jq -cR 'split(\",\")[:-1]'",

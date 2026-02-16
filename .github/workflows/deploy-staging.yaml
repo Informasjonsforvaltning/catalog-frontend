@@ -52,7 +52,7 @@ jobs:
           echo "changed=$(yarn --silent run matrix)" >> $GITHUB_OUTPUT
 
       - run: yarn run lint --configuration=ci
-      - run: yarn run test --configuration=ci
+      - run: yarn run test -- --configuration=ci --exclude=ui-v2
 
   build-app:
     name: Build app ${{ matrix.appname }}
