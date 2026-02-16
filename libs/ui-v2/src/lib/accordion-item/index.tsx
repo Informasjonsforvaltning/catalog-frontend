@@ -17,7 +17,7 @@ const AccordionItem = ({
   const [isOpen, setIsOpen] = useState(initiallyOpen);
 
   return (
-    <Details open={isOpen} onToggle={() => setIsOpen(isOpen)}>
+    <Details open={isOpen} onToggle={() => setIsOpen(!isOpen)}>
       <Details.Summary>{header}</Details.Summary>
       <Details.Content>{content}</Details.Content>
     </Details>
