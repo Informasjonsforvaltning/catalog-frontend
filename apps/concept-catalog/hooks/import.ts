@@ -161,7 +161,7 @@ const attemptToParseJsonFile = (text: string): Promise<ConceptImport[]> => {
       const json = JSON.parse(text);
 
       resolve(Array.isArray(json) ? json : []);
-    } catch (error: any) {
+    } catch (error) {
       reject(error);
     }
   });
@@ -182,13 +182,13 @@ const attemptToParseCsvFile = (text: string): Promise<ConceptImport[]> => {
           }
 
           resolve(
-            rows.map((row: any) =>
+            rows.map((row) =>
               mapCsvTextToConcept(columnHeaders as string[], row as string[]),
             ),
           );
         },
       });
-    } catch (error: any) {
+    } catch (error) {
       reject(error);
     }
   });

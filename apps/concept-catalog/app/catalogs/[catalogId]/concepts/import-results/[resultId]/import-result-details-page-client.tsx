@@ -58,7 +58,6 @@ const ImportResultDetailsPageClient = ({ catalogId, importResult }: Props) => {
 
   const cancelMutation = useMutation({
     mutationFn: async () => {
-      console.log("Is cancelling", isCancelling);
       await cancelImport(catalogId, importResult.id);
     },
     onMutate: async () => {
@@ -66,12 +65,10 @@ const ImportResultDetailsPageClient = ({ catalogId, importResult }: Props) => {
     },
     onSuccess: async () => {
       const refetched = await refetch();
-      console.log("Refetched Import status data", refetched.data.status);
       if (
         isCancelling &&
         refetched?.data.status !== ImportResultStatus.CANCELLED
       ) {
-        console.log("should send cancel request again");
         await cancelMutation.mutateAsync();
       } else {
         qc.setQueryData(

@@ -49,10 +49,6 @@ export const POST = async (
     try {
       const response = await createConcept(concept, session.accessToken);
       if (response.status !== 201) {
-        console.log(
-          "Failed to create concept with status " + response.status,
-          await response.json(),
-        );
         throw new Error(
           "Failed to create concept with status " + response.status,
         );
@@ -60,7 +56,6 @@ export const POST = async (
       const conceptId = response.headers.get("location")?.split("/").pop();
       return new Response(JSON.stringify(conceptId), { status: 200 });
     } catch (err) {
-      console.log(err);
       return new Response(
         JSON.stringify({ message: "Failed to create concept" }),
         { status: 500 },
