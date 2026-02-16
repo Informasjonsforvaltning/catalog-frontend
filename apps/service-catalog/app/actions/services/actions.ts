@@ -28,7 +28,9 @@ export async function getServices(catalogId: string): Promise<Service[]> {
 
   const response = await getAll(catalogId, session.accessToken);
   if (response.status !== 200) {
-    throw new Error("getServices failed with response code " + response.status);
+    throw new Error(
+      `API responded with status ${response.status} for getAllServices`,
+    );
   }
   const jsonResponse = await response.json();
   return jsonResponse;
@@ -46,7 +48,7 @@ export async function getServiceById(
 
   if (response.status !== 200) {
     throw new Error(
-      "getServiceById failed with response code " + response.status,
+      `API responded with status ${response.status} for getServiceById`,
     );
   }
 
@@ -63,24 +65,16 @@ export async function createService(
   if (!session) {
     return redirectToSignIn();
   }
-  let success = false;
-  let serviceId = undefined;
-  try {
-    const response = await create(newService, catalogId, session.accessToken);
-    if (response.status !== 201) {
-      throw new Error();
-    }
-    serviceId = response.headers.get("location")?.split("/").pop();
-    success = true;
-    return serviceId;
-  } catch (error) {
-    throw new Error(localization.alert.fail);
-  } finally {
-    if (success) {
-      updateTag("service");
-      updateTag("services");
-    }
+  const response = await create(newService, catalogId, session.accessToken);
+  if (response.status !== 201) {
+    throw new Error(
+      `API responded with status ${response.status} for createService`,
+    );
   }
+  updateTag("service");
+  updateTag("services");
+  const serviceId = response?.headers?.get("location")?.split("/").pop();
+  return serviceId;
 }
 
 export async function deleteService(
@@ -91,25 +85,18 @@ export async function deleteService(
   if (!session) {
     return redirectToSignIn();
   }
-  let success = false;
-  try {
-    const response = await removeService(
-      catalogId,
-      serviceId,
-      session.accessToken,
+  const response = await removeService(
+    catalogId,
+    serviceId,
+    session.accessToken,
+  );
+  if (response.status !== 204) {
+    throw new Error(
+      `API responded with status ${response.status} for deleteService`,
     );
-    if (response.status !== 204) {
-      throw new Error();
-    }
-    success = true;
-  } catch (error) {
-    throw new Error(localization.alert.deleteFailed);
-  } finally {
-    if (success) {
-      updateTag("services");
-      redirect(`/catalogs/${catalogId}/services`);
-    }
   }
+  updateTag("services");
+  redirect(`/catalogs/${catalogId}/services`);
 }
 
 export async function updateService(
@@ -137,31 +124,24 @@ export async function updateService(
     return;
   }
 
-  let success = false;
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
   }
 
-  try {
-    const response = await update(
-      catalogId,
-      oldService.id,
-      diff,
-      session.accessToken,
+  const response = await update(
+    catalogId,
+    oldService.id,
+    diff,
+    session.accessToken,
+  );
+  if (response.status !== 200) {
+    throw new Error(
+      `API responded with status ${response.status} for updateService`,
     );
-    if (response.status !== 200) {
-      throw new Error(`${response.statusText}`);
-    }
-    success = true;
-  } catch (error) {
-    throw new Error(localization.alert.fail);
-  } finally {
-    if (success) {
-      updateTag("service");
-      updateTag("services");
-    }
   }
+  updateTag("service");
+  updateTag("services");
 }
 
 export async function publishService(
@@ -172,21 +152,14 @@ export async function publishService(
   if (!session) {
     return redirectToSignIn();
   }
-  let success = false;
-  try {
-    const response = await publish(catalogId, serviceId, session.accessToken);
-    if (response.status !== 200) {
-      throw new Error();
-    }
-    success = true;
-  } catch (error) {
-    throw new Error(localization.alert.fail);
-  } finally {
-    if (success) {
-      updateTag("service");
-      updateTag("services");
-    }
+  const response = await publish(catalogId, serviceId, session.accessToken);
+  if (response.status !== 200) {
+    throw new Error(
+      `API responded with status ${response.status} for publishService`,
+    );
   }
+  updateTag("service");
+  updateTag("services");
 }
 
 export async function unpublishService(
@@ -197,19 +170,12 @@ export async function unpublishService(
   if (!session) {
     return redirectToSignIn();
   }
-  let success = false;
-  try {
-    const response = await unpublish(catalogId, serviceId, session.accessToken);
-    if (response.status !== 200) {
-      throw new Error();
-    }
-    success = true;
-  } catch (error) {
-    throw new Error(localization.alert.fail);
-  } finally {
-    if (success) {
-      updateTag("service");
-      updateTag("services");
-    }
+  const response = await unpublish(catalogId, serviceId, session.accessToken);
+  if (response.status !== 200) {
+    throw new Error(
+      `API responded with status ${response.status} for unpublishService`,
+    );
   }
+  updateTag("service");
+  updateTag("services");
 }
