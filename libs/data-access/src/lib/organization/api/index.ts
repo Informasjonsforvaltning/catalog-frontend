@@ -33,6 +33,13 @@ export const getOrganizations = async (
     cache: "no-cache" as RequestCache,
   };
   const response = await fetch(resource, options);
+
+  if (!response.ok) {
+    throw new Error(
+      `Failed to fetch organizations: ${response.status} ${response.statusText}`,
+    );
+  }
+
   return response.json();
 };
 
@@ -56,5 +63,12 @@ export const getOrganization = async (
     cache: "no-cache" as RequestCache,
   };
   const response = await fetch(resource, options);
+
+  if (!response.ok) {
+    throw new Error(
+      `Failed to fetch organization: ${response.status} ${response.statusText}`,
+    );
+  }
+
   return response.json();
 };
