@@ -1,31 +1,31 @@
 .textareaWithPrefix {
   display: flex;
   flex-direction: column;
-  gap: var(--fds-spacing-2);
+  gap: var(--ds-size-2);
 
   & label {
     display: inline-block;
     margin: 0;
     padding: 0;
-    color: var(--fds-semantic-text-neutral-default);
-    font: var(--fds-typography-label-small);
+    color: var(--ds-color-neutral-text-default);
+    font-size: var(--ds-font-size-2);
     font-family: inherit;
     font-weight: 500;
   }
 
   & .prefix {
-    border: 1px solid var(--fds-semantic-border-neutral-default);
-    border-top-left-radius: var(--fds-border_radius-medium);
-    border-top-right-radius: var(--fds-border_radius-medium);
+    border: 1px solid var(--ds-color-neutral-border-default);
+    border-top-left-radius: var(--ds-border-radius-md);
+    border-top-right-radius: var(--ds-border-radius-md);
     padding: 0;
-    background: var(--fds-semantic-surface-neutral-subtle);
-    color: var(--fds-semantic-border-neutral-default);
+    background: var(--ds-color-neutral-surface-tinted);
+    color: var(--ds-color-neutral-border-default);
     display: flex;
     justify-content: space-between;
 
     & > p {
-      padding: 0.65rem var(--fds-spacing-4);
-      color: var(--fds-semantic-border-neutral-default);
+      padding: 0.65rem var(--ds-size-4);
+      color: var(--ds-color-neutral-border-default);
     }
 
     & > * {
