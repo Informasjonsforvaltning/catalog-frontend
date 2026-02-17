@@ -18,7 +18,7 @@ import {
   useSearchFileTypes,
   useSearchMediaTypes,
   useSearchDataServiceSuggestions,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import {
   getTranslateText,
   localization,
@@ -1019,13 +1019,13 @@ export const DistributionModal = ({
                             {localization.none}
                           </Combobox.Option>
                           {openLicenses?.map((license, i) => (
-                              <Combobox.Option
-                                key={`license-${license.uri}-${i}`}
-                                value={license.uri}
-                              >
-                                {getTranslateText(license.label)}
-                              </Combobox.Option>
-                            ))}
+                            <Combobox.Option
+                              key={`license-${license.uri}-${i}`}
+                              value={license.uri}
+                            >
+                              {getTranslateText(license.label)}
+                            </Combobox.Option>
+                          ))}
                         </Combobox>
                       </Fieldset>
                       <FieldsetDivider />

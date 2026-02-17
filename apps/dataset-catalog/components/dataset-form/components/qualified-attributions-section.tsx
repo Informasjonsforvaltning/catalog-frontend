@@ -1,5 +1,5 @@
 import { Dataset } from "@catalog-frontend/types";
-import { TitleWithHelpTextAndTag, useDebounce } from "@catalog-frontend/ui";
+import { TitleWithHelpTextAndTag, useDebounce } from "@catalog-frontend/ui-v2";
 import {
   containsNonNumberRegex,
   localization,

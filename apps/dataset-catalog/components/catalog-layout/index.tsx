@@ -1,7 +1,7 @@
 "use client";
 
 import React, { ReactNode } from "react";
-import { Layout } from "@catalog-frontend/ui";
+import { Layout } from "@catalog-frontend/ui-v2";
 import { localization } from "@catalog-frontend/utils";
 import { useParams } from "next/navigation";
 import { useGetCatalogDesign } from "../../hooks/catalog-admin";

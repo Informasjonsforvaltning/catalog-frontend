@@ -3,7 +3,7 @@ import {
   FieldsetDivider,
   SpatialCombobox,
   TitleWithHelpTextAndTag,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import { getTranslateText, localization } from "@catalog-frontend/utils";
 import { Checkbox, Fieldset } from "@digdir/designsystemet-react";
 import { useFormikContext } from "formik";

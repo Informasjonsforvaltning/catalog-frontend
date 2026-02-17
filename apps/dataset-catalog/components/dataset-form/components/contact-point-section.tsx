@@ -3,7 +3,7 @@ import {
   FormikLanguageFieldset,
   FormikOptionalFieldsFieldset,
   TitleWithHelpTextAndTag,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import { Textfield } from "@digdir/designsystemet-react";
 
 export const ContactPointSection = () => {

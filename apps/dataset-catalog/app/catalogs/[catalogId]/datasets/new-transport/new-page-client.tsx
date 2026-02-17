@@ -5,7 +5,7 @@ import {
   DatasetToBeCreated,
   ReferenceData,
 } from "@catalog-frontend/types";
-import { Button, ButtonBar, ConfirmModal } from "@catalog-frontend/ui";
+import { Button, ButtonBar, ConfirmModal } from "@catalog-frontend/ui-v2";
 import { LocalDataStorage, localization } from "@catalog-frontend/utils";
 import { createDataset } from "@dataset-catalog/app/actions/actions";
 import DatasetForm from "@dataset-catalog/components/dataset-form/index";

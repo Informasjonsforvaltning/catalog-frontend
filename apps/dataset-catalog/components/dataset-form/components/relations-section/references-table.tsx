@@ -27,7 +27,7 @@ import {
   TitleWithHelpTextAndTag,
   useSearchDatasetsByUri,
   useSearchDatasetSuggestions,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import { useState, useRef, useEffect } from "react";
 import { referenceSchema } from "../../utils/validation-schema";
 import { compact, get, isEmpty } from "lodash";

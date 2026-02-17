@@ -5,7 +5,7 @@ import {
   DeleteButton,
   DetailsPageLayout,
   LinkButton,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import { getTranslateText, localization } from "@catalog-frontend/utils";
 import { useState } from "react";
 import styles from "./dataset-details-page.module.css";
@@ -15,7 +15,7 @@ import { deleteDataset } from "../../../../actions/actions";
 import StatusTag from "../../../../../components/status-tag/index";
 import { useRouter } from "next/navigation";
 import { Alert } from "@digdir/designsystemet-react";
-import { ConfirmModal, MarkdownComponent } from "@catalog-frontend/ui";
+import { ConfirmModal, MarkdownComponent } from "@catalog-frontend/ui-v2";
 
 interface datasetDetailsPageProps {
   dataset: Dataset;

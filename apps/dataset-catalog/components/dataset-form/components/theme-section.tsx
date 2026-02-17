@@ -5,7 +5,7 @@ import {
   Option,
   MobilityTheme,
 } from "@catalog-frontend/types";
-import { TitleWithHelpTextAndTag } from "@catalog-frontend/ui";
+import { TitleWithHelpTextAndTag } from "@catalog-frontend/ui-v2";
 import { Combobox } from "@digdir/designsystemet-react";
 import { getTranslateText, localization } from "@catalog-frontend/utils";
 import { FastField, useFormikContext } from "formik";

@@ -29,7 +29,7 @@ import {
   DeleteButton,
   FieldsetDivider,
   TitleWithHelpTextAndTag,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import {
   getTranslateText,
   localization,

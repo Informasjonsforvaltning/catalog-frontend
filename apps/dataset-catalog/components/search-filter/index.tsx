@@ -6,7 +6,7 @@ import {
   AccordionItem,
   AccordionItemProps,
   CheckboxGroupFilter,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import {
   ApplicationProfile,
   DatasetsPageSettings,

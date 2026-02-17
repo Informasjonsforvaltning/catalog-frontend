@@ -5,7 +5,7 @@ import {
   useDebounce,
   useSearchInformationModelsByUri,
   useSearchInformationModelsSuggestions,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import {
   capitalizeFirstLetter,
   getTranslateText,

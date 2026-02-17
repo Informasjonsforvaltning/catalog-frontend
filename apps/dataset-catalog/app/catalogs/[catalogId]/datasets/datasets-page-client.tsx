@@ -16,7 +16,7 @@ import {
   SearchHitContainer,
   SearchHitsLayout,
   Select,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import { Button, Chip, Tag } from "@digdir/designsystemet-react";
 import {
   dateStringToDate,

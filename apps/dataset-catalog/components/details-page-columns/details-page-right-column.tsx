@@ -1,4 +1,4 @@
-import { InfoCard } from "@catalog-frontend/ui";
+import { InfoCard } from "@catalog-frontend/ui-v2";
 import {
   formatISO,
   getTranslateText,

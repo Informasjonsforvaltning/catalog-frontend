@@ -7,7 +7,7 @@ import {
   TextareaWithPrefix,
   FastFieldWithRef,
   FieldsetDivider,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import {
   capitalizeFirstLetter,
   getTranslateText,
@@ -58,9 +58,7 @@ const FIELD_CONFIG = [
             props.setFieldValue("type", value.toString())
           }
         >
-          <Combobox.Option
-            value=""
-          >{`${localization.choose}...`}</Combobox.Option>
+          <Combobox.Option value="">{`${localization.choose}...`}</Combobox.Option>
           {props.datasetTypeOptions}
         </FastFieldWithRef>
       </Fieldset>

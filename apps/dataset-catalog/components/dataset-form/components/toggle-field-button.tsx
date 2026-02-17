@@ -1,5 +1,5 @@
 import { Dataset } from "@catalog-frontend/types";
-import { AddButton, FieldsetDivider } from "@catalog-frontend/ui";
+import { AddButton, FieldsetDivider } from "@catalog-frontend/ui-v2";
 import { localization } from "@catalog-frontend/utils";
 import { useFormikContext } from "formik";
 import { PropsWithChildren } from "react";
