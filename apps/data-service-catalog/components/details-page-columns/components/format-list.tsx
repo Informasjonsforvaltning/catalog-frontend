@@ -1,7 +1,7 @@
 import { Tag } from "@digdir/designsystemet-react";
 import { getTranslateText } from "@catalog-frontend/utils";
 import styles from "../details-columns.module.css";
-import { useSearchFileTypeByUri } from "@catalog-frontend/ui";
+import { useSearchFileTypeByUri } from "@catalog-frontend/ui-v2";
 
 type Props = {
   formatURIs: string[] | undefined;
@@ -25,7 +25,7 @@ export const FormatList = ({
     <li className={styles.list}>
       {formatURIs?.map((uri, index) => {
         return (
-          <Tag size="sm" color="info" key={`format-${index}`}>
+          <Tag color="info" key={`format-${index}`}>
             {getTranslateText(matchFileType(uri)?.label, language) || uri}
           </Tag>
         );

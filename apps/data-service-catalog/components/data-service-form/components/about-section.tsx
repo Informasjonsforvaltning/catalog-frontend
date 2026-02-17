@@ -4,17 +4,17 @@ import {
   TitleWithHelpTextAndTag,
   TextareaWithPrefix,
   FastFieldWithRef,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import { localization } from "@catalog-frontend/utils";
-import { Box, ErrorMessage, Textfield } from "@digdir/designsystemet-react";
+import { Textfield } from "@digdir/designsystemet-react";
 import { DataService } from "@catalog-frontend/types";
-import { FastField, useFormikContext } from "formik";
+import { useFormikContext } from "formik";
 
 export const AboutSection = () => {
   const { errors } = useFormikContext<DataService>();
 
   return (
-    <Box>
+    <div>
       <FormikLanguageFieldset
         name="title"
         as={Textfield}
@@ -73,6 +73,6 @@ export const AboutSection = () => {
         }
         error={errors?.version}
       />
-    </Box>
+    </div>
   );
 };

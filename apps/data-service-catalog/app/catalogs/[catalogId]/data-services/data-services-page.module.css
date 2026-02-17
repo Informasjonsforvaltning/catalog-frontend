@@ -2,7 +2,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--fds-spacing-4);
+  gap: var(--ds-size-4);
 }
 
 .searchHits {
@@ -11,14 +11,14 @@
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--fds-spacing-4);
+  gap: var(--ds-size-4);
 }
 
 .searchFieldWrapper {
   display: flex;
   align-items: center;
   flex-grow: 1;
-  gap: var(--fds-spacing-4);
+  gap: var(--ds-size-4);
 }
 
 .searchField {
@@ -42,5 +42,5 @@
 .buttons {
   display: flex;
   align-items: center;
-  gap: var(--fds-spacing-4);
+  gap: var(--ds-size-4);
 }

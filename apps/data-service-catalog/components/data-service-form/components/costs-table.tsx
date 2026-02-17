@@ -4,55 +4,22 @@ import {
   ISOLanguage,
   ReferenceDataCode,
 } from "@catalog-frontend/types";
+import { getTranslateText, localization } from "@catalog-frontend/utils";
 import {
-  capitalizeFirstLetter,
-  getTranslateText,
-  localization,
-  trimObjectWhitespace,
-} from "@catalog-frontend/utils";
-import {
-  Box,
   Button,
   Card,
-  Combobox,
-  ErrorMessage,
-  Fieldset,
   Link,
   List,
-  Modal,
   Paragraph,
   Tag,
-  Textfield,
 } from "@digdir/designsystemet-react";
-import { FieldArray, Formik, useFormikContext } from "formik";
-import {
-  AddButton,
-  EditButton,
-  FieldsetDivider,
-  FormikLanguageFieldset,
-  TitleWithHelpTextAndTag,
-  TextareaWithPrefix,
-  DeleteButton,
-  FastFieldWithRef,
-} from "@catalog-frontend/ui";
-import React, { useState, useRef, useEffect } from "react";
-import { isEmpty, isNumber } from "lodash";
+import { useFormikContext } from "formik";
+import { TitleWithHelpTextAndTag } from "@catalog-frontend/ui-v2";
 import styles from "../data-service-form.module.css";
-import FieldsetWithDelete from "../../fieldset-with-delete";
 import { TrashIcon } from "@navikt/aksel-icons";
-import { costValidationSchema } from "../utils/validation-schema";
-
-const DEFAULT_CURRENCY =
-  "http://publications.europa.eu/resource/authority/currency/NOK";
+import { CostsModal } from "./costs-modal/costs-modal";
 
 type Props = {
-  currencies?: ReferenceDataCode[];
-};
-
-type ModalProps = {
-  type: "new" | "edit";
-  onSuccess: (values: DataServiceCost) => void;
-  template: DataServiceCost;
   currencies?: ReferenceDataCode[];
 };
 
@@ -92,31 +59,29 @@ export const CostsTable = ({ currencies }: Props) => {
       </TitleWithHelpTextAndTag>
       {values?.costs?.map((item, i) => (
         <Card key={`costs-card-${i}`} color="neutral">
-          <Card.Content className={styles.costContent}>
-            <List.Root size="sm">
-              <List.Unordered
-                style={{
-                  listStyle: "none",
-                  paddingLeft: 0,
-                }}
-              >
-                {item?.value && (
-                  <List.Item>
-                    {item.value} {item.currency?.split("/")?.reverse()[0] ?? ""}
-                  </List.Item>
-                )}
+          <Card.Block className={styles.costContent}>
+            <List.Unordered
+              style={{
+                listStyle: "none",
+                paddingLeft: 0,
+              }}
+            >
+              {item?.value && (
+                <List.Item>
+                  {item.value} {item.currency?.split("/")?.reverse()[0] ?? ""}
+                </List.Item>
+              )}
 
-                {item?.documentation?.map((doc, docIndex) => (
-                  <List.Item key={`costs-${i}-doc-${docIndex}`}>
-                    <Link href={doc} target="_blank">
-                      {doc}
-                    </Link>
-                  </List.Item>
-                ))}
-              </List.Unordered>
-            </List.Root>
+              {item?.documentation?.map((doc, docIndex) => (
+                <List.Item key={`costs-${i}-doc-${docIndex}`}>
+                  <Link href={doc} target="_blank">
+                    {doc}
+                  </Link>
+                </List.Item>
+              ))}
+            </List.Unordered>
             <div>
-              <FieldModal
+              <CostsModal
                 template={item}
                 type="edit"
                 currencies={sortedCurrencies}
@@ -127,7 +92,6 @@ export const CostsTable = ({ currencies }: Props) => {
 
               <Button
                 variant="tertiary"
-                size="sm"
                 color="danger"
                 onClick={handleDeleteCost(i)}
               >
@@ -135,12 +99,10 @@ export const CostsTable = ({ currencies }: Props) => {
                 {localization.button.delete}
               </Button>
             </div>
-          </Card.Content>
-          <Card.Footer className={styles.costFooter}>
-            <Paragraph size="sm">
-              {getTranslateText(item?.description)}
-            </Paragraph>
-            <Box>
+          </Card.Block>
+          <Card.Block className={styles.costFooter}>
+            <Paragraph>{getTranslateText(item?.description)}</Paragraph>
+            <div>
               {allowedLanguages
                 .filter(
                   (lang) =>
@@ -151,17 +113,17 @@ export const CostsTable = ({ currencies }: Props) => {
                     ),
                 )
                 .map((lang) => (
-                  <Tag key={lang} size="sm" color="third">
+                  <Tag key={lang} color="third">
                     {localization.language[lang]}
                   </Tag>
                 ))}
-            </Box>
-          </Card.Footer>
+            </div>
+          </Card.Block>
         </Card>
       ))}
 
       <div>
-        <FieldModal
+        <CostsModal
           template={{ description: {} }}
           type="new"
           currencies={sortedCurrencies}
@@ -176,283 +138,5 @@ export const CostsTable = ({ currencies }: Props) => {
         />
       </div>
     </div>
-  );
-};
-
-const FieldModal = ({ template, type, onSuccess, currencies }: ModalProps) => {
-  const [validateOnChange, setValidateOnChange] = useState(false);
-  const [showValueField, setShowValueField] = useState(false);
-  const [focus, setFocus] = useState<string | null>();
-  const modalRef = useRef<HTMLDialogElement>(null);
-  const valueRef = React.createRef<HTMLInputElement | HTMLTextAreaElement>();
-  const docRef = React.createRef<HTMLInputElement | HTMLTextAreaElement>();
-
-  useEffect(() => {
-    if (focus === "value") {
-      valueRef?.current?.focus();
-      setFocus(null);
-    }
-    if (focus === "documentation") {
-      docRef?.current?.focus();
-      setFocus(null);
-    }
-  }, [focus, valueRef, docRef]);
-
-  const rmCurrencyIfNoValue = (formValues: DataServiceCost) => {
-    if (isNumber(formValues?.value)) {
-      return formValues;
-    }
-
-    return {
-      currency: undefined,
-      value: undefined,
-      documentation: formValues.documentation,
-      description: formValues.description,
-    };
-  };
-
-  return (
-    <>
-      <Modal.Root>
-        <Modal.Trigger asChild>
-          {type === "new" ? (
-            <AddButton>{`${localization.add} ${localization.dataServiceForm.fieldLabel.costs.toLowerCase()}`}</AddButton>
-          ) : (
-            <EditButton />
-          )}
-        </Modal.Trigger>
-        <Modal.Dialog ref={modalRef}>
-          <Formik
-            initialValues={template}
-            validateOnChange={validateOnChange}
-            validateOnBlur={validateOnChange}
-            validationSchema={costValidationSchema}
-            onSubmit={(formValues: DataServiceCost, { setSubmitting }) => {
-              const trimmedValues = trimObjectWhitespace(
-                rmCurrencyIfNoValue(formValues),
-              );
-              onSuccess(trimmedValues);
-              setSubmitting(false);
-              modalRef.current?.close();
-            }}
-          >
-            {({
-              errors,
-              isSubmitting,
-              submitForm,
-              values,
-              dirty,
-              setFieldValue,
-              validateForm,
-            }) => {
-              const showValueError = () => {
-                return validateOnChange && !isEmpty(errors?.value);
-              };
-
-              return (
-                <>
-                  <Modal.Header closeButton={false}>
-                    {type === "edit"
-                      ? `${localization.edit} ${localization.dataServiceForm.fieldLabel.costs.toLowerCase()}`
-                      : `${localization.add} ${localization.dataServiceForm.fieldLabel.costs.toLowerCase()}`}
-                  </Modal.Header>
-
-                  <Modal.Content className={styles.modalContent}>
-                    <Fieldset
-                      legend={
-                        <TitleWithHelpTextAndTag
-                          tagTitle={localization.tag.recommended}
-                          helpText={
-                            localization.dataServiceForm.helptext.costValue
-                          }
-                        >
-                          {localization.dataServiceForm.fieldLabel.costValue}
-                        </TitleWithHelpTextAndTag>
-                      }
-                    >
-                      {showValueField || isNumber(values?.value) ? (
-                        <div className={styles.valueCurrencyFieldset}>
-                          <FastFieldWithRef
-                            name="value"
-                            as={Textfield}
-                            size="sm"
-                            ref={valueRef}
-                            type="number"
-                          />
-                          <Combobox
-                            value={[values?.currency ?? DEFAULT_CURRENCY]}
-                            portal={false}
-                            onValueChange={(selectedValues) =>
-                              setFieldValue(
-                                "currency",
-                                selectedValues.toString(),
-                              )
-                            }
-                            size="sm"
-                            disabled={!isNumber(values?.value)}
-                          >
-                            {currencies &&
-                              currencies.map((currencyRef, i) => (
-                                <Combobox.Option
-                                  key={`currency-${currencyRef.uri}-${i}`}
-                                  value={currencyRef.uri}
-                                >
-                                  {currencyRef.code} (
-                                  {capitalizeFirstLetter(
-                                    getTranslateText(currencyRef.label),
-                                  )}
-                                  )
-                                </Combobox.Option>
-                              ))}
-                          </Combobox>
-                          <DeleteButton
-                            className={styles.deleteButton}
-                            onClick={() => {
-                              setFieldValue("value", undefined);
-                              setFieldValue("currency", undefined);
-                              setShowValueField(false);
-                            }}
-                          />
-                        </div>
-                      ) : (
-                        <AddButton
-                          onClick={() => {
-                            setFieldValue("value", "");
-                            setFieldValue("currency", DEFAULT_CURRENCY);
-                            setFocus("value");
-                            setShowValueField(true);
-                          }}
-                        >
-                          {`${localization.dataServiceForm.fieldLabel.costValue}`}
-                        </AddButton>
-                      )}
-                      {showValueError() && (
-                        <ErrorMessage size="sm" error>
-                          {errors.value}
-                        </ErrorMessage>
-                      )}
-                    </Fieldset>
-
-                    <FieldsetDivider />
-
-                    <Fieldset
-                      size="sm"
-                      legend={
-                        <TitleWithHelpTextAndTag
-                          tagTitle={localization.tag.recommended}
-                          helpText={
-                            localization.dataServiceForm.helptext
-                              .costDocumentation
-                          }
-                        >
-                          {
-                            localization.dataServiceForm.fieldLabel
-                              .costDocumentation
-                          }
-                        </TitleWithHelpTextAndTag>
-                      }
-                    >
-                      <FieldArray name="documentation">
-                        {(arrayHelpers) => (
-                          <>
-                            {arrayHelpers.form.values.documentation &&
-                              arrayHelpers.form.values.documentation.map(
-                                (_, index: number) => (
-                                  <div
-                                    key={`documentation-${index}`}
-                                    className={styles.padding}
-                                  >
-                                    <FieldsetWithDelete
-                                      onDelete={() =>
-                                        arrayHelpers.remove(index)
-                                      }
-                                    >
-                                      <FastFieldWithRef
-                                        name={`documentation[${index}]`}
-                                        as={Textfield}
-                                        size="sm"
-                                        ref={docRef}
-                                        error={errors?.documentation?.[index]}
-                                      />
-                                    </FieldsetWithDelete>
-                                  </div>
-                                ),
-                              )}
-
-                            <AddButton
-                              onClick={() => {
-                                arrayHelpers.push("");
-                                setFocus("documentation");
-                              }}
-                            >
-                              {`${localization.dataServiceForm.fieldLabel.costDocumentation}`}
-                            </AddButton>
-                          </>
-                        )}
-                      </FieldArray>
-                    </Fieldset>
-
-                    <FieldsetDivider />
-
-                    <FormikLanguageFieldset
-                      name="description"
-                      as={TextareaWithPrefix}
-                      legend={
-                        <TitleWithHelpTextAndTag
-                          tagTitle={localization.tag.recommended}
-                          helpText={
-                            localization.dataServiceForm.helptext
-                              .costDescription
-                          }
-                        >
-                          {
-                            localization.dataServiceForm.fieldLabel
-                              .costDescription
-                          }
-                        </TitleWithHelpTextAndTag>
-                      }
-                    />
-                  </Modal.Content>
-
-                  <Modal.Footer>
-                    <Button
-                      type="button"
-                      disabled={isSubmitting || !dirty}
-                      onClick={() => {
-                        validateForm().then((result) => {
-                          if (isEmpty(result)) {
-                            setValidateOnChange(false);
-                            submitForm();
-                          } else {
-                            setValidateOnChange(true);
-                          }
-                        });
-                      }}
-                      size="sm"
-                    >
-                      {type === "new"
-                        ? localization.add
-                        : localization.dataServiceForm.button.update}
-                    </Button>
-                    <Button
-                      variant="secondary"
-                      type="button"
-                      onClick={() => {
-                        setValidateOnChange(false);
-                        modalRef.current?.close();
-                      }}
-                      disabled={isSubmitting}
-                      size="sm"
-                    >
-                      {localization.button.cancel}
-                    </Button>
-                  </Modal.Footer>
-                </>
-              );
-            }}
-          </Formik>
-        </Modal.Dialog>
-      </Modal.Root>
-    </>
   );
 };

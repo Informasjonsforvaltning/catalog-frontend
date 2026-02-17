@@ -3,7 +3,7 @@ import {
   Breadcrumbs,
   CenterContainer,
   PageBanner,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import { localization } from "@catalog-frontend/utils";
 import { Heading } from "@digdir/designsystemet-react";
 
@@ -26,9 +26,7 @@ const NotFound = async () => {
         subtitle={localization.notFound}
       />
       <CenterContainer>
-        <Heading level={2} size="small">
-          {localization.notFoundPage}
-        </Heading>
+        <Heading level={2}>{localization.notFoundPage}</Heading>
       </CenterContainer>
     </>
   );

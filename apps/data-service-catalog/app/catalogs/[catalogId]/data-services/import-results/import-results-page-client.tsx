@@ -8,9 +8,10 @@ import {
   ImportResultsTable,
   SearchHitContainer,
   SearchHitsLayout,
-} from "@catalog-frontend/ui";
+  Select,
+} from "@catalog-frontend/ui-v2";
 import styles from "./import-results-page-client.module.css";
-import { Accordion, Chip, NativeSelect } from "@digdir/designsystemet-react";
+import { Chip, Details } from "@digdir/designsystemet-react";
 import {
   parseAsArrayOf,
   parseAsInteger,
@@ -87,24 +88,7 @@ const ImportResultsPageClient = ({ catalogId, importResults }: Props) => {
     setSortType(event.target.value);
   };
 
-  const FilterChips = () => (
-    <div className={styles.chips}>
-      <Chip.Group size="small" className={styles.wrap}>
-        {filterStatus?.map((filter, index) => (
-          <Chip.Removable
-            key={`status-${index}`}
-            onClick={() =>
-              setFilterStatus(
-                filterStatus?.filter((value) => value !== filter) ?? [],
-              )
-            }
-          >
-            {importStatuses?.find((s) => s.value === filter)?.label}
-          </Chip.Removable>
-        ))}
-      </Chip.Group>
-    </div>
-  );
+  const hasActiveFilters = !isEmpty(filterStatus);
 
   useEffect(() => {
     const filteredImportResults = () => {
@@ -134,26 +118,35 @@ const ImportResultsPageClient = ({ catalogId, importResults }: Props) => {
   return (
     <SearchHitsLayout>
       <SearchHitsLayout.SearchRow>
-        <NativeSelect
-          size="sm"
-          className={styles.select}
-          onChange={handleSortChange}
-        >
+        <Select className={styles.select} onChange={handleSortChange}>
           <option value="">
             {localization.search.sortOptions.NEWEST_FIRST}
           </option>
           <option value="createdAsc">
             {localization.search.sortOptions.LAST_UPDATED_LAST}
           </option>
-        </NativeSelect>
+        </Select>
       </SearchHitsLayout.SearchRow>
       <SearchHitsLayout.LeftColumn>
         <div className={styles.importFilter}>
-          <Accordion border={true} className={styles.accordion}>
-            {filterItems}
-          </Accordion>
+          <Details className={styles.accordion}>{filterItems}</Details>
         </div>
-        <FilterChips />
+        {hasActiveFilters && (
+          <div className={styles.chips}>
+            {filterStatus?.map((filter) => (
+              <Chip.Removable
+                key={`status-${filter}`}
+                onClick={() =>
+                  setFilterStatus(
+                    filterStatus?.filter((value) => value !== filter) ?? [],
+                  )
+                }
+              >
+                {importStatuses?.find((s) => s.value === filter)?.label}
+              </Chip.Removable>
+            ))}
+          </div>
+        )}
       </SearchHitsLayout.LeftColumn>
       <SearchHitsLayout.MainColumn>
         <SearchHitContainer

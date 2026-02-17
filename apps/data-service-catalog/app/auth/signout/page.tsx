@@ -1,6 +1,6 @@
 "use client";
 
-import { CenterContainer, PageBanner, Spinner } from "@catalog-frontend/ui";
+import { CenterContainer, PageBanner, Spinner } from "@catalog-frontend/ui-v2";
 import { localization } from "@catalog-frontend/utils";
 import { Heading } from "@digdir/designsystemet-react";
 import { signOut } from "next-auth/react";

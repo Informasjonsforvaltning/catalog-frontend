@@ -5,7 +5,7 @@ import {
   getTranslateText,
   localization,
 } from "@catalog-frontend/utils";
-import { Box, Combobox, Fieldset } from "@digdir/designsystemet-react";
+import { Combobox, Fieldset } from "@digdir/designsystemet-react";
 import { useFormikContext } from "formik";
 import { useState } from "react";
 import styles from "../data-service-form.module.css";
@@ -14,7 +14,7 @@ import {
   useDebounce,
   useSearchDatasetsByUri,
   useSearchDatasetSuggestions,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 
 interface Props {
   searchEnv: string;
@@ -54,10 +54,10 @@ export const DatasetSection = ({ searchEnv }: Props) => {
   ];
 
   return (
-    <Box>
+    <div>
       {!isLoading && (
-        <Fieldset
-          legend={
+        <Fieldset>
+          <Fieldset.Legend>
             <TitleWithHelpTextAndTag
               helpText={localization.dataServiceForm.helptext.servesDataset}
               tagTitle={localization.tag.recommended}
@@ -65,9 +65,7 @@ export const DatasetSection = ({ searchEnv }: Props) => {
             >
               {localization.dataServiceForm.fieldLabel.servesDataset}
             </TitleWithHelpTextAndTag>
-          }
-          size="sm"
-        >
+          </Fieldset.Legend>
           <Combobox
             size="sm"
             onValueChange={(selectedValues: string[]) =>
@@ -117,6 +115,6 @@ export const DatasetSection = ({ searchEnv }: Props) => {
           </Combobox>
         </Fieldset>
       )}
-    </Box>
+    </div>
   );
 };

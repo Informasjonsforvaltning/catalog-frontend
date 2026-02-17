@@ -4,11 +4,11 @@ import {
   FormikLanguageFieldset,
   FormikOptionalFieldsFieldset,
   TitleWithHelpTextAndTag,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import { localization } from "@catalog-frontend/utils";
 import { useFormikContext } from "formik";
 import { get as lodashGet } from "lodash";
-import { Box, ErrorMessage, Textfield } from "@digdir/designsystemet-react";
+import { ErrorSummary, Textfield } from "@digdir/designsystemet-react";
 import styles from "../data-service-form.module.css";
 
 export const ContactPointSection = () => {
@@ -52,7 +52,7 @@ export const ContactPointSection = () => {
   };
 
   return (
-    <Box>
+    <div>
       <div className={styles.padding}>
         <FormikLanguageFieldset
           name="contactPoint.name"
@@ -79,11 +79,7 @@ export const ContactPointSection = () => {
         }
         availableFields={contactPointOptions}
       />
-      {hasMainLevelError() && (
-        <ErrorMessage size="sm" error>
-          {getErrors()}
-        </ErrorMessage>
-      )}
-    </Box>
+      {hasMainLevelError() && <ErrorSummary>{getErrors()}</ErrorSummary>}
+    </div>
   );
 };

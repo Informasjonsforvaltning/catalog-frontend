@@ -4,7 +4,7 @@ import {
   ISOLanguage,
 } from "@catalog-frontend/types";
 import styles from "./details-columns.module.css";
-import { InfoCard } from "@catalog-frontend/ui";
+import { InfoCard } from "@catalog-frontend/ui-v2";
 import { isEmpty } from "lodash";
 import { localization, getTranslateText } from "@catalog-frontend/utils";
 import { Paragraph, Tag } from "@digdir/designsystemet-react";
@@ -45,7 +45,7 @@ export const LeftColumn = ({
           title={localization.dataServiceForm.fieldLabel.description}
           data-testid="data-service-description"
         >
-          <Paragraph size="sm">
+          <Paragraph>
             {getTranslateText(dataService?.description, language)}
           </Paragraph>
         </InfoCard.Item>
@@ -129,7 +129,7 @@ export const LeftColumn = ({
         >
           <li className={styles.list}>
             {allKeywords.map((keyword, index) => (
-              <Tag size="sm" color="info" key={`keyword-tag-${index}`}>
+              <Tag color="info" key={`keyword-tag-${index}`}>
                 {keyword}
               </Tag>
             ))}

@@ -4,9 +4,9 @@ import {
   FastFieldWithRef,
   FieldsetDivider,
   TitleWithHelpTextAndTag,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import { localization } from "@catalog-frontend/utils";
-import { Box, Fieldset, Textfield } from "@digdir/designsystemet-react";
+import { Fieldset, Textfield } from "@digdir/designsystemet-react";
 import { FieldArray, useFormikContext } from "formik";
 import FieldsetWithDelete from "../../fieldset-with-delete";
 import styles from "../data-service-form.module.css";
@@ -25,7 +25,7 @@ export const DocumentationSection = () => {
   }, [focus, fieldRef]);
 
   return (
-    <Box>
+    <div>
       <FastFieldWithRef
         name="landingPage"
         as={Textfield}
@@ -42,16 +42,14 @@ export const DocumentationSection = () => {
 
       <FieldsetDivider />
 
-      <Fieldset
-        size="sm"
-        legend={
+      <Fieldset>
+        <Fieldset.Legend>
           <TitleWithHelpTextAndTag
             helpText={localization.dataServiceForm.helptext.pages}
           >
             {localization.dataServiceForm.fieldLabel.pages}
           </TitleWithHelpTextAndTag>
-        }
-      >
+        </Fieldset.Legend>
         <FieldArray name="pages">
           {(arrayHelpers) => (
             <>
@@ -84,6 +82,6 @@ export const DocumentationSection = () => {
           )}
         </FieldArray>
       </Fieldset>
-    </Box>
+    </div>
   );
 };

@@ -22,7 +22,7 @@ export const dataServiceToBeCreatedTemplate = (): DataServiceToBeCreated => {
   return {
     title: {},
     description: {},
-    status: "",
+    status: "none",
     endpointUrl: "",
     endpointDescriptions: [],
     accessRights: "none",
@@ -34,7 +34,7 @@ export const dataServiceToBeCreatedTemplate = (): DataServiceToBeCreated => {
     license: "none",
     servesDataset: [],
     contactPoint: {},
-    availability: "",
+    availability: "none",
     costs: [],
   };
 };

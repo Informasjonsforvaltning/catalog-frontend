@@ -23,7 +23,7 @@ import {
   NotificationCarousel,
   SnackbarSeverity,
   StickyFooterBar,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import { Formik, Form, FormikProps } from "formik";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import {
@@ -157,13 +157,11 @@ const DataServiceForm = ({
     });
     return (
       <>
-        <Paragraph size="sm">
-          {localization.alert.youHaveUnsavedChanges}
-        </Paragraph>
-        <Paragraph size="sm">
+        <Paragraph>{localization.alert.youHaveUnsavedChanges}</Paragraph>
+        <Paragraph>
           <span className={styles.bold}>{name}</span> ({lastChangedFormatted})
         </Paragraph>
-        <Paragraph size="sm" className={styles.topMargin2}>
+        <Paragraph className={styles.topMargin2}>
           {localization.alert.wantToRestoreChanges}
         </Paragraph>
       </>
@@ -489,7 +487,6 @@ const DataServiceForm = ({
               <StickyFooterBar>
                 <div className={styles.footerContent}>
                   <Button
-                    size="sm"
                     type="button"
                     disabled={
                       readOnly ||
@@ -505,13 +502,12 @@ const DataServiceForm = ({
                     data-testid="save-data-service-button"
                   >
                     {isSubmitting ? (
-                      <Spinner title={localization.saving} size="sm" />
+                      <Spinner aria-label={localization.saving} />
                     ) : (
                       localization.save
                     )}
                   </Button>
                   <Button
-                    size="sm"
                     disabled={
                       readOnly || isSubmitting || isValidating || isCanceled
                     }
@@ -530,13 +526,13 @@ const DataServiceForm = ({
                     )}
                   >
                     <Checkbox
-                      size="sm"
+                      label={
+                        localization.dataServiceForm.fieldLabel.ignoreRequired
+                      }
                       value="ignoreRequired"
                       checked={ignoreRequired}
                       onChange={(e) => setIgnoreRequired(e.target.checked)}
-                    >
-                      {localization.dataServiceForm.fieldLabel.ignoreRequired}
-                    </Checkbox>
+                    />
                     <HelpMarkdown
                       aria-label={`Help ${localization.dataServiceForm.fieldLabel.ignoreRequired}`}
                     >

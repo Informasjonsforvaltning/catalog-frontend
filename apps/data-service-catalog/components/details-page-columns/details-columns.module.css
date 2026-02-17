@@ -28,5 +28,5 @@
 }
 
 .greyFont {
-  color: var(--fds-colors-grey-600);
+  color: var(--ds-color-neutral-text-subtle);
 }

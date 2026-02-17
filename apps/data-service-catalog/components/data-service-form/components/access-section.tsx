@@ -1,13 +1,13 @@
 import { DataService, ReferenceDataCode } from "@catalog-frontend/types";
-import { FieldsetDivider, TitleWithHelpTextAndTag } from "@catalog-frontend/ui";
 import {
-  accessRights,
-  getTranslateText,
-  localization,
-} from "@catalog-frontend/utils";
-import { Box, Radio } from "@digdir/designsystemet-react";
+  FieldsetDivider,
+  TitleWithHelpTextAndTag,
+} from "@catalog-frontend/ui-v2";
+import { accessRights, localization } from "@catalog-frontend/utils";
+import { Fieldset } from "@digdir/designsystemet-react";
 import { useFormikContext } from "formik";
 import { CostsTable } from "./costs-table";
+import { ReferenceDataRadioGroup } from "@data-service-catalog/components/data-service-form/components/reference-data-radio-group";
 
 type Props = {
   openLicenses?: ReferenceDataCode[];
@@ -18,58 +18,48 @@ export const AccessSection = ({ openLicenses, currencies }: Props) => {
   const { values, setFieldValue } = useFormikContext<DataService>();
 
   return (
-    <Box>
-      <Radio.Group
-        value={values?.license ?? "none"}
-        legend={
+    <div>
+      <Fieldset>
+        <Fieldset.Legend>
           <TitleWithHelpTextAndTag
             helpText={localization.dataServiceForm.helptext.license}
           >
             {localization.dataServiceForm.fieldLabel.license}
           </TitleWithHelpTextAndTag>
-        }
-        onChange={(selectedValues) =>
-          setFieldValue("license", selectedValues.toString())
-        }
-        size="sm"
-      >
-        <Radio value="none">{`${localization.dataServiceForm.noLicense}`}</Radio>
-        {openLicenses &&
-          openLicenses.map((licenseRef, i) => (
-            <Radio
-              key={`license-${licenseRef.uri}-${i}`}
-              value={licenseRef.uri}
-            >
-              {getTranslateText(licenseRef.label)}
-            </Radio>
-          ))}
-      </Radio.Group>
+        </Fieldset.Legend>
+        <ReferenceDataRadioGroup
+          selected={values?.license}
+          codes={openLicenses ?? []}
+          selectCode={(selected) =>
+            setFieldValue("license", selected.toString())
+          }
+          noneLabel={localization.dataServiceForm.noLicense}
+        />
+      </Fieldset>
 
       <FieldsetDivider />
 
-      <Radio.Group
-        size="sm"
-        legend={
+      <Fieldset>
+        <Fieldset.Legend>
           <TitleWithHelpTextAndTag
             helpText={localization.dataServiceForm.helptext.accessRights}
           >
             {localization.dataServiceForm.fieldLabel.accessRights}
           </TitleWithHelpTextAndTag>
-        }
-        value={values.accessRights ?? "none"}
-        onChange={(values) => setFieldValue("accessRights", values.toString())}
-      >
-        <Radio value="none">{`${localization.accessRight.none}`}</Radio>
-        {accessRights.map((option) => (
-          <Radio key={option.uri} value={option.uri}>
-            {getTranslateText(option.label)}
-          </Radio>
-        ))}
-      </Radio.Group>
+        </Fieldset.Legend>
+        <ReferenceDataRadioGroup
+          selected={values?.accessRights}
+          codes={accessRights ?? []}
+          selectCode={(selected) =>
+            setFieldValue("accessRights", selected.toString())
+          }
+          noneLabel={localization.accessRight.none}
+        />
+      </Fieldset>
 
       <FieldsetDivider />
 
       <CostsTable currencies={currencies} />
-    </Box>
+    </div>
   );
 };

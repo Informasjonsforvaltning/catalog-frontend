@@ -1,12 +1,12 @@
 import { DataService, ReferenceDataCode } from "@catalog-frontend/types";
-import { FieldsetDivider, TitleWithHelpTextAndTag } from "@catalog-frontend/ui";
 import {
-  capitalizeFirstLetter,
-  getTranslateText,
-  localization,
-} from "@catalog-frontend/utils";
-import { Box, Radio } from "@digdir/designsystemet-react";
+  FieldsetDivider,
+  TitleWithHelpTextAndTag,
+} from "@catalog-frontend/ui-v2";
+import { localization } from "@catalog-frontend/utils";
+import { Fieldset } from "@digdir/designsystemet-react";
 import { useFormikContext } from "formik";
+import { ReferenceDataRadioGroup } from "@data-service-catalog/components/data-service-form/components/reference-data-radio-group";
 
 type Props = {
   statuses?: ReferenceDataCode[];
@@ -17,35 +17,29 @@ export const StatusSection = ({ statuses, availabilities }: Props) => {
   const { values, setFieldValue } = useFormikContext<DataService>();
 
   return (
-    <Box>
-      <Radio.Group
-        value={values?.status ?? "none"}
-        legend={
+    <div>
+      <Fieldset>
+        <Fieldset.Legend>
           <TitleWithHelpTextAndTag
             helpText={localization.dataServiceForm.helptext.status}
           >
             {localization.dataServiceForm.fieldLabel.status}
           </TitleWithHelpTextAndTag>
-        }
-        onChange={(selectedValues) =>
-          setFieldValue("status", selectedValues.toString())
-        }
-        size="sm"
-      >
-        <Radio value="none">{`${localization.dataServiceForm.noStatus}`}</Radio>
-        {statuses &&
-          statuses.map((statusRef, i) => (
-            <Radio key={`licence-${statusRef.uri}-${i}`} value={statusRef.uri}>
-              {capitalizeFirstLetter(getTranslateText(statusRef.label))}
-            </Radio>
-          ))}
-      </Radio.Group>
+        </Fieldset.Legend>
+        <ReferenceDataRadioGroup
+          selected={values?.status}
+          codes={statuses ?? []}
+          selectCode={(selected) =>
+            setFieldValue("status", selected.toString())
+          }
+          noneLabel={localization.dataServiceForm.noStatus}
+        />
+      </Fieldset>
 
       <FieldsetDivider />
 
-      <Radio.Group
-        value={values?.availability ?? "none"}
-        legend={
+      <Fieldset>
+        <Fieldset.Legend>
           <TitleWithHelpTextAndTag
             helpText={localization.dataServiceForm.helptext.availability}
             tagColor="info"
@@ -53,23 +47,17 @@ export const StatusSection = ({ statuses, availabilities }: Props) => {
           >
             {localization.dataServiceForm.fieldLabel.availability}
           </TitleWithHelpTextAndTag>
-        }
-        onChange={(selectedValues) =>
-          setFieldValue("availability", selectedValues.toString())
-        }
-        size="sm"
-      >
-        <Radio value="none">{`${localization.dataServiceForm.noAvailability}`}</Radio>
-        {availabilities &&
-          availabilities.map((availabilityRef, i) => (
-            <Radio
-              key={`availability-${availabilityRef.uri}-${i}`}
-              value={availabilityRef.uri}
-            >
-              {capitalizeFirstLetter(getTranslateText(availabilityRef.label))}
-            </Radio>
-          ))}
-      </Radio.Group>
-    </Box>
+        </Fieldset.Legend>
+
+        <ReferenceDataRadioGroup
+          selected={values?.availability}
+          codes={availabilities ?? []}
+          selectCode={(selected) =>
+            setFieldValue("availability", selected.toString())
+          }
+          noneLabel={localization.dataServiceForm.noAvailability}
+        />
+      </Fieldset>
+    </div>
   );
 };

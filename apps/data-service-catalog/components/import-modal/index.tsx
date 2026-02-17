@@ -1,12 +1,18 @@
 import React, { useRef, useState } from "react";
 import { localization } from "@catalog-frontend/utils";
 import {
+  Button,
   LinkButton,
   TitleWithHelpTextAndTag,
   UploadButton,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import { useImport } from "../../hooks/import";
-import { Button, Modal, Spinner } from "@digdir/designsystemet-react";
+import {
+  Dialog,
+  Heading,
+  Paragraph,
+  Spinner,
+} from "@digdir/designsystemet-react";
 import styles from "./import-modal.module.scss";
 import { FileImportIcon } from "@navikt/aksel-icons";
 
@@ -41,34 +47,31 @@ export function ImportModal({ catalogId }: Props) {
   };
 
   return (
-    <Modal.Root>
-      <Modal.Trigger asChild>
-        <Button variant="secondary" size="small">
+    <Dialog.TriggerContext>
+      <Dialog.Trigger asChild>
+        <Button variant="secondary">
           <FileImportIcon fontSize="1.5rem" />
           Import
         </Button>
-      </Modal.Trigger>
-      <Modal.Dialog
-        ref={modalRef}
-        onInteractOutside={() => modalRef.current?.close()}
-      >
-        <Modal.Header>
+      </Dialog.Trigger>
+      <Dialog ref={modalRef}>
+        <Heading>
           <TitleWithHelpTextAndTag>
             {localization.dataServiceCatalog.importModal.title}
           </TitleWithHelpTextAndTag>
-        </Modal.Header>
-        <Modal.Content>
+        </Heading>
+        <Paragraph>
           <div>
             {localization.dataServiceCatalog.importModal.openapiDescription}
           </div>
           <div>
             {localization.dataServiceCatalog.importModal.resultDescription}
           </div>
-        </Modal.Content>
-        <Modal.Footer>
+        </Paragraph>
+        <Paragraph>
           <div className={styles.buttons}>
             {isLoading ? (
-              <Spinner title={localization.loading} size="large" />
+              <Spinner aria-label="API-import" />
             ) : (
               <>
                 <LinkButton
@@ -86,9 +89,9 @@ export function ImportModal({ catalogId }: Props) {
               </>
             )}
           </div>
-        </Modal.Footer>
-      </Modal.Dialog>
-    </Modal.Root>
+        </Paragraph>
+      </Dialog>
+    </Dialog.TriggerContext>
   );
 }
 

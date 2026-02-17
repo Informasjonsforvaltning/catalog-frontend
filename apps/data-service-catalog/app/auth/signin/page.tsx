@@ -5,7 +5,7 @@ import {
   KeycloakSignin,
   PageBanner,
   Spinner,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import { localization } from "@catalog-frontend/utils";
 import { Suspense } from "react";
 
