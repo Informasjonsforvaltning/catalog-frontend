@@ -1,6 +1,6 @@
 "use client";
 
-import { FC } from "react";
+import { FC, Fragment } from "react";
 import {
   getResourceRoles,
   hasOrganizationAdminPermission,
@@ -19,7 +19,7 @@ import {
   MenuHamburgerIcon,
   PersonIcon,
 } from "@navikt/aksel-icons";
-import { Button, Divider, DropdownMenu } from "@digdir/designsystemet-react";
+import { Divider, Dropdown, Avatar } from "@digdir/designsystemet-react";
 import classNames from "classnames";
 import { useParams } from "next/navigation";
 
@@ -132,82 +132,89 @@ const Header: FC<HeaderProps> = ({
           {useDemoLogo ? <FDKLogoDemo /> : <FDKLogo />}
         </a>
         {userDisplayName && (
-          <DropdownMenu size="small">
-            <DropdownMenu.Trigger asChild>
-              <Button variant="tertiary" className={styles.menuButton}>
-                <MenuHamburgerIcon aria-hidden fontSize="1.5rem" />
-                {localization.header.menu}
-              </Button>
-            </DropdownMenu.Trigger>
-            <DropdownMenu.Content>
-              <DropdownMenu.Group key="menu-group-user">
-                <DropdownMenu.Item
-                  className={classNames(styles.dropDownItem, styles.userInfo)}
-                  asChild
-                >
-                  <div>
-                    <span>
-                      <PersonIcon fontSize="1.3rem" role="presentation" />
-                      {userDisplayName}
-                    </span>
-                    {userRole && <span>{userRole}</span>}
+          <Dropdown.TriggerContext>
+            <Dropdown.Trigger className={styles.menuButton}>
+              <MenuHamburgerIcon aria-hidden fontSize="1.5rem" />
+              {localization.header.menu}
+            </Dropdown.Trigger>
+            <Dropdown placement="bottom-end" data-size="sm">
+              <Dropdown.List key="menu-group-user">
+                <Dropdown.Item className={styles.dropDownItem}>
+                  <div className={styles.userInfo}>
+                    <Avatar
+                      aria-label={userDisplayName || ""}
+                      data-size="sm"
+                      variant="circle"
+                    />
+                    <div className={styles.userDetails}>
+                      <div>{userDisplayName}</div>
+                      {userRole && <span>{userRole}</span>}
+                    </div>
                   </div>
-                </DropdownMenu.Item>
+                </Dropdown.Item>
                 <Divider />
-              </DropdownMenu.Group>
+              </Dropdown.List>
               {resourceRoles.some((role) => role.role === "admin") && (
-                <DropdownMenu.Group key="menu-group-admin">
-                  <DropdownMenu.Item className={styles.dropDownItem} asChild>
-                    <a href={catalogAdminUrl} className={styles.dropDownItem}>
-                      {localization.manageCatalogs}
-                    </a>
-                  </DropdownMenu.Item>
+                <Dropdown.List key="menu-group-admin">
+                  <Dropdown.Item className={styles.dropDownItem}>
+                    <Dropdown.Button asChild className={styles.dropDownItem}>
+                      <a href={catalogAdminUrl} className={styles.dropDownItem}>
+                        {localization.manageCatalogs}
+                      </a>
+                    </Dropdown.Button>
+                  </Dropdown.Item>
                   <Divider />
-                </DropdownMenu.Group>
+                </Dropdown.List>
               )}
               {urls.map((group, index) => (
-                <DropdownMenu.Group key={`menu-group-${index}`}>
-                  {group.map((urlObject, itemIndex) => (
-                    <DropdownMenu.Item
-                      key={`menu-item-${index}-${itemIndex}`}
-                      className={styles.dropDownItem}
-                      asChild
-                    >
-                      <a
-                        href={urlObject.url}
+                <Fragment key={`menu-group-${index}`}>
+                  <Dropdown.List>
+                    {group.map((urlObject, itemIndex) => (
+                      <Dropdown.Item
+                        key={`menu-item-${index}-${itemIndex}`}
                         className={styles.dropDownItem}
-                        target={urlObject.external ? "_blank" : ""}
-                        rel="noreferrer"
                       >
-                        {urlObject.name}
-                        {urlObject.external ? (
-                          <span className={styles.icon}>
-                            <ExternalLinkIcon title="ExternalLinkIcon" />
-                          </span>
-                        ) : (
-                          ""
-                        )}
-                      </a>
-                    </DropdownMenu.Item>
-                  ))}
-                  <Divider />
-                </DropdownMenu.Group>
+                        <Dropdown.Button
+                          asChild
+                          className={styles.dropDownItem}
+                        >
+                          <a
+                            href={urlObject.url}
+                            className={styles.dropDownItem}
+                            target={urlObject.external ? "_blank" : ""}
+                            rel="noreferrer"
+                          >
+                            {urlObject.name}
+                            {urlObject.external ? (
+                              <span className={styles.icon}>
+                                <ExternalLinkIcon title="ExternalLinkIcon" />
+                              </span>
+                            ) : (
+                              ""
+                            )}
+                          </a>
+                        </Dropdown.Button>
+                      </Dropdown.Item>
+                    ))}
+                    <Divider />
+                  </Dropdown.List>
+                </Fragment>
               ))}
               {handleLogout && (
-                <DropdownMenu.Group key="menu-group-logout">
-                  <DropdownMenu.Item asChild>
-                    <button
+                <Dropdown.List key="menu-group-logout">
+                  <Dropdown.Item>
+                    <Dropdown.Button
                       onClick={handleLogout}
                       className={styles.dropDownItem}
                     >
                       <LeaveIcon fontSize="1.3rem" />
                       <span>{localization.auth.logout}</span>
-                    </button>
-                  </DropdownMenu.Item>
-                </DropdownMenu.Group>
+                    </Dropdown.Button>
+                  </Dropdown.Item>
+                </Dropdown.List>
               )}
-            </DropdownMenu.Content>
-          </DropdownMenu>
+            </Dropdown>
+          </Dropdown.TriggerContext>
         )}
       </div>
     </header>

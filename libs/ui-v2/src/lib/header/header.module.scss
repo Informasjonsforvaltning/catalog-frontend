@@ -137,27 +137,12 @@
 }
 
 .userInfo {
-  & div {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+  display: flex;
+  gap: 0.5rem;
 
-    & > span:first-child {
-      display: flex;
-    }
-
-    & > span:last-child {
-      font-style: italic;
-      color: var(--fds-semantic-text-neutral-subtle);
-    }
-  }
-
-  :global(.fds-btn) {
-    color: var(--fds-semantic-text-neutral-default);
-    &:hover {
-      background-color: inherit;
-      cursor: inherit;
-      color: inherit;
+  .userDetails {
+    .displayName {
+      font-weight: bold;
     }
   }
 }

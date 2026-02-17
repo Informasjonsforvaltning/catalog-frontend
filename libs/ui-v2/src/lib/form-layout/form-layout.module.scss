@@ -29,11 +29,12 @@
   flex-direction: column;
   gap: 2rem;
   flex-grow: 1;
+  min-width: 0;
 }
 
 .sideMenu {
   position: sticky;
-  top: 1rem;
+  top: 1rem; //switch to 6rem when app bar is implemented
   overflow: hidden;
   min-width: 265px;
   padding: 1rem;
@@ -114,6 +115,7 @@
   border: 1px solid #d5d7d9;
   border-radius: 8px;
   flex-grow: 1;
+  min-width: 0;
 }
 
 .sectionHeading {
@@ -121,7 +123,7 @@
   flex-direction: column;
   padding: 1.5em 2em;
   gap: 0.25em;
-  background: var(--fds-semantic-surface-third-light);
+  background: var(--ds-color-surface-tinted);
 }
 
 .sectionHeadingTitle {

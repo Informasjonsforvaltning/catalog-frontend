@@ -16,8 +16,8 @@ export const getFormNotifications = ({
     ? [
         <Alert
           key="form-error"
-          size="sm"
-          severity="danger"
+          data-size="sm"
+          data-color="danger"
           className={styles.notification}
         >
           {localization.validation.formError}
@@ -28,8 +28,8 @@ export const getFormNotifications = ({
     ? [
         <Alert
           key="unsaved-changes"
-          size="sm"
-          severity="warning"
+          data-size="sm"
+          data-color="warning"
           className={styles.notification}
         >
           {localization.validation.unsavedChanges}

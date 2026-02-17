@@ -1,12 +1,12 @@
 "use client";
 
 import {
-  Box,
   Chip,
-  ErrorMessage,
+  ValidationMessage,
   Label,
   Textfield,
   TextfieldProps,
+  Fieldset,
 } from "@digdir/designsystemet-react";
 import { AddButton, DeleteButton } from "../button";
 import { forwardRef, ReactNode, useState } from "react";
@@ -68,16 +68,16 @@ const FormikMultivalueTextfield = forwardRef<
       setFieldValue(name, newValues);
     };
 
-    const ChipComponent = readOnly ? Chip.Toggle : Chip.Removable;
+    const ChipComponent = readOnly ? Chip.Button : Chip.Removable;
 
     return (
       <>
-        <Box className={classNames(styles.fieldBox, className)}>
+        <div className={classNames(styles.fieldBox, className)}>
           {!readOnly && (
             <>
               <Textfield
                 ref={ref}
-                size="sm"
+                data-size="sm"
                 value={inputValue}
                 onChange={(e) => handleOnChangeInputValue(e.target.value)}
                 onKeyDown={(e) => {
@@ -88,9 +88,9 @@ const FormikMultivalueTextfield = forwardRef<
                 }}
                 onBlur={() => handleAddTextValue()}
                 readOnly={readOnly}
-                label={label}
                 error={Boolean(error)}
-                {...props}
+                // {...props} todo
+                label={label}
               />
               <AddButton
                 className={styles.buttons}
@@ -107,13 +107,13 @@ const FormikMultivalueTextfield = forwardRef<
               onClick={() => onDeleteButtonClicked()}
             />
           )}
-        </Box>
+        </div>
         {readOnly && label && (
-          <Label asChild size="sm">
+          <Label asChild data-size="sm">
             <div>{label}</div>
           </Label>
         )}
-        <Chip.Group size="sm" className={styles.chipGroup}>
+        <Fieldset className={styles.chipGroup}>
           {_.get(values, name)?.map((v, i) => (
             <ChipComponent
               key={`chip-${i}`}
@@ -122,8 +122,8 @@ const FormikMultivalueTextfield = forwardRef<
               {v}
             </ChipComponent>
           ))}
-        </Chip.Group>
-        {error && <ErrorMessage>{error}</ErrorMessage>}
+        </Fieldset>
+        {error && <ValidationMessage>{error}</ValidationMessage>}
       </>
     );
   },

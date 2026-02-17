@@ -5,8 +5,8 @@ import { ReactNode } from "react";
 interface Props {
   title: ReactNode | string;
   tagTitle?: string;
-  tagColor?: TagProps["color"];
-  tagSize?: TagProps["size"];
+  tagColor?: TagProps["data-color"];
+  tagSize?: TagProps["data-size"];
 }
 
 export function TitleWithTag({
@@ -18,12 +18,12 @@ export function TitleWithTag({
   return (
     <div className={styles.container}>
       {typeof title === "string" ? (
-        <Label size={tagSize}>{title}</Label>
+        <Label data-size={tagSize}>{title}</Label>
       ) : (
         title
       )}
       {tagTitle && (
-        <Tag color={tagColor} size={tagSize}>
+        <Tag data-color={tagColor} data-size={tagSize}>
           {tagTitle}
         </Tag>
       )}

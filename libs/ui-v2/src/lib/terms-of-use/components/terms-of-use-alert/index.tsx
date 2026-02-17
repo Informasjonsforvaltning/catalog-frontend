@@ -29,8 +29,8 @@ const TermsOfUseAlert = async ({ catalogId }: TermsOfUseAlertProps) => {
 
   return (
     <Alert
-      size="sm"
-      severity="warning"
+      data-size="sm"
+      data-color="warning"
       title={localization.termsOfUse.notAcceptedTitle}
     >
       {localization.termsOfUse.notAcceptedContent}

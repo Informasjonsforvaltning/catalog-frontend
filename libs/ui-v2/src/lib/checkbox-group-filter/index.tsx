@@ -1,32 +1,36 @@
-import { Checkbox } from "@digdir/designsystemet-react";
+import {
+  Checkbox,
+  Fieldset,
+  useCheckboxGroup,
+} from "@digdir/designsystemet-react";
 
 type CheckboxGroupFilterItem<T> = {
   value: T;
   label: string;
 };
 
-interface Props<T> {
+interface Props<T extends string> {
   items: CheckboxGroupFilterItem<T>[];
   onChange: (value: string[]) => void;
   value?: string[];
 }
 
-export const CheckboxGroupFilter = <T,>({
+export const CheckboxGroupFilter = <T extends string>({
   items,
   onChange,
   value,
 }: Props<T>) => {
+  const { getCheckboxProps } = useCheckboxGroup({ onChange, value });
   return (
-    <Checkbox.Group onChange={onChange} size="small" value={value} legend="">
+    <Fieldset>
       {items.map(({ value, label }) => (
         <Checkbox
-          size="small"
-          key={`checkbox-item-${value}`}
-          value={`${value}`}
-        >
-          {label}
-        </Checkbox>
+          data-size="sm"
+          key={value}
+          label={label}
+          {...getCheckboxProps({ value })}
+        />
       ))}
-    </Checkbox.Group>
+    </Fieldset>
   );
 };

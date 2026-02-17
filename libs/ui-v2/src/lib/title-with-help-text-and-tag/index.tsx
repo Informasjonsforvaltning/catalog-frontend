@@ -22,7 +22,7 @@ type TagColor =
   | "info"
   | "warning";
 
-type TagSize = "sm" | "md" | "lg" | "small" | "medium" | "large";
+type TagSize = "sm" | "md" | "lg";
 
 export function TitleWithHelpTextAndTag({
   children: title,
@@ -41,12 +41,15 @@ export function TitleWithHelpTextAndTag({
         </HelpMarkdown>
       )}
       {tagTitle && (
-        <Tag color={tagColor} size={tagSize}>
+        <Tag data-color={tagColor} data-size={tagSize}>
           {tagTitle}
         </Tag>
       )}
       {changed && (
-        <Tag size="sm" color="warning">{`${localization.changed}`}</Tag>
+        <Tag
+          data-size="sm"
+          data-color="warning"
+        >{`${localization.changed}`}</Tag>
       )}
     </div>
   );

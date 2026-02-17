@@ -2,9 +2,8 @@
 
 import {
   Fieldset,
-  Box,
   Card,
-  ErrorMessage,
+  ValidationMessage,
 } from "@digdir/designsystemet-react";
 import { useFormikContext } from "formik";
 
@@ -70,15 +69,16 @@ export const FormikOptionalFieldsFieldset = ({
   }, [focus, fieldRefs]);
 
   return (
-    <Fieldset className={styles.fieldset} legend={legend} size="sm">
+    <Fieldset className={styles.fieldset}>
+      <Fieldset.Legend data-size="sm">{legend}</Fieldset.Legend>
       <Card>
-        <Card.Content>
+        <Card.Block>
           {visibleFields.map((field) => (
-            <Fieldset
-              key={field.valuePath}
-              legend={field?.legend ?? field?.label}
-            >
-              <Box key={field.valuePath} className={styles.field}>
+            <Fieldset key={field.valuePath}>
+              <Fieldset.Legend data-size="sm">
+                {field.legend || field.label}
+              </Fieldset.Legend>
+              <div key={field.valuePath} className={styles.field}>
                 <FastFieldWithRef
                   ref={fieldRefs[field.valuePath]}
                   name={field.valuePath}
@@ -88,7 +88,7 @@ export const FormikOptionalFieldsFieldset = ({
                 <DeleteButton
                   onClick={() => handleRemoveField(field.valuePath)}
                 />
-              </Box>
+              </div>
             </Fieldset>
           ))}
           <div className={styles.addButtons}>
@@ -102,9 +102,9 @@ export const FormikOptionalFieldsFieldset = ({
             ))}
           </div>
           {typeof mainError === "string" && (
-            <ErrorMessage size="sm">{mainError}</ErrorMessage>
+            <ValidationMessage data-size="sm">{mainError}</ValidationMessage>
           )}
-        </Card.Content>
+        </Card.Block>
       </Card>
     </Fieldset>
   );

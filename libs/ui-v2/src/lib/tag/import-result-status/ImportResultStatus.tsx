@@ -33,22 +33,11 @@ export const ImportResultStatusTag = forwardRef<
   ImportResultStatusTagProps
 >(
   (
-    {
-      children,
-      statusKey,
-      statusLabel,
-      size = "sm",
-      ...rest
-    }: ImportResultStatusTagProps,
+    { children, statusKey, statusLabel, ...rest }: ImportResultStatusTagProps,
     ref,
   ) => {
     return (
-      <DSTag
-        ref={ref}
-        color={getColorFromStatusKey(statusKey)}
-        size={size}
-        {...rest}
-      >
+      <DSTag ref={ref} data-color={getColorFromStatusKey(statusKey)} {...rest}>
         {statusLabel}
       </DSTag>
     );

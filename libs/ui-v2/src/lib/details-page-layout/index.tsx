@@ -49,7 +49,7 @@ const DetailsPageLayout = ({
     <div className="container">
       <div className={styles.heading}>
         <div className={styles.headingTitle}>
-          <Heading level={2} size="lg">
+          <Heading level={2} data-size="lg">
             {headingTitle}
           </Heading>
           <span>{headingTag}</span>
@@ -68,7 +68,7 @@ const DetailsPageLayout = ({
                     handleLanguageChange?.(event.target.value)
                   }
                   value={language}
-                  size="small"
+                  data-size="sm"
                   aria-label="Velg språk"
                 >
                   {languageOptions.map((item) => (

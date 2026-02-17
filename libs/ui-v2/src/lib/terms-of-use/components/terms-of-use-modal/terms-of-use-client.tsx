@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { Button, Modal, Paragraph } from "@digdir/designsystemet-react";
+import { Button, Dialog, Paragraph } from "@digdir/designsystemet-react";
 import { localization } from "@catalog-frontend/utils";
 
 type TermsModalProps = {
@@ -22,27 +22,29 @@ export const TermsOfUseModalClient = ({
   }, []);
 
   return (
-    <Modal ref={modalRef} onBeforeClose={() => false}>
-      <Modal.Header closeButton={false}>
+    <Dialog.TriggerContext>
+      <Dialog.Trigger>
         {localization.termsOfUse.notAcceptedTitle}
-      </Modal.Header>
-      <Modal.Content>
-        <Paragraph size="sm">
-          {localization.termsOfUse.notAcceptedContent}
-        </Paragraph>
-      </Modal.Content>
-      <Modal.Footer>
-        <Button size="sm" asChild>
-          <a target="_blank" rel="noreferrer" href={termsOfUseUrl}>
-            {localization.termsOfUse.gotoTermsOfUse}
-          </a>
-        </Button>
-        <Button size="sm" variant="secondary" asChild>
-          <a target="_blank" rel="noreferrer" href={closeUrl}>
-            {localization.termsOfUse.cancel}
-          </a>
-        </Button>
-      </Modal.Footer>
-    </Modal>
+      </Dialog.Trigger>
+      <Dialog ref={modalRef}>
+        <Dialog.Block>
+          <Paragraph data-size="sm">
+            {localization.termsOfUse.notAcceptedContent}
+          </Paragraph>
+        </Dialog.Block>
+        <Dialog.Block>
+          <Button data-size="sm" asChild>
+            <a target="_blank" rel="noreferrer" href={termsOfUseUrl}>
+              {localization.termsOfUse.gotoTermsOfUse}
+            </a>
+          </Button>
+          <Button data-size="sm" variant="secondary" asChild>
+            <a target="_blank" rel="noreferrer" href={closeUrl}>
+              {localization.termsOfUse.cancel}
+            </a>
+          </Button>
+        </Dialog.Block>
+      </Dialog>
+    </Dialog.TriggerContext>
   );
 };

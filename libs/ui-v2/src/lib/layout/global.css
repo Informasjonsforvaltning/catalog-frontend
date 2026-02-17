@@ -1,14 +1,10 @@
 /* This is a global stylesheet */
 
-@layer reset, fds;
-
 @import url("./reset.css");
-@import url("@digdir/designsystemet-theme");
-@import url("@digdir/designsystemet-css");
+@layer reset, ds;
 
 html * {
-  font-display: swap;
-  font-size: 16;
+  font-size: 16px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-family:
@@ -20,11 +16,12 @@ html * {
     "Helvetica Neue",
     Arial,
     sans-serif;
+  @media (max-width: 650px) {
+    font-size: 14px;
+  }
 }
 
 body {
-  font-family: inherit;
-  line-height: inherit;
   background-color: #fafafa;
   margin: 0;
   padding: 0;
@@ -67,7 +64,7 @@ body {
 }
 
 .error {
-  font-size: 1.5rem;
+  font-size: 24px;
 }
 
 .hide-text {
@@ -80,4 +77,10 @@ body {
   clip: rect(0, 0, 0, 0);
   border: 0;
   white-space: nowrap;
+}
+
+hr {
+  border: 0;
+  height: 1px;
+  background: var(--ds-color-neutral-border-subtle);
 }

@@ -2,13 +2,8 @@
 
 import Link from "next/link";
 import styles from "./navigation-card.module.css";
-import {
-  Heading,
-  Card as CardBase,
-  Paragraph,
-  Card,
-} from "@digdir/designsystemet-react";
-interface Card {
+import { Heading, Card, Paragraph } from "@digdir/designsystemet-react";
+interface CardProps {
   title?: string;
   body?: React.ReactElement | string;
   href?: string;
@@ -16,11 +11,10 @@ interface Card {
   subtitle?: string;
 }
 
-const NavigationCard = ({ title, body, href, icon, subtitle }: Card) => {
+const NavigationCard = ({ title, body, href, icon, subtitle }: CardProps) => {
   return (
-    <CardBase
-      color="third"
-      isLink={Boolean(href)}
+    <Card
+      data-color="third"
       asChild={Boolean(href)}
       className={styles.cardBase}
     >
@@ -28,26 +22,26 @@ const NavigationCard = ({ title, body, href, icon, subtitle }: Card) => {
         <Link className={styles.card} href={href}>
           <div className={styles.icon}>{icon}</div>
 
-          <Heading className={styles.heading} size="sm" level={2}>
+          <Heading className={styles.heading} data-size="sm" level={2}>
             {title}
           </Heading>
           {subtitle && (
-            <Heading size="2xs" level={3} className={styles.subtitle}>
+            <Heading data-size="2xs" level={3} className={styles.subtitle}>
               {subtitle}
             </Heading>
           )}
-          <CardBase.Content className={styles.body}>{body}</CardBase.Content>
+          <Card.Block className={styles.body}>{body}</Card.Block>
         </Link>
       ) : (
         <div className={styles.card}>
           <span className={styles.icon}>{icon}</span>
-          <Heading className={styles.heading} size="sm">
+          <Heading className={styles.heading} data-size="sm">
             {title}
           </Heading>
           <Paragraph className={styles.body}>{body}</Paragraph>
         </div>
       )}
-    </CardBase>
+    </Card>
   );
 };
 
