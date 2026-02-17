@@ -31,7 +31,7 @@ import {
   Breadcrumbs,
   BreadcrumbType,
   DesignBanner,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import { withReadProtectedPage } from "@concept-catalog/utils/auth";
 import { conceptSchema } from "@concept-catalog/components/concept-form/validation-schema";
 import ConceptPageClient from "./concept-page-client";

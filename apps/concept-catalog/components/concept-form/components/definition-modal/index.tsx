@@ -1,12 +1,12 @@
 import { ReactNode, useRef, useState, useEffect } from "react";
 import { Formik } from "formik";
-import { Button, Modal } from "@digdir/designsystemet-react";
+import { Button, Dialog } from "@digdir/designsystemet-react";
 import {
   FieldsetDivider,
   FormikLanguageFieldset,
   TextareaWithPrefix,
   TitleWithHelpTextAndTag,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import { Definisjon } from "@catalog-frontend/types";
 import { localization } from "@catalog-frontend/utils";
 import { SourceDescriptionFieldset } from "../source-description-fieldset";
@@ -41,14 +41,15 @@ export const DefinitionModal = ({
   const [submitted, setSubmitted] = useState(false);
 
   return (
-    <Modal.Root>
-      <Modal.Trigger asChild>{trigger}</Modal.Trigger>
-      <Modal.Dialog
+    <Dialog.TriggerContext>
+      <Dialog.Trigger asChild>{trigger}</Dialog.Trigger>
+      <Dialog
         ref={modalRef}
         className={styles.dialog}
         style={{
           overflow: "visible",
         }}
+        closeButton={false}
       >
         <Formik
           initialValues={initialDefinition || defaultDefinition}
@@ -71,8 +72,8 @@ export const DefinitionModal = ({
 
             return (
               <>
-                <Modal.Header closeButton={false}>{header}</Modal.Header>
-                <Modal.Content className={styles.content}>
+                <Dialog.Block>{header}</Dialog.Block>
+                <Dialog.Block className={styles.content}>
                   <FormikLanguageFieldset
                     name="tekst"
                     as={TextareaWithPrefix}
@@ -88,11 +89,11 @@ export const DefinitionModal = ({
                   />
                   <FieldsetDivider />
                   <SourceDescriptionFieldset name="kildebeskrivelse" />
-                </Modal.Content>
-                <Modal.Footer>
+                </Dialog.Block>
+                <Dialog.Block>
                   <Button
                     type="button"
-                    size="sm"
+                    data-size="sm"
                     disabled={isSubmitting}
                     onClick={() => {
                       submitForm();
@@ -103,7 +104,7 @@ export const DefinitionModal = ({
                   <Button
                     variant="secondary"
                     type="button"
-                    size="sm"
+                    data-size="sm"
                     onClick={() => {
                       onClose?.();
                       modalRef.current?.close();
@@ -112,12 +113,12 @@ export const DefinitionModal = ({
                   >
                     Avbryt
                   </Button>
-                </Modal.Footer>
+                </Dialog.Block>
               </>
             );
           }}
         </Formik>
-      </Modal.Dialog>
-    </Modal.Root>
+      </Dialog>
+    </Dialog.TriggerContext>
   );
 };

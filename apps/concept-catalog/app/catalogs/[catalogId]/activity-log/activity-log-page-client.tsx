@@ -3,7 +3,7 @@
 import { ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { Tabs } from "@digdir/designsystemet-react";
-import { SearchHitsLayout } from "@catalog-frontend/ui";
+import { SearchHitsLayout } from "@catalog-frontend/ui-v2";
 import { localization } from "@catalog-frontend/utils";
 import ActivityLogFilter from "../../../../components/activity-log-filter";
 import styles from "./activity-log-page.module.css";
@@ -18,7 +18,11 @@ export const ActivityLogPageClient = ({ catalogId, children }: Props) => {
 
   return (
     <div className="container">
-      <Tabs className={styles.tabs} defaultValue="activityLogTab" size="medium">
+      <Tabs
+        className={styles.tabs}
+        defaultValue="activityLogTab"
+        data-size="md"
+      >
         <Tabs.List className={styles.tabsList}>
           <Tabs.Tab
             value="conceptTab"
@@ -38,7 +42,7 @@ export const ActivityLogPageClient = ({ catalogId, children }: Props) => {
             {localization.activityLog.title}
           </Tabs.Tab>
         </Tabs.List>
-        <Tabs.Content value="activityLogTab" className={styles.tabsContent}>
+        <Tabs.Panel value="activityLogTab" className={styles.tabsContent}>
           <SearchHitsLayout>
             <SearchHitsLayout.LeftColumn>
               <ActivityLogFilter catalogId={catalogId} />
@@ -47,7 +51,7 @@ export const ActivityLogPageClient = ({ catalogId, children }: Props) => {
               {children}
             </SearchHitsLayout.MainColumn>
           </SearchHitsLayout>
-        </Tabs.Content>
+        </Tabs.Panel>
       </Tabs>
     </div>
   );

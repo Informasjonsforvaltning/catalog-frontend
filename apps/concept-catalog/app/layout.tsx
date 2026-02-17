@@ -2,11 +2,14 @@ import {
   AuthSessionModal,
   NextAuthProvider,
   ReactQueryClientProvider,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import { authOptions, localization } from "@catalog-frontend/utils";
 import { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import { NuqsAdapter } from "nuqs/adapters/react";
+import "@digdir/designsystemet-css";
+import "@digdir/designsystemet-css/theme";
+// import "@digdir/designsystemet-theme";
 
 export const metadata: Metadata = {
   title: localization.catalogType.concept,

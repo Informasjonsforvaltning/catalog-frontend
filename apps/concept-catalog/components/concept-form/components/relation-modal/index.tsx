@@ -2,7 +2,7 @@
 
 import { ReactNode, useEffect, useRef, useState } from "react";
 import { Formik } from "formik";
-import { Button, Modal } from "@digdir/designsystemet-react";
+import { Button, Dialog } from "@digdir/designsystemet-react";
 import {
   RelatedConcept,
   UnionRelation,
@@ -42,14 +42,15 @@ export const RelationModal = ({
   const [submitted, setSubmitted] = useState(false);
 
   return (
-    <Modal.Root>
-      <Modal.Trigger asChild>{trigger}</Modal.Trigger>
-      <Modal.Dialog
+    <Dialog.TriggerContext>
+      <Dialog.Trigger asChild>{trigger}</Dialog.Trigger>
+      <Dialog
         ref={modalRef}
         className={styles.dialog}
         style={{
           overflow: "visible",
         }}
+        closeButton={false}
       >
         <Formik
           initialValues={initialRelation || defaultRelation}
@@ -72,18 +73,18 @@ export const RelationModal = ({
 
             return (
               <>
-                <Modal.Header closeButton={false}>{header}</Modal.Header>
-                <Modal.Content className={styles.content}>
+                <Dialog.Block>{header}</Dialog.Block>
+                <Dialog.Block className={styles.content}>
                   <RelationFieldset
                     catalogId={catalogId}
                     conceptId={conceptId}
                     initialRelatedConcept={initialRelatedConcept}
                   />
-                </Modal.Content>
-                <Modal.Footer>
+                </Dialog.Block>
+                <Dialog.Block>
                   <Button
                     type="button"
-                    size="sm"
+                    data-size="sm"
                     disabled={isSubmitting}
                     onClick={() => {
                       submitForm();
@@ -94,7 +95,7 @@ export const RelationModal = ({
                   <Button
                     variant="secondary"
                     type="button"
-                    size="sm"
+                    data-size="sm"
                     onClick={() => {
                       onClose();
                       modalRef.current?.close();
@@ -103,12 +104,12 @@ export const RelationModal = ({
                   >
                     Avbryt
                   </Button>
-                </Modal.Footer>
+                </Dialog.Block>
               </>
             );
           }}
         </Formik>
-      </Modal.Dialog>
-    </Modal.Root>
+      </Dialog>
+    </Dialog.TriggerContext>
   );
 };

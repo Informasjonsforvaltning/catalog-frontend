@@ -28,7 +28,7 @@ export const CommentActivityLog = ({
       {comments.map((comment) => (
         <li key={comment.id} className={styles.listItem}>
           <div className={styles.listContent}>
-            <Heading level={3} size="xsmall">
+            <Heading level={3} data-size="xs">
               <Link
                 href={`/catalogs/${catalogId}/concepts/${comment.topicId}`}
                 className={styles.heading}

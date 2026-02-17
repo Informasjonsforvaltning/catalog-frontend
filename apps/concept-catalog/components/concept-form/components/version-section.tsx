@@ -1,4 +1,3 @@
-import { Box } from "@digdir/designsystemet-react";
 import { VersionFieldset } from "./version-fieldset";
 
 type VersionSectionProps = {
@@ -11,7 +10,7 @@ export const VersionSection = ({
   readOnly = false,
 }: VersionSectionProps) => {
   return (
-    <Box>
+    <div>
       <VersionFieldset
         name="versjonsnr"
         changed={changed}
@@ -19,7 +18,7 @@ export const VersionSection = ({
       />
       {/**
        * TODO Version note will be available as a modal dialog at a later stage.
-       * 
+       *
       <FieldsetDivider />
       <LanguageFieldset
         name='versjonsNote'
@@ -29,10 +28,10 @@ export const VersionSection = ({
             helpText={localization.conceptForm.helpText.versionNote}
           >
             {localization.conceptForm.fieldLabel.versionNote}
-          </TitleWithHelpTextAndTag>  
+          </TitleWithHelpTextAndTag>
         }
       />
        */}
-    </Box>
+    </div>
   );
 };

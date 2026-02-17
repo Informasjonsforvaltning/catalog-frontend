@@ -1,4 +1,4 @@
-import { UploadButton } from "@catalog-frontend/ui";
+import { UploadButton } from "@catalog-frontend/ui-v2";
 import { FileImportIcon } from "@navikt/aksel-icons";
 import { localization } from "@catalog-frontend/utils";
 import React from "react";

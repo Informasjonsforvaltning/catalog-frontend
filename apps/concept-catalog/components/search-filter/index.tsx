@@ -1,13 +1,13 @@
 "use client";
 
 import { memo, useMemo } from "react";
-import { Accordion } from "@digdir/designsystemet-react";
+import { Card } from "@digdir/designsystemet-react";
 import {
   AccordionItem,
   AccordionItemProps,
   CheckboxGroupFilter,
   Select,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import {
   AssignedUser,
   CodeList,
@@ -189,7 +189,7 @@ const SearchFilter = ({
               <Select
                 aria-label="Velg bruker"
                 onChange={(event) => handleOnAssignedChange(event.target.value)}
-                size="sm"
+                data-size="sm"
                 value={filterAssignedUser ?? ""}
               >
                 {[
@@ -257,9 +257,7 @@ const SearchFilter = ({
 
   return (
     <div className={styles.searchFilter}>
-      <Accordion border={true} className={styles.accordion}>
-        {accordionItems}
-      </Accordion>
+      <Card className={styles.accordion}>{accordionItems}</Card>
     </div>
   );
 };

@@ -20,7 +20,7 @@ import {
   BreadcrumbType,
   Breadcrumbs,
   DesignBanner,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import {
   conceptIsHigherVersion,
   localization,

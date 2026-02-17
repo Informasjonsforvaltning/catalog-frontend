@@ -3,7 +3,7 @@ import { MinusIcon } from "@navikt/aksel-icons";
 import { FastField, useFormikContext } from "formik";
 import styles from "../concept-form.module.scss";
 import { Concept } from "@catalog-frontend/types";
-import { TitleWithHelpTextAndTag } from "@catalog-frontend/ui";
+import { TitleWithHelpTextAndTag } from "@catalog-frontend/ui-v2";
 import { localization } from "@catalog-frontend/utils";
 import { get, isEmpty, isEqual } from "lodash";
 
@@ -16,9 +16,8 @@ export const PeriodSection = ({ changed, readOnly }: PeriodSectionProps) => {
   const { values, errors } = useFormikContext<Concept>();
 
   return (
-    <Fieldset
-      size="sm"
-      legend={
+    <Fieldset data-size="sm">
+      <Fieldset.Legend>
         <TitleWithHelpTextAndTag
           helpText={localization.conceptForm.helpText.period}
           changed={["gyldigFom", "gyldigTom"].some((field) =>
@@ -27,14 +26,13 @@ export const PeriodSection = ({ changed, readOnly }: PeriodSectionProps) => {
         >
           {localization.conceptForm.fieldLabel.period}
         </TitleWithHelpTextAndTag>
-      }
-    >
+      </Fieldset.Legend>
       <div className={styles.periodSection}>
         <FastField
           as={Textfield}
           type="date"
           name="gyldigFom"
-          size="sm"
+          data-size="sm"
           label="Gyldig fra og med"
           error={errors.gyldigFom}
           readOnly={readOnly}
@@ -44,7 +42,7 @@ export const PeriodSection = ({ changed, readOnly }: PeriodSectionProps) => {
           as={Textfield}
           type="date"
           name="gyldigTom"
-          size="sm"
+          data-size="sm"
           label="Gyldig til og med"
           error={errors.gyldigTom}
           min={values.gyldigFom}

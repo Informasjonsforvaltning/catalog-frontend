@@ -11,7 +11,7 @@ import {
   SearchField,
   SearchHitsLayout,
   Tag,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import {
   capitalizeFirstLetter,
   convertTimestampToDateAndTime,
@@ -199,7 +199,7 @@ export const ChangeRequestsPageClient = ({
       <Tabs
         className={styles.tabs}
         defaultValue="changeRequestTab"
-        size="medium"
+        data-size="md"
       >
         <Tabs.List className={styles.tabsList}>
           <Tabs.Tab
@@ -220,7 +220,7 @@ export const ChangeRequestsPageClient = ({
             </Tabs.Tab>
           )}
         </Tabs.List>
-        <Tabs.Content value="changeRequestTab" className={styles.tabsContent}>
+        <Tabs.Panel value="changeRequestTab" className={styles.tabsContent}>
           <SearchHitsLayout>
             <SearchHitsLayout.SearchRow>
               <div className={styles.searchRow}>
@@ -268,7 +268,7 @@ export const ChangeRequestsPageClient = ({
                         >
                           <div className={styles.listContent}>
                             <div>
-                              <Heading level={3} size="xsmall">
+                              <Heading level={3} data-size="xs">
                                 <Link
                                   prefetch={false}
                                   href={
@@ -332,7 +332,7 @@ export const ChangeRequestsPageClient = ({
               )}
             </SearchHitsLayout.MainColumn>
           </SearchHitsLayout>
-        </Tabs.Content>
+        </Tabs.Panel>
       </Tabs>
     </div>
   );

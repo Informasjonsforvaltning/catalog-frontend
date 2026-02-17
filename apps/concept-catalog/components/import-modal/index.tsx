@@ -1,18 +1,18 @@
 import React, { useRef, useState } from "react";
 import { localization } from "@catalog-frontend/utils";
-import { UploadButton } from "@catalog-frontend/ui";
+import { UploadButton } from "@catalog-frontend/ui-v2";
 import {
   useImportConceptsCSV,
   useSendConcepts,
   useImportRdf,
   useSendRdf,
 } from "../../hooks/import";
-import { Button, Modal, Spinner } from "@digdir/designsystemet-react";
+import { Button, Dialog, Spinner } from "@digdir/designsystemet-react";
 import styles from "./import-modal.module.scss";
 import { FileImportIcon, TasklistSendIcon } from "@navikt/aksel-icons";
 import Markdown from "react-markdown";
 import { Concept } from "@catalog-frontend/types";
-import { HelpMarkdown } from "@catalog-frontend/ui";
+import { HelpMarkdown } from "@catalog-frontend/ui-v2";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
@@ -227,23 +227,24 @@ export function ImportModal({ catalogId }: ImportProps) {
   };
 
   return (
-    <Modal.Root>
-      <Modal.Trigger asChild>
+    <Dialog.TriggerContext>
+      <Dialog.Trigger asChild>
         <Button variant="secondary">
           <FileImportIcon />
           {localization.importResult.import}
         </Button>
-      </Modal.Trigger>
-      <Modal.Dialog
+      </Dialog.Trigger>
+      <Dialog
         ref={modalRef}
         onClose={() => {
           cancel();
           modalRef.current = null;
         }}
+        closeButton={false}
       >
         {!isUploading && !isSending && !isUploaded && (
           <>
-            <Modal.Header className={styles.content}>
+            <Dialog.Block className={styles.content}>
               <div className={styles.titleTags}>
                 <Markdown>{localization.concept.importModal.title}</Markdown>
                 <HelpMarkdown
@@ -252,12 +253,12 @@ export function ImportModal({ catalogId }: ImportProps) {
                   {localization.concept.importModal.titleHelpText}
                 </HelpMarkdown>
               </div>
-            </Modal.Header>
-            <Modal.Content className={styles.content}>
+            </Dialog.Block>
+            <Dialog.Block className={styles.content}>
               <div className={styles.modalContent}>
                 {(isGoingtoImportResults || isUploading || isSending) && (
                   <div className={styles.spinnerOverlay}>
-                    <Spinner title={localization.loading} size="large" />
+                    <Spinner aria-label={localization.loading} data-size="lg" />
                   </div>
                 )}
                 <div className={styles.markdownContent}>
@@ -278,22 +279,22 @@ export function ImportModal({ catalogId }: ImportProps) {
                   </div>
                 </div>
               </div>
-            </Modal.Content>
+            </Dialog.Block>
           </>
         )}
 
         {(isUploading || isUploaded || isSending) && (
           <>
-            <Modal.Header className={styles.content}>
+            <Dialog.Block className={styles.content}>
               <Markdown>
                 {localization.concept.importModal.titleConfirmSending}
               </Markdown>
-            </Modal.Header>
-            <Modal.Content className={styles.content}>
+            </Dialog.Block>
+            <Dialog.Block className={styles.content}>
               <div className={styles.modalContent}>
                 {(isUploading || isSending) && (
                   <div className={styles.spinnerOverlay}>
-                    <Spinner title={localization.loading} size="large" />
+                    <Spinner aria-label={localization.loading} data-size="lg" />
                   </div>
                 )}
                 <div className={styles.markdownContent}>
@@ -302,12 +303,12 @@ export function ImportModal({ catalogId }: ImportProps) {
                   </Markdown>
                 </div>
               </div>
-            </Modal.Content>
+            </Dialog.Block>
           </>
         )}
 
         {!isUploading && !isSending && !isUploaded && (
-          <Modal.Footer>
+          <Dialog.Block>
             <div className={styles.buttons}>
               <>
                 <Button
@@ -320,7 +321,7 @@ export function ImportModal({ catalogId }: ImportProps) {
 
                 <UploadButton
                   disabled={isGoingtoImportResults || isUploading}
-                  size="sm"
+                  data-size="sm"
                   allowedMimeTypes={[
                     "text/csv",
                     "text/x-csv",
@@ -343,10 +344,10 @@ export function ImportModal({ catalogId }: ImportProps) {
                 />
               </>
             </div>
-          </Modal.Footer>
+          </Dialog.Block>
         )}
         {(isUploading || isUploaded || isSending) && (
-          <Modal.Footer>
+          <Dialog.Block>
             <div className={styles.buttons}>
               <Button
                 onClick={send}
@@ -360,9 +361,9 @@ export function ImportModal({ catalogId }: ImportProps) {
                 {localization.importResult.cancel}
               </Button>
             </div>
-          </Modal.Footer>
+          </Dialog.Block>
         )}
-      </Modal.Dialog>
-    </Modal.Root>
+      </Dialog>
+    </Dialog.TriggerContext>
   );
 }

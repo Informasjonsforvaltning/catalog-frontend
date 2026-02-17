@@ -11,7 +11,7 @@ import {
   deleteImportResult,
   saveImportedConcept,
 } from "../../../../../actions/concept/actions";
-import { ConfirmModal, ImportResultDetails } from "@catalog-frontend/ui";
+import { ConfirmModal, ImportResultDetails } from "@catalog-frontend/ui-v2";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";

@@ -3,9 +3,9 @@
 import React from "react";
 import { FastField, FormikErrors, useFormikContext } from "formik";
 import {
-  Box,
   Checkbox,
   Combobox,
+  Fieldset,
   Textarea,
   Textfield,
 } from "@digdir/designsystemet-react";
@@ -23,7 +23,7 @@ import {
 import {
   FormikMultivalueTextfield,
   TitleWithHelpTextAndTag,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import styles from "../../concept-form.module.scss";
 import { getParentPath } from "../../../../utils/codeList";
 
@@ -77,7 +77,7 @@ export const InternalSection = ({
       return (
         <FastField
           name={name}
-          size="sm"
+          data-size="sm"
           label={<FieldLabel />}
           as={Textfield}
           readOnly={readOnly}
@@ -89,7 +89,7 @@ export const InternalSection = ({
       return (
         <FastField
           name={name}
-          size="sm"
+          data-size="sm"
           as={Textarea}
           label={<FieldLabel />}
           rows={3}
@@ -100,7 +100,10 @@ export const InternalSection = ({
 
     if (internalField.type === "boolean") {
       return (
-        <Checkbox.Group legend={<FieldLabel />} size="sm" readOnly={readOnly}>
+        <Fieldset data-size="sm">
+          <Fieldset.Legend>
+            <FieldLabel />
+          </Fieldset.Legend>
           <Checkbox
             value={internalField.id}
             checked={fieldValue === "true"}
@@ -108,8 +111,9 @@ export const InternalSection = ({
               setFieldValue(name, e.target.checked ? "true" : "false")
             }
             aria-label={`${internalField.label}, ja eller nei`}
+            readOnly={readOnly}
           />
-        </Checkbox.Group>
+        </Fieldset>
       );
     }
 
@@ -117,7 +121,7 @@ export const InternalSection = ({
       return (
         <Combobox
           label={<FieldLabel />}
-          size="sm"
+          data-size="sm"
           placeholder="select user"
           value={
             fieldValue && userList?.find((u) => u.id === fieldValue)
@@ -145,7 +149,7 @@ export const InternalSection = ({
       return (
         <Combobox
           label={<FieldLabel />}
-          size="sm"
+          data-size="sm"
           value={
             fieldValue && codes?.find((code) => code.id === fieldValue)
               ? [fieldValue]
@@ -179,7 +183,7 @@ export const InternalSection = ({
   };
 
   return (
-    <Box className={styles.internalSection}>
+    <div className={styles.internalSection}>
       <Combobox
         label={
           <TitleWithHelpTextAndTag
@@ -189,7 +193,7 @@ export const InternalSection = ({
             {localization.conceptForm.fieldLabel.assignedUser}
           </TitleWithHelpTextAndTag>
         }
-        size="sm"
+        data-size="sm"
         value={
           values.assignedUser &&
           userList?.find((user) => user.id === values.assignedUser)
@@ -219,7 +223,7 @@ export const InternalSection = ({
             {localization.conceptForm.fieldLabel.abbreviationLabel}
           </TitleWithHelpTextAndTag>
         }
-        size="sm"
+        data-size="sm"
         name="abbreviatedLabel"
         error={errors?.["abbreviatedLabel"]}
         readOnly={readOnly}
@@ -250,6 +254,6 @@ export const InternalSection = ({
           })}
         </div>
       ))}
-    </Box>
+    </div>
   );
 };

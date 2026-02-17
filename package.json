@@ -35,7 +35,8 @@
   },
   "private": true,
   "workspaces": [
-    "libs/ui-v2"
+    "libs/ui-v2",
+    "apps/concept-catalog"
   ],
   "dependencies": {
     "@digdir/designsystemet-css": "0.10.0",

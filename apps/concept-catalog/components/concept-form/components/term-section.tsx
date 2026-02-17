@@ -1,9 +1,8 @@
-import { Box } from "@digdir/designsystemet-react";
 import {
   FieldsetDivider,
   FormikLanguageFieldset,
   TitleWithHelpTextAndTag,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import { localization } from "@catalog-frontend/utils";
 import { useFormikContext } from "formik";
 import { Concept } from "@catalog-frontend/types";
@@ -16,7 +15,7 @@ type TermSectionProps = {
 
 export const TermSection = ({ changed, readOnly }: TermSectionProps) => {
   return (
-    <Box>
+    <div>
       <FormikLanguageFieldset
         name="anbefaltTerm.navn"
         readOnly={readOnly}
@@ -61,6 +60,6 @@ export const TermSection = ({ changed, readOnly }: TermSectionProps) => {
         }
         multiple
       />
-    </Box>
+    </div>
   );
 };

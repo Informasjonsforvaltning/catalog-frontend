@@ -23,7 +23,7 @@ export const ActivityLog = ({ catalogId, updates }: Props) => {
       {updates.map((update) => (
         <li key={update.id} className={styles.listItem}>
           <div className={styles.listContent}>
-            <Heading level={3} size="xsmall">
+            <Heading level={3} data-size="xs">
               <Link
                 href={`/catalogs/${catalogId}/concepts/${update.resourceId}`}
                 className={styles.heading}

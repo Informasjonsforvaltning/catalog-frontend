@@ -7,7 +7,7 @@ import {
   SearchConceptResponse,
   Search,
 } from "@catalog-frontend/types";
-import { SelectOption } from "@catalog-frontend/ui";
+import { SelectOption } from "@catalog-frontend/ui-v2";
 import { useQuery } from "@tanstack/react-query";
 
 export type SortFields = "SIST_ENDRET" | "ANBEFALT_TERM";

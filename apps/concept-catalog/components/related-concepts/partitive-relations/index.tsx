@@ -1,6 +1,6 @@
 import React from "react";
 import { UnionRelation, RelatedConcept } from "@catalog-frontend/types";
-import { KeyValueListItem } from "@catalog-frontend/ui";
+import { KeyValueListItem } from "@catalog-frontend/ui-v2";
 import { getTranslateText, localization } from "@catalog-frontend/utils";
 import { Link } from "@digdir/designsystemet-react";
 

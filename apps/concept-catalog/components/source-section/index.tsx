@@ -8,7 +8,7 @@ import { FieldArray } from "formik";
 import { SourceForDefinitionField } from "./source-for-definition";
 import { PlusCircleIcon } from "@navikt/aksel-icons";
 import { RelationToSource } from "./relation-to-source";
-import { Button } from "@catalog-frontend/ui";
+import { Button } from "@catalog-frontend/ui-v2";
 
 interface Props {
   fieldName: string;
@@ -47,7 +47,7 @@ export const SourceSection: FC<Props> = ({
               <div>
                 {!readOnly && (
                   <Button
-                    color="second"
+                    data-color="second"
                     variant="tertiary"
                     onClick={() => arrayHelpers.push({ uri: "", tekst: "" })}
                   >
