@@ -1,7 +1,13 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { Accordion, Radio } from "@digdir/designsystemet-react";
+import {
+  Card,
+  Details,
+  Fieldset,
+  Radio,
+  useRadioGroup,
+} from "@digdir/designsystemet-react";
 import { localization } from "@catalog-frontend/utils";
 import styles from "./activity-log-filter.module.css";
 
@@ -22,30 +28,34 @@ const ActivityLogFilter = ({ catalogId }: Props) => {
     { label: localization.activityLog.commentActivity, value: "comments" },
   ];
 
+  const { getRadioProps } = useRadioGroup({
+    value: view,
+    onChange: (nextValue) => handleViewChange(nextValue),
+  });
+
   return (
     <div className={styles.accordionContainer}>
-      <Accordion border>
-        <Accordion.Item defaultOpen>
-          <Accordion.Header level={3}>
+      <Card>
+        <Details defaultOpen>
+          <Details.Summary>
             {localization.activityLog.selectType}
-          </Accordion.Header>
-          <Accordion.Content>
-            <Radio.Group
-              hideLegend
-              legend={localization.activityLog.selectType}
-              size="small"
-              onChange={handleViewChange}
-              defaultValue={view}
-            >
+          </Details.Summary>
+          <Details.Content>
+            <Fieldset data-size="sm">
+              <Fieldset.Legend className="sr-only">
+                {localization.activityLog.selectType}
+              </Fieldset.Legend>
               {options.map((option) => (
-                <Radio key={option.value} value={option.value}>
-                  {option.label}
-                </Radio>
+                <Radio
+                  key={option.value}
+                  {...getRadioProps(option.value)}
+                  label={option.label}
+                />
               ))}
-            </Radio.Group>
-          </Accordion.Content>
-        </Accordion.Item>
-      </Accordion>
+            </Fieldset>
+          </Details.Content>
+        </Details>
+      </Card>
     </div>
   );
 };

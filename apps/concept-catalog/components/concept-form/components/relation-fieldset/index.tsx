@@ -3,17 +3,17 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import { useFormikContext } from "formik";
 import {
-  Box,
   Combobox,
   Fieldset,
   Radio,
   Textfield,
+  useRadioGroup,
 } from "@digdir/designsystemet-react";
 import {
   FieldsetDivider,
   FormikLanguageFieldset,
   TitleWithHelpTextAndTag,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import { getTranslateText, localization } from "@catalog-frontend/utils";
 import {
   RelatedConcept,
@@ -211,6 +211,11 @@ export const RelationFieldset = ({
     setRelatedConcept([]);
   };
 
+  const { getRadioProps: getRelatedConceptTypeRadioProps } = useRadioGroup({
+    value: relatedConceptType,
+    onChange: (nextValue) => handleRelatedConceptTypeChange(nextValue),
+  });
+
   const handleRelationTypeChange = (value: string[]) => {
     setFieldValue("relasjon", value[0]);
     setFieldValue("relasjonsType", null);
@@ -256,11 +261,10 @@ export const RelationFieldset = ({
   }, [relatedConcept]);
 
   return (
-    <Box className={styles.root}>
-      <Box className={styles.flex}>
-        <Fieldset
-          size="sm"
-          legend={
+    <div className={styles.root}>
+      <div className={styles.flex}>
+        <Fieldset data-size="sm">
+          <Fieldset.Legend>
             <TitleWithHelpTextAndTag
               helpText={localization.conceptForm.helpText.relatedConcept}
               tagColor="warning"
@@ -268,23 +272,19 @@ export const RelationFieldset = ({
             >
               {localization.conceptForm.fieldLabel.relatedConcept}
             </TitleWithHelpTextAndTag>
-          }
-        >
-          <Radio.Group
-            legend=""
-            size="sm"
-            value={relatedConceptType}
-            onChange={handleRelatedConceptTypeChange}
-          >
-            {relatedConceptTypes.map((type) => (
-              <Radio key={type} value={type}>
-                {localization.conceptForm.fieldLabel.relatedConceptTypes[type]}
-              </Radio>
-            ))}
-          </Radio.Group>
+          </Fieldset.Legend>
+          {relatedConceptTypes.map((type) => (
+            <Radio
+              key={type}
+              {...getRelatedConceptTypeRadioProps(type)}
+              label={
+                localization.conceptForm.fieldLabel.relatedConceptTypes[type]
+              }
+            />
+          ))}
           {relatedConceptType === "internal" && (
             <Combobox
-              size="sm"
+              data-size="sm"
               portal={false}
               value={internalRelatedConceptComboValue()}
               label="Søk begrep"
@@ -307,7 +307,7 @@ export const RelationFieldset = ({
           )}
           {relatedConceptType === "external" && (
             <Combobox
-              size="sm"
+              data-size="sm"
               portal={false}
               value={externalRelatedConceptComboValue()}
               label="Søk begrep"
@@ -330,13 +330,14 @@ export const RelationFieldset = ({
           )}
           {relatedConceptType === "custom" && (
             <Textfield
+              aria-label={localization.conceptForm.fieldLabel.relatedConcept}
               value={relatedConcept[0] ?? ""}
               onChange={handleCustomRelatedConceptChange}
               error={errors.relatertBegrep}
             />
           )}
         </Fieldset>
-      </Box>
+      </div>
       <FieldsetDivider />
 
       <Combobox
@@ -349,7 +350,7 @@ export const RelationFieldset = ({
             {localization.conceptForm.fieldLabel.relation}
           </TitleWithHelpTextAndTag>
         }
-        size="sm"
+        data-size="sm"
         portal={false}
         error={errors?.relasjon}
         value={
@@ -370,7 +371,7 @@ export const RelationFieldset = ({
       {(values.relasjon === RelationTypeEnum.GENERISK ||
         values.relasjon === RelationTypeEnum.PARTITIV) && (
         <>
-          <Box className={styles.flex}>
+          <div className={styles.flex}>
             <Combobox
               label={
                 <TitleWithHelpTextAndTag
@@ -385,7 +386,7 @@ export const RelationFieldset = ({
                   {localization.conceptForm.fieldLabel.relationLevel}
                 </TitleWithHelpTextAndTag>
               }
-              size="sm"
+              data-size="sm"
               portal={false}
               value={
                 values.relasjonsType &&
@@ -404,7 +405,7 @@ export const RelationFieldset = ({
                 </Combobox.Option>
               ))}
             </Combobox>
-          </Box>
+          </div>
           <FormikLanguageFieldset
             name="inndelingskriterium"
             legend={
@@ -435,6 +436,6 @@ export const RelationFieldset = ({
           }
         />
       )}
-    </Box>
+    </div>
   );
 };

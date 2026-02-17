@@ -6,10 +6,9 @@ import {
   StorageData,
 } from "@catalog-frontend/types";
 import {
-  Box,
   Button,
   Card,
-  ErrorMessage,
+  ValidationMessage,
   Fieldset,
   Heading,
   Paragraph,
@@ -26,7 +25,7 @@ import {
 import { forwardRef, useState } from "react";
 import { DefinitionModal } from "./definition-modal";
 import { getTranslateText, localization } from "@catalog-frontend/utils";
-import { TitleWithHelpTextAndTag } from "@catalog-frontend/ui";
+import { TitleWithHelpTextAndTag } from "@catalog-frontend/ui-v2";
 import { DataStorage } from "@catalog-frontend/utils";
 
 function getFirstErrorByRootKeys(
@@ -150,11 +149,10 @@ export const DefinitionSection = ({
   ForwardedTag.displayName = "ForwardedTag";
 
   return (
-    <Box>
-      <Box className={styles.fieldSet}>
-        <Fieldset
-          readOnly={readOnly}
-          legend={
+    <div>
+      <div className={styles.fieldSet}>
+        <Fieldset>
+          <Fieldset.Legend>
             <TitleWithHelpTextAndTag
               helpText={localization.conceptForm.helpText.definition}
               tagTitle={localization.tag.required}
@@ -162,8 +160,8 @@ export const DefinitionSection = ({
             >
               Definisjon
             </TitleWithHelpTextAndTag>
-          }
-        />
+          </Fieldset.Legend>
+        </Fieldset>
 
         {definitions
           .filter((name) => values[name])
@@ -173,29 +171,23 @@ export const DefinitionSection = ({
               def && (
                 <Card
                   key={name}
-                  color="neutral"
+                  data-color="neutral"
                   className={
                     Object.keys(errors).includes(name)
                       ? styles.borderDanger
                       : ""
                   }
                 >
-                  <Card.Header className={styles.definitionHeader}>
+                  <Card.Block className={styles.definitionHeader}>
                     <div>
-                      <Heading level={3} size="xxsmall">
+                      <Heading level={3} data-size="2xs">
                         {
                           localization.conceptForm.fieldLabel
                             .definitionTargetGroupFull[name]
                         }
                       </Heading>
                       {def.kildebeskrivelse?.kilde?.length ? (
-                        <Popover
-                          open={open[index]}
-                          onClose={() => setOpen({ ...open, [index]: false })}
-                          placement="top"
-                          size="md"
-                          variant="default"
-                        >
+                        <Popover.TriggerContext>
                           <Popover.Trigger asChild>
                             <ForwardedTag
                               role="button"
@@ -210,7 +202,12 @@ export const DefinitionSection = ({
                               {sourcesText(def.kildebeskrivelse?.kilde)}
                             </ForwardedTag>
                           </Popover.Trigger>
-                          <Popover.Content>
+                          <Popover
+                            open={open[index]}
+                            onClose={() => setOpen({ ...open, [index]: false })}
+                            placement="top"
+                            data-size="md"
+                          >
                             <ul>
                               {def.kildebeskrivelse?.kilde?.map(
                                 (source, index) => (
@@ -220,10 +217,10 @@ export const DefinitionSection = ({
                                 ),
                               )}
                             </ul>
-                          </Popover.Content>
-                        </Popover>
+                          </Popover>
+                        </Popover.TriggerContext>
                       ) : (
-                        <Tag size="sm" color="second">
+                        <Tag data-size="sm" data-color="second">
                           {sourcesText(def.kildebeskrivelse?.kilde)}
                         </Tag>
                       )}
@@ -245,7 +242,7 @@ export const DefinitionSection = ({
                         trigger={
                           <Button
                             variant="tertiary"
-                            size="sm"
+                            data-size="sm"
                             disabled={readOnly}
                           >
                             <PencilWritingIcon
@@ -266,8 +263,8 @@ export const DefinitionSection = ({
 
                       <Button
                         variant="tertiary"
-                        size="sm"
-                        color="danger"
+                        data-size="sm"
+                        data-color="danger"
                         disabled={readOnly}
                         onClick={() => handleUpdateDefinition(null, name)}
                       >
@@ -275,26 +272,26 @@ export const DefinitionSection = ({
                         Slett
                       </Button>
                     </div>
-                  </Card.Header>
-                  <Card.Content className={styles.definitionContent}>
+                  </Card.Block>
+                  <Card.Block className={styles.definitionContent}>
                     <Paragraph>{getTranslateText(def.tekst)}</Paragraph>
-                    <Box>
+                    <div>
                       {allowedLanguages
                         .filter((lang) => def.tekst[lang])
                         .map((lang) => (
-                          <Tag key={lang} size="sm" color="third">
+                          <Tag key={lang} data-size="sm" data-color="third">
                             {localization.language[lang]}
                           </Tag>
                         ))}
-                    </Box>
-                  </Card.Content>
+                    </div>
+                  </Card.Block>
                 </Card>
               )
             );
           })}
-      </Box>
+      </div>
       {!readOnly && (
-        <Box className={styles.buttonRow}>
+        <div className={styles.buttonRow}>
           {definitions
             .filter((name) => !values[name])
             .map((name) => (
@@ -309,7 +306,7 @@ export const DefinitionSection = ({
                   localization.conceptForm.helpText.definitionText[name]
                 }
                 trigger={
-                  <Button variant="tertiary" color="first" size="sm">
+                  <Button variant="tertiary" data-color="first" data-size="sm">
                     <PlusCircleIcon aria-hidden fontSize="1rem" />
                     {
                       localization.conceptForm.fieldLabel.definitionTargetGroup[
@@ -323,7 +320,7 @@ export const DefinitionSection = ({
                 onClose={handleCloseDefinitionModal}
               />
             ))}
-        </Box>
+        </div>
       )}
 
       {Object.keys(errors).some((value) =>
@@ -333,14 +330,14 @@ export const DefinitionSection = ({
           "definisjonForSpesialister",
         ].includes(value),
       ) && (
-        <ErrorMessage>
+        <ValidationMessage>
           {getFirstErrorByRootKeys(errors, [
             "definisjon",
             "definisjonForAllmennheten",
             "definisjonForSpesialister",
           ])}
-        </ErrorMessage>
+        </ValidationMessage>
       )}
-    </Box>
+    </div>
   );
 };

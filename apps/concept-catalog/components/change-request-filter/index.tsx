@@ -1,6 +1,13 @@
 "use client";
 
-import { Accordion, Checkbox, Radio } from "@digdir/designsystemet-react";
+import {
+  Card,
+  Checkbox,
+  Details,
+  Radio,
+  useRadioGroup,
+  useCheckboxGroup,
+} from "@digdir/designsystemet-react";
 import { localization } from "@catalog-frontend/utils";
 import { ItemType, Status } from "@catalog-frontend/types";
 import styles from "./change-request-filter.module.css";
@@ -11,42 +18,48 @@ type Props = {
 };
 
 const ChangeRequestsFilter = ({ itemType, status }: Props) => {
+  const { getRadioProps } = useRadioGroup({
+    value: itemType.selected,
+    onChange: (nextValue) => itemType.onChange(nextValue),
+  });
+
+  const { getCheckboxProps } = useCheckboxGroup({
+    value: status.selected,
+    onChange: status.onChange,
+  });
+
   return (
     <div className={styles.accordionContainer}>
-      <Accordion border>
-        <Accordion.Item defaultOpen>
-          <Accordion.Header level={3}>{localization.filter}</Accordion.Header>
-          <Accordion.Content>
-            <Radio.Group
-              size="small"
-              onChange={itemType.onChange}
-              defaultValue={itemType.selected}
-            >
+      <Card>
+        <Details defaultOpen>
+          <Details.Summary>{localization.filter}</Details.Summary>
+          <Details.Content>
+            <div data-size="sm">
               {itemType.options.map((option) => (
-                <Radio key={option.value} value={option.value}>
-                  {option.label}
-                </Radio>
+                <Radio
+                  key={option.value}
+                  {...getRadioProps(option.value)}
+                  label={option.label}
+                />
               ))}
-            </Radio.Group>
-          </Accordion.Content>
-        </Accordion.Item>
-        <Accordion.Item defaultOpen>
-          <Accordion.Header level={3}>{localization.status}</Accordion.Header>
-          <Accordion.Content>
-            <Checkbox.Group
-              onChange={status.onChange}
-              size="small"
-              defaultValue={status.selected}
-            >
+            </div>
+          </Details.Content>
+        </Details>
+        <Details defaultOpen>
+          <Details.Summary>{localization.status}</Details.Summary>
+          <Details.Content>
+            <div data-size="sm">
               {status.options.map((statusItem) => (
-                <Checkbox key={statusItem.value} value={statusItem.value}>
-                  {statusItem.label}
-                </Checkbox>
+                <Checkbox
+                  key={statusItem.value}
+                  label={statusItem.label}
+                  {...getCheckboxProps(statusItem.value)}
+                />
               ))}
-            </Checkbox.Group>
-          </Accordion.Content>
-        </Accordion.Item>
-      </Accordion>
+            </div>
+          </Details.Content>
+        </Details>
+      </Card>
     </div>
   );
 };

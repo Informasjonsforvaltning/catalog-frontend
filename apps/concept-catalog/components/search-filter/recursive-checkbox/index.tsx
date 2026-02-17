@@ -17,13 +17,12 @@ export const RecursiveCheckbox = (props: Props) => {
   return (
     <div>
       <Checkbox
-        size="small"
+        data-size="sm"
         checked={checked}
         onChange={() => onCheck(node.value)}
         value={node.value}
-      >
-        {node.label}
-      </Checkbox>
+        label={node.label}
+      />
 
       {checked && Boolean(node.children?.length) && (
         <div className={styles.checkboxGroup}>

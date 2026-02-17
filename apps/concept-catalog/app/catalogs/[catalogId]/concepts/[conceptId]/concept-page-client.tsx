@@ -6,8 +6,8 @@ import NextLink from "next/link";
 import { isEmpty } from "lodash";
 import { ChatIcon, EnvelopeClosedIcon, PhoneIcon } from "@navikt/aksel-icons";
 import {
-  Accordion,
   Chip,
+  Details,
   Link,
   Switch,
   Tabs,
@@ -25,7 +25,7 @@ import {
   HelpMarkdown,
   ConfirmModal,
   MarkdownComponent,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import {
   localization,
   getTranslateText as translate,
@@ -248,16 +248,17 @@ export const ConceptPageClient = ({
         <div>
           <Switch
             value="published"
-            size="small"
-            position="right"
+            data-size="sm"
+            position="end"
             readOnly={isPublished || !hasWritePermission || !isValid}
             checked={isPublished}
             onChange={handleOnChangePublished}
-          >
-            {isPublished
-              ? localization.publicationState.published
-              : localization.publicationState.unpublished}
-          </Switch>
+            label={
+              isPublished
+                ? localization.publicationState.published
+                : localization.publicationState.unpublished
+            }
+          />
         </div>
         <div className={classes.greyFont}>
           {isPublished
@@ -327,12 +328,12 @@ export const ConceptPageClient = ({
             <ul key="label-list" className={classes.labels}>
               {concept?.merkelapp?.map((label) => (
                 <li key={`label-${label}`}>
-                  <Chip.Toggle
+                  <Chip.Button
                     key={`label-${label}`}
                     onClick={() => handleLabelClick(label)}
                   >
                     {label}
-                  </Chip.Toggle>
+                  </Chip.Button>
                 </li>
               ))}
             </ul>,
@@ -579,7 +580,7 @@ export const ConceptPageClient = ({
     const isCommentInEditMode = (id) => id in updateCommentText;
 
     return getCommentsStatus == "pending" ? (
-      <Spinner size="medium" />
+      <Spinner size="md" />
     ) : (
       <>
         <div className={classes.bottomSpacingSmall}>
@@ -672,20 +673,20 @@ export const ConceptPageClient = ({
     };
 
     return getHistoryStatus === "pending" ? (
-      <Spinner size="medium" />
+      <Spinner size="md" />
     ) : getHistoryData?.updates?.length === 0 ? (
       <span>{localization.history.noChanges}</span>
     ) : (
       <>
-        <Accordion>
+        <>
           {getHistoryData.updates?.length > 0 &&
             getHistoryData.updates.map((update: Update) => (
-              <Accordion.Item key={`history-${update.id}`}>
-                <Accordion.Header className={classes.historyHeader}>
+              <Details key={`history-${update.id}`}>
+                <Details.Summary className={classes.historyHeader}>
                   <span>{update.person.name}</span>
                   <span>{formatISO(update.datetime)}</span>
-                </Accordion.Header>
-                <Accordion.Content>
+                </Details.Summary>
+                <Details.Content>
                   {update.operations?.map((operation, i) => (
                     <div
                       key={`operation-${i}`}
@@ -697,10 +698,10 @@ export const ConceptPageClient = ({
                       <div>{JSON.stringify(operation.value)}</div>
                     </div>
                   ))}
-                </Accordion.Content>
-              </Accordion.Item>
+                </Details.Content>
+              </Details>
             ))}
-        </Accordion>
+        </>
         {getHistoryData.updates?.length > 0 && (
           <Pagination
             className={classes.historyPagination}
@@ -841,7 +842,7 @@ export const ConceptPageClient = ({
         </InfoCard>
 
         <div className={classes.tabs}>
-          <Tabs defaultValue={localization.comment.comments} size="small">
+          <Tabs defaultValue={localization.comment.comments} data-size="sm">
             <Tabs.List>
               <Tabs.Tab value={localization.comment.comments}>
                 {localization.comment.comments}
@@ -853,15 +854,15 @@ export const ConceptPageClient = ({
                 {localization.concept.versions}
               </Tabs.Tab>
             </Tabs.List>
-            <Tabs.Content value={localization.comment.comments}>
+            <Tabs.Panel value={localization.comment.comments}>
               <CommentsTab />
-            </Tabs.Content>
-            <Tabs.Content value={localization.changeHistory}>
+            </Tabs.Panel>
+            <Tabs.Panel value={localization.changeHistory}>
               <HistoryTab />
-            </Tabs.Content>
-            <Tabs.Content value={localization.concept.versions}>
+            </Tabs.Panel>
+            <Tabs.Panel value={localization.concept.versions}>
               <RevisionsTab />
-            </Tabs.Content>
+            </Tabs.Panel>
           </Tabs>
         </div>
       </div>
@@ -870,7 +871,7 @@ export const ConceptPageClient = ({
 
   const RightColumn = () => {
     return (
-      <InfoCard size="small">
+      <InfoCard data-size="sm">
         {infoDataColumnRight.map(([label, value]) => (
           <InfoCard.Item
             key={`info-data-${label}`}
@@ -938,7 +939,7 @@ export const ConceptPageClient = ({
                 </Button>
                 {!concept?.isArchived && (
                   <Button
-                    color="danger"
+                    data-color="danger"
                     variant="secondary"
                     onClick={() => setShowConfirmDelete(true)}
                   >
@@ -950,7 +951,6 @@ export const ConceptPageClient = ({
             <LinkButton
               href={`/catalogs/${catalogId}/change-requests/new?concept=${concept?.id}`}
               variant="secondary"
-              fullWidth={false}
             >
               {localization.concept.suggestChanges}
             </LinkButton>
