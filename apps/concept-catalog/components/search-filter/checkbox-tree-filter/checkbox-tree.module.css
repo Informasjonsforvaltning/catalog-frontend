@@ -1,3 +1,6 @@
 .pt1 {
   padding-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-size-4);
 }
