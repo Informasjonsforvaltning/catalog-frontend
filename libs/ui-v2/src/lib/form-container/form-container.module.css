@@ -25,7 +25,7 @@
   flex-direction: column;
   padding: 1.5em 2em;
   gap: 0.25em;
-  background: var(--fds-semantic-surface-third-light);
+  background: var(--ds-color-accent-background-tinted);
 }
 
 .header.secondary {
