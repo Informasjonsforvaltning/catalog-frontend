@@ -38,7 +38,7 @@ export const ToggleFieldButton = ({
   )[0] as keyof typeof localization.datasetForm.fieldLabel;
 
   return (
-    <Box>
+    <div>
       {expanded ? (
         <>
           {hasDeleteButton ? (
@@ -64,6 +64,6 @@ export const ToggleFieldButton = ({
           }}
         >{`${localization.add} ${localization.datasetForm.fieldLabel[labelKey]?.toLowerCase()}`}</AddButton>
       )}
-    </Box>
+    </div>
   );
 };

@@ -21,7 +21,7 @@ export const AccessRightFields = ({ isMobility: isMobility }: Props) => {
 
   return (
     <>
-      <Box>
+      <div>
         <Radio.Group
           data-size="sm"
           legend={
@@ -43,7 +43,7 @@ export const AccessRightFields = ({ isMobility: isMobility }: Props) => {
             </Radio>
           ))}
         </Radio.Group>
-      </Box>
+      </div>
 
       {!isMobility && (
         <div>

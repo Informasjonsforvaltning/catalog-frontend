@@ -39,7 +39,7 @@ export const AboutSection = ({
   const { setFieldValue, errors, values } = useFormikContext<Dataset>();
 
   return (
-    <Box>
+    <div>
       <Fieldset
         data-size="sm"
         legend={
@@ -165,6 +165,6 @@ export const AboutSection = ({
           </TitleWithHelpTextAndTag>
         }
       />
-    </Box>
+    </div>
   );
 };

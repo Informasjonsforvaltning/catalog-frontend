@@ -246,7 +246,7 @@ export const DistributionSection = ({
   }
 
   return (
-    <Box>
+    <div>
       <Fieldset
         data-size="sm"
         legend={
@@ -664,6 +664,6 @@ export const DistributionSection = ({
           />
         </div>
       </Fieldset>
-    </Box>
+    </div>
   );
 };

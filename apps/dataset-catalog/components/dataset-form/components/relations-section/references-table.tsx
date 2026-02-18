@@ -107,7 +107,7 @@ export const ReferenceTable = ({
   };
 
   return (
-    <Box className={styles.fieldContainer}>
+    <div className={styles.fieldContainer}>
       <TitleWithHelpTextAndTag
         helpText={localization.datasetForm.helptext.references}
       >
@@ -207,7 +207,7 @@ export const ReferenceTable = ({
           initialDatasets={[]}
         />
       </div>
-    </Box>
+    </div>
   );
 };
 

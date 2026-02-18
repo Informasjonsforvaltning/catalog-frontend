@@ -248,7 +248,7 @@ const DatasetsPageClient = ({
 
     return (
       <div className={styles.chips}>
-        <Chip.Group data-size="sm" className={styles.wrap}>
+        <div className={styles.wrap}>
           {filterStatus?.map((filter, index) => (
             <Chip.Removable
               key={filter}
@@ -288,7 +288,7 @@ const DatasetsPageClient = ({
                 : localization.tag.dcatApNo}
             </Chip.Removable>
           ))}
-        </Chip.Group>
+        </div>
       </div>
     );
   };

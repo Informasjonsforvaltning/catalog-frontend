@@ -19,7 +19,7 @@ export const DetailsSection = ({
   const { datasetTypes, provenanceStatements, languages, frequencies } =
     referenceData;
   return (
-    <Box>
+    <div>
       <RecommendedDetailFields
         referenceDataEnv={referenceDataEnv}
         languages={languages}
@@ -31,6 +31,6 @@ export const DetailsSection = ({
         frequencies={frequencies}
         isMobility={isMobility}
       />
-    </Box>
+    </div>
   );
 };

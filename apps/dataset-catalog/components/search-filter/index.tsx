@@ -1,7 +1,7 @@
 "use client";
 
 import { memo, useMemo } from "react";
-import { Accordion } from "@digdir/designsystemet-react";
+import { Details, Card } from "@digdir/designsystemet-react";
 import {
   AccordionItem,
   AccordionItemProps,
@@ -149,11 +149,9 @@ const SearchFilter = ({ pageSettings }: SearchFilterProps) => {
   ));
 
   return (
-    <div className={styles.searchFilter}>
-      <Accordion border={true} className={styles.accordion}>
-        {accordionItems}
-      </Accordion>
-    </div>
+    <Card className={styles.searchFilter}>
+      <Details className={styles.accordion}>{accordionItems}</Details>
+    </Card>
   );
 };
 

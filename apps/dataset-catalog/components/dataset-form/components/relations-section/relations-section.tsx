@@ -24,7 +24,7 @@ export const RelationsSection = ({
   const { errors } = useFormikContext<Dataset>();
 
   return (
-    <Box>
+    <div>
       <ReferenceTable
         searchEnv={searchEnv}
         autoSaveId={autoSaveId}
@@ -42,6 +42,6 @@ export const RelationsSection = ({
           errors={errors.relatedResources}
         />
       </div>
-    </Box>
+    </div>
   );
 };

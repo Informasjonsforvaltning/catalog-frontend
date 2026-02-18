@@ -49,7 +49,7 @@ export const QualifiedAttributionsSection = ({
   ];
 
   return (
-    <Box>
+    <div>
       <Fieldset
         data-size="sm"
         legend={
@@ -93,6 +93,6 @@ export const QualifiedAttributionsSection = ({
           ))}
         </Combobox>
       </Fieldset>
-    </Box>
+    </div>
   );
 };
