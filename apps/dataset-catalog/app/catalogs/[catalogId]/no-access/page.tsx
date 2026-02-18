@@ -33,7 +33,7 @@ const NoAccess = async ({
         subtitle={localization.noAccess}
       />
       <CenterContainer>
-        <Heading level={2} size="small">
+        <Heading level={2} data-size="sm">
           {localization.youHaveNoAccess}
         </Heading>
       </CenterContainer>

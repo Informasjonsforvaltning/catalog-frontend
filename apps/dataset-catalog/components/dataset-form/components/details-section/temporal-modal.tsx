@@ -51,7 +51,7 @@ export const TemporalModal = ({ label }: Props) => {
             className={get(errors, "temporal") ? styles.errorBorder : undefined}
           >
             {values?.temporal && values?.temporal?.length > 0 && (
-              <Table size="sm" className={styles.table}>
+              <Table data-size="sm" className={styles.table}>
                 <Table.Head>
                   <Table.Row>
                     <Table.HeaderCell>{localization.from}</Table.HeaderCell>
@@ -177,7 +177,7 @@ const FieldModal = ({
                   >
                     <FastField
                       as={Textfield}
-                      size="sm"
+                      data-size="sm"
                       label={localization.from}
                       type="date"
                       name="startDate"
@@ -188,7 +188,7 @@ const FieldModal = ({
 
                     <FastField
                       as={Textfield}
-                      size="sm"
+                      data-size="sm"
                       label={localization.to}
                       type="date"
                       name="endDate"
@@ -204,7 +204,7 @@ const FieldModal = ({
                         isSubmitting || !dirty || hasNoFieldValues(values)
                       }
                       onClick={() => submitForm()}
-                      size="sm"
+                      data-size="sm"
                     >
                       {type === "new" ? localization.add : localization.update}
                     </Button>
@@ -216,7 +216,7 @@ const FieldModal = ({
                         modalRef.current?.close();
                       }}
                       disabled={isSubmitting}
-                      size="sm"
+                      data-size="sm"
                     >
                       {localization.button.cancel}
                     </Button>

@@ -77,14 +77,14 @@ const restoreConfirmMessage = ({ values, lastChanged }: StorageData) => {
   });
   return (
     <>
-      <Paragraph size="sm">
+      <Paragraph data-size="sm">
         {localization.datasetForm.alert.youHaveUnsavedChanges}
       </Paragraph>
-      <Paragraph size="sm">
+      <Paragraph data-size="sm">
         <span className={styles.bold}>{getTranslateText(values?.title)}</span> (
         {lastChangedFormatted})
       </Paragraph>
-      <Paragraph size="sm" className={styles.topMargin2}>
+      <Paragraph data-size="sm" className={styles.topMargin2}>
         {localization.alert.wantToRestoreChanges}
       </Paragraph>
     </>
@@ -527,7 +527,7 @@ export const DatasetForm = ({
                 <div className={styles.footerContent}>
                   <Button
                     type="button"
-                    size="sm"
+                    data-size="sm"
                     disabled={
                       isSubmitting || isValidating || isCanceled || !dirty
                     }
@@ -537,7 +537,7 @@ export const DatasetForm = ({
                     }}
                   >
                     {isSubmitting ? (
-                      <Spinner title="Lagrer" size="sm" />
+                      <Spinner title="Lagrer" data-size="sm" />
                     ) : (
                       localization.save
                     )}
@@ -545,7 +545,7 @@ export const DatasetForm = ({
 
                   <Button
                     type="button"
-                    size="sm"
+                    data-size="sm"
                     variant="secondary"
                     disabled={isSubmitting || isValidating || isCanceled}
                     onClick={handleCancel}
@@ -555,7 +555,7 @@ export const DatasetForm = ({
                   <div className={styles.verticalLine} />
                   <Switch
                     position="left"
-                    size="sm"
+                    data-size="sm"
                     checked={values.approved}
                     onChange={(event) =>
                       handleSwitchChange(event, setFieldValue)
@@ -582,7 +582,7 @@ export const DatasetForm = ({
                     )}
                   >
                     <Checkbox
-                      size="sm"
+                      data-size="sm"
                       value="ignoreRequired"
                       checked={ignoreRequired}
                       onChange={(e) =>

@@ -20,7 +20,7 @@ export const SignOut = () => {
         subtitle={localization.auth.logout}
       />
       <CenterContainer>
-        <Heading level={2} size="small">
+        <Heading level={2} data-size="sm">
           <>
             <div>{localization.auth.loggingOut}</div>
             <Spinner />

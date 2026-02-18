@@ -51,7 +51,7 @@ export const QualifiedAttributionsSection = ({
   return (
     <Box>
       <Fieldset
-        size="sm"
+        data-size="sm"
         legend={
           <TitleWithHelpTextAndTag
             helpText={localization.datasetForm.helptext.qualifiedAttributions}
@@ -61,7 +61,7 @@ export const QualifiedAttributionsSection = ({
         }
       >
         <Combobox
-          size="sm"
+          data-size="sm"
           onValueChange={(selectedValues: string[]) =>
             setFieldValue("qualifiedAttributions", selectedValues)
           }

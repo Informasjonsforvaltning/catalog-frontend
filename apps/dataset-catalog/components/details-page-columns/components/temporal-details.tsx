@@ -12,7 +12,7 @@ export const TemporalDetails = ({ temporal }: Props) => {
     <>
       {temporal &&
       temporal.filter((item) => item?.startDate || item?.endDate).length > 0 ? (
-        <Table size="sm" className={styles.table}>
+        <Table data-size="sm" className={styles.table}>
           <Table.Head>
             <Table.Row>
               <Table.HeaderCell>{localization.from}</Table.HeaderCell>

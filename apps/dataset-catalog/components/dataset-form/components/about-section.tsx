@@ -41,7 +41,7 @@ export const AboutSection = ({
   return (
     <Box>
       <Fieldset
-        size="sm"
+        data-size="sm"
         legend={
           <TitleWithHelpTextAndTag
             helpText={
@@ -55,7 +55,7 @@ export const AboutSection = ({
           </TitleWithHelpTextAndTag>
         }
       >
-        <Paragraph size="sm">
+        <Paragraph data-size="sm">
           {values?.applicationProfile === ApplicationProfile.MOBILITYDCATAP
             ? localization.tag.mobilityDcatAp
             : localization.tag.dcatApNo}
@@ -91,7 +91,7 @@ export const AboutSection = ({
       {isMobility && (
         <>
           <Fieldset
-            size="sm"
+            data-size="sm"
             legend={
               <TitleWithHelpTextAndTag
                 tagColor={isMobility ? undefined : "info"}
@@ -110,7 +110,7 @@ export const AboutSection = ({
           </Fieldset>
           <FieldsetDivider />
           <Fieldset
-            size="sm"
+            data-size="sm"
             legend={
               <TitleWithHelpTextAndTag
                 helpText={localization.datasetForm.helptext.frequency}
@@ -126,7 +126,7 @@ export const AboutSection = ({
               onValueChange={(selectedValues) => {
                 setFieldValue("frequency", selectedValues.toString());
               }}
-              size="sm"
+              data-size="sm"
               virtual
               error={errors.frequency}
             >
@@ -152,7 +152,7 @@ export const AboutSection = ({
       <FastField
         style={{ width: "fit-content" }}
         as={Textfield}
-        size="sm"
+        data-size="sm"
         type="date"
         name="issued"
         label={

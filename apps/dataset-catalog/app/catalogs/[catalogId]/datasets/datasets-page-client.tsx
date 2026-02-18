@@ -248,7 +248,7 @@ const DatasetsPageClient = ({
 
     return (
       <div className={styles.chips}>
-        <Chip.Group size="small" className={styles.wrap}>
+        <Chip.Group data-size="sm" className={styles.wrap}>
           {filterStatus?.map((filter, index) => (
             <Chip.Removable
               key={filter}

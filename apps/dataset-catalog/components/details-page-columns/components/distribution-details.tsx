@@ -82,7 +82,7 @@ export const DistributionDetailsCard = ({
       <div className={styles.infoCardItems}>
         {getTranslateText(distribution?.title, language) && (
           <div>
-            <Heading level={4} size="2xs">
+            <Heading level={4} data-size="2xs">
               {localization.title}
             </Heading>
             <p>{getTranslateText(distribution?.title, language)}</p>
@@ -91,12 +91,12 @@ export const DistributionDetailsCard = ({
 
         {distribution?.accessURL && (
           <div>
-            <Heading level={4} size="2xs">
+            <Heading level={4} data-size="2xs">
               {localization.datasetForm.fieldLabel.accessURL}
             </Heading>
             {distribution.accessURL.map((url: string, index: number) => {
               return (
-                <Paragraph size="sm" key={`accessURL-${index}`}>
+                <Paragraph data-size="sm" key={`accessURL-${index}`}>
                   <Link href={url}>{url}</Link>
                 </Paragraph>
               );
@@ -105,27 +105,27 @@ export const DistributionDetailsCard = ({
         )}
         {!isEmpty(mobilityDataStandard) && (
           <div>
-            <Heading level={5} size="2xs">
+            <Heading level={5} data-size="2xs">
               {localization.datasetForm.fieldLabel.mobilityDataStandard}
             </Heading>
-            <Paragraph size="sm">
+            <Paragraph data-size="sm">
               {getTranslateText(mobilityDataStandard?.label, language)}
             </Paragraph>
           </div>
         )}
         {rights && !isEmpty(rights) && (
           <div>
-            <Heading level={5} size="2xs">
+            <Heading level={5} data-size="2xs">
               {localization.datasetForm.fieldLabel.distributionRights}
             </Heading>
-            <Paragraph size="sm">
+            <Paragraph data-size="sm">
               {getTranslateText(rights.label, language)}
             </Paragraph>
           </div>
         )}
         {distribution?.format && !isEmpty(distribution.format) && (
           <div>
-            <Heading level={4} size="2xs">
+            <Heading level={4} data-size="2xs">
               {localization.datasetForm.fieldLabel.format}
             </Heading>
             <li className={styles.list}>
@@ -135,8 +135,8 @@ export const DistributionDetailsCard = ({
                   formats.find((format: any) => format?.uri === item);
                 return (
                   <Tag
-                    size="sm"
-                    color="info"
+                    data-size="sm"
+                    data-color="info"
                     key={`distributionformat-${index}`}
                   >
                     {match ? getTranslateText(match?.label, language) : item}
@@ -153,10 +153,10 @@ export const DistributionDetailsCard = ({
             <FieldsetDivider />
             {!isEmpty(distribution?.description) && (
               <div className={styles.distributionField}>
-                <Heading level={5} size="2xs">
+                <Heading level={5} data-size="2xs">
                   {localization.description}
                 </Heading>
-                <Paragraph size="sm">
+                <Paragraph data-size="sm">
                   {getTranslateText(distribution?.description, language)}
                 </Paragraph>
               </div>
@@ -164,12 +164,12 @@ export const DistributionDetailsCard = ({
 
             {!isEmpty(distribution?.downloadURL) && (
               <div className={styles.distributionField}>
-                <Heading level={5} size="2xs">
+                <Heading level={5} data-size="2xs">
                   {localization.datasetForm.fieldLabel.downloadURL}
                 </Heading>
                 {distribution.downloadURL?.map((url: string, index: number) => {
                   return (
-                    <Paragraph size="sm" key={`downloadURL-${index}`}>
+                    <Paragraph data-size="sm" key={`downloadURL-${index}`}>
                       <Link href={url}>{url}</Link>
                     </Paragraph>
                   );
@@ -179,13 +179,13 @@ export const DistributionDetailsCard = ({
 
             {distribution.mediaType && distribution.mediaType.length > 0 && (
               <div className={styles.distributionField}>
-                <Heading level={5} size="2xs">
+                <Heading level={5} data-size="2xs">
                   {localization.datasetForm.fieldLabel.mediaType}
                 </Heading>
                 <ul className={styles.list}>
                   {distribution?.mediaType?.map((uri) => (
                     <li key={`mediatype-${uri}`}>
-                      <Tag size="sm" color="info">
+                      <Tag data-size="sm" data-color="info">
                         {(
                           selectedMediaTypes?.find(
                             (type) => type.uri === uri,
@@ -201,11 +201,11 @@ export const DistributionDetailsCard = ({
             {distribution?.accessServices &&
               distribution.accessServices.length > 0 && (
                 <div className={styles.distributionField}>
-                  <Heading level={5} size="2xs">
+                  <Heading level={5} data-size="2xs">
                     {localization.datasetForm.fieldLabel.accessServices}
                   </Heading>
                   {
-                    <Table size="sm" className={styles.distributionTable}>
+                    <Table data-size="sm" className={styles.distributionTable}>
                       <Table.Head>
                         <Table.Row>
                           <Table.HeaderCell>
@@ -264,11 +264,11 @@ export const DistributionDetailsCard = ({
 
             {distribution.license && (
               <>
-                <Heading level={5} size="2xs">
+                <Heading level={5} data-size="2xs">
                   {localization.datasetForm.fieldLabel.license}
                 </Heading>
                 <div className={styles.distributionField}>
-                  <Paragraph size="sm">
+                  <Paragraph data-size="sm">
                     {getTranslateText(
                       openLicenses.find(
                         (license) => license.uri === distribution.license,
@@ -282,11 +282,11 @@ export const DistributionDetailsCard = ({
 
             {!isEmpty(distribution?.conformsTo) && (
               <div className={styles.distributionField}>
-                <Heading level={5} size="2xs">
+                <Heading level={5} data-size="2xs">
                   {localization.datasetForm.fieldLabel.standard}
                 </Heading>
 
-                <Table size="sm" className={styles.distributionTable}>
+                <Table data-size="sm" className={styles.distributionTable}>
                   <Table.Head>
                     <Table.Row>
                       <Table.HeaderCell>{localization.title}</Table.HeaderCell>
@@ -311,12 +311,12 @@ export const DistributionDetailsCard = ({
 
             {distribution?.page && !isEmpty(distribution.page[0]) && (
               <div className={styles.distributionField}>
-                <Heading level={5} size="2xs">
+                <Heading level={5} data-size="2xs">
                   {localization.datasetForm.fieldLabel.page}
                 </Heading>
                 {distribution.page.map((page, index: number) => {
                   return (
-                    <Paragraph size="sm" key={`page-${index}`}>
+                    <Paragraph data-size="sm" key={`page-${index}`}>
                       <Link href={page}>{page}</Link>
                     </Paragraph>
                   );

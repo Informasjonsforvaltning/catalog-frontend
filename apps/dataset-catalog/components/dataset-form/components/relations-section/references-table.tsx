@@ -117,7 +117,7 @@ export const ReferenceTable = ({
         <div
           className={get(errors, "references") ? styles.errorBorder : undefined}
         >
-          <Table size="sm" className={styles.table}>
+          <Table data-size="sm" className={styles.table}>
             <Table.Head>
               <Table.Row>
                 <Table.HeaderCell>
@@ -321,7 +321,7 @@ const FieldModal = ({
                   >
                     <Fieldset
                       legend={localization.datasetForm.fieldLabel.relationType}
-                      size="sm"
+                      data-size="sm"
                     >
                       <Combobox
                         onValueChange={(value) =>
@@ -332,7 +332,7 @@ const FieldModal = ({
                         }
                         placeholder={`${localization.datasetForm.fieldLabel.choseRelation}...`}
                         portal={false}
-                        size="sm"
+                        data-size="sm"
                         error={errors?.referenceType}
                         virtual
                       >
@@ -353,7 +353,7 @@ const FieldModal = ({
 
                     <Fieldset
                       legend={localization.datasetForm.fieldLabel.dataset}
-                      size="sm"
+                      data-size="sm"
                     >
                       <Combobox
                         onChange={(input: any) =>
@@ -371,7 +371,7 @@ const FieldModal = ({
                         }
                         placeholder={`${localization.search.search}...`}
                         portal={false}
-                        size="sm"
+                        data-size="sm"
                         error={errors?.source}
                       >
                         <Combobox.Empty>
@@ -414,7 +414,7 @@ const FieldModal = ({
                         isSubmitting || !dirty || hasNoFieldValues(values)
                       }
                       onClick={() => submitForm()}
-                      size="sm"
+                      data-size="sm"
                     >
                       {type === "new" ? localization.add : localization.update}
                     </Button>
@@ -426,7 +426,7 @@ const FieldModal = ({
                         modalRef.current?.close();
                       }}
                       disabled={isSubmitting}
-                      size="sm"
+                      data-size="sm"
                     >
                       {localization.button.cancel}
                     </Button>

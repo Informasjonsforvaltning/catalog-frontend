@@ -80,7 +80,7 @@ export const NewPage = ({
       <ButtonBar>
         <Button
           variant="tertiary"
-          data-color="second"
+          data-color="danger"
           data-size="sm"
           onClick={() => setShowCancelConfirm(true)}
         >

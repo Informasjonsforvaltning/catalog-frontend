@@ -265,7 +265,7 @@ export const DistributionModal = ({
                             )
                           }
                           as={Textfield}
-                          size="sm"
+                          data-size="sm"
                           error={props.errors?.downloadURL?.[index]}
                         />
                       </FieldsetWithDelete>
@@ -305,7 +305,7 @@ export const DistributionModal = ({
         selectedAndSearchedAccessServices,
       }: any) => (
         <Fieldset
-          size="sm"
+          data-size="sm"
           legend={
             <TitleWithHelpTextAndTag
               helpText={localization.datasetForm.helptext.accessServices}
@@ -335,7 +335,7 @@ export const DistributionModal = ({
                   setSelectedAccessServiceUris(selectedValues);
                 }}
                 placeholder={`${localization.search.search}...`}
-                size="sm"
+                data-size="sm"
                 virtual
                 ref={(el: HTMLInputElement | null) =>
                   setInputRef("accessServices", el)
@@ -393,7 +393,7 @@ export const DistributionModal = ({
         searchingMediaTypes,
       }: any) => (
         <Fieldset
-          size="sm"
+          data-size="sm"
           legend={
             <TitleWithHelpTextAndTag
               helpText={localization.datasetForm.helptext.mediaType}
@@ -470,7 +470,7 @@ export const DistributionModal = ({
                             )
                           }
                           as={Textfield}
-                          size="sm"
+                          data-size="sm"
                           error={props.errors?.page?.[index]}
                         />
                       </FieldsetWithDelete>
@@ -505,7 +505,7 @@ export const DistributionModal = ({
         distributionType === "distribution",
       render: ({ errors }: any) => (
         <Fieldset
-          size="sm"
+          data-size="sm"
           legend={
             <TitleWithHelpTextAndTag
               helpText={
@@ -540,7 +540,7 @@ export const DistributionModal = ({
                         />
                       </div>
                       <FastField
-                        size="sm"
+                        data-size="sm"
                         as={Textfield}
                         label={localization.link}
                         name={`conformsTo[${i}].uri`}
@@ -830,7 +830,7 @@ export const DistributionModal = ({
                       {isMobility && "mobilityDataStandard" in values ? (
                         <>
                           <Fieldset
-                            size="sm"
+                            data-size="sm"
                             legend={
                               <TitleWithHelpTextAndTag
                                 tagTitle={localization.tag.required}
@@ -859,7 +859,7 @@ export const DistributionModal = ({
                                   selectedValues.toString(),
                                 );
                               }}
-                              size="sm"
+                              data-size="sm"
                               virtual
                               error={errors.mobilityDataStandard}
                             >
@@ -890,7 +890,7 @@ export const DistributionModal = ({
                       {isMobility && values.rights ? (
                         <>
                           <Fieldset
-                            size="sm"
+                            data-size="sm"
                             legend={
                               <TitleWithHelpTextAndTag
                                 helpText={
@@ -919,7 +919,7 @@ export const DistributionModal = ({
                                   selectedValues.toString(),
                                 );
                               }}
-                              size="sm"
+                              data-size="sm"
                               virtual
                               error={errors?.rights?.type}
                             >
@@ -943,7 +943,7 @@ export const DistributionModal = ({
                         </>
                       ) : undefined}
                       <Fieldset
-                        size="sm"
+                        data-size="sm"
                         legend={
                           <TitleWithHelpTextAndTag
                             helpText={
@@ -995,7 +995,7 @@ export const DistributionModal = ({
                       </Fieldset>
                       <FieldsetDivider />
                       <Fieldset
-                        size="sm"
+                        data-size="sm"
                         legend={
                           <TitleWithHelpTextAndTag
                             tagTitle={localization.tag.recommended}
@@ -1012,7 +1012,7 @@ export const DistributionModal = ({
                           onValueChange={(selectedValues) => {
                             setFieldValue("license", selectedValues.toString());
                           }}
-                          size="sm"
+                          data-size="sm"
                           virtual
                         >
                           <Combobox.Option key="license-none" value="">
@@ -1046,7 +1046,7 @@ export const DistributionModal = ({
                         type="button"
                         disabled={isSubmitting}
                         onClick={() => submitForm()}
-                        size="sm"
+                        data-size="sm"
                       >
                         {type === "new"
                           ? localization.add
@@ -1057,7 +1057,7 @@ export const DistributionModal = ({
                         type="button"
                         onClick={handleCancel}
                         disabled={isSubmitting}
-                        size="sm"
+                        data-size="sm"
                       >
                         {localization.button.cancel}
                       </Button>

@@ -258,7 +258,7 @@ export const LeftColumn = ({
       {dataset?.landingPage && !isEmpty(dataset?.landingPage[0]) && (
         <InfoCard.Item title={localization.datasetForm.fieldLabel.landingPage}>
           {dataset?.landingPage.map((page: string, index: number) => (
-            <Paragraph size="sm" key={`landing-page-${index}`}>
+            <Paragraph data-size="sm" key={`landing-page-${index}`}>
               <Link href={page}>{page}</Link>
             </Paragraph>
           ))}
@@ -308,10 +308,10 @@ export const LeftColumn = ({
 
             {hasValues(dataset?.currentness?.hasBody) && (
               <div>
-                <Heading level={3} size="2xs">
+                <Heading level={3} data-size="2xs">
                   {localization.datasetForm.fieldLabel.currentness}
                 </Heading>
-                <Paragraph size="sm">
+                <Paragraph data-size="sm">
                   {getTranslateText(dataset?.currentness?.hasBody, language)}
                 </Paragraph>
               </div>
@@ -328,7 +328,7 @@ export const LeftColumn = ({
 
       {hasValues(dataset?.relevance?.hasBody) && (
         <InfoCard.Item title={localization.datasetForm.fieldLabel.relevance}>
-          <Paragraph size="sm">
+          <Paragraph data-size="sm">
             {getTranslateText(dataset?.relevance?.hasBody, language)}{" "}
           </Paragraph>
         </InfoCard.Item>
@@ -336,7 +336,7 @@ export const LeftColumn = ({
 
       {hasValues(dataset?.completeness?.hasBody) && (
         <InfoCard.Item title={localization.datasetForm.fieldLabel.completeness}>
-          <Paragraph size="sm">
+          <Paragraph data-size="sm">
             {getTranslateText(dataset?.completeness?.hasBody, language)}{" "}
           </Paragraph>
         </InfoCard.Item>
@@ -344,7 +344,7 @@ export const LeftColumn = ({
 
       {hasValues(dataset?.accuracy?.hasBody) && (
         <InfoCard.Item title={localization.datasetForm.fieldLabel.accuracy}>
-          <Paragraph size="sm">
+          <Paragraph data-size="sm">
             {getTranslateText(dataset?.accuracy?.hasBody, language)}{" "}
           </Paragraph>
         </InfoCard.Item>
@@ -352,7 +352,7 @@ export const LeftColumn = ({
 
       {hasValues(dataset?.availability?.hasBody) && (
         <InfoCard.Item title={localization.datasetForm.fieldLabel.availability}>
-          <Paragraph size="sm">
+          <Paragraph data-size="sm">
             {getTranslateText(dataset?.availability?.hasBody, language)}{" "}
           </Paragraph>
         </InfoCard.Item>
@@ -379,7 +379,7 @@ export const LeftColumn = ({
         <InfoCard.Item title={localization.relations}>
           <div className={styles.infoCardItems}>
             {dataset?.references && compact(dataset?.references).length > 0 && (
-              <Table size="sm" className={styles.table}>
+              <Table data-size="sm" className={styles.table}>
                 <Table.Head>
                   <Table.Row>
                     <Table.HeaderCell>
@@ -435,7 +435,7 @@ export const LeftColumn = ({
 
             {hasValues(dataset?.inSeries) && (
               <div>
-                <Heading level={3} size="2xs">
+                <Heading level={3} data-size="2xs">
                   {localization.datasetForm.fieldLabel.inSeries}
                 </Heading>
                 {(() => {
@@ -443,11 +443,11 @@ export const LeftColumn = ({
                     (item) => item.id === dataset.inSeries,
                   );
                   return matchedType ? (
-                    <Tag size="sm" color="info">
+                    <Tag data-size="sm" data-color="info">
                       {capitalizeFirstLetter(matchedType.title)}
                     </Tag>
                   ) : (
-                    <Paragraph size="sm">{dataset.inSeries}</Paragraph>
+                    <Paragraph data-size="sm">{dataset.inSeries}</Paragraph>
                   );
                 })()}
               </div>
@@ -457,7 +457,7 @@ export const LeftColumn = ({
               hasValues(dataset.relatedResources[0]?.uri) &&
               hasValues(dataset.relatedResources[0].prefLabel) && (
                 <div>
-                  <Heading level={3} size="2xs">
+                  <Heading level={3} data-size="2xs">
                     {localization.datasetForm.fieldLabel.relations}
                   </Heading>
                   <UriWithLabelTable
@@ -471,7 +471,7 @@ export const LeftColumn = ({
       )}
       {hasValues(dataset.concepts) && (
         <InfoCard.Item title={localization.datasetForm.fieldLabel.concepts}>
-          <Table size="sm" className={styles.table}>
+          <Table data-size="sm" className={styles.table}>
             <Table.Head>
               <Table.Row>
                 <Table.HeaderCell>
@@ -514,7 +514,11 @@ export const LeftColumn = ({
               return langValues && typeof langValues !== "string"
                 ? langValues.map((item, index) =>
                     item ? (
-                      <Tag size="sm" color="info" key={`keyword-tag-${index}`}>
+                      <Tag
+                        data-size="sm"
+                        data-color="info"
+                        key={`keyword-tag-${index}`}
+                      >
                         {item}
                       </Tag>
                     ) : null,
@@ -529,7 +533,7 @@ export const LeftColumn = ({
         <InfoCard.Item
           title={localization.datasetForm.fieldLabel.informationModelsFromFDK}
         >
-          <Table size="sm">
+          <Table data-size="sm">
             <Table.Head>
               <Table.Row>
                 <Table.HeaderCell>

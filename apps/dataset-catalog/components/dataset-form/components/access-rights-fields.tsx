@@ -23,7 +23,7 @@ export const AccessRightFields = ({ isMobility: isMobility }: Props) => {
     <>
       <Box>
         <Radio.Group
-          size="sm"
+          data-size="sm"
           legend={
             <TitleWithHelpTextAndTag
               helpText={localization.datasetForm.helptext.accessRights}

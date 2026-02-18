@@ -26,7 +26,7 @@ const NotFound = async () => {
         subtitle={localization.notFound}
       />
       <CenterContainer>
-        <Heading level={2} size="small">
+        <Heading level={2} data-size="sm">
           {localization.notFoundPage}
         </Heading>
       </CenterContainer>

@@ -50,7 +50,7 @@ export const RecommendedDetailFields = ({
             {localization.datasetForm.fieldLabel.language}
           </TitleWithHelpTextAndTag>
         }
-        size="sm"
+        data-size="sm"
       >
         {values.language &&
           values.language.some((lang) => lang.includes("NOR")) && (
@@ -71,7 +71,7 @@ export const RecommendedDetailFields = ({
       {!isMobility && (
         <>
           <Fieldset
-            size="sm"
+            data-size="sm"
             legend={
               <TitleWithHelpTextAndTag
                 tagTitle={localization.tag.recommended}

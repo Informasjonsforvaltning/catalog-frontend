@@ -38,9 +38,9 @@ export const DistributionDetails = ({
             <div className={styles.field}>
               <Heading
                 level={5}
-                size="2xs"
+                data-size="2xs"
               >{`${localization.description}:`}</Heading>
-              <Paragraph size="sm">
+              <Paragraph data-size="sm">
                 {getTranslateText(distribution?.description, language)}
               </Paragraph>
             </div>
@@ -50,11 +50,11 @@ export const DistributionDetails = ({
             <div className={styles.field}>
               <Heading
                 level={5}
-                size="2xs"
+                data-size="2xs"
               >{`${localization.datasetForm.fieldLabel.downloadURL}:`}</Heading>
               {distribution.downloadURL?.map((url: string, index: number) => {
                 return (
-                  <Paragraph size="sm" key={`downloadURL-${index}`}>
+                  <Paragraph data-size="sm" key={`downloadURL-${index}`}>
                     {url}
                   </Paragraph>
                 );
@@ -66,12 +66,12 @@ export const DistributionDetails = ({
             <div className={styles.field}>
               <Heading
                 level={5}
-                size="2xs"
+                data-size="2xs"
               >{`${localization.datasetForm.fieldLabel.mediaType}:`}</Heading>
               <ul className={styles.list}>
                 {distribution?.mediaType?.map((uri) => (
                   <li key={`mediatype-${uri}`}>
-                    <Tag size="sm" color="info">
+                    <Tag data-size="sm" data-color="info">
                       {(
                         selectedMediaTypes?.find((type) => type.uri === uri) ??
                         {}
@@ -88,10 +88,10 @@ export const DistributionDetails = ({
               <div className={styles.field}>
                 <Heading
                   level={5}
-                  size="2xs"
+                  data-size="2xs"
                 >{`${localization.datasetForm.fieldLabel.accessServices}:`}</Heading>
                 {
-                  <Table size="sm" className={styles.table}>
+                  <Table data-size="sm" className={styles.table}>
                     <Table.Head>
                       <Table.Row>
                         <Table.HeaderCell>
@@ -132,10 +132,10 @@ export const DistributionDetails = ({
             <>
               <Heading
                 level={5}
-                size="2xs"
+                data-size="2xs"
               >{`${localization.datasetForm.fieldLabel.license}:`}</Heading>
               <div className={styles.field}>
-                <Paragraph size="sm">
+                <Paragraph data-size="sm">
                   {getTranslateText(
                     openLicenses.find(
                       (license) => license.uri === distribution.license,
@@ -151,10 +151,10 @@ export const DistributionDetails = ({
             <div className={styles.field}>
               <Heading
                 level={5}
-                size="2xs"
+                data-size="2xs"
               >{`${localization.datasetForm.fieldLabel.standard}:`}</Heading>
 
-              <Table size="sm" className={styles.table}>
+              <Table data-size="sm" className={styles.table}>
                 <Table.Head>
                   <Table.Row>
                     <Table.HeaderCell>{localization.title}</Table.HeaderCell>
@@ -179,11 +179,11 @@ export const DistributionDetails = ({
             <div className={styles.field}>
               <Heading
                 level={5}
-                size="2xs"
+                data-size="2xs"
               >{`${localization.datasetForm.fieldLabel.page}:`}</Heading>
               {distribution.page.map((page: string, index: number) => {
                 return (
-                  <Paragraph key={`page-${index}`} size="sm">
+                  <Paragraph key={`page-${index}`} data-size="sm">
                     {page}
                   </Paragraph>
                 );
