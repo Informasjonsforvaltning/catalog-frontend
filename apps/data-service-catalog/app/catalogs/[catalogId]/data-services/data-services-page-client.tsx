@@ -31,7 +31,6 @@ import {
 } from "nuqs";
 import StatusTag from "../../../../components/status-tag";
 import { isEmpty } from "lodash";
-import ImportModal from "../../../../components/import-modal";
 
 type SortTypes = "titleAsc" | "titleDesc";
 type FilterType = "published" | "status";
@@ -51,7 +50,6 @@ const DataServicesPageClient = ({
   dataServices,
   catalogId,
   hasWritePermission,
-  hasAdminPermission,
   distributionStatuses,
   pageSettings,
 }: Props) => {
@@ -264,7 +262,6 @@ const DataServicesPageClient = ({
               </Select>
             </div>
             <div className={styles.buttons}>
-              {hasAdminPermission && <ImportModal catalogId={catalogId} />}
               {hasWritePermission && (
                 <LinkButton href={`/catalogs/${catalogId}/data-services/new`}>
                   <PlusCircleIcon />
