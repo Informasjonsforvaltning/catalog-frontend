@@ -382,7 +382,7 @@ const ImportResultDetails = ({
                     key={conceptExtraction?.extractionRecord?.internalId}
                   >
                     <Table.Cell style={{ width: "70%" }}>
-                      <Details>
+                      <Details role="group">
                         <ImportRecordAccordionItem
                           key={`result-${conceptExtraction?.extractionRecord?.internalId}`}
                           targetBaseHref={targetBaseHref}
