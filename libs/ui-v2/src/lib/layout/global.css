@@ -84,3 +84,7 @@ hr {
   height: 1px;
   background: var(--ds-color-neutral-border-subtle);
 }
+
+.ds-button {
+  font-weight: var(--ds-font-weight-regular);
+}
