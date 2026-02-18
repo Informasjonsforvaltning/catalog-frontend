@@ -133,7 +133,7 @@ const Header: FC<HeaderProps> = ({
         </a>
         {userDisplayName && (
           <Dropdown.TriggerContext>
-            <Dropdown.Trigger className={styles.menuButton}>
+            <Dropdown.Trigger variant="tertiary" className={styles.menuButton}>
               <MenuHamburgerIcon aria-hidden fontSize="1.5rem" />
               {localization.header.menu}
             </Dropdown.Trigger>
