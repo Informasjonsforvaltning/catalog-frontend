@@ -1,5 +1,5 @@
 .fieldset {
-  & :global(.fds-fieldset__legend__content) {
+  & :global(.ds-fieldset__legend__content) {
     align-items: center;
     gap: var(--ds-size-1);
   }
@@ -14,11 +14,11 @@
     flex-grow: 1;
   }
 
-  :global(.fds-textfield__prefix) {
+  :global(.ds-textfield__prefix) {
     width: 10rem;
   }
 
-  :global(.fds-btn) {
+  :global(.ds-btn) {
     margin-left: 0.5rem;
 
     justify-content: flex-start;
@@ -30,7 +30,7 @@
   display: flex;
   padding-top: 0;
 
-  :global(.fds-btn) {
+  :global(.ds-btn) {
     padding: 0 0.5rem;
   }
 }

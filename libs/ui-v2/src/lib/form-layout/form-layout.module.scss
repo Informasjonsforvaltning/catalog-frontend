@@ -55,7 +55,7 @@
       background-color: var(--ds-color-accent-background-tinted);
       border-left: 4px solid var(--ds-color-accent-base-default);
 
-      :global(.fds-link) {
+      :global(.ds-link) {
         color: black;
       }
 
@@ -76,7 +76,7 @@
       color: var(--ds-color-neutral-text-default);
     }
 
-    :global(.fds-link) {
+    :global(.ds-link) {
       display: flex;
       justify-content: space-between;
       align-items: center;
