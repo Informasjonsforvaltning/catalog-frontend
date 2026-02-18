@@ -1,5 +1,6 @@
 /* This is a global stylesheet */
 
+@import url("https://altinncdn.no/fonts/inter/v4.1/inter.css");
 @import url("./reset.css");
 @layer reset, ds;
 
@@ -8,6 +9,7 @@ html * {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-family:
+    "Inter",
     system-ui,
     -apple-system,
     BlinkMacSystemFont,
