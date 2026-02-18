@@ -8,6 +8,7 @@ import {
   isSessionValid,
 } from "@catalog-frontend/utils";
 import { useRouter, usePathname } from "next/navigation";
+import { DialogActions } from "@catalog-frontend/ui-v2";
 
 type AuthSessionModalProps = {
   signInPath?: string;
@@ -69,12 +70,18 @@ export const AuthSessionModal = ({
         </Paragraph>
       </Dialog.Block>
       <Dialog.Block>
-        <Button data-size="sm" onClick={handleLoginClick}>
-          {localization.auth.login}
-        </Button>
-        <Button data-size="sm" variant="secondary" onClick={handleCancelClick}>
-          {localization.button.cancel}
-        </Button>
+        <DialogActions>
+          <Button data-size="sm" onClick={handleLoginClick}>
+            {localization.auth.login}
+          </Button>
+          <Button
+            data-size="sm"
+            variant="secondary"
+            onClick={handleCancelClick}
+          >
+            {localization.button.cancel}
+          </Button>
+        </DialogActions>
       </Dialog.Block>
     </Dialog>
   );

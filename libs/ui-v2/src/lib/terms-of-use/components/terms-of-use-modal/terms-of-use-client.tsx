@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { Button, Dialog, Paragraph } from "@digdir/designsystemet-react";
 import { localization } from "@catalog-frontend/utils";
+import { DialogActions } from "@catalog-frontend/ui-v2";
 
 type TermsModalProps = {
   termsOfUseUrl: string;
@@ -33,16 +34,18 @@ export const TermsOfUseModalClient = ({
           </Paragraph>
         </Dialog.Block>
         <Dialog.Block>
-          <Button data-size="sm" asChild>
-            <a target="_blank" rel="noreferrer" href={termsOfUseUrl}>
-              {localization.termsOfUse.gotoTermsOfUse}
-            </a>
-          </Button>
-          <Button data-size="sm" variant="secondary" asChild>
-            <a target="_blank" rel="noreferrer" href={closeUrl}>
-              {localization.termsOfUse.cancel}
-            </a>
-          </Button>
+          <DialogActions>
+            <Button data-size="sm" asChild>
+              <a target="_blank" rel="noreferrer" href={termsOfUseUrl}>
+                {localization.termsOfUse.gotoTermsOfUse}
+              </a>
+            </Button>
+            <Button data-size="sm" variant="secondary" asChild>
+              <a target="_blank" rel="noreferrer" href={closeUrl}>
+                {localization.termsOfUse.cancel}
+              </a>
+            </Button>
+          </DialogActions>
         </Dialog.Block>
       </Dialog>
     </Dialog.TriggerContext>
