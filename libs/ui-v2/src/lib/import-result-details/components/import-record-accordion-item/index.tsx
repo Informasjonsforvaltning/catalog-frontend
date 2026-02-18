@@ -73,8 +73,13 @@ const ImportRecordAccordionItem = ({
   };
 
   return (
-    <Details>
-      <Details.Summary>
+    <Details role="group">
+      <Details.Summary
+        role="button"
+        slot="summary"
+        tabIndex={0}
+        aria-expanded="false"
+      >
         {renderHeader(conceptExtraction.extractionRecord)}
       </Details.Summary>
       <Details.Content>
