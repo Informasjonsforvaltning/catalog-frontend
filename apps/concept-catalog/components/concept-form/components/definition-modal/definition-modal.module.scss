@@ -3,10 +3,10 @@
 }
 
 .content {
-  margin: var(--fds-spacing-8);
-  padding: var(--fds-spacing-8);
-  border: 1px solid var(--fds-semantic-border-neutral-subtle);
-  border-radius: var(--fds-border_radius-medium);
+  margin: var(--ds-size-8);
+  padding: var(--ds-size-8);
+  border: 1px solid var(--ds-color-neutral-border-subtle);
+  border-radius: var(--ds-border-radius-md);
   height: calc(100vh - 400px);
 }
 

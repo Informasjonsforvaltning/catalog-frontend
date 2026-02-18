@@ -4,11 +4,11 @@
 }
 
 .gap2 {
-  gap: var(--fds-spacing-2);
+  gap: var(--ds-size-2);
 }
 
 .gap4 {
-  gap: var(--fds-spacing-4);
+  gap: var(--ds-size-4);
 }
 
 .noWrap {
@@ -130,11 +130,11 @@
 }
 
 .borderDanger {
-  border-color: var(--fds-semantic-border-danger-default);
+  border-color: var(--ds-color-danger-border-default);
 }
 
 .topMargin2 {
-  margin-top: var(--fds-spacing-2);
+  margin-top: var(--ds-size-2);
 }
 
 .bold {
@@ -142,10 +142,10 @@
 }
 
 .forwardedTag {
-  background-color: var(--fds-semantic-surface-warning-default);
+  background-color: var(--ds-color-warning-surface-default);
   border: none;
-  min-height: var(--fds-sizing-7);
-  min-height: var(--fds-sizing-7);
+  min-height: var(--ds-size-7);
+  min-height: var(--ds-size-7);
   font-size: 1rem;
-  color: var(--fds-semantic-text-neutral-default);
+  color: var(--ds-color-neutral-text-default);
 }

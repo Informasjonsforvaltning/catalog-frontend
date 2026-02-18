@@ -3,7 +3,7 @@
 }
 
 .tabsList {
-  margin: var(--fds-spacing-8) 0 var(--fds-spacing-4) 0;
+  margin: var(--ds-size-8) 0 var(--ds-size-4) 0;
 }
 
 .tabsContent {
@@ -16,9 +16,9 @@
 }
 
 .placeholder {
-  padding: var(--fds-spacing-8);
+  padding: var(--ds-size-8);
   text-align: center;
-  color: var(--fds-semantic-text-neutral-subtle);
+  color: var(--ds-color-neutral-text-subtle);
 }
 
 .list {
@@ -52,18 +52,18 @@
 }
 
 .commentHeader > span {
-  color: var(--fds-colors-grey-600);
+  color: var(--ds-color-neutral-text-subtle);
 }
 
 .noHits {
   justify-self: center;
   align-self: center;
   font-size: 1.5rem;
-  padding: var(--fds-spacing-8);
+  padding: var(--ds-size-8);
 }
 
 .pagination {
   display: flex;
   justify-content: center;
-  padding: var(--fds-spacing-4) 0;
+  padding: var(--ds-size-4) 0;
 }

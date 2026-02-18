@@ -2,20 +2,20 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--fds-spacing-4);
+  gap: var(--ds-size-4);
 }
 
 .searchFieldWrapper {
   display: flex;
   align-items: center;
   flex-grow: 1;
-  gap: var(--fds-spacing-4);
+  gap: var(--ds-size-4);
 }
 
 .buttons {
   display: flex;
   align-items: center;
-  gap: var(--fds-spacing-4);
+  gap: var(--ds-size-4);
 }
 
 .searchField {
@@ -23,7 +23,7 @@
 }
 
 .chips {
-  margin: var(--fds-spacing-6) 0;
+  margin: var(--ds-size-6) 0;
 }
 
 .wrap {
@@ -31,7 +31,7 @@
 }
 
 .tabsList {
-  margin: var(--fds-spacing-8) 0 var(--fds-spacing-4) 0;
+  margin: var(--ds-size-8) 0 var(--ds-size-4) 0;
 }
 
 .tabsContent {
