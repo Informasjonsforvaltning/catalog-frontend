@@ -88,3 +88,11 @@ hr {
 .ds-button {
   font-weight: var(--ds-font-weight-regular);
 }
+
+/*
+ * Override width: 100% to let input wrap in flex container
+ * Introduced in https://github.com/digdir/designsystemet/pull/2570
+ */
+.ds-combobox__input {
+  width: auto;
+}
