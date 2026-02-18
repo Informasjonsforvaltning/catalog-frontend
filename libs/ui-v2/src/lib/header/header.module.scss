@@ -123,8 +123,11 @@
 
 .menuButton {
   color: currentColor;
+  --dsc-button-color: currentColor;
+  --dsc-button-color--hover: currentColor;
   &:hover {
     color: var(--ds-color-neutral-text-default);
+    --dsc-button-color--hover: var(--ds-color-neutral-text-default);
   }
 }
 
