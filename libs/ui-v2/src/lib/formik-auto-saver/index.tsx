@@ -6,6 +6,7 @@ import { Button, Dialog } from "@digdir/designsystemet-react";
 import { DataStorage, localization } from "@catalog-frontend/utils";
 import type { StorageData } from "@catalog-frontend/types";
 import { isEqual } from "lodash";
+import { DialogActions } from "@catalog-frontend/ui-v2";
 
 export type FormikAutoSaverProps = {
   id?: string;
@@ -89,17 +90,19 @@ export const FormikAutoSaver = ({
       <Dialog.Block>Ulagrede endringer</Dialog.Block>
       <Dialog.Block>{modalContent}</Dialog.Block>
       <Dialog.Block>
-        <Button data-size="sm" onClick={handleRestoreClick}>
-          {localization.button.restore}
-        </Button>
-        <Button
-          data-size="sm"
-          variant="secondary"
-          data-color="danger"
-          onClick={handleDiscardClick}
-        >
-          {localization.button.discard}
-        </Button>
+        <DialogActions>
+          <Button data-size="sm" onClick={handleRestoreClick}>
+            {localization.button.restore}
+          </Button>
+          <Button
+            data-size="sm"
+            variant="secondary"
+            data-color="danger"
+            onClick={handleDiscardClick}
+          >
+            {localization.button.discard}
+          </Button>
+        </DialogActions>
       </Dialog.Block>
     </Dialog>
   );
