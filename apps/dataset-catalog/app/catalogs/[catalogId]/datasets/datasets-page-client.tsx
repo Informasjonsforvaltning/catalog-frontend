@@ -256,7 +256,12 @@ const DatasetsPageClient = ({
                 removeFilter(filter, "status");
               }}
             >
-              {localization.datasetForm.filter[filter]}
+              {
+                localization.datasetForm.filter[
+                  // Status filter values are PublicationStatus (DRAFT/PUBLISH/APPROVE) from URL state
+                  filter as keyof typeof localization.datasetForm.filter
+                ]
+              }
             </Chip.Removable>
           ))}
           {filterPublicationState?.map((filter, index) => (
@@ -312,6 +317,7 @@ const DatasetsPageClient = ({
     return filteredDatasets.slice(startIndex, endIndex);
   }, [filteredDatasets, page]);
 
+  //TODO: use select options components
   return (
     <div className={styles.container}>
       <SearchHitsLayout>
@@ -328,7 +334,7 @@ const DatasetsPageClient = ({
                 }}
               />
               <Select
-                size="sm"
+                data-size="sm"
                 onChange={(e) => setSortValue(e.target.value)}
                 value={sortValue}
               >
@@ -349,7 +355,7 @@ const DatasetsPageClient = ({
                 <NewDatasetModal
                   catalogId={catalogId}
                   trigger={
-                    <Button variant="primary" size="sm">
+                    <Button variant="primary" data-size="sm">
                       <PlusCircleIcon fontSize="1.2rem" />
                       {localization.datasetForm.button.addDataset}
                     </Button>

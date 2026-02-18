@@ -762,7 +762,7 @@ export const DistributionModal = ({
                                               )
                                             }
                                             as={Textfield}
-                                            size="sm"
+                                            data-size="sm"
                                             error={errors?.accessURL?.[index]}
                                           />
                                         </FieldsetWithDelete>
@@ -802,7 +802,7 @@ export const DistributionModal = ({
                                             )
                                           }
                                           as={Textfield}
-                                          size="sm"
+                                          data-size="sm"
                                           error={errors?.accessURL?.[index]}
                                         />
                                       )}

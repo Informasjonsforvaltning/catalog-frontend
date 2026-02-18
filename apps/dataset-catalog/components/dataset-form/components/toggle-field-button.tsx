@@ -33,6 +33,10 @@ export const ToggleFieldButton = ({
     setFieldValue(fieldName, onDeleteValue);
   };
 
+  const labelKey = fieldName.split(
+    ".",
+  )[0] as keyof typeof localization.datasetForm.fieldLabel;
+
   return (
     <Box>
       {expanded ? (
@@ -58,7 +62,7 @@ export const ToggleFieldButton = ({
             setFieldValue(fieldName, addValue);
             setFocus && setFocus(fieldName);
           }}
-        >{`${localization.add} ${localization.datasetForm.fieldLabel[fieldName.split(".")[0]]?.toLowerCase()}`}</AddButton>
+        >{`${localization.add} ${localization.datasetForm.fieldLabel[labelKey]?.toLowerCase()}`}</AddButton>
       )}
     </Box>
   );
