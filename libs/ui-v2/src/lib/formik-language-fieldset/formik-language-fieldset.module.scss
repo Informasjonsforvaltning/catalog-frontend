@@ -1,7 +1,7 @@
 .fieldset {
   & :global(.fds-fieldset__legend__content) {
     align-items: center;
-    gap: var(--fds-spacing-1);
+    gap: var(--ds-size-1);
   }
 }
 
