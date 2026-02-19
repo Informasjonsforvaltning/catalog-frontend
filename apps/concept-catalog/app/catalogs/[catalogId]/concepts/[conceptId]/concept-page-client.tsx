@@ -245,21 +245,19 @@ export const ConceptPageClient = ({
         )}
       </div>,
       <>
-        <div>
-          <Switch
-            value="published"
-            data-size="sm"
-            position="end"
-            readOnly={isPublished || !hasWritePermission || !isValid}
-            checked={isPublished}
-            onChange={handleOnChangePublished}
-            label={
-              isPublished
-                ? localization.publicationState.published
-                : localization.publicationState.unpublished
-            }
-          />
-        </div>
+        <Switch
+          value="published"
+          data-size="sm"
+          position="end"
+          readOnly={isPublished || !hasWritePermission || !isValid}
+          checked={isPublished}
+          onChange={handleOnChangePublished}
+          label={
+            isPublished
+              ? localization.publicationState.published
+              : localization.publicationState.unpublished
+          }
+        />
         <div className={classes.greyFont}>
           {isPublished
             ? `${localization.publicationState.publishedInFDK}${
