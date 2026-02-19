@@ -291,6 +291,7 @@ export const nb = {
     success: "Oppdatering vellykket!",
     unsavedChanges:
       "Du har ulagrede endringer. Er du sikker på at du vil forlate siden?",
+    unsavedChangesHeading: "Ulagrede endringer",
     updateFailed: "Oppdatering mislyktes. Prøv igjen senere.",
     deleteFailed: "Kunne ikke slette. Prøv igjen senere.",
     formUnsavedChanges: "Skjemaet har ulagrede endringer.",
