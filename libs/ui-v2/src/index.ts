@@ -8,6 +8,7 @@ export * from "./lib/checkbox-group-filter";
 export * from "./lib/concept-combobox";
 export * from "./lib/confirm-modal";
 export * from "./lib/details-page-layout";
+export * from "./lib/dialog-actions";
 export * from "./lib/divider-line";
 export * from "./lib/fieldset-divider";
 export * from "./lib/footer";

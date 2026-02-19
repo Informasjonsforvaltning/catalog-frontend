@@ -4,6 +4,7 @@ import { ReactNode, useEffect, useRef } from "react";
 import { Button, Dialog } from "@digdir/designsystemet-react";
 import { localization } from "@catalog-frontend/utils";
 import style from "./confirm-modal.module.scss";
+import { DialogActions } from "@catalog-frontend/ui-v2";
 
 type ConfirmModalProps = {
   title: string;
@@ -53,14 +54,16 @@ export const ConfirmModal = ({
       <Dialog.Block>{title}</Dialog.Block>
       <Dialog.Block className={style.content}>{content}</Dialog.Block>
       <Dialog.Block>
-        <Button data-size="sm" onClick={handleSuccess}>
-          {successButtonText ?? localization.button.success}
-        </Button>
-        {!hideCancel && (
-          <Button data-size="sm" variant="secondary" onClick={handleCancel}>
-            {cancelButtonText ?? localization.button.cancel}
+        <DialogActions>
+          <Button data-size="sm" onClick={handleSuccess}>
+            {successButtonText ?? localization.button.success}
           </Button>
-        )}
+          {!hideCancel && (
+            <Button data-size="sm" variant="secondary" onClick={handleCancel}>
+              {cancelButtonText ?? localization.button.cancel}
+            </Button>
+          )}
+        </DialogActions>
       </Dialog.Block>
     </Dialog>
   );
