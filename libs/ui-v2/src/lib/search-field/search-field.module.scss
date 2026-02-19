@@ -16,6 +16,7 @@
 
 .searchButton {
   font-size: medium;
+  min-width: var(--ds-size-16);
 
   title + circle {
     display: none;
