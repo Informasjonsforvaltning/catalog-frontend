@@ -2,13 +2,9 @@
 
 import { ReactNode, useEffect, useRef, useState } from "react";
 import { Formik } from "formik";
-import { Button, Dialog } from "@digdir/designsystemet-react";
-import {
-  RelatedConcept,
-  UnionRelation,
-  RelationTypeEnum,
-  Concept,
-} from "@catalog-frontend/types";
+import { Button, Dialog, Heading } from "@digdir/designsystemet-react";
+import { DialogActions } from "@catalog-frontend/ui-v2";
+import { RelatedConcept, UnionRelation } from "@catalog-frontend/types";
 import { relationSchema } from "../../validation-schema";
 import { RelationFieldset } from "../relation-fieldset";
 import styles from "./relation-modal.module.scss";
@@ -73,15 +69,20 @@ export const RelationModal = ({
 
             return (
               <>
-                <Dialog.Block>{header}</Dialog.Block>
-                <Dialog.Block className={styles.content}>
+                <Heading
+                  data-size="2xs"
+                  style={{ marginBottom: "var(--ds-size-4)" }}
+                >
+                  {header}
+                </Heading>
+                <div className={styles.content}>
                   <RelationFieldset
                     catalogId={catalogId}
                     conceptId={conceptId}
                     initialRelatedConcept={initialRelatedConcept}
                   />
-                </Dialog.Block>
-                <Dialog.Block>
+                </div>
+                <DialogActions>
                   <Button
                     type="button"
                     data-size="sm"
@@ -104,7 +105,7 @@ export const RelationModal = ({
                   >
                     Avbryt
                   </Button>
-                </Dialog.Block>
+                </DialogActions>
               </>
             );
           }}

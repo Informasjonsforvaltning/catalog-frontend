@@ -1,6 +1,10 @@
 import React, { useRef, useState } from "react";
 import { localization } from "@catalog-frontend/utils";
-import { UploadButton } from "@catalog-frontend/ui-v2";
+import {
+  DialogActions,
+  HelpMarkdown,
+  UploadButton,
+} from "@catalog-frontend/ui-v2";
 import {
   useImportConceptsCSV,
   useSendConcepts,
@@ -12,7 +16,6 @@ import styles from "./import-modal.module.scss";
 import { FileImportIcon, TasklistSendIcon } from "@navikt/aksel-icons";
 import Markdown from "react-markdown";
 import { Concept } from "@catalog-frontend/types";
-import { HelpMarkdown } from "@catalog-frontend/ui-v2";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
@@ -240,11 +243,10 @@ export function ImportModal({ catalogId }: ImportProps) {
           cancel();
           modalRef.current = null;
         }}
-        closeButton={false}
       >
         {!isUploading && !isSending && !isUploaded && (
           <>
-            <Dialog.Block className={styles.content}>
+            <div className={styles.content}>
               <div className={styles.titleTags}>
                 <Markdown>{localization.concept.importModal.title}</Markdown>
                 <HelpMarkdown
@@ -253,8 +255,8 @@ export function ImportModal({ catalogId }: ImportProps) {
                   {localization.concept.importModal.titleHelpText}
                 </HelpMarkdown>
               </div>
-            </Dialog.Block>
-            <Dialog.Block className={styles.content}>
+            </div>
+            <div className={styles.content}>
               <div className={styles.modalContent}>
                 {(isGoingtoImportResults || isUploading || isSending) && (
                   <div className={styles.spinnerOverlay}>
@@ -279,18 +281,18 @@ export function ImportModal({ catalogId }: ImportProps) {
                   </div>
                 </div>
               </div>
-            </Dialog.Block>
+            </div>
           </>
         )}
 
         {(isUploading || isUploaded || isSending) && (
           <>
-            <Dialog.Block className={styles.content}>
+            <div className={styles.content}>
               <Markdown>
                 {localization.concept.importModal.titleConfirmSending}
               </Markdown>
-            </Dialog.Block>
-            <Dialog.Block className={styles.content}>
+            </div>
+            <div className={styles.content}>
               <div className={styles.modalContent}>
                 {(isUploading || isSending) && (
                   <div className={styles.spinnerOverlay}>
@@ -303,65 +305,59 @@ export function ImportModal({ catalogId }: ImportProps) {
                   </Markdown>
                 </div>
               </div>
-            </Dialog.Block>
+            </div>
           </>
         )}
 
         {!isUploading && !isSending && !isUploaded && (
-          <Dialog.Block>
-            <div className={styles.buttons}>
-              <>
-                <Button
-                  variant="secondary"
-                  disabled={isGoingtoImportResults || isUploading}
-                  onClick={goToImporResults}
-                >
-                  {localization.importResult.results}
-                </Button>
+          <DialogActions>
+            <Button
+              variant="secondary"
+              disabled={isGoingtoImportResults || isUploading}
+              onClick={goToImporResults}
+            >
+              {localization.importResult.results}
+            </Button>
 
-                <UploadButton
-                  disabled={isGoingtoImportResults || isUploading}
-                  data-size="sm"
-                  allowedMimeTypes={[
-                    "text/csv",
-                    "text/x-csv",
-                    "text/plain",
-                    "application/csv",
-                    "application/x-csv",
-                    "application/vnd.ms-excel",
-                    "application/json",
-                  ]}
-                  onUpload={onCsvUpload}
-                >
-                  <FileImportIcon fontSize="1.5rem" />
-                  <span>{localization.button.importConceptCSV}</span>
-                </UploadButton>
+            <UploadButton
+              disabled={isGoingtoImportResults || isUploading}
+              data-size="sm"
+              allowedMimeTypes={[
+                "text/csv",
+                "text/x-csv",
+                "text/plain",
+                "application/csv",
+                "application/x-csv",
+                "application/vnd.ms-excel",
+                "application/json",
+              ]}
+              onUpload={onCsvUpload}
+            >
+              <FileImportIcon fontSize="1.5rem" />
+              <span>{localization.button.importConceptCSV}</span>
+            </UploadButton>
 
-                <ImportConceptRdf
-                  catalogId={catalogId}
-                  setIsUploading={setIsUploading}
-                  setIsUploaded={setIsUploaded}
-                />
-              </>
-            </div>
-          </Dialog.Block>
+            <ImportConceptRdf
+              catalogId={catalogId}
+              setIsUploading={setIsUploading}
+              setIsUploaded={setIsUploaded}
+            />
+          </DialogActions>
         )}
         {(isUploading || isUploaded || isSending) && (
-          <Dialog.Block>
-            <div className={styles.buttons}>
-              <Button
-                onClick={send}
-                disabled={isUploading || isSending}
-                variant="primary"
-              >
-                <TasklistSendIcon />
-                {localization.importResult.continue}
-              </Button>
-              <Button variant="secondary" onClick={cancel} disabled={isSending}>
-                {localization.importResult.cancel}
-              </Button>
-            </div>
-          </Dialog.Block>
+          <DialogActions>
+            <Button
+              onClick={send}
+              disabled={isUploading || isSending}
+              variant="primary"
+            >
+              <TasklistSendIcon />
+              {localization.importResult.continue}
+            </Button>
+            <Button variant="secondary" onClick={cancel} disabled={isSending}>
+              {localization.importResult.cancel}
+            </Button>
+          </DialogActions>
         )}
       </Dialog>
     </Dialog.TriggerContext>

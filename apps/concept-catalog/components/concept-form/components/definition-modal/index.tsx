@@ -1,7 +1,8 @@
 import { ReactNode, useRef, useState, useEffect } from "react";
 import { Formik } from "formik";
-import { Button, Dialog } from "@digdir/designsystemet-react";
+import { Button, Dialog, Heading } from "@digdir/designsystemet-react";
 import {
+  DialogActions,
   FieldsetDivider,
   FormikLanguageFieldset,
   TextareaWithPrefix,
@@ -72,8 +73,13 @@ export const DefinitionModal = ({
 
             return (
               <>
-                <Dialog.Block>{header}</Dialog.Block>
-                <Dialog.Block className={styles.content}>
+                <Heading
+                  data-size="2xs"
+                  style={{ marginBottom: "var(--ds-size-4)" }}
+                >
+                  {header}
+                </Heading>
+                <div className={styles.content}>
                   <FormikLanguageFieldset
                     name="tekst"
                     as={TextareaWithPrefix}
@@ -89,8 +95,8 @@ export const DefinitionModal = ({
                   />
                   <FieldsetDivider />
                   <SourceDescriptionFieldset name="kildebeskrivelse" />
-                </Dialog.Block>
-                <Dialog.Block>
+                </div>
+                <DialogActions>
                   <Button
                     type="button"
                     data-size="sm"
@@ -113,7 +119,7 @@ export const DefinitionModal = ({
                   >
                     Avbryt
                   </Button>
-                </Dialog.Block>
+                </DialogActions>
               </>
             );
           }}
