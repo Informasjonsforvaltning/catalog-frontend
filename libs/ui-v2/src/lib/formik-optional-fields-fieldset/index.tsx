@@ -69,42 +69,36 @@ export const FormikOptionalFieldsFieldset = ({
   }, [focus, fieldRefs]);
 
   return (
-    <Fieldset className={styles.fieldset}>
-      <Fieldset.Legend data-size="sm">{legend}</Fieldset.Legend>
+    <Fieldset data-size="sm">
+      {legend && (
+        <Fieldset.Legend className={styles.legend}>{legend}</Fieldset.Legend>
+      )}
       <Card>
-        <Card.Block>
-          {visibleFields.map((field) => (
-            <Fieldset key={field.valuePath}>
-              <Fieldset.Legend data-size="sm">
-                {field.legend || field.label}
-              </Fieldset.Legend>
-              <div key={field.valuePath} className={styles.field}>
-                <FastFieldWithRef
-                  ref={fieldRefs[field.valuePath]}
-                  name={field.valuePath}
-                  aria-label={field.label}
-                  error={get(errors, field.valuePath)}
-                />
-                <DeleteButton
-                  onClick={() => handleRemoveField(field.valuePath)}
-                />
-              </div>
-            </Fieldset>
-          ))}
-          <div className={styles.addButtons}>
-            {visibleFieldButtons.map((field) => (
-              <AddButton
-                key={field.valuePath}
-                onClick={() => handleAddField(field.valuePath)}
-              >
-                {field.label}
-              </AddButton>
-            ))}
+        {visibleFields.map((field) => (
+          <div className={styles.field} key={field.valuePath}>
+            <FastFieldWithRef
+              label={field.legend || field.label}
+              ref={fieldRefs[field.valuePath]}
+              name={field.valuePath}
+              aria-label={field.label}
+              error={get(errors, field.valuePath)}
+            />
+            <DeleteButton onClick={() => handleRemoveField(field.valuePath)} />
           </div>
-          {typeof mainError === "string" && (
-            <ValidationMessage data-size="sm">{mainError}</ValidationMessage>
-          )}
-        </Card.Block>
+        ))}
+        <div className={styles.addButtons}>
+          {visibleFieldButtons.map((field) => (
+            <AddButton
+              key={field.valuePath}
+              onClick={() => handleAddField(field.valuePath)}
+            >
+              {field.label}
+            </AddButton>
+          ))}
+        </div>
+        {typeof mainError === "string" && (
+          <ValidationMessage>{mainError}</ValidationMessage>
+        )}
       </Card>
     </Fieldset>
   );
