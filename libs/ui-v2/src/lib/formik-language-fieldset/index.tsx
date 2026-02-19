@@ -121,68 +121,66 @@ export const FormikLanguageFieldset = ({
   }, [focus]);
 
   return (
-    <Fieldset className={styles.fieldset} data-size="sm">
-      <Fieldset.Legend className={styles.legend}>{legend}</Fieldset.Legend>
-      {visibleLanguageFields.map((lang) => (
-        <div key={lang}>
-          {multiple ? (
-            <FormikMultivalueTextfield
-              ref={
-                languageRefs.current[lang] as React.RefObject<HTMLInputElement>
-              }
-              label={
-                <TitleWithHelpTextAndTag>
-                  {localization.language[lang]}
-                </TitleWithHelpTextAndTag>
-              }
+    <Fieldset data-size="sm">
+      {legend && <Fieldset.Legend>{legend}</Fieldset.Legend>}
+      {visibleLanguageFields.map((lang) =>
+        multiple ? (
+          <FormikMultivalueTextfield
+            ref={
+              languageRefs.current[lang] as React.RefObject<HTMLInputElement>
+            }
+            label={
+              <TitleWithHelpTextAndTag>
+                {localization.language[lang]}
+              </TitleWithHelpTextAndTag>
+            }
+            key={lang}
+            name={`${name}.${lang}`}
+            prefix={localization.language[lang]}
+            showDeleteButton
+            onDeleteButtonClicked={() => handleRemoveLanguage(lang)}
+            readOnly={readOnly}
+            error={hasError(lang)}
+          />
+        ) : (
+          <div key={lang} className={styles.languageField}>
+            <FastFieldWithRef
+              as={renderAs}
+              ref={languageRefs.current[lang]}
               name={`${name}.${lang}`}
-              prefix={localization.language[lang]}
-              showDeleteButton
-              onDeleteButtonClicked={() => handleRemoveLanguage(lang)}
-              readOnly={readOnly}
+              aria-label={localization.language[lang]}
               error={hasError(lang)}
+              readOnly={readOnly}
+              {...(renderAs === TextareaWithPrefix
+                ? {
+                    cols: 110,
+                    prefix: (
+                      <>
+                        <Paragraph variant="short">
+                          {localization.language[lang]}
+                        </Paragraph>
+                        {!requiredLanguages?.includes(lang) && !readOnly && (
+                          <div>
+                            <DeleteButton
+                              onClick={() => handleRemoveLanguage(lang)}
+                            />
+                          </div>
+                        )}
+                      </>
+                    ),
+                  }
+                : {
+                    prefix: localization.language[lang],
+                  })}
             />
-          ) : (
-            <div key={lang} className={styles.languageField}>
-              <FastFieldWithRef
-                as={renderAs}
-                ref={languageRefs.current[lang]}
-                name={`${name}.${lang}`}
-                aria-label={localization.language[lang]}
-                error={hasError(lang)}
-                readOnly={readOnly}
-                {...(renderAs === TextareaWithPrefix
-                  ? {
-                      cols: 110,
-                      prefix: (
-                        <>
-                          <Paragraph data-size="sm" variant="short">
-                            {localization.language[lang]}
-                          </Paragraph>
-                          {!requiredLanguages?.includes(lang) && !readOnly && (
-                            <div>
-                              <DeleteButton
-                                onClick={() => handleRemoveLanguage(lang)}
-                              />
-                            </div>
-                          )}
-                        </>
-                      ),
-                    }
-                  : {
-                      prefix: localization.language[lang],
-                    })}
-              />
-              {!requiredLanguages?.includes(lang) &&
-                renderAs !== TextareaWithPrefix &&
-                !readOnly && (
-                  <DeleteButton onClick={() => handleRemoveLanguage(lang)} />
-                )}
-            </div>
-          )}
-        </div>
-      ))}
-
+            {!requiredLanguages?.includes(lang) &&
+              renderAs !== TextareaWithPrefix &&
+              !readOnly && (
+                <DeleteButton onClick={() => handleRemoveLanguage(lang)} />
+              )}
+          </div>
+        ),
+      )}
       {!readOnly && (
         <div className={styles.languageButtons}>
           {visibleLanguageButtons.map((lang) => (
@@ -192,9 +190,8 @@ export const FormikLanguageFieldset = ({
           ))}
         </div>
       )}
-
       {showError && getError() && (
-        <ValidationMessage data-size="sm">{getError()}</ValidationMessage>
+        <ValidationMessage>{getError()}</ValidationMessage>
       )}
     </Fieldset>
   );
