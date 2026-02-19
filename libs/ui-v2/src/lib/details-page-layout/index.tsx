@@ -49,7 +49,7 @@ const DetailsPageLayout = ({
     <div className="container">
       <div className={styles.heading}>
         <div className={styles.headingTitle}>
-          <Heading level={2} data-size="lg">
+          <Heading level={2} data-size="md">
             {headingTitle}
           </Heading>
           <span>{headingTag}</span>
