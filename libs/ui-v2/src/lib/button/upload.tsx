@@ -24,6 +24,7 @@ const UploadButton: FC<UploadButtonProps> = ({
         id={buttonId}
         aria-controls={ref.current?.id}
         aria-haspopup="true"
+        data-size="sm"
         onClick={() => {
           if (ref.current) {
             ref.current.value = "";

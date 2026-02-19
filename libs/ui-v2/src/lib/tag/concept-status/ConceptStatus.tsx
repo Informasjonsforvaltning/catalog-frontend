@@ -5,7 +5,7 @@ import {
 import { forwardRef } from "react";
 
 enum ConceptStatusColors {
-  DRAFT = "second",
+  DRAFT = "warning",
   CANDIDATE = "info",
   WAITING = "neutral",
   CURRENT = "success",

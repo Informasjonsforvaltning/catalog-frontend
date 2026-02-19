@@ -7,7 +7,7 @@
     flex-grow: 1;
   }
 
-  :global(.fds-textfield__prefix) {
+  :global(.ds-textfield__prefix) {
     width: 7rem;
   }
 }
@@ -22,4 +22,5 @@
   display: flex;
   flex-wrap: wrap;
   margin-top: var(--ds-size-2);
+  gap: var(--ds-size-2);
 }

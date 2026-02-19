@@ -1,26 +1,21 @@
-.fieldset {
-  & :global(.fds-fieldset__legend__content) {
-    align-items: center;
-    gap: var(--ds-size-1);
-  }
+.legend {
+  margin-bottom: var(--ds-size-4);
 }
 
 .field {
   display: flex;
   align-items: flex-end;
-  padding-bottom: 0.4rem;
 
   & > *:first-child {
     flex-grow: 1;
   }
 
-  :global(.fds-textfield__prefix) {
-    width: 10rem;
+  :global(.ds-field-affix) {
+    width: var(--ds-size-22);
   }
 
-  :global(.fds-btn) {
-    margin-left: 0.5rem;
-
+  :global(.ds-button) {
+    margin-left: var(--ds-size-2);
     justify-content: flex-start;
     white-space: nowrap;
   }
@@ -28,9 +23,4 @@
 
 .addButtons {
   display: flex;
-  padding-top: 0;
-
-  :global(.fds-btn) {
-    padding: 0 0.5rem;
-  }
 }

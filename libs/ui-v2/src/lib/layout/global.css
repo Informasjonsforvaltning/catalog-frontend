@@ -4,7 +4,6 @@
 @layer reset, ds;
 
 html * {
-  font-size: 16px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-family:
@@ -83,4 +82,16 @@ hr {
   border: 0;
   height: 1px;
   background: var(--ds-color-neutral-border-subtle);
+}
+
+.ds-button {
+  font-weight: var(--ds-font-weight-regular);
+}
+
+/*
+ * Override width: 100% to let input wrap in flex container
+ * Introduced in https://github.com/digdir/designsystemet/pull/2570
+ */
+.ds-combobox__input {
+  width: auto;
 }

@@ -15,7 +15,7 @@
     flex-grow: 1;
   }
 
-  :global(.fds-alert__content) {
+  :global(.ds-alert__content) {
     display: flex;
     align-items: center;
     flex-direction: row;
@@ -23,7 +23,7 @@
     gap: var(--ds-size-4);
   }
 
-  :global(.fds-btn) {
+  :global(.ds-btn) {
     &:hover {
       background: rgba(0, 0, 0, 0.125);
     }

@@ -9,7 +9,7 @@ export interface LinkButtonProps extends DsButtonProps {
 }
 
 const LinkButton = ({ href, children, ...props }: LinkButtonProps) => (
-  <DigdirButton {...props} asChild>
+  <DigdirButton data-size="sm" {...props} asChild>
     <Link href={href}>{children}</Link>
   </DigdirButton>
 );

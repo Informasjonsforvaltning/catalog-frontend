@@ -11,6 +11,8 @@ export interface ButtonProps extends DsButtonProps {
   href?: string;
 }
 
-export const Button = (props: ButtonProps) => <DigdirButton {...props} />;
+export const Button = (props: ButtonProps) => (
+  <DigdirButton data-size="sm" {...props} />
+);
 
 export default Button;
