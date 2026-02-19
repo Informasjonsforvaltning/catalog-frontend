@@ -10,6 +10,7 @@ import {
   LinkButton,
   SearchField,
   SearchHitsLayout,
+  Select,
   Tag,
 } from "@catalog-frontend/ui-v2";
 import {
@@ -23,11 +24,11 @@ import {
   validUUID,
 } from "@catalog-frontend/utils";
 import ChangeRequestFilter from "@concept-catalog/components/change-request-filter";
-import ChangeRequestSort from "@concept-catalog/components/change-request-sort";
 import { getTranslatedStatus } from "@concept-catalog/utils/change-request";
 import {
   ChangeRequest,
   ChangeRequestsPageSettings,
+  Option,
 } from "@catalog-frontend/types";
 import { useFeatureFlags } from "@concept-catalog/context/feature-flags";
 import styles from "./change-requests-page.module.css";
@@ -233,11 +234,13 @@ export const ChangeRequestsPageClient = ({
                       setSearchTerm(value);
                     }}
                   />
-                  <ChangeRequestSort
-                    options={sortOptions}
-                    selected={sort}
-                    onChange={onSortChange}
-                  />
+                  <Select onChange={onSortChange} value={sort} data-size="sm">
+                    {sortOptions.map((option: Option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </Select>
                 </div>
                 <LinkButton href={`/catalogs/${catalogId}/change-requests/new`}>
                   {localization.suggestionForNewConcept}
