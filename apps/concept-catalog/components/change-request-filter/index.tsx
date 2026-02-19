@@ -4,6 +4,7 @@ import {
   Card,
   Checkbox,
   Details,
+  Fieldset,
   Radio,
   useRadioGroup,
   useCheckboxGroup,
@@ -29,38 +30,38 @@ const ChangeRequestsFilter = ({ itemType, status }: Props) => {
   });
 
   return (
-    <div className={styles.accordionContainer}>
-      <Card>
-        <Details defaultOpen>
-          <Details.Summary>{localization.filter}</Details.Summary>
-          <Details.Content>
-            <div data-size="sm">
-              {itemType.options.map((option) => (
-                <Radio
-                  key={option.value}
-                  {...getRadioProps(option.value)}
-                  label={option.label}
-                />
-              ))}
-            </div>
-          </Details.Content>
-        </Details>
-        <Details defaultOpen>
-          <Details.Summary>{localization.status}</Details.Summary>
-          <Details.Content>
-            <div data-size="sm">
-              {status.options.map((statusItem) => (
-                <Checkbox
-                  key={statusItem.value}
-                  label={statusItem.label}
-                  {...getCheckboxProps(statusItem.value)}
-                />
-              ))}
-            </div>
-          </Details.Content>
-        </Details>
-      </Card>
-    </div>
+    <Card className={styles.accordionContainer}>
+      <Details defaultOpen>
+        <Details.Summary>{localization.filter}</Details.Summary>
+        <Details.Content>
+          <Fieldset data-size="sm">
+            <Fieldset.Legend>{localization.filter}</Fieldset.Legend>
+            {itemType.options.map((option) => (
+              <Radio
+                key={option.value}
+                {...getRadioProps(option.value)}
+                label={option.label}
+              />
+            ))}
+          </Fieldset>
+        </Details.Content>
+      </Details>
+      <Details defaultOpen>
+        <Details.Summary>{localization.status}</Details.Summary>
+        <Details.Content>
+          <Fieldset data-size="sm">
+            <Fieldset.Legend>{localization.status}</Fieldset.Legend>
+            {status.options.map((statusItem) => (
+              <Checkbox
+                key={statusItem.value}
+                label={statusItem.label}
+                {...getCheckboxProps(statusItem.value)}
+              />
+            ))}
+          </Fieldset>
+        </Details.Content>
+      </Details>
+    </Card>
   );
 };
 
