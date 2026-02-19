@@ -11,7 +11,6 @@ import {
   localization,
 } from "@catalog-frontend/utils";
 import {
-  Box,
   Textfield,
   Fieldset,
   Combobox,

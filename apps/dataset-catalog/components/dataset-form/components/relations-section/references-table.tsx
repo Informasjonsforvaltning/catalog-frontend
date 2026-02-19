@@ -11,7 +11,6 @@ import {
   DataStorage,
 } from "@catalog-frontend/utils";
 import {
-  Box,
   Button,
   Combobox,
   Fieldset,

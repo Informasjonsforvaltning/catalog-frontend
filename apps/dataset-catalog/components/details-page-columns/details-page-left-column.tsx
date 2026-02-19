@@ -5,6 +5,7 @@ import {
   useSearchConceptsByUri,
   useSearchDatasetsByUri,
   useSearchInformationModelsByUri,
+  MarkdownComponent,
 } from "@catalog-frontend/ui-v2";
 import {
   localization,
@@ -37,7 +38,6 @@ import { AccessRightsDetails } from "./components/access-rights-details";
 import { TemporalDetails } from "./components/temporal-details";
 import TagList from "../tag-list";
 import { compact, get, isEmpty } from "lodash";
-import { MarkdownComponent } from "@catalog-frontend/ui-v2";
 
 type Props = {
   dataset: Dataset;

@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { Field, useFormikContext } from "formik";
 import {
-  Box,
   Button,
   Card,
   Fieldset,
@@ -271,7 +270,7 @@ export const DistributionSection = ({
                     <div className={styles.field}>
                       {!isEmpty(item?.title) && (
                         <>
-                          <Heading data-size="2xs" spacing level={3}>
+                          <Heading data-size="2xs" level={3}>
                             {localization.datasetForm.fieldLabel.title}
                           </Heading>
                           <Paragraph data-size="sm">

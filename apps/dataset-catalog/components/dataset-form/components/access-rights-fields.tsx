@@ -8,12 +8,7 @@ import {
   getTranslateText,
   localization,
 } from "@catalog-frontend/utils";
-import {
-  Box,
-  Fieldset,
-  Radio,
-  useRadioGroup,
-} from "@digdir/designsystemet-react";
+import { Fieldset, Radio } from "@digdir/designsystemet-react";
 import { useFormikContext } from "formik";
 import { UriWithLabelFieldsetTable } from "./uri-with-label-field-set-table";
 

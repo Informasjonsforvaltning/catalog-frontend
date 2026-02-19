@@ -588,9 +588,8 @@ export const DatasetForm = ({
                       onChange={(e) =>
                         handleIgnoreRequiredChange(e.target.checked)
                       }
-                    >
-                      {localization.datasetForm.fieldLabel.ignoreRequired}
-                    </Checkbox>
+                      label={localization.datasetForm.fieldLabel.ignoreRequired}
+                    />
                     <HelpMarkdown
                       aria-label={`Help ${localization.datasetForm.fieldLabel.ignoreRequired}`}
                     >

@@ -5,7 +5,7 @@ import {
   localization,
   onlyNumbersRegex,
 } from "@catalog-frontend/utils";
-import { Box, Combobox, Fieldset } from "@digdir/designsystemet-react";
+import { Combobox, Fieldset } from "@digdir/designsystemet-react";
 import {
   useSearchEnheter,
   useSearchEnheterByOrgNmbs,
