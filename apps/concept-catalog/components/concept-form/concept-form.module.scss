@@ -33,15 +33,10 @@
 
 .definitionContent {
   display: flex;
-
-  & div:last-child {
-    display: flex;
-    gap: 0.5rem;
-  }
-
-  & > * {
-    background-color: inherit;
-  }
+  flex-direction: column;
+  padding: 0 var(--dsc-card-padding) var(--dsc-card-padding);
+  margin: 0;
+  gap: var(--ds-size-2);
 }
 
 .definitionHeader {
@@ -49,6 +44,7 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+  padding-bottom: 0;
 
   & > div {
     display: flex;
@@ -148,4 +144,9 @@
   min-height: var(--ds-size-7);
   font-size: 1rem;
   color: var(--ds-color-neutral-text-default);
+}
+
+.languageTags {
+  display: flex;
+  gap: var(--ds-size-2);
 }

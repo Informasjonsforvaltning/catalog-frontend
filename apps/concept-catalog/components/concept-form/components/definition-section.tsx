@@ -158,7 +158,7 @@ export const DefinitionSection = ({
               tagTitle={localization.tag.required}
               changed={definitions.some((def) => changed?.includes(def))}
             >
-              Definisjon
+              {localization.conceptForm.section.definitionTitle}
             </TitleWithHelpTextAndTag>
           </Fieldset.Legend>
         </Fieldset>
@@ -220,7 +220,7 @@ export const DefinitionSection = ({
                           </Popover>
                         </Popover.TriggerContext>
                       ) : (
-                        <Tag data-size="sm" data-color="second">
+                        <Tag data-size="sm" data-color="warning">
                           {sourcesText(def.kildebeskrivelse?.kilde)}
                         </Tag>
                       )}
@@ -273,18 +273,18 @@ export const DefinitionSection = ({
                       </Button>
                     </div>
                   </Card.Block>
-                  <Card.Block className={styles.definitionContent}>
+                  <div className={styles.definitionContent}>
                     <Paragraph>{getTranslateText(def.tekst)}</Paragraph>
-                    <div>
+                    <div className={styles.languageTags}>
                       {allowedLanguages
                         .filter((lang) => def.tekst[lang])
                         .map((lang) => (
-                          <Tag key={lang} data-size="sm" data-color="third">
+                          <Tag key={lang} data-size="sm" data-color="info">
                             {localization.language[lang]}
                           </Tag>
                         ))}
                     </div>
-                  </Card.Block>
+                  </div>
                 </Card>
               )
             );
