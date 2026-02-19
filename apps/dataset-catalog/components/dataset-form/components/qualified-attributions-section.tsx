@@ -50,16 +50,14 @@ export const QualifiedAttributionsSection = ({
 
   return (
     <div>
-      <Fieldset
-        data-size="sm"
-        legend={
+      <Fieldset data-size="sm">
+        <Fieldset.Legend>
           <TitleWithHelpTextAndTag
             helpText={localization.datasetForm.helptext.qualifiedAttributions}
           >
             {localization.datasetForm.fieldLabel.qualifiedAttributions}
           </TitleWithHelpTextAndTag>
-        }
-      >
+        </Fieldset.Legend>
         <Combobox
           data-size="sm"
           onValueChange={(selectedValues: string[]) =>

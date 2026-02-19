@@ -73,7 +73,7 @@ const DatasetDetailsPageClient = ({
       >
         {dataset.specializedType === "SERIES" ? (
           <DetailsPageLayout.Left>
-            <Alert severity="warning">
+            <Alert data-color="warning">
               Datasettserier har ikke blitt implementert enda.
             </Alert>
           </DetailsPageLayout.Left>

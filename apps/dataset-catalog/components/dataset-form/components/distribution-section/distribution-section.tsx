@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useFormikContext } from "formik";
+import { Field, useFormikContext } from "formik";
 import {
   Box,
   Button,
@@ -11,6 +11,7 @@ import {
   Heading,
   Paragraph,
   Tag,
+  ValidationMessage,
 } from "@digdir/designsystemet-react";
 import {
   ChevronDownIcon,
@@ -247,9 +248,8 @@ export const DistributionSection = ({
 
   return (
     <div>
-      <Fieldset
-        data-size="sm"
-        legend={
+      <Fieldset data-size="sm">
+        <Fieldset.Legend>
           <TitleWithHelpTextAndTag
             helpText={localization.datasetForm.helptext.distribution}
             tagTitle={
@@ -261,9 +261,7 @@ export const DistributionSection = ({
           >
             {localization.datasetForm.fieldLabel.distributions}
           </TitleWithHelpTextAndTag>
-        }
-        error={errors.distribution}
-      >
+        </Fieldset.Legend>
         {values?.distribution &&
           !distributionArrayIsEmpty(values?.distribution) &&
           values?.distribution?.map(
@@ -417,7 +415,7 @@ export const DistributionSection = ({
                 </Card>
               ),
           )}
-
+        <ValidationMessage>{errors.distribution}</ValidationMessage>
         <div className={styles.add}>
           <DistributionModal
             type="new"
@@ -468,16 +466,14 @@ export const DistributionSection = ({
         </div>
       </Fieldset>
       <FieldsetDivider />
-      <Fieldset
-        data-size="sm"
-        legend={
+      <Fieldset data-size="sm">
+        <Fieldset.Legend>
           <TitleWithHelpTextAndTag
             helpText={localization.datasetForm.helptext.sample}
           >
             {localization.datasetForm.fieldLabel.sample}
           </TitleWithHelpTextAndTag>
-        }
-      >
+        </Fieldset.Legend>
         {values?.sample &&
           !distributionArrayIsEmpty(values?.sample) &&
           values?.sample

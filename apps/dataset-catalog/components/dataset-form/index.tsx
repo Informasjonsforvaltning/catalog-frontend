@@ -537,7 +537,7 @@ export const DatasetForm = ({
                     }}
                   >
                     {isSubmitting ? (
-                      <Spinner title="Lagrer" data-size="sm" />
+                      <Spinner aria-label="Lagrer" data-size="sm" />
                     ) : (
                       localization.save
                     )}

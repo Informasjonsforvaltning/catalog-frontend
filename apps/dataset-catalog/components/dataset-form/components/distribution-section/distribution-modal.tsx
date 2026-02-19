@@ -30,7 +30,7 @@ import {
   Combobox,
   Fieldset,
   Modal,
-  SkeletonRectangle,
+  Skeleton,
   Textfield,
 } from "@digdir/designsystemet-react";
 import { FastField, FieldArray, Formik } from "formik";
@@ -304,16 +304,14 @@ export const DistributionModal = ({
         setSearchDataServicesQuery,
         selectedAndSearchedAccessServices,
       }: any) => (
-        <Fieldset
-          data-size="sm"
-          legend={
+        <Fieldset data-size="sm">
+          <Fieldset.Legend>
             <TitleWithHelpTextAndTag
               helpText={localization.datasetForm.helptext.accessServices}
             >
               {localization.datasetForm.fieldLabel.accessServices}
             </TitleWithHelpTextAndTag>
-          }
-        >
+          </Fieldset.Legend>
           {selectedAccessServiceUris?.every((v) =>
             selectedAndSearchedAccessServices.find(
               (option: { uri: string }) => option.uri === v,
@@ -375,7 +373,7 @@ export const DistributionModal = ({
               </Combobox>
             </FieldsetWithDelete>
           ) : (
-            <SkeletonRectangle />
+            <Skeleton variant="rectangle" />
           )}
         </Fieldset>
       ),
@@ -392,16 +390,14 @@ export const DistributionModal = ({
         mediaTypes,
         searchingMediaTypes,
       }: any) => (
-        <Fieldset
-          data-size="sm"
-          legend={
+        <Fieldset data-size="sm">
+          <Fieldset.Legend>
             <TitleWithHelpTextAndTag
               helpText={localization.datasetForm.helptext.mediaType}
             >
               {localization.datasetForm.fieldLabel.mediaType}
             </TitleWithHelpTextAndTag>
-          }
-        >
+          </Fieldset.Legend>
           {selectedMediaTypeUris?.every((v) =>
             selectedAndSearchedMediaTypes?.find(
               (option: ReferenceDataCode | undefined) => option?.uri === v,
@@ -432,7 +428,7 @@ export const DistributionModal = ({
               />
             </FieldsetWithDelete>
           ) : (
-            <SkeletonRectangle />
+            <Skeleton variant="rectangle" />
           )}
         </Fieldset>
       ),
@@ -504,9 +500,8 @@ export const DistributionModal = ({
       shouldShow: ({ distributionType }: any) =>
         distributionType === "distribution",
       render: ({ errors }: any) => (
-        <Fieldset
-          data-size="sm"
-          legend={
+        <Fieldset data-size="sm">
+          <Fieldset.Legend>
             <TitleWithHelpTextAndTag
               helpText={
                 localization.datasetForm.helptext.distributionConformsTo
@@ -514,8 +509,7 @@ export const DistributionModal = ({
             >
               {localization.datasetForm.fieldLabel.conformsTo}
             </TitleWithHelpTextAndTag>
-          }
-        >
+          </Fieldset.Legend>
           <FieldArray name="conformsTo">
             {({ push, remove, form }) => (
               <>
@@ -829,9 +823,8 @@ export const DistributionModal = ({
                       </FieldArray>
                       {isMobility && "mobilityDataStandard" in values ? (
                         <>
-                          <Fieldset
-                            data-size="sm"
-                            legend={
+                          <Fieldset data-size="sm">
+                            <Fieldset.Legend>
                               <TitleWithHelpTextAndTag
                                 tagTitle={localization.tag.required}
                                 helpText={
@@ -844,8 +837,7 @@ export const DistributionModal = ({
                                     .mobilityDataStandard
                                 }
                               </TitleWithHelpTextAndTag>
-                            }
-                          >
+                            </Fieldset.Legend>
                             <Combobox
                               value={
                                 values?.mobilityDataStandard
@@ -889,9 +881,8 @@ export const DistributionModal = ({
                       ) : undefined}
                       {isMobility && values.rights ? (
                         <>
-                          <Fieldset
-                            data-size="sm"
-                            legend={
+                          <Fieldset data-size="sm">
+                            <Fieldset.Legend>
                               <TitleWithHelpTextAndTag
                                 helpText={
                                   localization.datasetForm.helptext
@@ -904,8 +895,7 @@ export const DistributionModal = ({
                                     .distributionRights
                                 }
                               </TitleWithHelpTextAndTag>
-                            }
-                          >
+                            </Fieldset.Legend>
                             <Combobox
                               value={
                                 values?.rights?.type
@@ -942,9 +932,8 @@ export const DistributionModal = ({
                           <FieldsetDivider />
                         </>
                       ) : undefined}
-                      <Fieldset
-                        data-size="sm"
-                        legend={
+                      <Fieldset data-size="sm">
+                        <Fieldset.Legend>
                           <TitleWithHelpTextAndTag
                             helpText={
                               localization.datasetForm.helptext.fileType
@@ -958,8 +947,7 @@ export const DistributionModal = ({
                           >
                             {localization.datasetForm.fieldLabel.format}
                           </TitleWithHelpTextAndTag>
-                        }
-                      >
+                        </Fieldset.Legend>
                         {!selectedFileTypeUris ||
                         selectedFileTypeUris?.every((v) =>
                           selectedAndSearchedFileTypes?.find(
@@ -990,13 +978,12 @@ export const DistributionModal = ({
                             error={errors.format}
                           />
                         ) : (
-                          <SkeletonRectangle />
+                          <Skeleton variant="rectangle" />
                         )}
                       </Fieldset>
                       <FieldsetDivider />
-                      <Fieldset
-                        data-size="sm"
-                        legend={
+                      <Fieldset data-size="sm">
+                        <Fieldset.Legend>
                           <TitleWithHelpTextAndTag
                             tagTitle={localization.tag.recommended}
                             tagColor="info"
@@ -1004,8 +991,7 @@ export const DistributionModal = ({
                           >
                             {localization.datasetForm.fieldLabel.license}
                           </TitleWithHelpTextAndTag>
-                        }
-                      >
+                        </Fieldset.Legend>
                         <Combobox
                           value={values?.license ? [values?.license] : [""]}
                           portal={false}

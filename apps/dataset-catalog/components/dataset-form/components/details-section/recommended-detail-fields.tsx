@@ -70,9 +70,8 @@ export const RecommendedDetailFields = ({
       <FieldsetDivider />
       {!isMobility && (
         <>
-          <Fieldset
-            data-size="sm"
-            legend={
+          <Fieldset data-size="sm">
+            <Fieldset.Legend>
               <TitleWithHelpTextAndTag
                 tagTitle={localization.tag.recommended}
                 tagColor="info"
@@ -80,8 +79,7 @@ export const RecommendedDetailFields = ({
               >
                 {localization.datasetForm.fieldLabel.spatial}
               </TitleWithHelpTextAndTag>
-            }
-          >
+            </Fieldset.Legend>
             <SpatialCombobox referenceDataEnv={referenceDataEnv} />
           </Fieldset>
           <FieldsetDivider />

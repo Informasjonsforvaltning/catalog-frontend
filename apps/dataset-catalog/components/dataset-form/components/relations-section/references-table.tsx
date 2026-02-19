@@ -315,14 +315,13 @@ const FieldModal = ({
                       ? `${localization.edit} ${localization.relation.toLowerCase()}`
                       : `${localization.add} ${localization.relation.toLowerCase()}`}
                   </Modal.Header>
-
                   <Modal.Content
                     className={cn(styles.modalContent, styles.fieldContainer)}
                   >
-                    <Fieldset
-                      legend={localization.datasetForm.fieldLabel.relationType}
-                      data-size="sm"
-                    >
+                    <Fieldset data-size="sm">
+                      <Fieldset.Legend>
+                        {localization.datasetForm.fieldLabel.relationType}
+                      </Fieldset.Legend>
                       <Combobox
                         onValueChange={(value) =>
                           setFieldValue("referenceType", value.toString())
@@ -351,10 +350,10 @@ const FieldModal = ({
                       </Combobox>
                     </Fieldset>
 
-                    <Fieldset
-                      legend={localization.datasetForm.fieldLabel.dataset}
-                      data-size="sm"
-                    >
+                    <Fieldset data-size="sm">
+                      <Fieldset.Legend>
+                        {localization.datasetForm.fieldLabel.dataset}
+                      </Fieldset.Legend>
                       <Combobox
                         onChange={(input: any) =>
                           setSearchQuery(input.target.value)
