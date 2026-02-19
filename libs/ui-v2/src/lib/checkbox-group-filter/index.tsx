@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect } from "react";
 import {
   Checkbox,
   Fieldset,
@@ -18,9 +21,14 @@ interface Props<T extends string> {
 export const CheckboxGroupFilter = <T extends string>({
   items,
   onChange,
-  value,
+  value = [],
 }: Props<T>) => {
-  const { getCheckboxProps } = useCheckboxGroup({ onChange, value });
+  const { getCheckboxProps, setValue } = useCheckboxGroup({ onChange, value });
+
+  useEffect(() => {
+    setValue(value);
+  }, [value, setValue]);
+
   return (
     <Fieldset>
       {items.map(({ value, label }) => (
