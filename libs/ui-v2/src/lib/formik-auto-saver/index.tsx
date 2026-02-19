@@ -2,11 +2,12 @@
 
 import { ReactNode, useEffect, useRef, useState } from "react";
 import { useFormikContext } from "formik";
-import { Button, Dialog } from "@digdir/designsystemet-react";
+import { Button, Dialog, Heading } from "@digdir/designsystemet-react";
 import { DataStorage, localization } from "@catalog-frontend/utils";
 import type { StorageData } from "@catalog-frontend/types";
 import { isEqual } from "lodash";
 import { DialogActions } from "@catalog-frontend/ui-v2";
+import style from "./formik-auto-saver.module.scss";
 
 export type FormikAutoSaverProps = {
   id?: string;
@@ -87,23 +88,23 @@ export const FormikAutoSaver = ({
 
   return (
     <Dialog ref={modalRef}>
-      <Dialog.Block>Ulagrede endringer</Dialog.Block>
-      <Dialog.Block>{modalContent}</Dialog.Block>
-      <Dialog.Block>
-        <DialogActions>
-          <Button data-size="sm" onClick={handleRestoreClick}>
-            {localization.button.restore}
-          </Button>
-          <Button
-            data-size="sm"
-            variant="secondary"
-            data-color="danger"
-            onClick={handleDiscardClick}
-          >
-            {localization.button.discard}
-          </Button>
-        </DialogActions>
-      </Dialog.Block>
+      <Heading data-size="2xs">
+        {localization.alert.unsavedChangesHeading}
+      </Heading>
+      <div className={style.content}>{modalContent}</div>
+      <DialogActions>
+        <Button data-size="sm" onClick={handleRestoreClick}>
+          {localization.button.restore}
+        </Button>
+        <Button
+          data-size="sm"
+          variant="secondary"
+          data-color="danger"
+          onClick={handleDiscardClick}
+        >
+          {localization.button.discard}
+        </Button>
+      </DialogActions>
     </Dialog>
   );
 };
