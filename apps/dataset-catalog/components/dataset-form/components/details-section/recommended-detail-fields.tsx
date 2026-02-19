@@ -9,7 +9,7 @@ import { Checkbox, Fieldset } from "@digdir/designsystemet-react";
 import { useFormikContext } from "formik";
 import { Dataset, ReferenceDataCode } from "@catalog-frontend/types";
 import { sortBy } from "lodash";
-import { TemporalModal } from "./temporal-modal";
+import { TemporalDialog } from "./temporal-modal";
 
 interface Props {
   referenceDataEnv: string;
@@ -38,10 +38,8 @@ export const RecommendedDetailFields = ({
 
   return (
     <>
-      <Checkbox.Group
-        onChange={(values) => setFieldValue("language", values)}
-        value={values.language ?? []}
-        legend={
+      <Fieldset data-size="sm">
+        <Fieldset.Legend>
           <TitleWithHelpTextAndTag
             tagColor="info"
             tagTitle={localization.tag.recommended}
@@ -49,24 +47,27 @@ export const RecommendedDetailFields = ({
           >
             {localization.datasetForm.fieldLabel.language}
           </TitleWithHelpTextAndTag>
-        }
-        data-size="sm"
-      >
+        </Fieldset.Legend>
         {values.language &&
           values.language.some((lang) => lang.includes("NOR")) && (
-            <Checkbox key={langNOR.uri} value={langNOR.uri}>
-              {getTranslateText(langNOR.label)}
-            </Checkbox>
+            <Checkbox
+              key={langNOR.uri}
+              value={langNOR.uri}
+              label={getTranslateText(langNOR.label)}
+              onChange={(values) => setFieldValue("language", values)}
+            />
           )}
         {sortedLanguages
           .filter((lang) => lang.code !== "NOR")
           .map((lang) => (
-            <Checkbox key={lang.uri} value={lang.uri}>
-              {getTranslateText(lang.label)}
-            </Checkbox>
+            <Checkbox
+              key={lang.uri}
+              value={lang.uri}
+              label={getTranslateText(lang.label)}
+              onChange={(values) => setFieldValue("language", values)}
+            />
           ))}
-      </Checkbox.Group>
-
+      </Fieldset>
       <FieldsetDivider />
       {!isMobility && (
         <>
@@ -85,7 +86,7 @@ export const RecommendedDetailFields = ({
           <FieldsetDivider />
         </>
       )}
-      <TemporalModal
+      <TemporalDialog
         label={
           <TitleWithHelpTextAndTag
             tagTitle={localization.tag.recommended}
