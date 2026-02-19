@@ -42,7 +42,7 @@ const ActivityLogFilter = ({ catalogId }: Props) => {
           </Details.Summary>
           <Details.Content>
             <Fieldset data-size="sm">
-              <Fieldset.Legend className="sr-only">
+              <Fieldset.Legend>
                 {localization.activityLog.selectType}
               </Fieldset.Legend>
               {options.map((option) => (
