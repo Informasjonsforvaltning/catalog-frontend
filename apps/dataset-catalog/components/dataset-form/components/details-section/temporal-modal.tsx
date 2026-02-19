@@ -10,7 +10,7 @@ import {
   localization,
   trimObjectWhitespace,
 } from "@catalog-frontend/utils";
-import { Button, Modal, Table, Textfield } from "@digdir/designsystemet-react";
+import { Button, Dialog, Table, Textfield } from "@digdir/designsystemet-react";
 import { FastField, FieldArray, Formik, useFormikContext } from "formik";
 import styles from "../../dataset-form.module.css";
 import { ReactNode, useEffect, useRef, useState } from "react";
@@ -24,7 +24,7 @@ interface Props {
   errors?: any;
 }
 
-interface ModalProps {
+interface DialogProps {
   type: "new" | "edit";
   onSuccess: (values: DateRange) => void;
   onCancel: () => void;
@@ -37,7 +37,7 @@ const hasNoFieldValues = (values: DateRange) => {
   return isEmpty(values.startDate) && isEmpty(values.endDate);
 };
 
-export const TemporalModal = ({ label }: Props) => {
+export const TemporalDialog = ({ label }: Props) => {
   const { values, errors, setFieldValue } = useFormikContext<Dataset>();
   const [snapshot, setSnapshot] = useState<DateRange[]>(values?.temporal ?? []);
 
@@ -74,7 +74,7 @@ export const TemporalModal = ({ label }: Props) => {
                       </Table.Cell>
                       <Table.Cell>
                         <span className={styles.set}>
-                          <FieldModal
+                          <FieldDialog
                             template={item}
                             type="edit"
                             onSuccess={(updatedItem: DateRange) => {
@@ -102,7 +102,7 @@ export const TemporalModal = ({ label }: Props) => {
               </Table>
             )}
             <div>
-              <FieldModal
+              <FieldDialog
                 template={{ startDate: "", endDate: "" }}
                 type="new"
                 onSuccess={() => setSnapshot([...(values.temporal ?? [])])}
@@ -123,27 +123,27 @@ export const TemporalModal = ({ label }: Props) => {
   );
 };
 
-const FieldModal = ({
+const FieldDialog = ({
   template,
   type,
   onSuccess,
   onCancel,
   onChange,
-}: ModalProps) => {
+}: DialogProps) => {
   const [submitted, setSubmitted] = useState(false);
   const modalRef = useRef<HTMLDialogElement>(null);
 
   return (
     <>
-      <Modal.Root>
-        <Modal.Trigger asChild>
+      <Dialog.TriggerContext>
+        <Dialog.Trigger asChild>
           {type === "edit" ? (
             <EditButton />
           ) : (
             <AddButton>{localization.datasetForm.button.addDate}</AddButton>
           )}
-        </Modal.Trigger>
-        <Modal.Dialog ref={modalRef}>
+        </Dialog.Trigger>
+        <Dialog ref={modalRef} closeButton={false}>
           <Formik
             initialValues={template}
             validateOnChange={submitted}
@@ -166,13 +166,13 @@ const FieldModal = ({
 
               return (
                 <>
-                  <Modal.Header closeButton={false}>
+                  <Dialog.Block>
                     {type === "edit"
                       ? `${localization.edit} `
                       : `${localization.add} `}
-                  </Modal.Header>
+                  </Dialog.Block>
 
-                  <Modal.Content
+                  <Dialog.Block
                     className={cn(styles.modalContent, styles.calendar)}
                   >
                     <FastField
@@ -195,9 +195,9 @@ const FieldModal = ({
                       error={errors.endDate}
                       min={values.startDate}
                     />
-                  </Modal.Content>
+                  </Dialog.Block>
 
-                  <Modal.Footer>
+                  <Dialog.Block>
                     <Button
                       type="button"
                       disabled={
@@ -220,13 +220,13 @@ const FieldModal = ({
                     >
                       {localization.button.cancel}
                     </Button>
-                  </Modal.Footer>
+                  </Dialog.Block>
                 </>
               );
             }}
           </Formik>
-        </Modal.Dialog>
-      </Modal.Root>
+        </Dialog>
+      </Dialog.TriggerContext>
     </>
   );
 };

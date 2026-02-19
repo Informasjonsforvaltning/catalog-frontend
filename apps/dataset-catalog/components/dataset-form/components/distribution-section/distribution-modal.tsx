@@ -29,7 +29,7 @@ import {
   Card,
   Combobox,
   Fieldset,
-  Modal,
+  Dialog,
   Skeleton,
   Textfield,
 } from "@digdir/designsystemet-react";
@@ -100,7 +100,7 @@ export const DistributionModal = ({
   ] = useState<Search.SearchObject[]>([]);
   const template = distributionTemplate(initialValues);
   const [submitted, setSubmitted] = useState(false);
-  const modalRef = useRef<HTMLDialogElement>(null);
+  const dialogRef = useRef<HTMLDialogElement>(null);
 
   const [searchQueryMediaTypes, setSearchQueryMediaTypes] =
     useState<string>("");
@@ -207,7 +207,7 @@ export const DistributionModal = ({
     if (onCancel) {
       onCancel();
     }
-    modalRef.current?.close();
+    dialogRef.current?.close();
   };
 
   const handleSubmit = (values: Distribution, { setSubmitting }: any) => {
@@ -225,7 +225,7 @@ export const DistributionModal = ({
     onSuccess(trimmedValues);
     setSubmitting(false);
     setSubmitted(true);
-    modalRef.current?.close();
+    dialogRef.current?.close();
   };
 
   const FIELD_CONFIG = [
@@ -570,9 +570,9 @@ export const DistributionModal = ({
   }, [focus]);
 
   return (
-    <Modal.Root>
-      <Modal.Trigger asChild>{trigger}</Modal.Trigger>
-      <Modal.Dialog ref={modalRef} className={styles.dialog}>
+    <Dialog.TriggerContext>
+      <Dialog.Trigger asChild>{trigger}</Dialog.Trigger>
+      <Dialog ref={dialogRef} className={styles.dialog} closeButton={false}>
         <Formik
           initialValues={{ ...template }}
           name="distribution"
@@ -666,15 +666,15 @@ export const DistributionModal = ({
               <>
                 {initialValues && (
                   <>
-                    <Modal.Header closeButton={false}>
+                    <Dialog.Block>
                       {type === "new"
                         ? distributionType === "distribution"
                           ? localization.datasetForm.button.addDistribution
                           : localization.datasetForm.button.addSample
                         : `${localization.edit} ${distributionType === "distribution" ? localization.datasetForm.fieldLabel.distribution.toLowerCase() : localization.datasetForm.fieldLabel.sample.toLowerCase()}`}
-                    </Modal.Header>
+                    </Dialog.Block>
 
-                    <Modal.Content className={styles.modalContent}>
+                    <Dialog.Block className={styles.dialogContent}>
                       <FormikLanguageFieldset
                         as={Textfield}
                         name="title"
@@ -1025,9 +1025,9 @@ export const DistributionModal = ({
                         ),
                       )}
                       {minimizedFields.map((f) => renderField(f))}
-                    </Modal.Content>
+                    </Dialog.Block>
 
-                    <Modal.Footer>
+                    <Dialog.Block>
                       <Button
                         type="button"
                         disabled={isSubmitting}
@@ -1047,14 +1047,14 @@ export const DistributionModal = ({
                       >
                         {localization.button.cancel}
                       </Button>
-                    </Modal.Footer>
+                    </Dialog.Block>
                   </>
                 )}
               </>
             );
           }}
         </Formik>
-      </Modal.Dialog>
-    </Modal.Root>
+      </Dialog>
+    </Dialog.TriggerContext>
   );
 };

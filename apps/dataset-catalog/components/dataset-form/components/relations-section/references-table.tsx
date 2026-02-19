@@ -15,7 +15,7 @@ import {
   Button,
   Combobox,
   Fieldset,
-  Modal,
+  Dialog,
   Table,
 } from "@digdir/designsystemet-react";
 import { Formik, useFormikContext } from "formik";
@@ -40,7 +40,7 @@ type Props = {
   autoSaveStorage?: DataStorage<StorageData>;
 };
 
-type ModalProps = {
+type DialogProps = {
   searchEnv: string;
   type: "new" | "edit";
   onSuccess: (values: Reference) => void;
@@ -147,7 +147,7 @@ export const ReferenceTable = ({
                     </Table.Cell>
                     <Table.Cell>
                       <div className={styles.set}>
-                        <FieldModal
+                        <FieldDialog
                           searchEnv={searchEnv}
                           template={ref}
                           type="edit"
@@ -177,7 +177,7 @@ export const ReferenceTable = ({
         </div>
       )}
       <div>
-        <FieldModal
+        <FieldDialog
           searchEnv={searchEnv}
           template={{ source: "", referenceType: "" }}
           type="new"
@@ -211,7 +211,7 @@ export const ReferenceTable = ({
   );
 };
 
-const FieldModal = ({
+const FieldDialog = ({
   template,
   type,
   onSuccess,
@@ -220,11 +220,11 @@ const FieldModal = ({
   searchEnv,
   initialUri,
   initialDatasets,
-}: ModalProps) => {
+}: DialogProps) => {
   const [submitted, setSubmitted] = useState(false);
   const [selectedUri, setSelectedUri] = useState(initialUri);
 
-  const modalRef = useRef<HTMLDialogElement>(null);
+  const dialogRef = useRef<HTMLDialogElement>(null);
 
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -272,15 +272,15 @@ const FieldModal = ({
 
   return (
     <>
-      <Modal.Root>
-        <Modal.Trigger asChild>
+      <Dialog.TriggerContext>
+        <Dialog.Trigger asChild>
           {type === "new" ? (
             <AddButton>{`${localization.add} ${localization.relation.toLowerCase()}`}</AddButton>
           ) : (
             <EditButton />
           )}
-        </Modal.Trigger>
-        <Modal.Dialog ref={modalRef}>
+        </Dialog.Trigger>
+        <Dialog ref={dialogRef} closeButton={false}>
           <Formik
             initialValues={template}
             validateOnChange={submitted}
@@ -291,7 +291,7 @@ const FieldModal = ({
               onSuccess(trimmedValues);
               setSubmitting(false);
               setSubmitted(true);
-              modalRef.current?.close();
+              dialogRef.current?.close();
             }}
           >
             {({
@@ -310,12 +310,12 @@ const FieldModal = ({
 
               return (
                 <>
-                  <Modal.Header closeButton={false}>
+                  <Dialog.Block>
                     {type === "edit"
                       ? `${localization.edit} ${localization.relation.toLowerCase()}`
                       : `${localization.add} ${localization.relation.toLowerCase()}`}
-                  </Modal.Header>
-                  <Modal.Content
+                  </Dialog.Block>
+                  <Dialog.Block
                     className={cn(styles.modalContent, styles.fieldContainer)}
                   >
                     <Fieldset data-size="sm">
@@ -404,9 +404,9 @@ const FieldModal = ({
                         })}
                       </Combobox>
                     </Fieldset>
-                  </Modal.Content>
+                  </Dialog.Block>
 
-                  <Modal.Footer>
+                  <Dialog.Block>
                     <Button
                       type="button"
                       disabled={
@@ -422,20 +422,20 @@ const FieldModal = ({
                       type="button"
                       onClick={() => {
                         onCancel();
-                        modalRef.current?.close();
+                        dialogRef.current?.close();
                       }}
                       disabled={isSubmitting}
                       data-size="sm"
                     >
                       {localization.button.cancel}
                     </Button>
-                  </Modal.Footer>
+                  </Dialog.Block>
                 </>
               );
             }}
           </Formik>
-        </Modal.Dialog>
-      </Modal.Root>
+        </Dialog>
+      </Dialog.TriggerContext>
     </>
   );
 };

@@ -48,10 +48,11 @@ export const PublishSwitch = ({ catalogId, dataset, disabled }: Props) => {
       <Switch
         className={styles.center}
         data-size="sm"
-        position="right"
+        position="end"
         onChange={() => handlePublishDataset()}
         checked={dataset.published}
         disabled={disabled || !(dataset.approved || dataset.published)}
+        aria-labelledby={localization.publicationState.published}
       >
         {localization.publicationState.published}
       </Switch>

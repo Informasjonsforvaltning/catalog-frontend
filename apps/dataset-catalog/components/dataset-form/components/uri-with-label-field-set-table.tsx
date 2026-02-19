@@ -12,7 +12,7 @@ import {
   localization,
   trimObjectWhitespace,
 } from "@catalog-frontend/utils";
-import { Button, Modal, Table, Textfield } from "@digdir/designsystemet-react";
+import { Button, Dialog, Table, Textfield } from "@digdir/designsystemet-react";
 import { FastField, FieldArray, Formik, useFormikContext } from "formik";
 import styles from "../dataset-form.module.css";
 import { ReactNode, useEffect, useRef, useState } from "react";
@@ -27,7 +27,7 @@ interface Props {
   hideHeadWhenEmpty?: boolean;
 }
 
-interface ModalProps {
+interface DialogProps {
   fieldName: string;
   type: "new" | "edit";
   onSuccess: (values: UriWithLabel) => void;
@@ -82,7 +82,7 @@ export const UriWithLabelFieldsetTable = ({
                     <Table.Cell>{item?.uri}</Table.Cell>
                     <Table.Cell>
                       <span className={styles.set}>
-                        <FieldModal
+                        <FieldDialog
                           fieldName={fieldName}
                           template={item}
                           type="edit"
@@ -110,7 +110,7 @@ export const UriWithLabelFieldsetTable = ({
               </Table.Body>
             </Table>
             <div>
-              <FieldModal
+              <FieldDialog
                 fieldName={fieldName}
                 template={{ prefLabel: {}, uri: "" }}
                 type="new"
@@ -133,21 +133,21 @@ export const UriWithLabelFieldsetTable = ({
   );
 };
 
-const FieldModal = ({
+const FieldDialog = ({
   fieldName,
   template,
   type,
   onSuccess,
   onCancel,
   onChange,
-}: ModalProps) => {
+}: DialogProps) => {
   const [submitted, setSubmitted] = useState(false);
-  const modalRef = useRef<HTMLDialogElement>(null);
+  const dialogRef = useRef<HTMLDialogElement>(null);
 
   return (
     <>
-      <Modal.Root>
-        <Modal.Trigger asChild>
+      <Dialog.TriggerContext>
+        <Dialog.Trigger asChild>
           {type === "edit" ? (
             <EditButton />
           ) : (
@@ -158,8 +158,8 @@ const FieldModal = ({
               ]?.toLowerCase()}
             </AddButton>
           )}
-        </Modal.Trigger>
-        <Modal.Dialog ref={modalRef}>
+        </Dialog.Trigger>
+        <Dialog ref={dialogRef} closeButton={false}>
           <Formik
             initialValues={template}
             validateOnChange={submitted}
@@ -170,7 +170,7 @@ const FieldModal = ({
               onSuccess(trimmedValues);
               setSubmitting(false);
               setSubmitted(true);
-              modalRef.current?.close();
+              dialogRef.current?.close();
             }}
           >
             {({ errors, isSubmitting, submitForm, values, dirty }) => {
@@ -182,14 +182,14 @@ const FieldModal = ({
 
               return (
                 <>
-                  <Modal.Header closeButton={false}>
+                  <Dialog.Block>
                     {type === "edit" ? localization.edit : localization.add}{" "}
                     {localization.datasetForm.fieldLabel?.[
                       fieldName as keyof typeof localization.datasetForm.fieldLabel
                     ].toLowerCase()}
-                  </Modal.Header>
+                  </Dialog.Block>
 
-                  <Modal.Content className={styles.modalContent}>
+                  <Dialog.Block className={styles.dialogContent}>
                     <FormikLanguageFieldset
                       as={Textfield}
                       name="prefLabel"
@@ -203,9 +203,9 @@ const FieldModal = ({
                       error={errors?.uri}
                       data-size="sm"
                     />
-                  </Modal.Content>
+                  </Dialog.Block>
 
-                  <Modal.Footer>
+                  <Dialog.Block>
                     <Button
                       type="button"
                       disabled={
@@ -221,20 +221,20 @@ const FieldModal = ({
                       type="button"
                       onClick={() => {
                         onCancel();
-                        modalRef.current?.close();
+                        dialogRef.current?.close();
                       }}
                       disabled={isSubmitting}
                       data-size="sm"
                     >
                       {localization.button.cancel}
                     </Button>
-                  </Modal.Footer>
+                  </Dialog.Block>
                 </>
               );
             }}
           </Formik>
-        </Modal.Dialog>
-      </Modal.Root>
+        </Dialog>
+      </Dialog.TriggerContext>
     </>
   );
 };

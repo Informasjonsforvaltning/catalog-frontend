@@ -6,7 +6,6 @@ import {
   Box,
   Button,
   Card,
-  ErrorMessage,
   Fieldset,
   Heading,
   Paragraph,
@@ -408,9 +407,9 @@ export const DistributionSection = ({
                     />
                   )}
                   {get(errors, "distribution[" + index + "]") && (
-                    <ErrorMessage data-size="sm">
+                    <ValidationMessage data-size="sm">
                       {localization.validation.multipleInvalidValues}
-                    </ErrorMessage>
+                    </ValidationMessage>
                   )}
                 </Card>
               ),
@@ -607,9 +606,9 @@ export const DistributionSection = ({
                       />
                     )}
                     {get(errors, "sample[" + index + "]") && (
-                      <ErrorMessage data-size="sm">
+                      <ValidationMessage data-size="sm">
                         Inneholder en eller flere ugyldige verdier
-                      </ErrorMessage>
+                      </ValidationMessage>
                     )}
                   </Card>
                 ),
