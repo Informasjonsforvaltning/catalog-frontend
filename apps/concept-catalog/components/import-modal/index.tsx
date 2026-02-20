@@ -232,7 +232,7 @@ export function ImportModal({ catalogId }: ImportProps) {
   return (
     <Dialog.TriggerContext>
       <Dialog.Trigger asChild>
-        <Button variant="secondary">
+        <Button variant="secondary" data-size="sm">
           <FileImportIcon />
           {localization.importResult.import}
         </Button>
