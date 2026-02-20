@@ -9,6 +9,7 @@ import {
 } from "@catalog-frontend/types";
 import styles from "./datasets-page.module.css";
 import {
+  AddButton,
   HelpMarkdown,
   NewDatasetModal,
   SearchField,
@@ -16,7 +17,7 @@ import {
   SearchHitContainer,
   SearchHitsLayout,
 } from "@catalog-frontend/ui-v2";
-import { Button, Chip, Tag, Select } from "@digdir/designsystemet-react";
+import { Chip, Tag, Select } from "@digdir/designsystemet-react";
 import {
   dateStringToDate,
   formatDate,
@@ -28,7 +29,6 @@ import {
   sortDescending,
 } from "@catalog-frontend/utils";
 import StatusTag from "../../../../components/status-tag/index";
-import { PlusCircleIcon } from "@navikt/aksel-icons";
 import SearchFilter from "../../../../components/search-filter";
 import { isEmpty } from "lodash";
 import {
@@ -354,10 +354,9 @@ const DatasetsPageClient = ({
                 <NewDatasetModal
                   catalogId={catalogId}
                   trigger={
-                    <Button variant="primary" data-size="sm">
-                      <PlusCircleIcon fontSize="1.2rem" />
+                    <AddButton variant="primary" data-size="sm">
                       {localization.datasetForm.button.addDataset}
-                    </Button>
+                    </AddButton>
                   }
                 />
               )}

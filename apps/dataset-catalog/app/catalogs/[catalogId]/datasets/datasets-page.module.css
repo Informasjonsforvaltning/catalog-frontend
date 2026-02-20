@@ -2,7 +2,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--fds-spacing-4);
+  gap: var(--ds-size-4);
 }
 
 .searchHits {
@@ -11,20 +11,19 @@
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--fds-spacing-4);
+  gap: var(--ds-size-4);
 }
 
 .searchFieldWrapper {
   display: flex;
   align-items: center;
-  flex-grow: 1;
-  gap: var(--fds-spacing-4);
+  gap: var(--ds-size-4);
 }
 
 .buttons {
   display: flex;
   align-items: center;
-  gap: var(--fds-spacing-4);
+  gap: var(--ds-size-4);
 }
 
 .searchField {
@@ -34,7 +33,7 @@
 .leftColumn {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: var(--ds-size-4);
 }
 
 .select {
@@ -43,7 +42,7 @@
 
 .set {
   display: flex;
-  gap: 0.5rem;
+  gap: var(--ds-size-2);
 }
 
 .greyFont {
@@ -51,5 +50,5 @@
 }
 
 .chips {
-  margin: var(--fds-spacing-6) 0;
+  margin: var(--ds-size-6) 0;
 }
