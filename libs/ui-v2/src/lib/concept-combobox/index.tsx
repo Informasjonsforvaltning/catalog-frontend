@@ -20,6 +20,9 @@ interface Props<T extends string> {
   searchEnv: string;
 }
 
+// Zero-width space to prevent auto-selection when input matches label exactly
+const INVISIBLE_CHARACTER = "\u200B";
+
 export const ConceptCombobox = <T extends string>(props: Props<T>) => {
   const { fieldLabel, searchEnv } = props;
   const [searchQuery, setSearchQuery] = useState("");
@@ -82,7 +85,8 @@ export const ConceptCombobox = <T extends string>(props: Props<T>) => {
           key={option.uri}
           displayValue={
             option.title
-              ? capitalizeFirstLetter(getTranslateText(option.title))
+              ? INVISIBLE_CHARACTER +
+                capitalizeFirstLetter(getTranslateText(option.title))
               : option.uri
           }
         >
