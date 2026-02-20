@@ -88,7 +88,7 @@ const FormikMultivalueTextfield = forwardRef<
                 }}
                 onBlur={() => handleAddTextValue()}
                 readOnly={readOnly}
-                error={Boolean(error)}
+                error={error ? true : undefined}
                 // {...props} todo
                 label={label}
               />
