@@ -1,7 +1,7 @@
 "use client";
 
 import { memo, useMemo } from "react";
-import { Details, Card } from "@digdir/designsystemet-react";
+import { Card } from "@digdir/designsystemet-react";
 import {
   AccordionItem,
   AccordionItemProps,
@@ -13,7 +13,6 @@ import {
   PublicationStatus,
 } from "@catalog-frontend/types";
 import { localization } from "@catalog-frontend/utils";
-import styles from "./search-filter.module.css";
 
 import { parseAsArrayOf, parseAsString, useQueryState } from "nuqs";
 
@@ -117,18 +116,16 @@ const SearchFilter = ({ pageSettings }: SearchFilterProps) => {
       initiallyOpen: true,
       header: localization.publicationState.state,
       content: (
-        <>
-          <p>
-            {localization.publicationState.descriptionDataset}
-            <br />
-            <br />
-          </p>
+        <div data-size="sm">
+          {localization.publicationState.descriptionDataset}
+          <br />
+          <br />
           <CheckboxGroupFilter
             items={publicationStateItems}
             onChange={handlePublicationOnChange}
             value={filterPublicationState ?? []}
           />
-        </>
+        </div>
       ),
     },
     {
@@ -148,11 +145,7 @@ const SearchFilter = ({ pageSettings }: SearchFilterProps) => {
     <AccordionItem key={`accordion-item-${item.header}`} {...item} />
   ));
 
-  return (
-    <Card className={styles.searchFilter}>
-      <Details className={styles.accordion}>{accordionItems}</Details>
-    </Card>
-  );
+  return <Card>{accordionItems}</Card>;
 };
 
 export default memo(SearchFilter);

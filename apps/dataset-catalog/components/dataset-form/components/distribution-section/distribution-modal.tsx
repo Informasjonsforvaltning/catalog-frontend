@@ -32,6 +32,7 @@ import {
   Dialog,
   Skeleton,
   Textfield,
+  Heading,
 } from "@digdir/designsystemet-react";
 import { FastField, FieldArray, Formik } from "formik";
 import styles from "./distributions.module.scss";
@@ -667,11 +668,13 @@ export const DistributionModal = ({
                 {initialValues && (
                   <>
                     <Dialog.Block>
-                      {type === "new"
-                        ? distributionType === "distribution"
-                          ? localization.datasetForm.button.addDistribution
-                          : localization.datasetForm.button.addSample
-                        : `${localization.edit} ${distributionType === "distribution" ? localization.datasetForm.fieldLabel.distribution.toLowerCase() : localization.datasetForm.fieldLabel.sample.toLowerCase()}`}
+                      <Heading>
+                        {type === "new"
+                          ? distributionType === "distribution"
+                            ? localization.datasetForm.button.addDistribution
+                            : localization.datasetForm.button.addSample
+                          : `${localization.edit} ${distributionType === "distribution" ? localization.datasetForm.fieldLabel.distribution.toLowerCase() : localization.datasetForm.fieldLabel.sample.toLowerCase()}`}
+                      </Heading>
                     </Dialog.Block>
 
                     <Dialog.Block className={styles.dialogContent}>
@@ -1028,25 +1031,34 @@ export const DistributionModal = ({
                     </Dialog.Block>
 
                     <Dialog.Block>
-                      <Button
-                        type="button"
-                        disabled={isSubmitting}
-                        onClick={() => submitForm()}
-                        data-size="sm"
+                      <div
+                        style={{
+                          display: "flex",
+                          gap: "var(--ds-size-4)",
+                          marginTop: "var(--ds-size-4)",
+                        }}
                       >
-                        {type === "new"
-                          ? localization.add
-                          : localization.datasetForm.button.updateDistribution}
-                      </Button>
-                      <Button
-                        variant="secondary"
-                        type="button"
-                        onClick={handleCancel}
-                        disabled={isSubmitting}
-                        data-size="sm"
-                      >
-                        {localization.button.cancel}
-                      </Button>
+                        <Button
+                          type="button"
+                          disabled={isSubmitting}
+                          onClick={() => submitForm()}
+                          data-size="sm"
+                        >
+                          {type === "new"
+                            ? localization.add
+                            : localization.datasetForm.button
+                                .updateDistribution}
+                        </Button>
+                        <Button
+                          variant="secondary"
+                          type="button"
+                          onClick={handleCancel}
+                          disabled={isSubmitting}
+                          data-size="sm"
+                        >
+                          {localization.button.cancel}
+                        </Button>
+                      </div>
                     </Dialog.Block>
                   </>
                 )}

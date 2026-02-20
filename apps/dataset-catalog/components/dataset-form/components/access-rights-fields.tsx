@@ -8,7 +8,7 @@ import {
   getTranslateText,
   localization,
 } from "@catalog-frontend/utils";
-import { Fieldset, Radio } from "@digdir/designsystemet-react";
+import { Fieldset, Radio, useRadioGroup } from "@digdir/designsystemet-react";
 import { useFormikContext } from "formik";
 import { UriWithLabelFieldsetTable } from "./uri-with-label-field-set-table";
 
@@ -18,7 +18,12 @@ interface Props {
 
 export const AccessRightFields = ({ isMobility: isMobility }: Props) => {
   const { values, errors, setFieldValue } = useFormikContext<Dataset>();
-  //TODO: useRadiogroup?
+
+  const { getRadioProps } = useRadioGroup({
+    value: values.accessRight,
+    onChange: (value) => setFieldValue("accessRight", value),
+    error: errors.accessRight,
+  });
 
   return (
     <>
@@ -33,16 +38,18 @@ export const AccessRightFields = ({ isMobility: isMobility }: Props) => {
               {localization.access}
             </TitleWithHelpTextAndTag>
           </Fieldset.Legend>
-        </Fieldset>
-
-        <Radio label={`${localization.accessRight.none}`} value="none" />
-        {accessRights?.map((option, index) => (
           <Radio
-            label={getTranslateText(option.label)}
-            key={`${option.uri}-${index}`}
-            value={option.uri}
+            label={`${localization.accessRight.none}`}
+            {...getRadioProps({ value: undefined })}
           />
-        ))}
+          {accessRights?.map((option) => (
+            <Radio
+              label={getTranslateText(option.label)}
+              key={option.uri}
+              {...getRadioProps({ value: option.uri })}
+            />
+          ))}
+        </Fieldset>
       </div>
 
       {!isMobility && (

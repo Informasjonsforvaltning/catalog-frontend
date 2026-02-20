@@ -4,14 +4,21 @@ import { Switch } from "@digdir/designsystemet-react";
 import styles from "./publish-switch.module.css";
 import { publishDataset } from "../../app/actions/actions";
 import { Dataset, PublicationStatus } from "@catalog-frontend/types";
+import { ReactNode } from "react";
 
 type Props = {
   catalogId: string;
   dataset: Dataset;
   disabled: boolean;
+  label?: ReactNode;
 };
 
-export const PublishSwitch = ({ catalogId, dataset, disabled }: Props) => {
+export const PublishSwitch = ({
+  catalogId,
+  dataset,
+  disabled,
+  label,
+}: Props) => {
   const handlePublishDataset = async () => {
     if (dataset.approved && !dataset.published) {
       if (window.confirm(localization.datasetForm.alert.confirmPublish)) {
@@ -47,12 +54,12 @@ export const PublishSwitch = ({ catalogId, dataset, disabled }: Props) => {
     <>
       <Switch
         className={styles.center}
-        data-size="sm"
         position="end"
         onChange={() => handlePublishDataset()}
         checked={dataset.published}
         disabled={disabled || !(dataset.approved || dataset.published)}
-        aria-labelledby={localization.publicationState.published}
+        label={label || localization.publicationState.published}
+        data-color="success"
       >
         {localization.publicationState.published}
       </Switch>

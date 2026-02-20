@@ -100,7 +100,7 @@ export const EditPage = ({
       <ButtonBar>
         <Button
           variant="tertiary"
-          data-color="danger"
+          data-color="neutral"
           data-size="sm"
           onClick={() => setShowCancelConfirm(true)}
         >

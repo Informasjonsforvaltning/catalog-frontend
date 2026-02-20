@@ -9,7 +9,7 @@ import { isEmpty } from "lodash";
 import PublishSwitch from "../publish-switch";
 import { ApplicationProfile, Dataset } from "@catalog-frontend/types";
 import styles from "./details-columns.module.css";
-import { Link, Paragraph } from "@digdir/designsystemet-react";
+import { Link } from "@digdir/designsystemet-react";
 
 type Props = {
   dataset: Dataset;
@@ -34,11 +34,11 @@ export const RightColumn = ({
             : localization.datasetForm.helptext.applicationProfileDcat
         }
       >
-        <Paragraph data-size="sm">
+        <div data-size="sm">
           {dataset?.applicationProfile === ApplicationProfile.MOBILITYDCATAP
             ? localization.tag.mobilityDcatAp
             : localization.tag.dcatApNo}
-        </Paragraph>
+        </div>
       </InfoCard.Item>
 
       <InfoCard.Item
@@ -46,7 +46,7 @@ export const RightColumn = ({
         title={localization.datasetForm.fieldLabel.datasetID}
         headingColor="light"
       >
-        {dataset?.id}
+        <div data-size="sm">{dataset?.id}</div>
       </InfoCard.Item>
 
       <InfoCard.Item
@@ -66,11 +66,14 @@ export const RightColumn = ({
           catalogId={dataset.catalogId}
           dataset={dataset}
           disabled={!hasWritePermission}
+          label={
+            <div data-size="sm">
+              {dataset.published
+                ? localization.publicationState.publishedInFDK
+                : localization.publicationState.unpublished}
+            </div>
+          }
         />
-
-        {dataset.published
-          ? localization.publicationState.publishedInFDK
-          : localization.publicationState.unpublished}
       </InfoCard.Item>
 
       {dataset?.lastModified && (
@@ -79,12 +82,14 @@ export const RightColumn = ({
           title={localization.datasetForm.fieldLabel.lastUpdated}
           headingColor="light"
         >
-          {formatISO(dataset?.lastModified, {
-            weekday: "long",
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          })}
+          <div data-size="sm">
+            {formatISO(dataset?.lastModified, {
+              weekday: "long",
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
+          </div>
         </InfoCard.Item>
       )}
 
@@ -93,7 +98,7 @@ export const RightColumn = ({
           title={localization.datasetForm.heading.contactPoint}
           headingColor="light"
         >
-          <div className={styles.contactPoints}>
+          <div className={styles.contactPoints} data-size="sm">
             {!isEmpty(dataset?.contactPoints[0]?.name) && (
               <span>
                 {getTranslateText(dataset?.contactPoints[0]?.name, language)}

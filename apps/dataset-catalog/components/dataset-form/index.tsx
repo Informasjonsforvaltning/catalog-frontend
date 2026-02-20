@@ -555,14 +555,14 @@ export const DatasetForm = ({
                   <div className={styles.verticalLine} />
                   <Switch
                     position="start"
-                    data-size="sm"
                     checked={values.approved}
                     onChange={(event) =>
                       handleSwitchChange(event, setFieldValue)
                     }
-                    aria-labelledby={localization.tag.approve}
+                    label={localization.tag.approve}
                   >
                     <div className={styles.footerContent}>
+                      {localization.tag.approve}
                       <HelpMarkdown
                         title={
                           localization.datasetForm.fieldLabel.registrationStatus

@@ -15,9 +15,8 @@ import {
   SearchHit,
   SearchHitContainer,
   SearchHitsLayout,
-  Select,
 } from "@catalog-frontend/ui-v2";
-import { Button, Chip, Tag } from "@digdir/designsystemet-react";
+import { Button, Chip, Tag, Select } from "@digdir/designsystemet-react";
 import {
   dateStringToDate,
   formatDate,
@@ -249,7 +248,7 @@ const DatasetsPageClient = ({
     return (
       <div className={styles.chips}>
         <div className={styles.wrap}>
-          {filterStatus?.map((filter, index) => (
+          {filterStatus?.map((filter) => (
             <Chip.Removable
               key={filter}
               onClick={() => {
@@ -264,7 +263,7 @@ const DatasetsPageClient = ({
               }
             </Chip.Removable>
           ))}
-          {filterPublicationState?.map((filter, index) => (
+          {filterPublicationState?.map((filter) => (
             <Chip.Removable
               key={filter}
               onClick={() => {
@@ -276,7 +275,7 @@ const DatasetsPageClient = ({
                 : localization.publicationState.unpublished}
             </Chip.Removable>
           ))}
-          {filterApplicationProfile?.map((filter, index) => (
+          {filterApplicationProfile?.map((filter) => (
             <Chip.Removable
               key={filter}
               onClick={() => {
@@ -317,7 +316,6 @@ const DatasetsPageClient = ({
     return filteredDatasets.slice(startIndex, endIndex);
   }, [filteredDatasets, page]);
 
-  //TODO: use select options components
   return (
     <div className={styles.container}>
       <SearchHitsLayout>
@@ -337,17 +335,18 @@ const DatasetsPageClient = ({
                 data-size="sm"
                 onChange={(e) => setSortValue(e.target.value)}
                 value={sortValue}
+                width="auto"
               >
-                <option value="">{`${localization.choose} ${localization.search.sort.toLowerCase()}...`}</option>
-                <option value="lastChanged">
+                <Select.Option value="">{`${localization.choose} ${localization.search.sort.toLowerCase()}...`}</Select.Option>
+                <Select.Option value="lastChanged">
                   {localization.search.sortOptions.LAST_UPDATED_FIRST}
-                </option>
-                <option value="titleAsc">
+                </Select.Option>
+                <Select.Option value="titleAsc">
                   {localization.search.sortOptions.TITLE_AÅ}
-                </option>
-                <option value="titleDesc">
+                </Select.Option>
+                <Select.Option value="titleDesc">
                   {localization.search.sortOptions.TITLE_ÅA}
-                </option>
+                </Select.Option>
               </Select>
             </div>
             <div className={styles.buttons}>
