@@ -91,7 +91,7 @@
     "@nx/js": "22.5.1",
     "@nx/next": "22.5.1",
     "@nx/playwright": "22.5.1",
-    "@nx/react": "22.5.1",
+    "@nx/react": "22.5.2",
     "@nx/web": "22.5.1",
     "@nx/workspace": "22.5.1",
     "@playwright/test": "^1.55.1",
