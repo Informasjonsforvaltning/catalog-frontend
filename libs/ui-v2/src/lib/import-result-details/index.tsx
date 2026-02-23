@@ -382,22 +382,19 @@ const ImportResultDetails = ({
                     key={conceptExtraction?.extractionRecord?.internalId}
                   >
                     <Table.Cell style={{ width: "70%" }}>
-                      <Details role="group">
-                        <ImportRecordAccordionItem
-                          key={`result-${conceptExtraction?.extractionRecord?.internalId}`}
-                          targetBaseHref={targetBaseHref}
-                          conceptExtraction={conceptExtraction}
-                          enableOpening={
-                            importResult?.status !==
-                              ImportResultStatus.PENDING_CONFIRMATION &&
-                            importResult?.status !==
-                              ImportResultStatus.CANCELLED
-                          }
-                          isCompleted={
-                            importResult.status === ImportResultStatus.COMPLETED
-                          }
-                        />
-                      </Details>
+                      <ImportRecordAccordionItem
+                        key={`result-${conceptExtraction?.extractionRecord?.internalId}`}
+                        targetBaseHref={targetBaseHref}
+                        conceptExtraction={conceptExtraction}
+                        enableOpening={
+                          importResult?.status !==
+                            ImportResultStatus.PENDING_CONFIRMATION &&
+                          importResult?.status !== ImportResultStatus.CANCELLED
+                        }
+                        isCompleted={
+                          importResult.status === ImportResultStatus.COMPLETED
+                        }
+                      />
                     </Table.Cell>
 
                     <Table.Cell style={{ width: "10%" }}>

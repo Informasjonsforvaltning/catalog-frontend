@@ -95,3 +95,12 @@ hr {
 .ds-combobox__input {
   width: auto;
 }
+
+/* Remove validation icon from ValidationMessage, keep only text */
+.ds-validation-message::before {
+  display: none;
+}
+
+.ds-validation-message {
+  padding-inline-start: 0;
+}
