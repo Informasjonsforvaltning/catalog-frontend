@@ -737,27 +737,6 @@ export const DistributionModal = ({
                                                 el,
                                               )
                                             }
-                                            label={
-                                              index === 0 ? (
-                                                <TitleWithHelpTextAndTag
-                                                  tagColor="warning"
-                                                  tagTitle={
-                                                    localization.tag.required
-                                                  }
-                                                  helpText={
-                                                    localization.datasetForm
-                                                      .helptext.accessURL
-                                                  }
-                                                >
-                                                  {
-                                                    localization.datasetForm
-                                                      .fieldLabel.accessURL
-                                                  }
-                                                </TitleWithHelpTextAndTag>
-                                              ) : (
-                                                ""
-                                              )
-                                            }
                                             as={Textfield}
                                             data-size="sm"
                                             error={errors?.accessURL?.[index]}
@@ -765,38 +744,29 @@ export const DistributionModal = ({
                                         </FieldsetWithDelete>
                                       ) : (
                                         <FastFieldWithRef
-                                          name={`accessURL[${index}]`}
+                                          name={`accessURL[0]`}
                                           ref={(
                                             el:
                                               | HTMLInputElement
                                               | HTMLTextAreaElement
                                               | null,
-                                          ) =>
-                                            setInputRef(
-                                              `accessURL[${index}]`,
-                                              el,
-                                            )
-                                          }
+                                          ) => setInputRef("accessURL[0]", el)}
                                           label={
-                                            index === 0 ? (
-                                              <TitleWithHelpTextAndTag
-                                                tagColor="warning"
-                                                tagTitle={
-                                                  localization.tag.required
-                                                }
-                                                helpText={
-                                                  localization.datasetForm
-                                                    .helptext.accessURL
-                                                }
-                                              >
-                                                {
-                                                  localization.datasetForm
-                                                    .fieldLabel.accessURL
-                                                }
-                                              </TitleWithHelpTextAndTag>
-                                            ) : (
-                                              ""
-                                            )
+                                            <TitleWithHelpTextAndTag
+                                              tagColor="warning"
+                                              tagTitle={
+                                                localization.tag.required
+                                              }
+                                              helpText={
+                                                localization.datasetForm
+                                                  .helptext.accessURL
+                                              }
+                                            >
+                                              {
+                                                localization.datasetForm
+                                                  .fieldLabel.accessURL
+                                              }
+                                            </TitleWithHelpTextAndTag>
                                           }
                                           as={Textfield}
                                           data-size="sm"
