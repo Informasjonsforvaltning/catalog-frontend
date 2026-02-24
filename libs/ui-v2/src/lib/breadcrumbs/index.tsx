@@ -1,49 +1,57 @@
-import { hashCode, localization } from "@catalog-frontend/utils";
+import { localization } from "@catalog-frontend/utils";
+import {
+  Breadcrumbs as DSBreadcrumbs,
+  BreadcrumbsList,
+  BreadcrumbsItem,
+  BreadcrumbsLink,
+} from "@digdir/designsystemet-react";
+import classNames from "classnames";
 import styles from "./breadcrumbs.module.css";
-import Link from "next/link";
+
 export type BreadcrumbType = {
   href: string;
   text: string;
 };
 
-export interface BreadcrumbsProps {
+interface Props {
   breadcrumbList?: BreadcrumbType[];
   catalogPortalUrl: string;
 }
 
-const Breadcrumbs = ({
-  breadcrumbList,
-  catalogPortalUrl,
-}: BreadcrumbsProps) => {
+export const Breadcrumbs = (props: Props) => {
+  const { breadcrumbList, catalogPortalUrl } = props;
   return (
-    <div className="container">
-      <nav className={styles.breadcrumbs}>
-        <span>
-          <a
-            className={styles.link}
-            aria-label={localization.catalogOverview}
+    <DSBreadcrumbs
+      className={classNames("container", styles.breadcrumbs)}
+      data-size="sm"
+    >
+      <BreadcrumbsLink
+        aria-label={localization.button.backToOverview}
+        className={styles.breadcrumbLink}
+        href={catalogPortalUrl}
+      >
+        {localization.catalogOverview}
+      </BreadcrumbsLink>
+      <BreadcrumbsList>
+        <BreadcrumbsItem>
+          <BreadcrumbsLink
+            className={styles.breadcrumbLink}
             href={catalogPortalUrl}
           >
             {localization.catalogOverview}
-          </a>
-          {breadcrumbList?.map((breadcrumb, i) => {
-            return (
-              <span key={hashCode(breadcrumb.href)}>
-                <span className={styles.separator}>{">"}</span>
-                {i === breadcrumbList.length - 1 ? (
-                  <span className={styles.deactiveLink}>{breadcrumb.text}</span>
-                ) : (
-                  <Link href={breadcrumb.href} className={styles.link}>
-                    {breadcrumb.text}
-                  </Link>
-                )}
-              </span>
-            );
-          })}
-        </span>
-      </nav>
-    </div>
+          </BreadcrumbsLink>
+        </BreadcrumbsItem>
+        {breadcrumbList?.map((breadcrumb) => (
+          <BreadcrumbsItem key={breadcrumb.href}>
+            <BreadcrumbsLink
+              href={breadcrumb.href}
+              className={styles.breadcrumbLink}
+            >
+              {breadcrumb.text}
+            </BreadcrumbsLink>
+          </BreadcrumbsItem>
+        ))}
+      </BreadcrumbsList>
+    </DSBreadcrumbs>
   );
 };
-
-export { Breadcrumbs };

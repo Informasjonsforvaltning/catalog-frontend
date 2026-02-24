@@ -1,4 +1,4 @@
-import { Tag } from "@digdir/designsystemet-react";
+import { Label, Tag } from "@digdir/designsystemet-react";
 import { localization } from "@catalog-frontend/utils";
 import styles from "./label.module.css";
 import { HelpMarkdown } from "../help-markdown";
@@ -34,7 +34,7 @@ export function TitleWithHelpTextAndTag({
 }: Props) {
   return (
     <div className={styles.container}>
-      {title}
+      <Label data-size="sm">{title}</Label>
       {helpText && (
         <HelpMarkdown aria-label={`${localization.helpWithCompleting}`}>
           {helpText}
