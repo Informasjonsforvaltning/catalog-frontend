@@ -1,4 +1,4 @@
-import { Layout, TermsOfUseModal } from "@catalog-frontend/ui";
+import { Layout, TermsOfUseModal } from "@catalog-frontend/ui-v2";
 import { localization } from "@catalog-frontend/utils";
 
 const PageLayout = async (props: {

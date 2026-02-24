@@ -1951,6 +1951,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@catalog-frontend/service-catalog@workspace:apps/service-catalog":
+  version: 0.0.0-use.local
+  resolution: "@catalog-frontend/service-catalog@workspace:apps/service-catalog"
+  dependencies:
+    "@digdir/designsystemet-css": "npm:1.11.1"
+    "@digdir/designsystemet-react": "npm:1.11.1"
+  languageName: unknown
+  linkType: soft
+
 "@catalog-frontend/ui-v2@workspace:libs/ui-v2":
   version: 0.0.0-use.local
   resolution: "@catalog-frontend/ui-v2@workspace:libs/ui-v2"
