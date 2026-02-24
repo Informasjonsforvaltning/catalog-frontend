@@ -10,7 +10,6 @@ import { Concept } from "@catalog-frontend/types";
 import { TitleWithHelpTextAndTag } from "@catalog-frontend/ui-v2";
 import { localization } from "@catalog-frontend/utils";
 import styles from "../concept-form.module.scss";
-import { isNil } from "lodash";
 
 type ContactSectionProps = {
   changed?: string[];
@@ -34,15 +33,15 @@ export const ContactSection = ({
   ];
 
   const selectedFields = [
-    ...(!isNil(values.kontaktpunkt?.harEpost) ? ["harEpost"] : []),
-    ...(!isNil(values.kontaktpunkt?.harTelefon) ? ["harTelefon"] : []),
+    ...(values.kontaktpunkt?.harEpost != null ? ["harEpost"] : []),
+    ...(values.kontaktpunkt?.harTelefon != null ? ["harTelefon"] : []),
   ];
 
   const handleContactChange = (value: string[]) => {
     contactOptions.forEach((option) => {
       if (!value.includes(option.value)) {
         setFieldValue(`kontaktpunkt.${option.value}`, null);
-      } else if (isNil(values.kontaktpunkt?.[option.value])) {
+      } else if (values.kontaktpunkt?.[option.value] == null) {
         setFieldValue(`kontaktpunkt.${option.value}`, "");
       }
     });
