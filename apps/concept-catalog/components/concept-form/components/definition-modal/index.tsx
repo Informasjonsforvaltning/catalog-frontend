@@ -44,14 +44,7 @@ export const DefinitionModal = ({
   return (
     <Dialog.TriggerContext>
       <Dialog.Trigger asChild>{trigger}</Dialog.Trigger>
-      <Dialog
-        ref={modalRef}
-        className={styles.dialog}
-        style={{
-          overflow: "visible",
-        }}
-        closeButton={false}
-      >
+      <Dialog ref={modalRef} className={styles.dialog} closeButton={false}>
         <Formik
           initialValues={initialDefinition || defaultDefinition}
           validationSchema={definitionSchema}

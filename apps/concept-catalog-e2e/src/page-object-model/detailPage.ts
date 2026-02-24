@@ -102,11 +102,11 @@ export default class DetailPage {
 
   getStatusColor(uri: string) {
     if (uri.includes("DRAFT")) {
-      return "rgb(250, 238, 194)";
+      return "rgb(250, 230, 198)";
     } else if (uri.includes("CURRENT")) {
-      return "rgb(209, 244, 225)";
+      return "rgb(218, 237, 221)";
     } else if (uri.includes("REJECTED")) {
-      return "rgb(244, 245, 246)";
+      return "rgb(248, 228, 228)";
     }
     return "ukjent";
   }
@@ -133,10 +133,16 @@ export default class DetailPage {
       }),
     ).toBeVisible();
 
-    const statusTag = this.page.getByText(
-      this.getStatusText(concept.statusURI as string),
-      { exact: true },
-    );
+    const heading = this.page.getByRole("heading", {
+      name: concept.anbefaltTerm?.navn.nb as string,
+    });
+    const statusTag = this.page
+      .locator("div")
+      .filter({ has: heading })
+      .last()
+      .getByText(this.getStatusText(concept.statusURI as string), {
+        exact: true,
+      });
     await expect(statusTag).toBeVisible();
 
     const backgroundColor = await statusTag.evaluate(
@@ -434,11 +440,16 @@ export default class DetailPage {
       ),
     ).toBeVisible();
 
+    const versionHeading = this.page.getByRole("heading", {
+      name: "Versjon",
+    });
+    await expect(versionHeading).toBeVisible();
+    const versionContainer = this.page
+      .locator("div")
+      .filter({ has: versionHeading })
+      .last();
     await expect(
-      this.page.getByRole("heading", { name: "Versjon" }),
-    ).toBeVisible();
-    await expect(
-      this.page.getByText(this.getVersionText(concept)),
+      versionContainer.getByText(this.getVersionText(concept), { exact: true }),
     ).toBeVisible();
 
     await expect(
@@ -481,56 +492,72 @@ export default class DetailPage {
       ),
     ).toBeVisible();
 
+    const dateUpdatedHeading = this.page.getByRole("heading", {
+      name: "Dato sist oppdatert",
+    });
+    await expect(dateUpdatedHeading).toBeVisible();
+    const dateUpdatedContainer = this.page
+      .locator("div")
+      .filter({ has: dateUpdatedHeading })
+      .last();
     await expect(
-      this.page.getByRole("heading", { name: "Dato sist oppdatert" }),
-    ).toBeVisible();
-    await expect(
-      this.page
-        .getByText(
-          formatISO(new Date().toISOString(), {
-            weekday: "long",
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          }) ?? "",
-        )
-        .first(),
-    ).toBeVisible();
-
-    await expect(
-      this.page.getByRole("heading", { name: "Opprettet", exact: true }),
-    ).toBeVisible();
-    await expect(
-      this.page
-        .getByText(
-          formatISO(new Date().toISOString(), {
-            weekday: "long",
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          }) ?? "",
-        )
-        .nth(1),
+      dateUpdatedContainer.getByText(
+        formatISO(new Date().toISOString(), {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        }) ?? "",
+      ),
     ).toBeVisible();
 
+    const createdHeading = this.page.getByRole("heading", {
+      name: "Opprettet",
+      exact: true,
+    });
+    await expect(createdHeading).toBeVisible();
+    const createdContainer = this.page
+      .locator("div")
+      .filter({ has: createdHeading })
+      .last();
     await expect(
-      this.page.getByRole("heading", { name: "Opprettet av", exact: true }),
+      createdContainer.getByText(
+        formatISO(new Date().toISOString(), {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        }) ?? "",
+      ),
     ).toBeVisible();
-    await expect(this.page.getByText("LAMA LEDENDE")).toBeVisible();
+
+    const createdByHeading = this.page.getByRole("heading", {
+      name: "Opprettet av",
+      exact: true,
+    });
+    await expect(createdByHeading).toBeVisible();
+    const createdByContainer = this.page
+      .locator("div")
+      .filter({ has: createdByHeading })
+      .last();
+    await expect(createdByContainer.getByText("LAMA LEDENDE")).toBeVisible();
 
     if (concept.kontaktpunkt?.harEpost || concept.kontaktpunkt?.harTelefon) {
+      const contactHeading = this.page.getByRole("heading", {
+        name: "Kontaktinformasjon for eksterne",
+      });
+      await expect(contactHeading).toBeVisible();
+      const contactContainer = this.page
+        .locator("div")
+        .filter({ has: contactHeading })
+        .last();
       await expect(
-        this.page.getByRole("heading", {
-          name: "Kontaktinformasjon for eksterne",
-        }),
-      ).toBeVisible();
-      await expect(
-        this.page.getByText(concept.kontaktpunkt.harEpost as string),
+        contactContainer.getByText(concept.kontaktpunkt.harEpost as string),
       ).toBeVisible({
         visible: Boolean(concept.kontaktpunkt.harEpost),
       });
       await expect(
-        this.page.getByText(concept.kontaktpunkt.harTelefon as string),
+        contactContainer.getByText(concept.kontaktpunkt.harTelefon as string),
       ).toBeVisible({
         visible: Boolean(concept.kontaktpunkt.harTelefon),
       });

@@ -6,7 +6,6 @@ import {
   Checkbox,
   Combobox,
   Fieldset,
-  Textarea,
   Textfield,
 } from "@digdir/designsystemet-react";
 import {
@@ -90,7 +89,8 @@ export const InternalSection = ({
         <FastField
           name={name}
           data-size="sm"
-          as={Textarea}
+          as={Textfield}
+          multiline
           label={<FieldLabel />}
           rows={3}
           readOnly={readOnly}

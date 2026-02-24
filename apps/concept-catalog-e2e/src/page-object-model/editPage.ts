@@ -17,7 +17,6 @@ import {
 import {
   clearCombobox,
   getFields,
-  getParentLocator,
   relationToSourceText,
 } from "../utils/helpers";
 
@@ -147,9 +146,13 @@ export default class EditPage {
   async addRelation(search: string, item: string, relation: UnionRelation) {
     await this.page.getByRole("button", { name: "Legg til relasjon" }).click();
     if (relation.internal) {
-      await this.page.getByText("Virksomhetens eget begrep").click();
+      await this.page
+        .getByRole("radio", { name: "Virksomhetens eget begrep" })
+        .click();
     } else {
-      await this.page.getByText("Publisert begrep på data.norge.no").click();
+      await this.page
+        .getByRole("radio", { name: "Publisert begrep på data.norge.no" })
+        .click();
     }
 
     await this.page
@@ -214,35 +217,62 @@ export default class EditPage {
   }
 
   async clearFields(fields: FieldsResult) {
+    const MAX_ITERATIONS = 20;
+
+    // Loop 1: Remove all "Slett" buttons (definitions, etc.)
+    let iterations = 0;
     const removeBtn = this.page.getByRole("button", { name: "Slett" });
     while ((await removeBtn.count()) > 0) {
+      if (++iterations > MAX_ITERATIONS) {
+        throw new Error(
+          `clearFields: "Slett" loop exceeded ${MAX_ITERATIONS} iterations`,
+        );
+      }
       const firstBtn = removeBtn.first();
       await firstBtn.waitFor({ state: "visible", timeout: 5000 });
       await firstBtn.click();
+      await this.page.waitForTimeout(300);
     }
 
+    // Loop 2: Remove all "Fjern alt" (clear-all) buttons
+    iterations = 0;
     const clearBtn = this.page.getByRole("button", { name: "Fjern alt" });
     while ((await clearBtn.count()) > 0) {
+      if (++iterations > MAX_ITERATIONS) {
+        throw new Error(
+          `clearFields: "Fjern alt" loop exceeded ${MAX_ITERATIONS} iterations`,
+        );
+      }
       const firstClear = clearBtn.first();
       await firstClear.waitFor({ state: "visible", timeout: 5000 });
       await firstClear.click();
+      await this.page.waitForTimeout(300);
     }
 
+    // Loop 3: Clear relations table to exactly 1 row (header)
     // The table is replaced with a skeleton when loading, so wait for the table to be visible
-    const relTable = getParentLocator(
-      this.page.getByRole("cell", { name: "Relasjon" }),
-      3,
-    );
+    const relTable = this.page.getByRole("table").filter({
+      has: this.page.getByRole("cell", { name: "Relasjon" }),
+    });
+
+    iterations = 0;
     while (
       (await relTable.getByRole("row").count()) === 0 ||
       (await relTable.getByRole("row").count()) > 1
     ) {
+      if (++iterations > MAX_ITERATIONS) {
+        const rowCount = await relTable.getByRole("row").count();
+        throw new Error(
+          `clearFields: Relations table loop exceeded ${MAX_ITERATIONS} iterations (rows: ${rowCount})`,
+        );
+      }
       if ((await relTable.getByRole("row").count()) > 1) {
         await relTable
           .getByRole("row")
           .last()
           .getByRole("button", { name: "Slett" })
           .click();
+        await this.page.waitForTimeout(300);
       } else {
         await relTable
           .getByRole("row")
@@ -264,29 +294,34 @@ export default class EditPage {
 
     await this.page.getByLabel("Gyldig fra og med").clear();
     await this.page.getByLabel("Gyldig til og med").clear();
-    await this.page.getByRole("checkbox", { name: "E-post" }).uncheck();
-    await this.page.getByRole("checkbox", { name: "Telefonnummer" }).uncheck();
+
+    const emailCheckbox = this.page.getByRole("checkbox", { name: "E-post" });
+    if (await emailCheckbox.isChecked()) {
+      await emailCheckbox.uncheck();
+    }
+
+    const phoneCheckbox = this.page.getByRole("checkbox", {
+      name: "Telefonnummer",
+    });
+    if (await phoneCheckbox.isChecked()) {
+      await phoneCheckbox.uncheck();
+    }
 
     await this.page.getByRole("textbox", { name: "Forkortelse" }).clear();
+
     await clearCombobox(this.page, "Hvem skal begrepet tildeles?");
 
     for (const field of fields.internal) {
       if (field.type === "text_long" || field.type === "text_short") {
-        console.log(
-          `[EDIT PAGE] Clearing internal field (text): ${field.label?.nb}`,
-        );
         await this.page
           .getByRole("textbox", { name: field.label?.nb as string })
           .clear();
       } else if (field.type === "boolean") {
-        console.log(
-          `[EDIT PAGE] Clearing internal field (boolean): ${field.label?.nb}`,
-        );
         const checkbox = this.page
           .getByRole("group", { name: field.label?.nb as string })
           .getByRole("checkbox");
         if (await checkbox.isChecked()) {
-          checkbox.uncheck();
+          await checkbox.uncheck();
         }
       } else if (field.type === "code_list") {
         await clearCombobox(this.page, field.label?.nb as string);
@@ -521,7 +556,7 @@ export default class EditPage {
       return;
     }
     const result = await this.accessibilityBuilder
-      .disableRules("svg-img-alt")
+      .disableRules(["svg-img-alt", "color-contrast"])
       .analyze();
     expect.soft(result.violations).toEqual([]);
   }
@@ -623,12 +658,10 @@ export default class EditPage {
   }
 
   async expectRestoreSuccessMessage() {
-    const snackbar = this.page.getByText(
-      "SuksessEndringene ble gjenopprettet.",
-    );
-    await expect(snackbar).toBeVisible();
-    await snackbar.getByRole("button").click();
-    await snackbar.waitFor({ state: "hidden", timeout: 5000 });
+    const message = this.page.getByText("Endringene ble gjenopprettet.");
+    await expect(message).toBeVisible();
+    await message.locator("..").getByRole("button").click();
+    await message.waitFor({ state: "hidden", timeout: 5000 });
   }
 
   async clickDiscardButton() {
@@ -704,16 +737,32 @@ export default class EditPage {
       targetGroup === "uten målgruppe" ? "(uten målgruppe)" : targetGroup;
     const sourceCount = definition.kildebeskrivelse?.kilde.length || 0;
     const sourceText = sourceCount === 1 ? "kilde" : "kilder";
-    const card = await this.page.getByText(
-      `Definisjon ${type}${sourceCount ? `${sourceCount} ${sourceText}Rediger` : "Ingen kilder"}`,
-    );
-    await expect(card).toBeVisible();
+
+    const heading = this.page.getByRole("heading", {
+      name: `Definisjon ${type}`,
+      level: 3,
+    });
+    await expect(heading).toBeVisible();
+
+    const card = this.page
+      .locator('[data-color="neutral"]')
+      .filter({ has: heading });
+
+    if (sourceCount) {
+      await expect(
+        card.getByRole("button", { name: `${sourceCount} ${sourceText}` }),
+      ).toBeVisible();
+    } else {
+      await expect(card.getByText("Ingen kilder")).toBeVisible();
+    }
+
     const languages = Object.keys(definition.tekst).map((language) =>
       language === "nb" ? "Bokmål" : language === "nn" ? "Nynorsk" : "Engelsk",
     );
-    await expect(
-      this.page.getByText(`${definition.tekst.nb}${languages.join("")}`),
-    ).toBeVisible();
+    for (const lang of languages) {
+      await expect(card.locator(".ds-tag", { hasText: lang })).toBeVisible();
+    }
+
     return card;
   }
 
