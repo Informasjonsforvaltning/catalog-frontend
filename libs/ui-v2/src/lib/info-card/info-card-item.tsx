@@ -12,11 +12,11 @@ type Size = "2xs" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
 type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 
 export interface InfoCardItemProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, "title"> {
+  extends React.HTMLAttributes<HTMLDivElement> {
   /**
    * Heading
    */
-  title?: React.ReactNode;
+  title?: string;
   /**
    * Heading color
    */

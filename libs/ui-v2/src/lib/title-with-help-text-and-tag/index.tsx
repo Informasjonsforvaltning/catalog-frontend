@@ -46,9 +46,10 @@ export function TitleWithHelpTextAndTag({
         </Tag>
       )}
       {changed && (
-        <Tag data-size="sm" data-color="warning">
-          {localization.changed}
-        </Tag>
+        <Tag
+          data-size="sm"
+          data-color="warning"
+        >{`${localization.changed}`}</Tag>
       )}
     </div>
   );
