@@ -7,7 +7,9 @@
 }
 
 .wrap {
+  display: flex;
   flex-wrap: wrap;
+  gap: var(--ds-size-2);
 }
 
 .importFilter {
