@@ -132,9 +132,7 @@ export const DistributionModal = ({
     searchDataServicesQuery,
   );
 
-  if (initialValues?.accessURL?.length === 0) {
-    initialValues.accessURL = [""];
-  }
+  //TODO: permanent solution to hydration issue(?), initial values for accessURL must be set in props to avoid errors
 
   useEffect(() => {
     const allMediaTypes = [
