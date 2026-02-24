@@ -11,16 +11,11 @@
 .contactPoints {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: var(--ds-size-2);
 }
 
-.contactPoints > span {
+.contactPoint {
   display: flex;
-  gap: 0.5rem;
-  align-items: center;
-}
-
-.contactPoints > span > div {
-  display: flex;
+  gap: var(--ds-size-2);
   align-items: center;
 }

@@ -3,7 +3,7 @@ import {
   getMainActivities,
   getOrganization,
 } from "@catalog-frontend/data-access";
-import { Breadcrumbs, PageBanner } from "@catalog-frontend/ui";
+import { Breadcrumbs, PageBanner } from "@catalog-frontend/ui-v2";
 import { getTranslateText, localization } from "@catalog-frontend/utils";
 import { EditPage } from "./edit-page-client";
 import { getPublicServiceById } from "@service-catalog/app/actions/public-services/actions";

@@ -15,7 +15,7 @@ import {
   SearchHitsLayout,
   ServiceStatusTagProps,
   Tag,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import styles from "./service-page.module.css";
 import FilterChips from "../../../../components/filter-chips";
 import { PlusCircleIcon } from "@navikt/aksel-icons";
@@ -116,17 +116,13 @@ const ServicePageClient = ({
         ) : undefined}
       </SearchHitsLayout.SearchRow>
       <SearchHitsLayout.LeftColumn>
-        {
-          <div>
-            <Filter
-              onStatusChange={setStatusFilters}
-              onPublicationStateChange={setPublicationFilters}
-              statuses={statuses}
-              statusFilters={statusFilters}
-              publicationState={publicationFilters}
-            />
-          </div>
-        }
+        <Filter
+          onStatusChange={setStatusFilters}
+          onPublicationStateChange={setPublicationFilters}
+          statuses={statuses}
+          statusFilters={statusFilters}
+          publicationState={publicationFilters}
+        />
       </SearchHitsLayout.LeftColumn>
       <SearchHitsLayout.MainColumn>
         {

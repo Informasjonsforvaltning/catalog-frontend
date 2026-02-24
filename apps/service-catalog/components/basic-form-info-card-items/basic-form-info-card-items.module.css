@@ -16,3 +16,9 @@
   width: 100%;
   table-layout: fixed;
 }
+
+.flexList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-size-2);
+}
