@@ -5,14 +5,21 @@ import {
   EditButton,
   FieldsetDivider,
   FormikLanguageFieldset,
-  FormHeading,
+  DialogActions,
 } from "@catalog-frontend/ui-v2";
 import {
   getTranslateText,
   localization,
   trimObjectWhitespace,
 } from "@catalog-frontend/utils";
-import { Button, Dialog, Table, Textfield } from "@digdir/designsystemet-react";
+import {
+  Button,
+  Dialog,
+  Table,
+  Textfield,
+  Label,
+  Heading,
+} from "@digdir/designsystemet-react";
 import { FastField, FieldArray, Formik, useFormikContext } from "formik";
 import styles from "../dataset-form.module.css";
 import { ReactNode, useEffect, useRef, useState } from "react";
@@ -60,11 +67,18 @@ export const UriWithLabelFieldsetTable = ({
 
   return (
     <div className={styles.fieldContainer}>
-      {typeof label === "string" ? <FormHeading>{label}</FormHeading> : label}
+      {typeof label === "string" ? (
+        <Label data-size="sm">{label}</Label>
+      ) : (
+        label
+      )}
       <FieldArray
         name={fieldName}
         render={(arrayHelpers) => (
-          <div className={errors ? styles.errorBorder : undefined}>
+          <div
+            className={errors ? styles.errorBorder : undefined}
+            data-color={errors ? "danger" : undefined}
+          >
             <Table data-size="sm" className={styles.table}>
               {showHead && (
                 <Table.Head>
@@ -182,30 +196,28 @@ const FieldDialog = ({
 
               return (
                 <>
-                  <Dialog.Block>
+                  <Heading level={1} data-size="xs">
                     {type === "edit" ? localization.edit : localization.add}{" "}
                     {localization.datasetForm.fieldLabel?.[
                       fieldName as keyof typeof localization.datasetForm.fieldLabel
                     ].toLowerCase()}
-                  </Dialog.Block>
-
-                  <Dialog.Block className={styles.dialogContent}>
-                    <FormikLanguageFieldset
-                      as={Textfield}
-                      name="prefLabel"
-                      legend={localization.title}
-                    />
-                    <FieldsetDivider />
-                    <FastField
-                      name="uri"
-                      as={Textfield}
-                      label={localization.link}
-                      error={errors?.uri}
-                      data-size="sm"
-                    />
-                  </Dialog.Block>
-
-                  <Dialog.Block>
+                  </Heading>
+                  <FieldsetDivider />
+                  <FormikLanguageFieldset
+                    as={Textfield}
+                    name="prefLabel"
+                    legend={localization.title}
+                  />
+                  <FieldsetDivider />
+                  <FastField
+                    name="uri"
+                    as={Textfield}
+                    label={localization.link}
+                    error={errors?.uri}
+                    data-size="sm"
+                  />
+                  <FieldsetDivider />
+                  <DialogActions>
                     <Button
                       type="button"
                       disabled={
@@ -228,7 +240,7 @@ const FieldDialog = ({
                     >
                       {localization.button.cancel}
                     </Button>
-                  </Dialog.Block>
+                  </DialogActions>
                 </>
               );
             }}

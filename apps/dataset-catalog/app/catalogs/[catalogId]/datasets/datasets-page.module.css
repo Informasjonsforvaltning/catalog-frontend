@@ -11,7 +11,14 @@
   margin: 0;
   display: flex;
   flex-direction: column;
+  border-color: var(--ds-color-border-default);
   gap: var(--ds-size-4);
+  p {
+    font-size: var(--ds-size-4);
+  }
+  div {
+    border-color: var(--ds-color-border-subtle);
+  }
 }
 
 .searchFieldWrapper {
@@ -43,6 +50,7 @@
 .set {
   display: flex;
   gap: var(--ds-size-2);
+  font-size: var(--ds-size-4);
 }
 
 .greyFont {

@@ -3,10 +3,10 @@
 }
 
 .modalContent {
-  margin: var(--fds-spacing-8);
-  padding: var(--fds-spacing-4);
-  border: 1px solid var(--fds-semantic-border-neutral-subtle);
-  border-radius: var(--fds-border_radius-medium);
+  margin: var(--ds-size-8);
+  padding: var(--ds-size-4);
+  border: 1px solid var(--ds-semantic-border-neutral-subtle);
+  border-radius: var(--ds-border-radius-md);
   height: calc(100vh - 400px);
   display: flex;
   flex-direction: column;
@@ -95,5 +95,5 @@
 }
 
 .padding-bottom-4 {
-  padding-bottom: var(--fds-spacing-4);
+  padding-bottom: var(--ds-size-4);
 }
