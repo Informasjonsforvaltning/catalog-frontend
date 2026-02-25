@@ -37,7 +37,7 @@ export const CheckboxGroupFilter = <T extends string>({
           key={value}
           {...getCheckboxProps({ value })}
           label={label}
-          aria-label={label}
+          title={label}
         />
       ))}
     </Fieldset>
