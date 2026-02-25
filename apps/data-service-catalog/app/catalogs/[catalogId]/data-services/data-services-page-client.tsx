@@ -210,6 +210,7 @@ const DataServicesPageClient = ({
                 }}
               />
               <Select
+                data-size="sm"
                 onChange={(e) => setSortValue(e.target.value)}
                 value={sortValue}
               >
