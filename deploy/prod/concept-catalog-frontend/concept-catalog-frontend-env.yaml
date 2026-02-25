@@ -91,4 +91,4 @@ spec:
                   name: commonurl
                   key: CATALOG_PORTAL_BASE_URI
             - name: ACTIVITY_LOG_ENABLED
-              value: "false"
+              value: "true"

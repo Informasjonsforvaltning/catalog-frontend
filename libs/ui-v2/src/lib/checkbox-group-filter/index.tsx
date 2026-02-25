@@ -35,8 +35,9 @@ export const CheckboxGroupFilter = <T extends string>({
         <Checkbox
           data-size="sm"
           key={value}
-          label={label}
           {...getCheckboxProps({ value })}
+          label={label}
+          title={label}
         />
       ))}
     </Fieldset>
