@@ -63,7 +63,7 @@ export const AboutSection = () => {
       <FastFieldWithRef
         as={Textfield}
         name="version"
-        size="sm"
+        data-size="sm"
         label={
           <TitleWithHelpTextAndTag
             helpText={localization.dataServiceForm.helptext.version}

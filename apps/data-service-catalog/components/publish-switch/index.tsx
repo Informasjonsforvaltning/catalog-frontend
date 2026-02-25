@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { localization } from "@catalog-frontend/utils";
-import { Field, Input, Label, Switch } from "@digdir/designsystemet-react";
+import { Field, Input, Label } from "@digdir/designsystemet-react";
 import { ConfirmModal } from "@catalog-frontend/ui-v2";
 import {
   publishDataService,

@@ -16,7 +16,7 @@ export const ReferenceDataTag = ({
 }: Props) => {
   const code = referenceDataCodes?.find((s) => s.uri === referenceDataURI);
   return (
-    <Tag color="info">
+    <Tag data-color="info">
       {getTranslateText(code?.label, language) ?? referenceDataURI}
     </Tag>
   );

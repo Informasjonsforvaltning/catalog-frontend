@@ -67,7 +67,7 @@ export const DatasetSection = ({ searchEnv }: Props) => {
             </TitleWithHelpTextAndTag>
           </Fieldset.Legend>
           <Combobox
-            size="sm"
+            data-size="sm"
             onValueChange={(selectedValues: string[]) =>
               setFieldValue("servesDataset", selectedValues)
             }

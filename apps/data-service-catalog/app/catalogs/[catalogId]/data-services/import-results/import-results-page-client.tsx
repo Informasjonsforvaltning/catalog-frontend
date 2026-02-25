@@ -11,7 +11,7 @@ import {
   Select,
 } from "@catalog-frontend/ui-v2";
 import styles from "./import-results-page-client.module.css";
-import { Chip, Details } from "@digdir/designsystemet-react";
+import { Card, Chip } from "@digdir/designsystemet-react";
 import {
   parseAsArrayOf,
   parseAsInteger,
@@ -129,7 +129,7 @@ const ImportResultsPageClient = ({ catalogId, importResults }: Props) => {
       </SearchHitsLayout.SearchRow>
       <SearchHitsLayout.LeftColumn>
         <div className={styles.importFilter}>
-          <Details className={styles.accordion}>{filterItems}</Details>
+          <Card className={styles.accordion}>{filterItems}</Card>
         </div>
         {hasActiveFilters && (
           <div className={styles.chips}>

@@ -25,7 +25,7 @@ export const FormatList = ({
     <li className={styles.list}>
       {formatURIs?.map((uri, index) => {
         return (
-          <Tag color="info" key={`format-${index}`}>
+          <Tag data-color="info" key={`format-${index}`}>
             {getTranslateText(matchFileType(uri)?.label, language) || uri}
           </Tag>
         );

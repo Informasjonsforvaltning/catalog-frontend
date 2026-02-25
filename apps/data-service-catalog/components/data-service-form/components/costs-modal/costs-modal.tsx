@@ -142,7 +142,7 @@ export const CostsModal = ({
                           <FastFieldWithRef
                             name="value"
                             as={Textfield}
-                            size="sm"
+                            data-size="sm"
                             ref={valueRef}
                             type="number"
                           />
@@ -155,7 +155,7 @@ export const CostsModal = ({
                                 selectedValues.toString(),
                               )
                             }
-                            size="sm"
+                            data-size="sm"
                             disabled={!isNumber(values?.value)}
                           >
                             {currencies &&
@@ -232,7 +232,7 @@ export const CostsModal = ({
                                       <FastFieldWithRef
                                         name={`documentation[${index}]`}
                                         as={Textfield}
-                                        size="sm"
+                                        data-size="sm"
                                         ref={docRef}
                                         error={errors?.documentation?.[index]}
                                       />

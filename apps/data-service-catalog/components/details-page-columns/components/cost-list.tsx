@@ -12,7 +12,7 @@ export const CostList = ({ costs, language }: Props) => {
   return (
     <>
       {costs?.map((cost, i) => (
-        <Card key={`costs-card-${i}`} color="neutral">
+        <Card key={`costs-card-${i}`} data-color="neutral">
           <Card.Block>
             <List.Unordered
               style={{

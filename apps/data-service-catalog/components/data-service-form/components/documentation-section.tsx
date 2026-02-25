@@ -29,7 +29,7 @@ export const DocumentationSection = () => {
       <FastFieldWithRef
         name="landingPage"
         as={Textfield}
-        size="sm"
+        data-size="sm"
         label={
           <TitleWithHelpTextAndTag
             helpText={localization.dataServiceForm.helptext.landingPage}
@@ -62,7 +62,7 @@ export const DocumentationSection = () => {
                       <FastFieldWithRef
                         name={`pages[${index}]`}
                         as={Textfield}
-                        size="sm"
+                        data-size="sm"
                         ref={fieldRef}
                         error={errors?.pages?.[index]}
                       />

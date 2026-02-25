@@ -129,7 +129,7 @@ export const LeftColumn = ({
         >
           <li className={styles.list}>
             {allKeywords.map((keyword, index) => (
-              <Tag color="info" key={`keyword-tag-${index}`}>
+              <Tag data-color="info" key={`keyword-tag-${index}`}>
                 {keyword}
               </Tag>
             ))}

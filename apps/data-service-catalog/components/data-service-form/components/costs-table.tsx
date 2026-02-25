@@ -58,7 +58,7 @@ export const CostsTable = ({ currencies }: Props) => {
         {localization.dataServiceForm.fieldLabel.costs}
       </TitleWithHelpTextAndTag>
       {values?.costs?.map((item, i) => (
-        <Card key={`costs-card-${i}`} color="neutral">
+        <Card key={`costs-card-${i}`} data-color="neutral">
           <Card.Block className={styles.costContent}>
             <List.Unordered
               style={{
@@ -92,7 +92,7 @@ export const CostsTable = ({ currencies }: Props) => {
 
               <Button
                 variant="tertiary"
-                color="danger"
+                data-color="danger"
                 onClick={handleDeleteCost(i)}
               >
                 <TrashIcon title="Slett" fontSize="1.5rem" />
@@ -113,7 +113,7 @@ export const CostsTable = ({ currencies }: Props) => {
                     ),
                 )
                 .map((lang) => (
-                  <Tag key={lang} color="third">
+                  <Tag key={lang} data-color="third">
                     {localization.language[lang]}
                   </Tag>
                 ))}
