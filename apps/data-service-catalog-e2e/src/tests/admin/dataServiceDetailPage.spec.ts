@@ -83,7 +83,9 @@ runTestAsAdmin(
     );
 
     // Confirm the publish action
-    const confirmBtn = page.locator("dialog[open] button").first();
+    const confirmBtn = page
+      .locator("dialog[open]")
+      .getByRole("button", { name: "Publiser" });
     await confirmBtn.waitFor({ state: "visible", timeout: 5000 });
     await confirmBtn.click();
 
@@ -134,7 +136,9 @@ runTestAsAdmin(
     );
 
     // Confirm the unpublish action
-    const confirmBtn2 = page.locator("dialog[open] button").first();
+    const confirmBtn2 = page
+      .locator("dialog[open]")
+      .getByRole("button", { name: "Avpubliser" });
     await confirmBtn2.waitFor({ state: "visible", timeout: 5000 });
     await confirmBtn2.click();
 
@@ -179,15 +183,18 @@ runTestAsAdmin(
     await dataServiceDetailPage.expectConfirmModalVisible();
 
     // Verify modal has the correct buttons
-    await expect(page.locator("dialog[open] button").first()).toHaveText(
-      "Publiser",
-    );
-    await expect(page.locator("dialog[open] button").nth(1)).toHaveText(
-      "Avbryt",
-    );
+    await expect(
+      page.locator("dialog[open]").getByRole("button", { name: "Publiser" }),
+    ).toBeVisible();
+    await expect(
+      page.locator("dialog[open]").getByRole("button", { name: "Avbryt" }),
+    ).toBeVisible();
 
     // Cancel the modal
-    await page.locator("dialog[open] button").nth(1).click();
+    await page
+      .locator("dialog[open]")
+      .getByRole("button", { name: "Avbryt" })
+      .click();
 
     // Verify modal is no longer visible
     await dataServiceDetailPage.expectConfirmModalNotVisible();
@@ -270,15 +277,17 @@ runTestAsAdmin(
     );
 
     // Verify modal has the correct buttons
-    await expect(page.locator("dialog[open] button").first()).toHaveText(
-      "Slett",
-    );
-    await expect(page.locator("dialog[open] button").nth(1)).toHaveText(
-      "Avbryt",
-    );
+    await expect(
+      page.locator("dialog[open]").getByRole("button", { name: "Slett" }),
+    ).toBeVisible();
+    await expect(
+      page.locator("dialog[open]").getByRole("button", { name: "Avbryt" }),
+    ).toBeVisible();
 
     // Confirm the delete action
-    const confirmBtn3 = page.locator("dialog[open] button").first();
+    const confirmBtn3 = page
+      .locator("dialog[open]")
+      .getByRole("button", { name: "Slett" });
     await confirmBtn3.waitFor({ state: "visible", timeout: 5000 });
     await confirmBtn3.click();
 
@@ -317,7 +326,10 @@ runTestAsAdmin(
     await dataServiceDetailPage.expectConfirmModalVisible();
 
     // Cancel the modal
-    await page.locator("dialog[open] button").nth(1).click();
+    await page
+      .locator("dialog[open]")
+      .getByRole("button", { name: "Avbryt" })
+      .click();
 
     // Verify modal is no longer visible
     await dataServiceDetailPage.expectConfirmModalNotVisible();

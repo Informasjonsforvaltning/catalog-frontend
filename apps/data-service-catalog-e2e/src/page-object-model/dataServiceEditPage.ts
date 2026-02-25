@@ -105,15 +105,9 @@ export default class DataServiceEditPage {
     this.contactUrlButton = this.contactInfoGroup.getByRole("button", {
       name: "Kontaktside",
     });
-    this.contactEmailInput = page
-      .getByRole("group", { name: "E-post" })
-      .getByRole("textbox");
-    this.contactPhoneInput = page
-      .getByRole("group", { name: "Telefon" })
-      .getByRole("textbox");
-    this.contactUrlInput = page
-      .getByRole("group", { name: "Kontaktside" })
-      .getByRole("textbox");
+    this.contactEmailInput = this.contactInfoGroup.getByLabel("E-post");
+    this.contactPhoneInput = this.contactInfoGroup.getByLabel("Telefon");
+    this.contactUrlInput = this.contactInfoGroup.getByLabel("Kontaktside");
     this.statusGroup = page.getByRole("group", { name: "Status" });
     this.licenseGroup = page.getByRole("group", { name: "Lisens" });
     this.accessRightsGroup = page.getByRole("group", {
