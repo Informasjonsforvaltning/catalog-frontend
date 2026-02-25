@@ -113,3 +113,7 @@ Hard rules (do not violate):
 1. **Never use `any`** - Model types properly. Prefer generics, unions, or `unknown` + narrowing.
 2. **Do not hide type errors** - Avoid `@ts-ignore`, `@ts-nocheck`, broad ESLint disables. If exception required, document _why_ and add removal condition.
 3. **No unsafe type assertions** - Avoid `as SomeType` unless at a trusted boundary with justifying comment.
+
+## Playwright Guidelines
+
+1. Always write Playwright tests idiomatically, following best practices with clear structure, reliable selectors, and user-focused assertions
