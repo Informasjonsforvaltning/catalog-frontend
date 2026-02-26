@@ -21,7 +21,7 @@ import {
   ServiceMessages,
   TermsOfUseAlert,
   MarkdownComponent,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import { Alert, Heading } from "@digdir/designsystemet-react";
 import styles from "./catalogs.module.css";
 import { CatalogCard } from "./components/catalog-card";
@@ -67,9 +67,7 @@ const CatalogsPage = async (props: {
   return (
     <div className="container">
       <ServiceMessages serviceMessages={serviceMessages} />
-      <Heading level={1} spacing>
-        Katalogoversikt
-      </Heading>
+      <Heading level={1}>Katalogoversikt</Heading>
       {(organizations.length > 1 ||
         (organizations.length > 0 && !currentOrganization)) && (
         <OrganizationCombo
@@ -78,8 +76,8 @@ const CatalogsPage = async (props: {
         />
       )}
       {organizations.length === 0 ? (
-        <Alert severity="warning" style={{ marginTop: "1rem" }}>
-          <Heading level={2} size="xs" spacing>
+        <Alert data-color="warning" style={{ marginTop: "1rem" }}>
+          <Heading level={2} data-size="xs">
             {localization.alert.noOrganizationAvailable.heading}
           </Heading>
           <MarkdownComponent>
@@ -92,7 +90,7 @@ const CatalogsPage = async (props: {
           <Heading
             data-testid="catalog-portal-heading"
             className={styles.heading}
-            size="lg"
+            data-size="lg"
           >
             {getTranslateText(currentOrganization.prefLabel)}
           </Heading>
