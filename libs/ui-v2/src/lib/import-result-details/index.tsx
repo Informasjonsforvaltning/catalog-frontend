@@ -190,7 +190,7 @@ const ImportResultDetails = ({
       conceptExtraction.conceptExtractionStatus ===
       ConceptExtractionStatus.PENDING_CONFIRMATION
     ) {
-      return "first";
+      return "brand1";
     } else if (
       conceptExtraction.conceptExtractionStatus ===
       ConceptExtractionStatus.SAVING_FAILED
@@ -339,7 +339,7 @@ const ImportResultDetails = ({
             <Button
               variant="secondary"
               data-size="sm"
-              data-color="first"
+              data-color="brand1"
               disabled={
                 saveConceptMutation?.isPending ||
                 importResult?.status === ImportResultStatus.CANCELLED ||

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import styles from "./navigation-card.module.css";
-import { Heading, Card, Paragraph } from "@digdir/designsystemet-react";
+import { Card, Heading, Paragraph } from "@digdir/designsystemet-react";
 interface CardProps {
   title?: string;
   body?: React.ReactElement | string;
@@ -14,7 +14,8 @@ interface CardProps {
 const NavigationCard = ({ title, body, href, icon, subtitle }: CardProps) => {
   return (
     <Card
-      data-color="third"
+      data-color="accent"
+      variant="tinted"
       asChild={Boolean(href)}
       className={styles.cardBase}
     >
@@ -30,7 +31,7 @@ const NavigationCard = ({ title, body, href, icon, subtitle }: CardProps) => {
               {subtitle}
             </Heading>
           )}
-          <Card.Block className={styles.body}>{body}</Card.Block>
+          <Paragraph className={styles.body}>{body}</Paragraph>
         </Link>
       ) : (
         <div className={styles.card}>
