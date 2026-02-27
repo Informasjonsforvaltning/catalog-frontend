@@ -71,23 +71,21 @@ export const PublishSwitch = ({
   };
 
   return (
-    <>
-      <Switch
-        className={styles.center}
-        value="published"
-        size="small"
-        position="right"
-        checked={isPublished}
-        onChange={() =>
-          type === "services"
-            ? handlePublishService()
-            : handlePublishPublicService()
-        }
-        disabled={disabled}
-      >
-        {localization.publicationState.published}
-      </Switch>
-    </>
+    <Switch
+      className={styles.center}
+      data-color="success"
+      value="published"
+      data-size="sm"
+      position="end"
+      checked={isPublished}
+      onChange={() =>
+        type === "services"
+          ? handlePublishService()
+          : handlePublishPublicService()
+      }
+      disabled={disabled}
+      label={localization.publicationState.published}
+    />
   );
 };
 
