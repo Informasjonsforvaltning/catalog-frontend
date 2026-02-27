@@ -6,7 +6,7 @@ import {
   LinkButton,
   ServiceStatusTagProps,
   Tag,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import { getTranslateText, localization } from "@catalog-frontend/utils";
 import { DeleteServiceButton } from "../../../../../components/buttons";
 import PublishSwitch from "../../../../../components/publish-switch";
@@ -103,6 +103,7 @@ const PublicServiceDetailsPageClient = ({
 
             <DeleteServiceButton
               catalogId={catalogId}
+              published={service.published}
               serviceId={serviceId}
               type="public-services"
             />

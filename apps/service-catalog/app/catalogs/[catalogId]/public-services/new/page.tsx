@@ -1,4 +1,4 @@
-import { Breadcrumbs, PageBanner } from "@catalog-frontend/ui";
+import { Breadcrumbs, PageBanner } from "@catalog-frontend/ui-v2";
 import {
   getAdmsStatuses,
   getMainActivities,

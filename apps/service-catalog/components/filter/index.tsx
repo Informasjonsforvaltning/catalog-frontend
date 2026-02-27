@@ -1,7 +1,8 @@
 "use client";
 import { ReferenceDataCode } from "@catalog-frontend/types";
+import { CheckboxGroupFilter } from "@catalog-frontend/ui-v2";
 import { getTranslateText, localization } from "@catalog-frontend/utils";
-import { Accordion, Checkbox } from "@digdir/designsystemet-react";
+import { Card, Details } from "@digdir/designsystemet-react";
 
 type Props = {
   statuses: ReferenceDataCode[];
@@ -24,48 +25,36 @@ export const Filter = ({
   ];
 
   return (
-    <div>
-      <Accordion border={true}>
-        <Accordion.Item open>
-          <Accordion.Header level={2}>
-            {localization.serviceCatalog.serviceStatus}
-          </Accordion.Header>
-          <Accordion.Content>
-            <Checkbox.Group
-              value={statusFilters}
-              onChange={(values) => onStatusChange(values)}
-              hideLegend
-              legend={localization.serviceCatalog.serviceStatus}
-            >
-              {statuses.map((status) => (
-                <Checkbox key={`filter-${status.code}`} value={status.uri}>
-                  {getTranslateText(status.label)}
-                </Checkbox>
-              ))}
-            </Checkbox.Group>
-          </Accordion.Content>
-        </Accordion.Item>
-        <Accordion.Item open>
-          <Accordion.Header level={2}>
-            {localization.publicationState.state}
-          </Accordion.Header>
-          <Accordion.Content>
-            <Checkbox.Group
-              value={publicationState}
-              onChange={(values) => onPublicationStateChange(values)}
-              hideLegend
-              legend={localization.publicationState.state}
-            >
-              {publicationStates.map((state) => (
-                <Checkbox key={state.name} value={state.value}>
-                  {state.name}
-                </Checkbox>
-              ))}
-            </Checkbox.Group>
-          </Accordion.Content>
-        </Accordion.Item>
-      </Accordion>
-    </div>
+    <Card>
+      <Details defaultOpen>
+        <Details.Summary>
+          {localization.serviceCatalog.serviceStatus}
+        </Details.Summary>
+        <Details.Content>
+          <CheckboxGroupFilter
+            value={statusFilters}
+            items={statuses.map((state) => ({
+              value: state.uri,
+              label: getTranslateText(state.label),
+            }))}
+            onChange={onStatusChange}
+          />
+        </Details.Content>
+      </Details>
+      <Details defaultOpen>
+        <Details.Summary>{localization.publicationState.state}</Details.Summary>
+        <Details.Content>
+          <CheckboxGroupFilter
+            value={publicationState}
+            items={publicationStates.map((state) => ({
+              value: state.value,
+              label: state.name,
+            }))}
+            onChange={onPublicationStateChange}
+          />
+        </Details.Content>
+      </Details>
+    </Card>
   );
 };
 

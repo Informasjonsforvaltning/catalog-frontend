@@ -3,7 +3,11 @@ import {
   getOrganization,
 } from "@catalog-frontend/data-access";
 import { Service } from "@catalog-frontend/types";
-import { BreadcrumbType, Breadcrumbs, PageBanner } from "@catalog-frontend/ui";
+import {
+  BreadcrumbType,
+  Breadcrumbs,
+  PageBanner,
+} from "@catalog-frontend/ui-v2";
 import {
   getTranslateText,
   getValidSession,

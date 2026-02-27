@@ -4,15 +4,12 @@
   gap: 0.8rem;
 }
 
-.field {
-  padding-bottom: 1.5rem;
-}
-
 .modalContent {
-  margin: var(--fds-spacing-8);
-  padding: var(--fds-spacing-4);
-  border: 1px solid var(--fds-semantic-border-neutral-subtle);
-  border-radius: var(--fds-border_radius-medium);
+  margin-top: var(--ds-size-8);
+  margin-bottom: var(--ds-size-8);
+  padding: var(--ds-size-4);
+  border: 1px solid var(--ds-color-neutral-border-default);
+  border-radius: var(--ds-border-radius-md);
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
@@ -22,10 +19,6 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-}
-
-.field {
-  padding-bottom: 1.5rem;
 }
 
 .buttons {
@@ -51,7 +44,7 @@
 }
 
 .gap2 {
-  gap: var(--fds-spacing-2);
+  gap: var(--ds-size-2);
 }
 
 .noWrap {
@@ -59,8 +52,8 @@
 }
 
 .errorBorder {
-  border: 2px solid var(--fds-semantic-border-danger-default);
-  border-radius: var(--fds-border_radius-medium);
+  border: 2px solid var(--ds-color-danger-border-default);
+  border-radius: var(--ds-border-radius-md);
 }
 
 .errorMessage {
