@@ -1,7 +1,7 @@
 .container {
   display: flex;
   align-items: flex-end;
-  gap: var(--fds-spacing-2);
+  gap: var(--ds-size-2);
 }
 
 .combobox {
