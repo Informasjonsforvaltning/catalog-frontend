@@ -67,7 +67,7 @@ const CatalogsPage = async (props: {
   return (
     <div className="container">
       <ServiceMessages serviceMessages={serviceMessages} />
-      <Heading level={1}>Katalogoversikt</Heading>
+      <Heading level={1}>{localization.catalogOverview}</Heading>
       {(organizations.length > 1 ||
         (organizations.length > 0 && !currentOrganization)) && (
         <OrganizationCombo
@@ -90,7 +90,7 @@ const CatalogsPage = async (props: {
           <Heading
             data-testid="catalog-portal-heading"
             className={styles.heading}
-            data-size="lg"
+            data-size="xs"
           >
             {getTranslateText(currentOrganization.prefLabel)}
           </Heading>

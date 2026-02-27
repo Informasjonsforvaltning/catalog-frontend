@@ -1,5 +1,3 @@
-import "@digdir/designsystemet-css";
-import "@digdir/designsystemet-css/theme";
 import { NextAuthProvider } from "@catalog-frontend/ui-v2";
 import { authOptions, localization } from "@catalog-frontend/utils";
 import { Metadata } from "next";
