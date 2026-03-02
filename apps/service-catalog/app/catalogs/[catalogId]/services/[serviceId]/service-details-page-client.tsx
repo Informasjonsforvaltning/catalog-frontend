@@ -7,15 +7,15 @@ import {
   LinkButton,
   ServiceStatusTagProps,
   Tag,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import { getTranslateText, localization } from "@catalog-frontend/utils";
 import { DeleteServiceButton } from "../../../../../components/buttons";
 import PublishSwitch from "../../../../../components/publish-switch";
 import BasicServiceFormInfoCardItems from "../../../../../components/basic-form-info-card-items";
 import { useState } from "react";
-import styles from "./service-details-page.module.css";
 import { EnvelopeClosedIcon, LinkIcon, PhoneIcon } from "@navikt/aksel-icons";
-import { Link } from "@digdir/designsystemet-react";
+import { Link, Paragraph } from "@digdir/designsystemet-react";
+import styles from "./service-details-page.module.css";
 
 interface ServiceDetailsPageProps {
   catalogId: string;
@@ -70,7 +70,7 @@ const ServiceDetailsPageClient = ({
       <DetailsPageLayout.Right>
         <InfoCard>
           <InfoCard.Item title={localization.id} headingColor="light">
-            <p>{service.id}</p>
+            <Paragraph data-size="sm">{service.id}</Paragraph>
           </InfoCard.Item>
 
           <InfoCard.Item
@@ -85,11 +85,11 @@ const ServiceDetailsPageClient = ({
               disabled={!hasWritePermission}
             />
 
-            <p className={styles.greyFont}>
+            <Paragraph className={styles.greyFont} data-size="sm">
               {service.published
                 ? localization.publicationState.publishedInFDK
                 : localization.publicationState.unpublished}
-            </p>
+            </Paragraph>
           </InfoCard.Item>
 
           <InfoCard.Item
@@ -97,39 +97,31 @@ const ServiceDetailsPageClient = ({
             headingColor="light"
           >
             <div className={styles.contactPoints}>
-              <span>
+              <Paragraph data-size="sm">
                 {getTranslateText(contactPoint?.category, language) ||
                   localization.noName}
-              </span>
+              </Paragraph>
 
               {contactPoint?.email && (
-                <span>
-                  <div>
-                    <EnvelopeClosedIcon />
-                  </div>
-
+                <Paragraph className={styles.contactPoint} data-size="sm">
+                  <EnvelopeClosedIcon />
                   {contactPoint.email}
-                </span>
+                </Paragraph>
               )}
               {contactPoint?.telephone && (
-                <span>
-                  <div>
-                    <PhoneIcon />
-                  </div>
+                <Paragraph className={styles.contactPoint} data-size="sm">
+                  <PhoneIcon />
                   {contactPoint.telephone}
-                </span>
+                </Paragraph>
               )}
 
               {contactPoint?.contactPage && (
-                <span>
-                  <div>
-                    <LinkIcon />
-                  </div>
-
+                <Paragraph className={styles.contactPoint} data-size="sm">
+                  <LinkIcon />
                   <Link href={contactPoint.contactPage}>
                     {contactPoint.contactPage}
                   </Link>
-                </span>
+                </Paragraph>
               )}
             </div>
           </InfoCard.Item>
@@ -139,6 +131,7 @@ const ServiceDetailsPageClient = ({
         {hasWritePermission && (
           <div className={styles.actionButtons}>
             <LinkButton
+              data-size="sm"
               href={`/catalogs/${catalogId}/services/${serviceId}/edit`}
             >
               {localization.serviceCatalog.editService}
@@ -146,6 +139,7 @@ const ServiceDetailsPageClient = ({
 
             <DeleteServiceButton
               catalogId={catalogId}
+              published={service.published}
               serviceId={serviceId}
               type="services"
             />

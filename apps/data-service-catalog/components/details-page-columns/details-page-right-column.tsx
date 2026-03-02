@@ -1,4 +1,4 @@
-import { InfoCard } from "@catalog-frontend/ui";
+import { InfoCard } from "@catalog-frontend/ui-v2";
 import styles from "./details-columns.module.css";
 import { DataService, DataServiceReferenceData } from "@catalog-frontend/types";
 import {

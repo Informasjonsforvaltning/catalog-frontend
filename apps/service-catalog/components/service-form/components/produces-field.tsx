@@ -2,10 +2,11 @@ import { LocalizedStrings, Output, Service } from "@catalog-frontend/types";
 import {
   AddButton,
   DeleteButton,
+  DialogActions,
   EditButton,
   FieldsetDivider,
   FormikLanguageFieldset,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import cn from "classnames";
 import {
   getTranslateText,
@@ -15,11 +16,11 @@ import {
 import {
   Button,
   Card,
-  ErrorMessage,
   Heading,
-  Modal,
   Paragraph,
   Textfield,
+  ValidationMessage,
+  Dialog,
 } from "@digdir/designsystemet-react";
 import { FieldArray, Formik, useFormikContext } from "formik";
 import styles from "../service-form.module.css";
@@ -66,21 +67,17 @@ export const ProducesField = (props: Props) => {
           {values.produces?.map((item, index) => (
             <Card key={`${index}-${item.identifier}`}>
               <div className={styles.heading}>
-                <div className={styles.field}>
-                  {!isEmpty(item?.title) && (
-                    <>
-                      <Heading size="2xs" spacing level={3}>
-                        {localization.serviceForm.fieldLabel.title}
-                      </Heading>
-                      <Paragraph size="sm">
-                        {getTranslateText(item.title)}
-                      </Paragraph>
-                      {Array.isArray(errors) && errors?.[index]?.title && (
-                        <ErrorMessage size="sm">
-                          {getTranslateText(errors[index].title)}
-                        </ErrorMessage>
-                      )}
-                    </>
+                <div>
+                  <Heading data-size="2xs" level={3}>
+                    {localization.serviceForm.fieldLabel.title}
+                  </Heading>
+                  <Paragraph data-size="sm">
+                    {getTranslateText(item.title)}
+                  </Paragraph>
+                  {Array.isArray(errors) && errors?.[index]?.title && (
+                    <ValidationMessage data-color="danger" data-size="sm">
+                      {getTranslateText(errors[index].title)}
+                    </ValidationMessage>
                   )}
                 </div>
 
@@ -108,43 +105,41 @@ export const ProducesField = (props: Props) => {
                   />
                 </div>
               </div>
-              <div className={styles.field}>
-                <Heading size="2xs" spacing level={3}>
+              <div>
+                <Heading data-size="2xs" level={3}>
                   {localization.serviceForm.fieldLabel.description}
                 </Heading>
-                <Paragraph size="sm">
+                <Paragraph data-size="sm">
                   {getTranslateText(item.description)}
                 </Paragraph>
                 {Array.isArray(errors) && errors?.[index]?.description && (
-                  <ErrorMessage size="sm">
+                  <ValidationMessage data-color="danger" data-size="sm">
                     {getTranslateText(errors[index].description)}
-                  </ErrorMessage>
+                  </ValidationMessage>
                 )}
               </div>
             </Card>
           ))}
 
-          <div>
-            <FieldModal
-              validationSchema={validationSchema}
-              template={{ title: {}, description: {}, identifier: "" }}
-              type="new"
-              onSuccess={() => setSnapshot([...(values.produces ?? [])])}
-              onCancel={() => setFieldValue("produces", snapshot)}
-              onChange={(updatedItem: Output) => {
-                if (snapshot.length === (values.produces?.length ?? 0)) {
-                  arrayHelpers.push(updatedItem);
-                } else {
-                  arrayHelpers.replace(snapshot.length, updatedItem);
-                }
-              }}
-            />
-          </div>
+          <FieldModal
+            validationSchema={validationSchema}
+            template={{ title: {}, description: {}, identifier: "" }}
+            type="new"
+            onSuccess={() => setSnapshot([...(values.produces ?? [])])}
+            onCancel={() => setFieldValue("produces", snapshot)}
+            onChange={(updatedItem: Output) => {
+              if (snapshot.length === (values.produces?.length ?? 0)) {
+                arrayHelpers.push(updatedItem);
+              } else {
+                arrayHelpers.replace(snapshot.length, updatedItem);
+              }
+            }}
+          />
 
           {typeof errors === "string" && (
-            <ErrorMessage className={styles.errorMessage} size="sm">
+            <ValidationMessage data-color="danger" data-size="sm">
               {errors}
-            </ErrorMessage>
+            </ValidationMessage>
           )}
         </div>
       )}
@@ -159,91 +154,88 @@ const FieldModal = (props: ModalProps) => {
   const modalRef = useRef<HTMLDialogElement>(null);
 
   return (
-    <>
-      <Modal.Root>
-        <Modal.Trigger asChild>
-          {type === "edit" ? (
-            <EditButton />
-          ) : (
-            <AddButton>
-              {localization.add}{" "}
-              {localization.serviceForm.fieldLabel.produces.toLowerCase()}
-            </AddButton>
-          )}
-        </Modal.Trigger>
-        <Modal.Dialog ref={modalRef}>
-          <Formik
-            initialValues={template}
-            validateOnChange={submitted}
-            validateOnBlur={submitted}
-            validationSchema={validationSchema}
-            onSubmit={(formValues, { setSubmitting }) => {
-              const trimmedValues = trimObjectWhitespace(formValues);
-              onSuccess(trimmedValues);
-              setSubmitting(false);
-              setSubmitted(true);
-              modalRef.current?.close();
-            }}
-          >
-            {({ isSubmitting, submitForm, values, dirty }) => {
-              useEffect(() => {
-                if (dirty) {
-                  onChange({ ...values });
-                }
-              }, [values, dirty]);
+    <Dialog.TriggerContext>
+      <Dialog.Trigger asChild>
+        {type === "edit" ? (
+          <EditButton />
+        ) : (
+          <AddButton>
+            {localization.add}{" "}
+            {localization.serviceForm.fieldLabel.produces.toLowerCase()}
+          </AddButton>
+        )}
+      </Dialog.Trigger>
+      <Dialog closeButton={false} ref={modalRef}>
+        <Formik
+          initialValues={template}
+          enableReinitialize={true}
+          validateOnChange={submitted}
+          validateOnBlur={submitted}
+          validationSchema={validationSchema}
+          onSubmit={(formValues, { setSubmitting, resetForm }) => {
+            const trimmedValues = trimObjectWhitespace(formValues);
+            onSuccess(trimmedValues);
+            setSubmitting(false);
+            setSubmitted(true);
+            resetForm();
+            modalRef.current?.close();
+          }}
+        >
+          {({ isSubmitting, submitForm, values, dirty, resetForm }) => {
+            useEffect(() => {
+              if (dirty) {
+                onChange({ ...values });
+              }
+            }, [values, dirty]);
 
-              return (
-                <>
-                  <Modal.Header closeButton={false}>
-                    {type === "edit" ? localization.edit : localization.add}{" "}
-                    {localization.serviceForm.fieldLabel.produces.toLowerCase()}
-                  </Modal.Header>
+            return (
+              <>
+                <Heading>
+                  {type === "edit" ? localization.edit : localization.add}{" "}
+                  {localization.serviceForm.fieldLabel.produces.toLowerCase()}
+                </Heading>
+                <div className={styles.modalContent}>
+                  <FormikLanguageFieldset
+                    as={Textfield}
+                    name="title"
+                    legend={localization.serviceForm.fieldLabel.title}
+                  />
 
-                  <Modal.Content className={styles.modalContent}>
-                    <FormikLanguageFieldset
-                      as={Textfield}
-                      name="title"
-                      legend={localization.serviceForm.fieldLabel.title}
-                    />
-
-                    <FieldsetDivider />
-                    <FormikLanguageFieldset
-                      as={Textfield}
-                      name="description"
-                      legend={localization.serviceForm.fieldLabel.description}
-                    />
-                  </Modal.Content>
-
-                  <Modal.Footer>
-                    <Button
-                      type="button"
-                      disabled={
-                        isSubmitting || !dirty || hasNoFieldValues(values)
-                      }
-                      onClick={() => submitForm()}
-                      size="sm"
-                    >
-                      {type === "new" ? localization.add : localization.update}
-                    </Button>
-                    <Button
-                      variant="secondary"
-                      type="button"
-                      onClick={() => {
-                        onCancel();
-                        modalRef.current?.close();
-                      }}
-                      disabled={isSubmitting}
-                      size="sm"
-                    >
-                      {localization.button.cancel}
-                    </Button>
-                  </Modal.Footer>
-                </>
-              );
-            }}
-          </Formik>
-        </Modal.Dialog>
-      </Modal.Root>
-    </>
+                  <FieldsetDivider />
+                  <FormikLanguageFieldset
+                    as={Textfield}
+                    name="description"
+                    legend={localization.serviceForm.fieldLabel.description}
+                  />
+                </div>
+                <DialogActions>
+                  <Button
+                    type="button"
+                    disabled={isSubmitting || hasNoFieldValues(values)}
+                    onClick={() => submitForm()}
+                    data-size="sm"
+                  >
+                    {type === "new" ? localization.add : localization.update}
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    type="button"
+                    onClick={() => {
+                      onCancel();
+                      resetForm();
+                      modalRef.current?.close();
+                    }}
+                    disabled={isSubmitting}
+                    data-size="sm"
+                  >
+                    {localization.button.cancel}
+                  </Button>
+                </DialogActions>
+              </>
+            );
+          }}
+        </Formik>
+      </Dialog>
+    </Dialog.TriggerContext>
   );
 };

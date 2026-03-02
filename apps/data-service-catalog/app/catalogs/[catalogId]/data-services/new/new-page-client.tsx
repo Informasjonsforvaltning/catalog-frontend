@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, ButtonBar, ConfirmModal } from "@catalog-frontend/ui";
+import { Button, ButtonBar, ConfirmModal } from "@catalog-frontend/ui-v2";
 import { LocalDataStorage, localization } from "@catalog-frontend/utils";
 import { ArrowLeftIcon } from "@navikt/aksel-icons";
 import { useRef, useState } from "react";
@@ -38,8 +38,10 @@ export const NewDataServicePageClient = ({
   };
 
   const handleCreate = async (values: any) => {
-    const dataServiceId = await createDataService(catalogId.toString(), values);
-    dataServiceIdRef.current = dataServiceId;
+    dataServiceIdRef.current = await createDataService(
+      catalogId.toString(),
+      values,
+    );
     return undefined;
   };
 
@@ -71,7 +73,6 @@ export const NewDataServicePageClient = ({
         <Button
           variant="tertiary"
           color="second"
-          size="sm"
           onClick={() => setShowCancelConfirm(true)}
         >
           <ArrowLeftIcon fontSize="1.25em" />

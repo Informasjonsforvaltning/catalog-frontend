@@ -67,6 +67,7 @@ const DetailsPageLayout = ({
                   onChange={(event) =>
                     handleLanguageChange?.(event.target.value)
                   }
+                  name="language"
                   value={language}
                   data-size="sm"
                   aria-label="Velg språk"

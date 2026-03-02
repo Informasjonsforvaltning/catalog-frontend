@@ -3,7 +3,7 @@
 import { localization } from "@catalog-frontend/utils";
 import { withReadProtectedPage } from "@catalog-portal/utils/auth";
 import TermsAndConditionsPageClient from "./terms-and-conditions-page-client";
-import { Breadcrumbs, BreadcrumbType } from "@catalog-frontend/ui";
+import { Breadcrumbs, BreadcrumbType } from "@catalog-frontend/ui-v2";
 import {
   getLatestTerms,
   getOrgAcceptation,

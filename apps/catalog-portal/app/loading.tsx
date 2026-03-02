@@ -6,7 +6,7 @@ import { localization } from "@catalog-frontend/utils";
 const Loading = () => {
   return (
     <div className={styles.spinner}>
-      <Spinner title={localization.loading} size="xlarge" />
+      <Spinner aria-label={localization.loading} data-size="xl" />
     </div>
   );
 };
