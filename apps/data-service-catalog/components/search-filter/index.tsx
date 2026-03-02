@@ -108,17 +108,15 @@ const SearchFilter = ({ distributionStatuses }: Props) => {
     },
   ];
 
-  const accordionItems = accordionItemContents.map((item) => (
-    <AccordionItem
-      key={`accordion-item-${item.header}`}
-      initiallyOpen={true}
-      {...item}
-    />
-  ));
-
   return (
     <Card className={styles.searchFilter}>
-      <div>{accordionItems}</div>
+      {accordionItemContents.map((item) => (
+        <AccordionItem
+          key={`accordion-item-${item.header}`}
+          initiallyOpen
+          {...item}
+        />
+      ))}
     </Card>
   );
 };

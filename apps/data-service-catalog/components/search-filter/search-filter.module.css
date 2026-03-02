@@ -1,5 +1,6 @@
 .searchFilter {
   display: flex;
+  flex-direction: column;
   height: fit-content;
   box-sizing: border-box;
 }

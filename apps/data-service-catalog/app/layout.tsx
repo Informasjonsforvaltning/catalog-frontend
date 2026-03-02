@@ -6,8 +6,7 @@ import {
 import { authOptions, localization } from "@catalog-frontend/utils";
 import { Metadata } from "next";
 import { getServerSession } from "next-auth";
-import { NuqsAdapter } from "nuqs/adapters/next/app";
-import "@digdir/designsystemet-theme";
+import { NuqsAdapter } from "nuqs/adapters/react";
 
 export const metadata: Metadata = {
   title: localization.catalogType.dataService,
