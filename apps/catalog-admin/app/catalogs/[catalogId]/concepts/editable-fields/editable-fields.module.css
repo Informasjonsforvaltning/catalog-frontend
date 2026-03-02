@@ -14,3 +14,7 @@
   justify-content: flex-start;
   margin-top: 37px;
 }
+
+.fullWidth {
+  width: 100%;
+}

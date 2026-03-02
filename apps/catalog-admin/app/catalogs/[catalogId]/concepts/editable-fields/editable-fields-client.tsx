@@ -2,7 +2,11 @@
 
 import styles from "./editable-fields.module.css";
 import { Heading } from "@digdir/designsystemet-react";
-import { Button, Select, useWarnIfUnsavedChanges } from "@catalog-frontend/ui";
+import {
+  Button,
+  Select,
+  useWarnIfUnsavedChanges,
+} from "@catalog-frontend/ui-v2";
 import { localization } from "@catalog-frontend/utils";
 import { CodeList } from "@catalog-frontend/types";
 
@@ -71,49 +75,44 @@ export function EditableFieldsClient({ catalogId }: EditableFieldsClientProps) {
   ];
 
   return (
-    <>
-      <PageLayout>
-        <div className={styles.heading}>
-          <Heading level={2} size="xsmall">
-            {localization.catalogAdmin.editableFields}
-          </Heading>
-        </div>
+    <PageLayout>
+      <div className={styles.heading}>
+        <Heading level={2} data-size="xs">
+          {localization.catalogAdmin.editableFields}
+        </Heading>
+      </div>
 
-        <div className={styles.page}>
-          <div className={styles.pageContent}>
-            <div>
-              <div className="accordionField">
-                <p>Fagområde:</p>
+      <div className={styles.page}>
+        <div className={styles.pageContent}>
+          <div>
+            <div className="accordionField">
+              <p>Fagområde:</p>
 
-                <Select
-                  label={localization.catalogAdmin.chooseCodeList}
-                  value={
-                    updatedCodeListId || dbEditableFields?.domainCodeListId
-                  }
-                  onChange={(event) => {
-                    setUpdatedCodeListId(event.target.value);
-                  }}
+              <Select
+                aria-label={localization.catalogAdmin.chooseCodeList}
+                value={updatedCodeListId || dbEditableFields?.domainCodeListId}
+                onChange={(event) => {
+                  setUpdatedCodeListId(event.target.value);
+                }}
+              >
+                {codeListsOptions}
+              </Select>
+            </div>
+
+            <div className="accordionField">
+              <div className={styles.accordionButtons}>
+                <Button
+                  className={styles.fullWidth}
+                  onClick={() => handleUpdateDbCodeListId()}
                 >
-                  {codeListsOptions}
-                </Select>
-              </div>
-
-              <div className="accordionField">
-                <div className={styles.accordionButtons}>
-                  <Button
-                    fullWidth={true}
-                    size="small"
-                    onClick={() => handleUpdateDbCodeListId()}
-                  >
-                    {localization.button.save}
-                  </Button>
-                </div>
+                  {localization.button.save}
+                </Button>
               </div>
             </div>
           </div>
         </div>
-      </PageLayout>
-    </>
+      </div>
+    </PageLayout>
   );
 }
 export default EditableFieldsClient;

@@ -37,6 +37,7 @@
   "workspaces": [
     "libs/ui-v2",
     "apps/data-service-catalog",
+    "apps/catalog-admin",
     "apps/catalog-portal",
     "apps/service-catalog"
   ],

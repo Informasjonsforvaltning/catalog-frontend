@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Button } from "@catalog-frontend/ui";
+import { Button } from "@catalog-frontend/ui-v2";
 import { Textfield } from "@digdir/designsystemet-react";
 import { CodeList, EditorType } from "@catalog-frontend/types";
 import { localization } from "@catalog-frontend/utils";
@@ -249,7 +249,7 @@ export const CodeListEditor = ({
           </Button>
         ) : (
           <Button
-            color="danger"
+            data-color="danger"
             onClick={() => {
               handleDeleteCodeList(codeList?.id ?? "");
             }}
