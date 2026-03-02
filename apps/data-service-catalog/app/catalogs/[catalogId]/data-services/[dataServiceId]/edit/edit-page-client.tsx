@@ -5,7 +5,7 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { ArrowLeftIcon } from "@navikt/aksel-icons";
 import { LocalDataStorage, localization } from "@catalog-frontend/utils";
 import type { DataService, StorageData } from "@catalog-frontend/types";
-import { Button, ButtonBar, ConfirmModal } from "@catalog-frontend/ui";
+import { Button, ButtonBar, ConfirmModal } from "@catalog-frontend/ui-v2";
 import DataServiceForm from "../../../../../../components/data-service-form";
 import { updateDataService } from "../../../../../../app/actions/actions";
 
@@ -79,7 +79,6 @@ export const EditPage = ({
         <Button
           variant="tertiary"
           color="second"
-          size="sm"
           onClick={() => setShowCancelConfirm(true)}
         >
           <ArrowLeftIcon fontSize="1.25em" />

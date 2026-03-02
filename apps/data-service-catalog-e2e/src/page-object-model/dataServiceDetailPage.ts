@@ -35,7 +35,7 @@ export default class DataServiceDetailPage {
     this.editButton = page.getByTestId("edit-data-service-button");
     this.deleteButton = page.getByTestId("delete-data-service-button");
     this.publishSwitch = page.getByTestId("data-service-publish-switch");
-    this.title = page.locator("h2");
+    this.title = page.locator("main").locator("h2");
     this.description = page.getByTestId("data-service-description");
     this.endpointUrl = page.getByTestId("data-service-endpoint-url");
     this.contactPoint = page.getByTestId("data-service-contact-point");
@@ -49,9 +49,11 @@ export default class DataServiceDetailPage {
     this.contactUrl = page.getByTestId("data-service-contact-url");
     this.confirmModal = page.locator("dialog[open]");
     this.confirmModalSuccessButton = page
-      .locator("dialog[open] button")
+      .locator('dialog[open] button:not([data-command="close"])')
       .first();
-    this.confirmModalCancelButton = page.locator("dialog[open] button").nth(1);
+    this.confirmModalCancelButton = page
+      .locator('dialog[open] button:not([data-command="close"])')
+      .nth(1);
   }
 
   // Navigation
