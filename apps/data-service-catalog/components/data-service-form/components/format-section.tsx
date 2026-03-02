@@ -4,9 +4,9 @@ import {
   TitleWithHelpTextAndTag,
   useSearchFileTypeByUri,
   useSearchFileTypes,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import { localization } from "@catalog-frontend/utils";
-import { Box, Fieldset } from "@digdir/designsystemet-react";
+import { Fieldset } from "@digdir/designsystemet-react";
 import { useFormikContext } from "formik";
 import { useState } from "react";
 
@@ -27,9 +27,9 @@ export const FormatSection = ({ referenceDataEnv }: Props) => {
     useSearchFileTypeByUri(values?.formats ?? [], referenceDataEnv);
 
   return (
-    <Box>
-      <Fieldset
-        legend={
+    <div>
+      <Fieldset>
+        <Fieldset.Legend>
           <TitleWithHelpTextAndTag
             helpText={localization.dataServiceForm.helptext.format}
             tagTitle={localization.tag.recommended}
@@ -37,9 +37,7 @@ export const FormatSection = ({ referenceDataEnv }: Props) => {
           >
             {localization.dataServiceForm.fieldLabel.format}
           </TitleWithHelpTextAndTag>
-        }
-        size="sm"
-      >
+        </Fieldset.Legend>
         <FormikReferenceDataCombobox
           onChange={(event) => setSearchQueryFileTypes(event.target.value)}
           onValueChange={(selectedValues) =>
@@ -54,6 +52,6 @@ export const FormatSection = ({ referenceDataEnv }: Props) => {
           portal={false}
         />
       </Fieldset>
-    </Box>
+    </div>
   );
 };

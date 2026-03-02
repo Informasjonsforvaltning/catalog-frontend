@@ -104,8 +104,9 @@ export const FormikLanguageFieldset = ({
       ));
     }
 
-    if (get(errors, name)) {
-      return getTranslateText(get(errors, name));
+    const error = get(errors, name);
+    if (error) {
+      return typeof error === "string" ? error : getTranslateText(error);
     }
 
     return "";

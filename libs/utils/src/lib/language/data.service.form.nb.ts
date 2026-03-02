@@ -92,6 +92,7 @@ export const dataServiceFormNb = {
     versionMaxLength: "Versjon kan ikke være lengre enn 50 tegn.",
   },
   alert: {
+    confirmDeleteTitle: "Bekreft sletting",
     confirmDelete: "Er du sikker på at du vil slette API-beskrivelsen?",
     confirmPublish: "Er du sikker på at du vil publisere API-beskrivelsen?",
     confirmUnpublish: "Er du sikker på at du vil avpublisere API-beskrivelsen?",

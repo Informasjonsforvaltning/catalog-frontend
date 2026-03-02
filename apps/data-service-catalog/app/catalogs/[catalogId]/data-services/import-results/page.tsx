@@ -2,7 +2,7 @@ import {
   BreadcrumbType,
   Breadcrumbs,
   DesignBanner,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import { localization } from "@catalog-frontend/utils";
 import { ImportResult } from "@catalog-frontend/types";
 import { getDataServiceImportResults } from "@catalog-frontend/data-access";
