@@ -1,6 +1,6 @@
 "use client";
 
-import { NavigationCard } from "@catalog-frontend/ui";
+import { NavigationCard } from "@catalog-frontend/ui-v2";
 import React from "react";
 import { localization } from "@catalog-frontend/utils";
 import { PaletteIcon, PersonIcon } from "@navikt/aksel-icons";
@@ -12,22 +12,20 @@ export interface GeneralPageClientProps {
 
 export const GeneralPageClient = ({ catalogId }: GeneralPageClientProps) => {
   return (
-    <>
-      <div className={styles.cardsContainer}>
-        <NavigationCard
-          icon={<PaletteIcon fontSize="3rem" />}
-          title={localization.catalogAdmin.design}
-          body={localization.catalogAdmin.manage.design}
-          href={`/catalogs/${catalogId}/general/design`}
-        />
-        <NavigationCard
-          icon={<PersonIcon fontSize="3rem" />}
-          title={localization.catalogAdmin.username}
-          body={localization.catalogAdmin.manage.username}
-          href={`/catalogs/${catalogId}/general/users`}
-        />
-      </div>
-    </>
+    <div className={styles.cardsContainer}>
+      <NavigationCard
+        icon={<PaletteIcon fontSize="3rem" />}
+        title={localization.catalogAdmin.design}
+        body={localization.catalogAdmin.manage.design}
+        href={`/catalogs/${catalogId}/general/design`}
+      />
+      <NavigationCard
+        icon={<PersonIcon fontSize="3rem" />}
+        title={localization.catalogAdmin.username}
+        body={localization.catalogAdmin.manage.username}
+        href={`/catalogs/${catalogId}/general/users`}
+      />
+    </div>
   );
 };
 

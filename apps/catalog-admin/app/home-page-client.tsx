@@ -1,6 +1,6 @@
 "use client";
 
-import { Breadcrumbs, NavigationCard } from "@catalog-frontend/ui";
+import { Breadcrumbs, NavigationCard } from "@catalog-frontend/ui-v2";
 
 const HomePageClient = ({ organizations, catalogPortalUrl }) => {
   return (

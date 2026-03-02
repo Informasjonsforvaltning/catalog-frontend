@@ -3,13 +3,13 @@
 import React, { useState } from "react";
 import cn from "classnames";
 import styles from "./internal-field.module.css";
-import { Button, Select } from "@catalog-frontend/ui";
 import {
-  Textfield,
-  Checkbox,
-  HelpText,
-  Paragraph,
-} from "@digdir/designsystemet-react";
+  Button,
+  CheckboxGroupFilter,
+  HelpMarkdown,
+  Select,
+} from "@catalog-frontend/ui-v2";
+import { Textfield, Paragraph, Label } from "@digdir/designsystemet-react";
 import {
   CodeList,
   FieldType,
@@ -219,8 +219,9 @@ export const InternalFieldEditor = ({ catalogId, field }: Props) => {
       </div>
 
       <div className="accordionField">
+        <Label>{localization.catalogAdmin.fieldTypeDescription}</Label>
         <Select
-          label={localization.catalogAdmin.fieldTypeDescription}
+          aria-label={localization.catalogAdmin.fieldTypeDescription}
           value={
             (updatedFieldsList.find((f) => f.id === field?.id) || field)
               ?.type || newField?.type
@@ -251,8 +252,9 @@ export const InternalFieldEditor = ({ catalogId, field }: Props) => {
         "code_list" ||
         newField?.type === "code_list") && (
         <div className="accordionField">
+          <Label>{localization.catalogAdmin.chooseCodeList}</Label>
           <Select
-            label={localization.catalogAdmin.chooseCodeList}
+            aria-label={localization.catalogAdmin.chooseCodeList}
             value={
               (updatedFieldsList.find((f) => f.id === field?.id) || field)
                 ?.codeListId || newField?.codeListId
@@ -281,54 +283,52 @@ export const InternalFieldEditor = ({ catalogId, field }: Props) => {
       {((updatedFieldsList.find((f) => f.id === field?.id) || field)?.type ==
         "boolean" ||
         newField?.type === "boolean") && (
-        <>
-          <div className={cn("accordionField", styles.row)}>
-            <Checkbox.Group
-              legend=""
-              onChange={(filters) => {
-                field
-                  ? updateFieldsListState(
-                      field?.id,
-                      undefined,
-                      undefined,
-                      undefined,
-                      filters,
-                    )
-                  : setNewField((prevField) => ({
-                      ...prevField,
-                      enableFilter: filters.length > 0,
-                    }));
-              }}
-              defaultValue={
-                (updatedFieldsList.find((f) => f.id === field?.id) || field)
-                  ?.enableFilter
-                  ? ["enableFilter"]
-                  : []
-              }
-            >
-              <Checkbox value="enableFilter">
-                {localization.catalogAdmin.enableFilter}
-              </Checkbox>
-            </Checkbox.Group>
+        <div className={cn("accordionField", styles.row)}>
+          <CheckboxGroupFilter
+            items={[
+              {
+                value: "enableFilter",
+                label: localization.catalogAdmin.enableFilter,
+              },
+            ]}
+            onChange={(filters) => {
+              field
+                ? updateFieldsListState(
+                    field?.id,
+                    undefined,
+                    undefined,
+                    undefined,
+                    filters,
+                  )
+                : setNewField((prevField) => ({
+                    ...prevField,
+                    enableFilter: filters.length > 0,
+                  }));
+            }}
+            value={
+              (updatedFieldsList.find((f) => f.id === field?.id) || field)
+                ?.enableFilter
+                ? ["enableFilter"]
+                : []
+            }
+          />
 
-            <HelpText
-              placement="right"
-              title={localization.catalogAdmin.manage.enableFilter}
-              type="button"
-            >
-              <Paragraph size="sm">
-                {localization.catalogAdmin.manage.enableFilter}
-              </Paragraph>
-            </HelpText>
-          </div>
-        </>
+          <HelpMarkdown
+            placement="right"
+            aria-label={localization.catalogAdmin.manage.enableFilter}
+          >
+            <Paragraph data-size="sm">
+              {localization.catalogAdmin.manage.enableFilter}
+            </Paragraph>
+          </HelpMarkdown>
+        </div>
       )}
 
       <div className="accordionField">
         <div className="editorButtons">
           <div className={styles.saveButton}>
             <Button
-              fullWidth={true}
+              className={styles.fullWidth}
               onClick={() =>
                 field
                   ? handleUpdateDbInternalField(field?.id)
@@ -340,7 +340,7 @@ export const InternalFieldEditor = ({ catalogId, field }: Props) => {
           </div>
           {field ? (
             <Button
-              color="danger"
+              data-color="danger"
               onClick={() => {
                 handleDeleteInternalField(field?.id);
               }}
@@ -348,7 +348,7 @@ export const InternalFieldEditor = ({ catalogId, field }: Props) => {
               {localization.button.delete}
             </Button>
           ) : (
-            <Button color="danger" onClick={handleCancel}>
+            <Button data-color="danger" onClick={handleCancel}>
               {localization.button.cancel}
             </Button>
           )}
