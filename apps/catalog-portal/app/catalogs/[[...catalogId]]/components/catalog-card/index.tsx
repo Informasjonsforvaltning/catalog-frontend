@@ -1,6 +1,6 @@
 "use client";
 
-import { NavigationCard, Spinner } from "@catalog-frontend/ui";
+import { NavigationCard, Spinner } from "@catalog-frontend/ui-v2";
 import {
   getConceptCount,
   getDataServiceCount,
@@ -30,7 +30,7 @@ type CatalogCardProps = {
 const CardSpinner = () => {
   return (
     <div className={styles.cardSpinner}>
-      <Spinner title="Laster..." size="small" />
+      <Spinner title="Laster..." size="sm" />
     </div>
   );
 };

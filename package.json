@@ -36,7 +36,9 @@
   "private": true,
   "workspaces": [
     "libs/ui-v2",
-    "apps/data-service-catalog"
+    "apps/data-service-catalog",
+    "apps/catalog-portal",
+    "apps/service-catalog"
   ],
   "dependencies": {
     "@digdir/designsystemet-css": "0.10.0",
