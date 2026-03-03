@@ -9415,7 +9415,7 @@ __metadata:
     luxon: "npm:3.7.2"
     next: "npm:16.1.6"
     next-auth: "npm:^4.24.13"
-    nuqs: "npm:^2.8.8"
+    nuqs: "npm:^2.8.9"
     nx: "npm:22.5.3"
     playwright-core: "npm:^1.58.2"
     playwright-ctrf-json-reporter: "npm:^0.0.27"
@@ -16881,9 +16881,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nuqs@npm:^2.8.8":
-  version: 2.8.8
-  resolution: "nuqs@npm:2.8.8"
+"nuqs@npm:^2.8.9":
+  version: 2.8.9
+  resolution: "nuqs@npm:2.8.9"
   dependencies:
     "@standard-schema/spec": "npm:1.0.0"
   peerDependencies:
@@ -16904,7 +16904,7 @@ __metadata:
       optional: true
     react-router-dom:
       optional: true
-  checksum: 10/705cf25df703ada9d8e661b13321e3acb862bac1cc00a3ea7766a36f2b343d04bbb53d19c10395c18776054fd3b3419d4c6bb678c4eec3ea7837f60d4b0df0f4
+  checksum: 10/bce5c1d0920b56d2f4ff3a0074a3bd3fc7f847694529f72d808f5cd9882bd88ff443e8f93ad0c3aef41b5d3a411c656f9bfb430bb77dbd5f1f37d0f6b18addd6
   languageName: node
   linkType: hard
 
