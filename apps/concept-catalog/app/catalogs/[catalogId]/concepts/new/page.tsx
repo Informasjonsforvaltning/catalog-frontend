@@ -8,7 +8,7 @@ import {
   Breadcrumbs,
   BreadcrumbType,
   DesignBanner,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import { localization, prepareStatusList } from "@catalog-frontend/utils";
 import {
   CodeListsResult,

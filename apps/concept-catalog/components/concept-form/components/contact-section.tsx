@@ -1,17 +1,15 @@
-import { useEffect, useState } from "react";
 import { FastField, useFormikContext } from "formik";
 import {
-  Box,
   Textfield,
-  CheckboxGroup,
+  Fieldset,
   Checkbox,
-  ErrorMessage,
+  ValidationMessage,
+  useCheckboxGroup,
 } from "@digdir/designsystemet-react";
 import { Concept } from "@catalog-frontend/types";
-import { TitleWithHelpTextAndTag } from "@catalog-frontend/ui";
+import { TitleWithHelpTextAndTag } from "@catalog-frontend/ui-v2";
 import { localization } from "@catalog-frontend/utils";
 import styles from "../concept-form.module.scss";
-import { get, isEmpty, isEqual, isNil } from "lodash";
 
 type ContactSectionProps = {
   changed?: string[];
@@ -23,8 +21,6 @@ export const ContactSection = ({
   readOnly = false,
 }: ContactSectionProps) => {
   const { errors, values, setFieldValue } = useFormikContext<Concept>();
-  const [selectedFields, setSelectedFields] = useState<string[]>([]);
-
   const contactOptions = [
     {
       label: localization.conceptForm.fieldLabel.emailAddress,
@@ -36,29 +32,31 @@ export const ContactSection = ({
     },
   ];
 
+  const selectedFields = [
+    ...(values.kontaktpunkt?.harEpost != null ? ["harEpost"] : []),
+    ...(values.kontaktpunkt?.harTelefon != null ? ["harTelefon"] : []),
+  ];
+
   const handleContactChange = (value: string[]) => {
     contactOptions.forEach((option) => {
       if (!value.includes(option.value)) {
         setFieldValue(`kontaktpunkt.${option.value}`, null);
-      } else if (isNil(values.kontaktpunkt?.[option.value])) {
+      } else if (values.kontaktpunkt?.[option.value] == null) {
         setFieldValue(`kontaktpunkt.${option.value}`, "");
       }
     });
   };
 
-  useEffect(() => {
-    setSelectedFields([
-      ...(!isNil(values.kontaktpunkt?.harEpost) ? ["harEpost"] : []),
-      ...(!isNil(values.kontaktpunkt?.harTelefon) ? ["harTelefon"] : []),
-    ]);
-  }, [values.kontaktpunkt]);
+  const { getCheckboxProps } = useCheckboxGroup({
+    value: selectedFields,
+    onChange: handleContactChange,
+    readOnly,
+  });
 
   return (
-    <Box className={styles.contactSection}>
-      <CheckboxGroup
-        size="sm"
-        value={selectedFields}
-        legend={
+    <div className={styles.contactSection}>
+      <Fieldset data-size="sm">
+        <Fieldset.Legend>
           <TitleWithHelpTextAndTag
             helpText={localization.conceptForm.helpText.contactInfo}
             tagTitle={localization.tag.required}
@@ -70,21 +68,20 @@ export const ContactSection = ({
           >
             {localization.conceptForm.fieldLabel.contactInfo}
           </TitleWithHelpTextAndTag>
-        }
-        onChange={handleContactChange}
-        readOnly={readOnly}
-      >
+        </Fieldset.Legend>
         {contactOptions.map((option) => (
-          <Checkbox key={option.value} value={option.value}>
-            {option.label}
-          </Checkbox>
+          <Checkbox
+            key={option.value}
+            label={option.label}
+            {...getCheckboxProps(option.value)}
+          />
         ))}
-      </CheckboxGroup>
+      </Fieldset>
       {selectedFields.includes("harEpost") && (
         <FastField
           as={Textfield}
           name="kontaktpunkt.harEpost"
-          size="sm"
+          data-size="sm"
           label={
             <TitleWithHelpTextAndTag>
               {localization.conceptForm.fieldLabel.emailAddress}
@@ -98,7 +95,7 @@ export const ContactSection = ({
         <FastField
           as={Textfield}
           name="kontaktpunkt.harTelefon"
-          size="sm"
+          data-size="sm"
           label={
             <TitleWithHelpTextAndTag>
               {localization.conceptForm.fieldLabel.phoneNumber}
@@ -112,7 +109,7 @@ export const ContactSection = ({
         <FastField
           as={Textfield}
           name="kontaktpunkt.harSkjema"
-          size="sm"
+          data-size="sm"
           label={
             <TitleWithHelpTextAndTag>
               {localization.conceptForm.fieldLabel.contactForm}
@@ -123,8 +120,10 @@ export const ContactSection = ({
         />
       )}
       {typeof errors?.kontaktpunkt === "string" ? (
-        <ErrorMessage size="sm">{errors?.kontaktpunkt}</ErrorMessage>
+        <ValidationMessage data-size="sm">
+          {errors?.kontaktpunkt}
+        </ValidationMessage>
       ) : undefined}
-    </Box>
+    </div>
   );
 };

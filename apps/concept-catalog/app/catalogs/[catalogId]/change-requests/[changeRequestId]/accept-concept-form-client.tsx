@@ -12,7 +12,7 @@ import {
   Snackbar,
   SnackbarSeverity,
   Tag,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import ConceptForm from "@concept-catalog/components/concept-form";
 import { getTranslatedStatus } from "@concept-catalog/utils/change-request";
 import {
@@ -96,10 +96,10 @@ export const AcceptConceptFormClient = ({
     return (
       <Button
         variant="primary"
-        color="success"
+        data-color="success"
         onClick={handleAccept}
         disabled={isHandlingAction}
-        size="sm"
+        data-size="sm"
       >
         {localization.changeRequest.accept}
       </Button>
@@ -135,10 +135,10 @@ export const AcceptConceptFormClient = ({
     return (
       <Button
         variant="primary"
-        color="danger"
+        data-color="danger"
         onClick={handleReject}
         disabled={isHandlingAction}
-        size="sm"
+        data-size="sm"
       >
         {localization.changeRequest.reject}
       </Button>
@@ -172,8 +172,8 @@ export const AcceptConceptFormClient = ({
                 <LinkButton
                   href={`/catalogs/${organization.organizationId}/change-requests/${changeRequest.id}/edit`}
                   variant="secondary"
-                  color="second"
-                  size="sm"
+                  data-color="second"
+                  data-size="sm"
                 >
                   {localization.button.edit}
                 </LinkButton>
@@ -226,8 +226,8 @@ export const AcceptConceptFormClient = ({
       <ButtonBar>
         <Button
           variant="tertiary"
-          color="second"
-          size="sm"
+          data-color="second"
+          data-size="sm"
           onClick={handleGotoOverview}
         >
           <ArrowLeftIcon fontSize="1.25em" />
@@ -237,8 +237,8 @@ export const AcceptConceptFormClient = ({
         {originalConcept && (
           <Button
             variant="secondary"
-            color="second"
-            size="sm"
+            data-color="second"
+            data-size="sm"
             onClick={handleGotoConcept}
           >
             {localization.button.gotoConcept}

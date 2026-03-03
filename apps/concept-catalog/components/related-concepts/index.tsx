@@ -1,6 +1,6 @@
 import React from "react";
 import { UnionRelation, RelatedConcept } from "@catalog-frontend/types";
-import { KeyValueList } from "@catalog-frontend/ui";
+import { KeyValueList } from "@catalog-frontend/ui-v2";
 import AssociativeRelations from "./associative-relations";
 import PartitiveRelations from "./partitive-relations";
 import GenericRelations from "./generic-relations";

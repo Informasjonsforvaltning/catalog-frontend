@@ -1,12 +1,13 @@
 import { ReactNode, useRef, useState, useEffect } from "react";
 import { Formik } from "formik";
-import { Button, Modal } from "@digdir/designsystemet-react";
+import { Button, Dialog, Heading } from "@digdir/designsystemet-react";
 import {
+  DialogActions,
   FieldsetDivider,
   FormikLanguageFieldset,
   TextareaWithPrefix,
   TitleWithHelpTextAndTag,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import { Definisjon } from "@catalog-frontend/types";
 import { localization } from "@catalog-frontend/utils";
 import { SourceDescriptionFieldset } from "../source-description-fieldset";
@@ -41,15 +42,9 @@ export const DefinitionModal = ({
   const [submitted, setSubmitted] = useState(false);
 
   return (
-    <Modal.Root>
-      <Modal.Trigger asChild>{trigger}</Modal.Trigger>
-      <Modal.Dialog
-        ref={modalRef}
-        className={styles.dialog}
-        style={{
-          overflow: "visible",
-        }}
-      >
+    <Dialog.TriggerContext>
+      <Dialog.Trigger asChild>{trigger}</Dialog.Trigger>
+      <Dialog ref={modalRef} className={styles.dialog} closeButton={false}>
         <Formik
           initialValues={initialDefinition || defaultDefinition}
           validationSchema={definitionSchema}
@@ -71,8 +66,13 @@ export const DefinitionModal = ({
 
             return (
               <>
-                <Modal.Header closeButton={false}>{header}</Modal.Header>
-                <Modal.Content className={styles.content}>
+                <Heading
+                  data-size="2xs"
+                  style={{ marginBottom: "var(--ds-size-4)" }}
+                >
+                  {header}
+                </Heading>
+                <div className={styles.content}>
                   <FormikLanguageFieldset
                     name="tekst"
                     as={TextareaWithPrefix}
@@ -88,11 +88,11 @@ export const DefinitionModal = ({
                   />
                   <FieldsetDivider />
                   <SourceDescriptionFieldset name="kildebeskrivelse" />
-                </Modal.Content>
-                <Modal.Footer>
+                </div>
+                <DialogActions>
                   <Button
                     type="button"
-                    size="sm"
+                    data-size="sm"
                     disabled={isSubmitting}
                     onClick={() => {
                       submitForm();
@@ -103,7 +103,7 @@ export const DefinitionModal = ({
                   <Button
                     variant="secondary"
                     type="button"
-                    size="sm"
+                    data-size="sm"
                     onClick={() => {
                       onClose?.();
                       modalRef.current?.close();
@@ -112,12 +112,12 @@ export const DefinitionModal = ({
                   >
                     Avbryt
                   </Button>
-                </Modal.Footer>
+                </DialogActions>
               </>
             );
           }}
         </Formik>
-      </Modal.Dialog>
-    </Modal.Root>
+      </Dialog>
+    </Dialog.TriggerContext>
   );
 };

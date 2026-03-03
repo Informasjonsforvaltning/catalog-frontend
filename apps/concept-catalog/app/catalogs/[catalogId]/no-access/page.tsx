@@ -3,7 +3,7 @@ import {
   Breadcrumbs,
   CenterContainer,
   PageBanner,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import { localization } from "@catalog-frontend/utils";
 import { Heading } from "@digdir/designsystemet-react";
 
@@ -38,7 +38,7 @@ const NoAccess = async ({
         subtitle={localization.noAccess}
       />
       <CenterContainer>
-        <Heading level={2} size="small">
+        <Heading level={2} data-size="sm">
           {localization.youHaveNoAccess}
         </Heading>
       </CenterContainer>

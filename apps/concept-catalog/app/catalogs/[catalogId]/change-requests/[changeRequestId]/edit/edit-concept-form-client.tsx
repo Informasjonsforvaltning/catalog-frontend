@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import { ArrowLeftIcon } from "@navikt/aksel-icons";
-import { Button, ButtonBar, ConfirmModal } from "@catalog-frontend/ui";
+import { Button, ButtonBar, ConfirmModal } from "@catalog-frontend/ui-v2";
 import type {
   Concept,
   ChangeRequestUpdateBody,
@@ -163,8 +163,8 @@ export const EditConceptFormClient = ({
       <ButtonBar>
         <Button
           variant="tertiary"
-          color="second"
-          size="sm"
+          data-color="second"
+          data-size="sm"
           onClick={() => setShowCancelConfirm(true)}
         >
           <ArrowLeftIcon fontSize="1.25em" />
@@ -174,8 +174,8 @@ export const EditConceptFormClient = ({
         {originalConcept && (
           <Button
             variant="secondary"
-            color="second"
-            size="sm"
+            data-color="second"
+            data-size="sm"
             onClick={() => setShowGotoConceptConfirm(true)}
           >
             {localization.button.gotoConcept}

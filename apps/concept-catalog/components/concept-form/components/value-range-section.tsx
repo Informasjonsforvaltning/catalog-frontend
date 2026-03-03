@@ -1,7 +1,7 @@
 import { FastField, useFormikContext } from "formik";
 import { Textfield } from "@digdir/designsystemet-react";
 import { Concept } from "@catalog-frontend/types";
-import { TitleWithHelpTextAndTag } from "@catalog-frontend/ui";
+import { TitleWithHelpTextAndTag } from "@catalog-frontend/ui-v2";
 import { localization } from "@catalog-frontend/utils";
 import styles from "../concept-form.module.scss";
 import { get, isEmpty, isEqual } from "lodash";
@@ -22,7 +22,7 @@ export const ValueRangeSection = ({
       <div className={styles.fieldSet}>
         <FastField
           as={Textfield}
-          size="sm"
+          data-size="sm"
           name="omfang.tekst"
           label={
             <TitleWithHelpTextAndTag
@@ -37,7 +37,7 @@ export const ValueRangeSection = ({
         />
         <FastField
           as={Textfield}
-          size="sm"
+          data-size="sm"
           name="omfang.uri"
           label={
             <TitleWithHelpTextAndTag changed={changed?.includes("omfang.uri")}>

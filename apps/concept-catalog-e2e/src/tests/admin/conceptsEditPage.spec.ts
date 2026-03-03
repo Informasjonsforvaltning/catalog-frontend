@@ -344,7 +344,9 @@ runTestAsAdmin(
     await conceptsPage.editPage.clickAddRelation();
 
     console.log("[TEST] Selecting internal relation type...");
-    await conceptsPage.page.getByText("Virksomhetens eget begrep").click();
+    await conceptsPage.page
+      .getByRole("radio", { name: "Virksomhetens eget begrep" })
+      .click();
 
     console.log("[TEST] Opening the search combobox...");
     await conceptsPage.page

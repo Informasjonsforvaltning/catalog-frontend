@@ -36,6 +36,7 @@
   "private": true,
   "workspaces": [
     "libs/ui-v2",
+    "apps/concept-catalog",
     "apps/data-service-catalog",
     "apps/catalog-admin",
     "apps/catalog-portal",

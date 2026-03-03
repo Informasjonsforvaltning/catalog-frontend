@@ -22,7 +22,7 @@ import {
   Select,
   LinkButton,
   SearchField,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import {
   getTranslateText,
   capitalizeFirstLetter,
@@ -376,7 +376,7 @@ export const SearchPageClient = ({
 
     return (
       <div className={styles.chips}>
-        <Chip.Group size="small" className={styles.wrap}>
+        <div data-size="sm" className={styles.wrap}>
           {filterSubject?.map((filter, index) => (
             <Chip.Removable
               key={`subject-${index}`}
@@ -445,14 +445,14 @@ export const SearchPageClient = ({
                 ));
               },
             )}
-        </Chip.Group>
+        </div>
       </div>
     );
   };
 
   return (
     <div className="container">
-      <Tabs className={styles.tabs} defaultValue="conceptTab" size="medium">
+      <Tabs className={styles.tabs} defaultValue="conceptTab" data-size="md">
         <Tabs.List className={styles.tabsList}>
           <Tabs.Tab value="conceptTab">
             {localization.concept.concepts}
@@ -474,7 +474,7 @@ export const SearchPageClient = ({
             </Tabs.Tab>
           )}
         </Tabs.List>
-        <Tabs.Content value="conceptTab" className={styles.tabsContent}>
+        <Tabs.Panel value="conceptTab" className={styles.tabsContent}>
           <SearchHitsLayout>
             <SearchHitsLayout.SearchRow>
               <div className={styles.searchRow}>
@@ -499,7 +499,7 @@ export const SearchPageClient = ({
                   />
                   <Select
                     aria-label={localization.search.sort}
-                    size="sm"
+                    data-size="sm"
                     onChange={(event) =>
                       onSortSelect(event?.target.value as SortOption)
                     }
@@ -516,7 +516,7 @@ export const SearchPageClient = ({
                     {hasWritePermission && (
                       <LinkButton
                         href={`/catalogs/${catalogId}/concepts/new`}
-                        size="sm"
+                        data-size="sm"
                       >
                         <>
                           <PlusCircleIcon fontSize="1.5rem" />
@@ -560,7 +560,7 @@ export const SearchPageClient = ({
               )}
             </SearchHitsLayout.MainColumn>
           </SearchHitsLayout>
-        </Tabs.Content>
+        </Tabs.Panel>
       </Tabs>
     </div>
   );

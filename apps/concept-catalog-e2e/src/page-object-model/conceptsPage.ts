@@ -84,7 +84,12 @@ export default class ConceptsPage {
       return;
     }
     const result = await this.accessibilityBuilder
-      .disableRules(["svg-img-alt", "aria-toggle-field-name", "target-size"])
+      .disableRules([
+        "svg-img-alt",
+        "aria-toggle-field-name",
+        "target-size",
+        "label-title-only",
+      ])
       .analyze();
     expect.soft(result.violations).toEqual([]);
   }

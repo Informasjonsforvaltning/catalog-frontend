@@ -1969,6 +1969,15 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@catalog-frontend/concept-catalog@workspace:apps/concept-catalog":
+  version: 0.0.0-use.local
+  resolution: "@catalog-frontend/concept-catalog@workspace:apps/concept-catalog"
+  dependencies:
+    "@digdir/designsystemet-css": "npm:1.11.1"
+    "@digdir/designsystemet-react": "npm:1.11.1"
+  languageName: unknown
+  linkType: soft
+
 "@catalog-frontend/data-service-catalog@workspace:apps/data-service-catalog":
   version: 0.0.0-use.local
   resolution: "@catalog-frontend/data-service-catalog@workspace:apps/data-service-catalog"
