@@ -28,7 +28,7 @@ export async function getPublicServices(catalogId: string): Promise<Service[]> {
   const response = await getAll(catalogId, session.accessToken);
   if (response.status !== 200) {
     throw new Error(
-      "getPublicServices failed with response code " + response.status,
+      `API responded with status ${response.status} for getAllPublicServices`,
     );
   }
   const jsonResponse = await response.json();
@@ -47,7 +47,7 @@ export async function getPublicServiceById(
 
   if (response.status !== 200) {
     throw new Error(
-      "getPublicServiceById failed with response code " + response.status,
+      `API responded with status ${response.status} for getPublicServiceById`,
     );
   }
 
@@ -64,28 +64,20 @@ export async function createPublicService(
   if (!session) {
     return redirectToSignIn();
   }
-  let success = false;
-  let serviceId = undefined;
-  try {
-    const response = await create(
-      newPublicService,
-      catalogId,
-      session.accessToken,
+  const response = await create(
+    newPublicService,
+    catalogId,
+    session.accessToken,
+  );
+  if (response.status !== 201) {
+    throw new Error(
+      `API responded with status ${response.status} for createPublicService`,
     );
-    if (response.status !== 201) {
-      throw new Error();
-    }
-    serviceId = response.headers.get("location")?.split("/").pop();
-    success = true;
-    return serviceId;
-  } catch (error) {
-    throw new Error(localization.alert.fail);
-  } finally {
-    if (success) {
-      updateTag("public-service");
-      updateTag("public-services");
-    }
   }
+  updateTag("public-service");
+  updateTag("public-services");
+  const serviceId = response?.headers?.get("location")?.split("/").pop();
+  return serviceId;
 }
 
 export async function deletePublicService(
@@ -96,21 +88,15 @@ export async function deletePublicService(
   if (!session) {
     return redirectToSignIn();
   }
-  let success = false;
-  try {
-    const response = await deletePS(catalogId, serviceId, session.accessToken);
-    if (response.status !== 204) {
-      throw new Error();
-    }
-    success = true;
-  } catch (error) {
-    throw new Error(localization.alert.deleteFailed);
-  } finally {
-    if (success) {
-      updateTag("public-services");
-      redirect(`/catalogs/${catalogId}/public-services`);
-    }
+  const response = await deletePS(catalogId, serviceId, session.accessToken);
+  if (response.status !== 204) {
+    throw new Error(
+      `API responded with status ${response.status} for deletePublicService`,
+    );
   }
+
+  updateTag("public-services");
+  redirect(`/catalogs/${catalogId}/public-services`);
 }
 
 export async function updatePublicService(
@@ -139,31 +125,23 @@ export async function updatePublicService(
     return;
   }
 
-  let success = false;
-
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
   }
-  try {
-    const response = await update(
-      catalogId,
-      oldPublicService.id,
-      diff,
-      session.accessToken,
+  const response = await update(
+    catalogId,
+    oldPublicService.id,
+    diff,
+    session.accessToken,
+  );
+  if (response.status !== 200) {
+    throw new Error(
+      `API responded with status ${response.status} for updatePublicService`,
     );
-    if (response.status !== 200) {
-      throw new Error();
-    }
-    success = true;
-  } catch (error) {
-    throw new Error(localization.alert.fail);
-  } finally {
-    if (success) {
-      updateTag("public-service");
-      updateTag("public-services");
-    }
   }
+  updateTag("public-service");
+  updateTag("public-services");
 }
 
 export async function publishPublicService(
@@ -174,21 +152,14 @@ export async function publishPublicService(
   if (!session) {
     return redirectToSignIn();
   }
-  let success = false;
-  try {
-    const response = await publish(catalogId, serviceId, session.accessToken);
-    if (response.status !== 200) {
-      throw new Error();
-    }
-    success = true;
-  } catch (error) {
-    throw new Error(localization.alert.fail);
-  } finally {
-    if (success) {
-      updateTag("public-service");
-      updateTag("public-services");
-    }
+  const response = await publish(catalogId, serviceId, session.accessToken);
+  if (response.status !== 200) {
+    throw new Error(
+      `API responded with status ${response.status} for publishPublicService`,
+    );
   }
+  updateTag("public-service");
+  updateTag("public-services");
 }
 
 export async function unpublishPublicService(
@@ -199,19 +170,12 @@ export async function unpublishPublicService(
   if (!session) {
     return redirectToSignIn();
   }
-  let success = false;
-  try {
-    const response = await unpublish(catalogId, serviceId, session.accessToken);
-    if (response.status !== 200) {
-      throw new Error();
-    }
-    success = true;
-  } catch (error) {
-    throw new Error(localization.alert.fail);
-  } finally {
-    if (success) {
-      updateTag("public-service");
-      updateTag("public-services");
-    }
+  const response = await unpublish(catalogId, serviceId, session.accessToken);
+  if (response.status !== 200) {
+    throw new Error(
+      `API responded with status ${response.status} for unpublishPublicService`,
+    );
   }
+  updateTag("public-service");
+  updateTag("public-services");
 }

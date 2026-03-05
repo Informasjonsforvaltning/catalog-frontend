@@ -10,7 +10,6 @@ import {
 import { Dataset, DatasetToBeCreated } from "@catalog-frontend/types";
 import {
   getValidSession,
-  localization,
   redirectToSignIn,
   removeEmptyValues,
 } from "@catalog-frontend/utils";
@@ -24,7 +23,9 @@ export async function getDatasets(catalogId: string): Promise<Dataset[]> {
   }
   const response = await getAll(catalogId, session.accessToken);
   if (response.status !== 200) {
-    throw new Error("getDatasets failed with response code " + response.status);
+    throw new Error(
+      `API responded with status ${response.status} for getAllDatasets`,
+    );
   }
   return await response.json();
 }
@@ -41,7 +42,7 @@ export async function getDatasetById(
 
   if (response.status !== 200) {
     throw new Error(
-      "getDatasetById failed with response code " + response.status,
+      `API responded with status ${response.status} for getDatasetById`,
     );
   }
 
@@ -58,29 +59,20 @@ export async function createDataset(
   if (!session) {
     return redirectToSignIn();
   }
-  let success = false;
-  let datasetId: undefined | string = undefined;
-  try {
-    const response = await postDataset(
-      datasetNoEmptyValues,
-      catalogId,
-      session.accessToken,
+  const response = await postDataset(
+    datasetNoEmptyValues,
+    catalogId,
+    session.accessToken,
+  );
+  if (response.status !== 201) {
+    throw new Error(
+      `API responded with status ${response.status} for createDataset`,
     );
-    if (response.status !== 201) {
-      throw new Error();
-    }
-
-    datasetId = response.headers.get("location")?.split("/").pop();
-    success = true;
-    return datasetId;
-  } catch (error) {
-    throw new Error(`${localization.alert.fail} ${error}`);
-  } finally {
-    if (success) {
-      updateTag("dataset");
-      updateTag("datasets");
-    }
   }
+  updateTag("dataset");
+  updateTag("datasets");
+  const datasetId = response?.headers?.get("location")?.split("/").pop();
+  return datasetId;
 }
 
 export async function deleteDataset(
@@ -91,24 +83,17 @@ export async function deleteDataset(
   if (!session) {
     return redirectToSignIn();
   }
-  let success = false;
-  try {
-    const response = await removeDataset(
-      catalogId,
-      datasetId,
-      session.accessToken,
+  const response = await removeDataset(
+    catalogId,
+    datasetId,
+    session.accessToken,
+  );
+  if (response.status !== 200) {
+    throw new Error(
+      `API responded with status ${response.status} for deleteDataset`,
     );
-    if (response.status !== 200) {
-      throw new Error();
-    }
-    success = true;
-  } catch (error) {
-    throw new Error(`${localization.alert.deleteFailed} ${error}`);
-  } finally {
-    if (success) {
-      updateTag("datasets");
-    }
   }
+  updateTag("datasets");
 }
 
 export async function updateDataset(
@@ -124,32 +109,25 @@ export async function updateDataset(
     return;
   }
 
-  let success = false;
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
   }
 
-  try {
-    const response = await update(
-      catalogId,
-      initialDataset.id,
-      diff,
-      session.accessToken,
+  const response = await update(
+    catalogId,
+    initialDataset.id,
+    diff,
+    session.accessToken,
+  );
+  if (response.status !== 200) {
+    throw new Error(
+      `API responded with status ${response.status} for updateDataset`,
     );
-    if (response.status !== 200) {
-      throw new Error(`${response.status} ${response.statusText}`);
-    }
-    success = true;
-  } catch (error) {
-    console.error(`${localization.alert.fail} ${error}`);
-    throw new Error("Noe gikk galt, prøv igjen...");
   }
 
-  if (success) {
-    updateTag("dataset");
-    updateTag("datasets");
-  }
+  updateTag("dataset");
+  updateTag("datasets");
 }
 
 export async function publishDataset(
@@ -168,19 +146,16 @@ export async function publishDataset(
     return redirectToSignIn();
   }
 
-  try {
-    const response = await update(
-      catalogId,
-      initialDataset.id,
-      diff,
-      session.accessToken,
+  const response = await update(
+    catalogId,
+    initialDataset.id,
+    diff,
+    session.accessToken,
+  );
+  if (response.status !== 200) {
+    throw new Error(
+      `API responded with status ${response.status} for publishDataset`,
     );
-    if (response.status !== 200) {
-      throw new Error(`${response.status} ${response.statusText}`);
-    }
-  } catch (error) {
-    console.error(`${localization.alert.fail} ${error}`);
-    throw new Error("Noe gikk galt, prøv igjen...");
   }
 
   updateTag("dataset");
