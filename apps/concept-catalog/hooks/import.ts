@@ -161,7 +161,7 @@ const attemptToParseJsonFile = (text: string): Promise<ConceptImport[]> => {
       const json = JSON.parse(text);
 
       resolve(Array.isArray(json) ? json : []);
-    } catch (error: any) {
+    } catch (error) {
       reject(error);
     }
   });
@@ -182,13 +182,13 @@ const attemptToParseCsvFile = (text: string): Promise<ConceptImport[]> => {
           }
 
           resolve(
-            rows.map((row: any) =>
+            rows.map((row) =>
               mapCsvTextToConcept(columnHeaders as string[], row as string[]),
             ),
           );
         },
       });
-    } catch (error: any) {
+    } catch (error) {
       reject(error);
     }
   });
@@ -199,12 +199,8 @@ export const useImportRdf = (catalogId: string) => {
     mutationKey: ["import-Concepts-RDF"],
     mutationFn: async () => {
       if (!validOrganizationNumber(catalogId)) {
-        console.log("Invalid organization number", catalogId);
         return Promise.reject("Invalid organization number");
       }
-    },
-    onSuccess: () => {
-      console.log("Concept RDF file has been uploaded successfully!");
     },
     onError: () => {
       console.error("Error uploading concept RDF file");
@@ -225,13 +221,12 @@ export const useSendRdf = (catalogId: string) => {
       const location = await createImportJob(catalogId);
       if (location) {
         const resultId = location.split("/").pop();
-        console.log("Created import result ID at ", location);
         if (!resultId) {
           console.error("No result ID found in the location URL");
           return Promise.reject("No result ID found");
         }
 
-        importRdfConcepts(
+        await importRdfConcepts(
           mutationProps.fileContent,
           mutationProps.contentType,
           catalogId,
@@ -243,15 +238,10 @@ export const useSendRdf = (catalogId: string) => {
           ),
         );
 
-        console.log("Created import result ID at ", location);
-
         router.push(
           `/catalogs/${catalogId}/concepts/import-results/${resultId}`,
         );
       }
-    },
-    onSuccess: () => {
-      console.log("Concept RDF file has been sent!");
     },
     onError: () => {
       console.error("Error sending concept RDF file");
@@ -272,13 +262,12 @@ export const useSendConcepts = (
       const location = await createImportJob(catalogId);
       if (location) {
         const resultId = location.split("/").pop();
-        console.log("Created import result ID at ", location);
         if (!resultId) {
           console.error("No result ID found in the location URL");
           return Promise.reject("No result ID found");
         }
 
-        importConceptsCSV(catalogId, resultId, concepts).catch((error) =>
+        await importConceptsCSV(catalogId, resultId, concepts).catch((error) =>
           console.error(
             "Failed to import CSV/JSON concepts in the background",
             error,
@@ -289,9 +278,6 @@ export const useSendConcepts = (
           `/catalogs/${catalogId}/concepts/import-results/${resultId}`,
         );
       }
-    },
-    onSuccess: () => {
-      console.log("Concepts have been sent!!");
     },
   });
 };

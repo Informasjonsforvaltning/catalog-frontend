@@ -181,11 +181,11 @@ export const UserEditor = ({ catalogId, user, type }: UserEditorProps) => {
           Lagre
         </Button>
         {type === "create" ? (
-          <Button color="danger" onClick={handleCancel}>
+          <Button data-color="danger" onClick={handleCancel}>
             {localization.button.cancel}
           </Button>
         ) : (
-          <Button color="danger" onClick={() => handleDeleteUser(user)}>
+          <Button data-color="danger" onClick={() => handleDeleteUser(user)}>
             {localization.button.delete}
           </Button>
         )}

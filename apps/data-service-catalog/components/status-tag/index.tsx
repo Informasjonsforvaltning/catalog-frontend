@@ -1,4 +1,4 @@
-import { DataServiceStatusTagProps, Tag } from "@catalog-frontend/ui";
+import { DataServiceStatusTagProps, Tag } from "@catalog-frontend/ui-v2";
 import { getTranslateText } from "@catalog-frontend/utils";
 import React from "react";
 import { ReferenceDataCode } from "@catalog-frontend/types";

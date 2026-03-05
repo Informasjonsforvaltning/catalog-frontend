@@ -246,6 +246,7 @@ export async function cancelImport(
   if (!session) {
     return redirectToSignIn();
   }
+
   console.log("Sending import cancellation", catalogId, resultId);
 
   const response = await cancelConceptImport(
@@ -261,6 +262,7 @@ export async function cancelImport(
       `API responded with status ${response.status} for cancelConceptImport`,
     );
   }
+
   updateTag("import-result");
   updateTag("import-results");
   console.log("Importing result has been cancelled", catalogId, resultId);

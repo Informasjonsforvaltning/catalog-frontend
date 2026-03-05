@@ -37,7 +37,7 @@ export const ConceptActivityLog = ({
             </Heading>
             <p className={styles.text}>
               {localization.formatString(
-                localization.activityLog.createdByAt,
+                localization.activityLog.updatedByAt,
                 convertTimestampToDateAndTime(update.datetime),
                 update.person?.name ?? localization.unknown,
               )}

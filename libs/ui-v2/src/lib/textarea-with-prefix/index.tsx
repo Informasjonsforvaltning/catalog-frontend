@@ -1,8 +1,9 @@
 import { forwardRef, ReactNode } from "react";
-import { Box, Textarea, TextareaProps } from "@digdir/designsystemet-react";
+import { Textarea, TextareaProps } from "@digdir/designsystemet-react";
 import styles from "./textarea-with-prefix.module.scss";
 
 export type TextareaWithPrefixProps = {
+  label: string;
   prefix: ReactNode;
 } & TextareaProps;
 
@@ -11,13 +12,13 @@ export const TextareaWithPrefix = forwardRef<
   TextareaWithPrefixProps
 >(({ prefix, label, ...props }, ref) => {
   return (
-    <Box className={styles.textareaWithPrefix}>
+    <div className={styles.textareaWithPrefix}>
       {label && <label>{label}</label>}
-      <Box>
-        <Box className={styles.prefix}>{prefix}</Box>
+      <div>
+        <div className={styles.prefix}>{prefix}</div>
         <Textarea ref={ref} {...props} />
-      </Box>
-    </Box>
+      </div>
+    </div>
   );
 });
 

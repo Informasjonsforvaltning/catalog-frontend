@@ -87,6 +87,7 @@ export const nb = {
     noComments: "Ingen kommentarer",
     selectType: "Velg type",
     createdByAt: "Opprettet: {0} av {1}",
+    updatedByAt: "Oppdatert: {0} av {1}",
   },
   helpText: "Hjelpetekst",
   publisher: "Utgiver",
@@ -291,6 +292,8 @@ export const nb = {
     success: "Oppdatering vellykket!",
     unsavedChanges:
       "Du har ulagrede endringer. Er du sikker på at du vil forlate siden?",
+    unsavedChangesHeading: "Ulagrede endringer",
+    updateFailed: "Oppdatering mislyktes. Prøv igjen senere.",
     deleteFailed: "Kunne ikke slette. Prøv igjen senere.",
     formUnsavedChanges: "Skjemaet har ulagrede endringer.",
     youHaveUnsavedChanges: "Det finnes endringer som ikke har blitt lagret:",

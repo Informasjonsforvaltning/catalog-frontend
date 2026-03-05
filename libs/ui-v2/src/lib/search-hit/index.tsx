@@ -3,7 +3,7 @@ import styles from "./search-hit.module.css";
 import Link from "next/link";
 import { ReactNode } from "react";
 import { Url } from "next/dist/shared/lib/router/router";
-import { MarkdownComponent } from "@catalog-frontend/ui";
+import { MarkdownComponent } from "@catalog-frontend/ui-v2";
 
 interface Props {
   title: string;

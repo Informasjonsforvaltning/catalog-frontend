@@ -2,12 +2,12 @@
 
 import React, { useEffect, useMemo, useState } from "react";
 import styles from "./code-lists.module.css";
-import { Accordion, Heading } from "@digdir/designsystemet-react";
+import { Card, Details, Heading } from "@digdir/designsystemet-react";
 import {
   Button,
   SearchField,
   useWarnIfUnsavedChanges,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import { PlusCircleIcon } from "@navikt/aksel-icons";
 import { useGetAllCodeLists } from "../../../../../hooks/code-lists";
 import { Code, CodeList } from "@catalog-frontend/types";
@@ -100,82 +100,72 @@ const CodeListsPageClient = ({
   };
 
   return (
-    <>
-      <PageLayout>
-        <div className={styles.row}>
-          <SearchField
-            ariaLabel="Søkefelt kodeliste"
-            placeholder="Søk etter kodeliste..."
-            onSearchSubmit={(search) => setSearch(search)}
-          />
+    <PageLayout>
+      <div className={styles.row}>
+        <SearchField
+          placeholder="Søk etter kodeliste..."
+          onSearch={(search) => setSearch(search)}
+        />
 
-          <Button onClick={handleCreateCodeList}>
-            <>
-              <PlusCircleIcon />
-              {localization.catalogAdmin.createCodeList}
-            </>
-          </Button>
-        </div>
-        <Heading level={2} size="xsmall">
-          {localization.catalogAdmin.codeLists}
-        </Heading>
-        <div className="accordionStructure">
-          {showCodeListEditor && (
-            <Accordion
-              key="codeList-create-edtior"
-              border={true}
-              className="accordionWidth"
-            >
-              <Accordion.Item defaultOpen={showCodeListEditor}>
-                <Accordion.Header>
-                  <Heading size="small" />
-                </Accordion.Header>
+        <Button onClick={handleCreateCodeList}>
+          <PlusCircleIcon />
+          {localization.catalogAdmin.createCodeList}
+        </Button>
+      </div>
+      <Heading level={2} data-size="xs">
+        {localization.catalogAdmin.codeLists}
+      </Heading>
+      <div className="accordionStructure">
+        {showCodeListEditor && (
+          <Card className="accordionWidth">
+            <Details defaultOpen={showCodeListEditor}>
+              <Details.Summary>
+                <Heading data-size="sm" />
+              </Details.Summary>
 
-                <Accordion.Content>
-                  <CodeListEditor type="create" catalogId={catalogId} />
-                </Accordion.Content>
-              </Accordion.Item>
-            </Accordion>
-          )}
-          {filteredCodeLists() &&
-            filteredCodeLists()?.map((codeList: CodeList, index: number) => (
-              <Accordion key={index} border={true} className="accordionWidth">
-                <Accordion.Item>
-                  <Accordion.Header>
-                    <Heading size="xsmall">{codeList.name}</Heading>
-                    <p className={styles.description}>
-                      {" "}
-                      {codeList.description}{" "}
-                    </p>
-                  </Accordion.Header>
-                  <Accordion.Content>
-                    <p className={styles.id}>ID: {codeList.id}</p>
-                  </Accordion.Content>
+              <Details.Content>
+                <CodeListEditor type="create" catalogId={catalogId} />
+              </Details.Content>
+            </Details>
+          </Card>
+        )}
+        {filteredCodeLists() &&
+          filteredCodeLists()?.map((codeList: CodeList, index: number) => (
+            <Card className="accordionWidth" key={index}>
+              <Details>
+                <Details.Summary>
+                  <div>
+                    <Heading data-size="xs">{codeList.name}</Heading>
+                    <p className={styles.description}>{codeList.description}</p>
+                  </div>
+                </Details.Summary>
+                <Details.Content>
+                  <p className={styles.id}>ID: {codeList.id}</p>
+                </Details.Content>
 
-                  <Accordion.Content>
-                    <CodeListEditor
-                      codeList={codeList}
-                      codeListsInUse={codeListsInUse}
-                      catalogId={catalogId}
-                      dirty={(dirty) =>
-                        setDirtyCodeLists((prev) => {
-                          if (dirty && !prev.includes(codeList.id ?? "")) {
-                            return [...prev, codeList.id ?? ""];
-                          }
-                          if (!dirty) {
-                            return prev.filter((id) => id !== codeList.id);
-                          }
-                          return prev;
-                        })
-                      }
-                    />
-                  </Accordion.Content>
-                </Accordion.Item>
-              </Accordion>
-            ))}
-        </div>
-      </PageLayout>
-    </>
+                <Details.Content>
+                  <CodeListEditor
+                    codeList={codeList}
+                    codeListsInUse={codeListsInUse}
+                    catalogId={catalogId}
+                    dirty={(dirty) =>
+                      setDirtyCodeLists((prev) => {
+                        if (dirty && !prev.includes(codeList.id ?? "")) {
+                          return [...prev, codeList.id ?? ""];
+                        }
+                        if (!dirty) {
+                          return prev.filter((id) => id !== codeList.id);
+                        }
+                        return prev;
+                      })
+                    }
+                  />
+                </Details.Content>
+              </Details>
+            </Card>
+          ))}
+      </div>
+    </PageLayout>
   );
 };
 

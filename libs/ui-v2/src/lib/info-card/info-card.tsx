@@ -10,7 +10,7 @@ interface InfoCardComponent
   Item: InfoCardItemType;
 }
 
-export const infoCardSize = ["large", "small"] as const;
+export const infoCardSize = ["lg", "sm"] as const;
 type InfoCardSize = (typeof infoCardSize)[number];
 
 export interface InfoCardProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -25,7 +25,7 @@ export interface InfoCardProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export const InfoCard = forwardRef<HTMLDivElement, InfoCardProps>(
-  ({ size = "large", className, ...rest }, ref) => (
+  ({ size = "lg", className, ...rest }, ref) => (
     <div
       {...rest}
       className={cn(classes.infoCard, classes[size], className)}

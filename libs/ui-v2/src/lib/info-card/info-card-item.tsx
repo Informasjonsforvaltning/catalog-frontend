@@ -7,21 +7,7 @@ import { localization } from "@catalog-frontend/utils";
 
 export const headingColor = ["neutral", "light"] as const;
 type HeadingColor = (typeof headingColor)[number];
-type Size =
-  | "2xs"
-  | "xs"
-  | "sm"
-  | "md"
-  | "lg"
-  | "xl"
-  | "2xl"
-  | "xxsmall"
-  | "xsmall"
-  | "small"
-  | "medium"
-  | "large"
-  | "xlarge"
-  | "2xlarge";
+type Size = "2xs" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
 
 type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 
@@ -87,7 +73,7 @@ const InfoCardItem: InfoCardItemType = forwardRef(
             {title && (
               <Heading
                 level={headingLevel}
-                size={headingSize}
+                data-size={headingSize}
                 className={cn(classes.fieldHeading, classes[headingColor])}
               >
                 {title}

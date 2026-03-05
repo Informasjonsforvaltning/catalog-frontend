@@ -1,4 +1,4 @@
-import { TermsOfUseModal } from "@catalog-frontend/ui";
+import { TermsOfUseModal } from "@catalog-frontend/ui-v2";
 import { CatalogLayout } from "../../../components/catalog-layout";
 
 const PageLayout = async (props: {

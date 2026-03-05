@@ -19,7 +19,7 @@ exports[`Header should render successfully 1`] = `
         <button
           aria-expanded="false"
           aria-haspopup="menu"
-          class="fds-btn fds-focus fds-btn--md fds-btn--tertiary fds-btn--first menuButton"
+          class="ds-btn ds-focus ds-btn--md ds-btn--tertiary ds-btn--first menuButton"
           type="button"
         >
           <svg

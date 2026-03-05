@@ -5,7 +5,7 @@ import { localization } from "@catalog-frontend/utils";
 import { Terms, TermsAcceptation } from "@catalog-frontend/types";
 import parse from "html-react-parser";
 import styles from "./terms-and-conditions-page.module.css";
-import { Button, Link, MarkdownComponent } from "@catalog-frontend/ui";
+import { Button, Link, MarkdownComponent } from "@catalog-frontend/ui-v2";
 import { useState } from "react";
 import { acceptTermsAndConditions } from "@catalog-portal/app/actions";
 
@@ -41,11 +41,9 @@ const TermsAndConditionsPageClient = ({
 
   return (
     <div className="container">
-      <Heading level={1} spacing>
-        {localization.termsOfUse.heading}
-      </Heading>
+      <Heading level={1}>{localization.termsOfUse.heading}</Heading>
       {latestIsAccepted && (
-        <Alert severity="success" size="small">
+        <Alert data-color="success" data-size="sm">
           <MarkdownComponent>
             {
               localization.formatString(
@@ -58,7 +56,7 @@ const TermsAndConditionsPageClient = ({
         </Alert>
       )}
       {!latestIsAccepted && !hasAdminPermission && (
-        <Alert severity="warning" size="small" className={styles.alert}>
+        <Alert data-color="warning" data-size="sm" className={styles.alert}>
           <MarkdownComponent>
             {localization.termsOfUse.adminPermissionNeeded}
           </MarkdownComponent>
@@ -72,9 +70,8 @@ const TermsAndConditionsPageClient = ({
             checked={isCheckboxChecked}
             disabled={latestIsAccepted}
             onChange={() => setIsCheckboxChecked(!isCheckboxChecked)}
-          >
-            {localization.termsOfUse.acceptCheckbox}
-          </Checkbox>
+            label={localization.termsOfUse.acceptCheckbox}
+          />
           <Button
             disabled={!isCheckboxChecked || latestIsAccepted}
             onClick={handleAccept}

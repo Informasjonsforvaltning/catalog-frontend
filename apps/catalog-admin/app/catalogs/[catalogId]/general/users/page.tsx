@@ -1,6 +1,6 @@
 import { withProtectedPage } from "../../../../../utils/auth";
 import UsersPageClient from "./users-page-client";
-import { Breadcrumbs, DesignBanner } from "@catalog-frontend/ui";
+import { Breadcrumbs, DesignBanner } from "@catalog-frontend/ui-v2";
 import { localization } from "@catalog-frontend/utils";
 
 export default withProtectedPage(

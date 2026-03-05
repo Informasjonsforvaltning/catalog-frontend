@@ -13,6 +13,9 @@ interface Props extends ComboboxProps {
   ref?: Ref<HTMLInputElement>;
 }
 
+// Zero-width space to prevent auto-selection when input matches label exactly
+const INVISIBLE_CHARACTER = "\u200B";
+
 export function FormikReferenceDataCombobox({
   formikValues,
   selectedValuesSearchHits,
@@ -58,6 +61,7 @@ export function FormikReferenceDataCombobox({
           value={item.uri}
           description={showCodeAsDescription ? item?.code : ""}
         >
+          {INVISIBLE_CHARACTER}
           {item.label ? getTranslateText(item.label) : item.uri}
         </Combobox.Option>
       ))}

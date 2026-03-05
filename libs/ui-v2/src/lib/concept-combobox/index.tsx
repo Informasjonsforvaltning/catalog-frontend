@@ -7,7 +7,7 @@ import {
   useDebounce,
   useSearchConceptsByUri,
   useSearchConceptSuggestions,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import {
   localization,
   getTranslateText,
@@ -19,6 +19,9 @@ interface Props<T extends string> {
   fieldLabel: T;
   searchEnv: string;
 }
+
+// Zero-width space to prevent auto-selection when input matches label exactly
+const INVISIBLE_CHARACTER = "\u200B";
 
 export const ConceptCombobox = <T extends string>(props: Props<T>) => {
   const { fieldLabel, searchEnv } = props;
@@ -82,7 +85,8 @@ export const ConceptCombobox = <T extends string>(props: Props<T>) => {
           key={option.uri}
           displayValue={
             option.title
-              ? capitalizeFirstLetter(getTranslateText(option.title))
+              ? INVISIBLE_CHARACTER +
+                capitalizeFirstLetter(getTranslateText(option.title))
               : option.uri
           }
         >

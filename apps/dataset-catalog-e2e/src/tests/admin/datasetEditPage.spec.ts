@@ -333,7 +333,7 @@ runTestAsAdmin(
     await editPage.clickAddRelation();
     await editPage.fillRelationForm({
       relationType: "Er en del av",
-      dataset: "Entur Timetable data",
+      dataset: "Sammenslåing data.norge",
     });
 
     await editPage.clickAddRelatedResource();
@@ -351,7 +351,7 @@ runTestAsAdmin(
     await detailPage.expectRelatedResourceUri(
       "https://example.com/related-reference",
     );
-    await detailPage.expectRelationTitle("Entur Timetable data");
+    await detailPage.expectRelationTitle("Sammenslåing data.norge");
     await detailPage.expectRelationType("Er en del av");
   },
 );
@@ -405,7 +405,9 @@ runTestAsAdmin(
     };
 
     // Add information model
-    await editPage.selectInformationModel("ssbs informasjonsmodell");
+    await editPage.selectInformationModel(
+      "Felles informasjonsmodell for Person og Enhet",
+    );
     await editPage.clickAddInformationModel();
     await editPage.addInformationModelSource({
       prefLabel: modelTitle,
@@ -419,7 +421,9 @@ runTestAsAdmin(
 
     // Verify changes
     await detailPage.goto(process.env.E2E_CATALOG_ID as string, dataset.id);
-    await detailPage.expectInformationModelTitle("ssbs informasjonsmodell");
+    await detailPage.expectInformationModelTitle(
+      "Felles informasjonsmodell for Person og Enhet",
+    );
     await detailPage.expectInformationModelTitle(modelTitle.nb as string);
     await detailPage.expectInformationModelUri(
       "https://example.com/information-model",

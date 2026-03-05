@@ -7,6 +7,7 @@ import React, {
   PropsWithChildren,
   ReactNode,
   ComponentType,
+  JSX,
 } from "react";
 
 export interface Props extends ComponentPropsWithoutRef<"a"> {
