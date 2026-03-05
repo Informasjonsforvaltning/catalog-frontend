@@ -1,9 +1,8 @@
-//@ts-check
-const path = require("path");
-const { withNx } = require("@nx/next/plugins/with-nx");
+import path from "path";
+import type { WithNxOptions } from "@nx/next/plugins/with-nx.js";
+import { withNx } from "@nx/next/plugins/with-nx.js";
 
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+const nextConfig: WithNxOptions = {
   experimental: {
     serverActions: {
       bodySizeLimit: "10mb",
@@ -37,4 +36,4 @@ const nextConfig = {
   },
 };
 
-module.exports = withNx(nextConfig);
+export default withNx(nextConfig);

@@ -1,9 +1,8 @@
-//@ts-check
-const path = require("path");
-const { withNx } = require("@nx/next/plugins/with-nx");
+import path from "path";
+import type { WithNxOptions } from "@nx/next/plugins/with-nx.js";
+import { withNx } from "@nx/next/plugins/with-nx.js";
 
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+const nextConfig: WithNxOptions = {
   turbopack: {
     root: path.join(__dirname, "../.."),
     rules: {
@@ -18,4 +17,4 @@ const nextConfig = {
   },
 };
 
-module.exports = withNx(nextConfig);
+export default withNx(nextConfig);
