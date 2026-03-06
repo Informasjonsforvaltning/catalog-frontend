@@ -1,6 +1,6 @@
 "use client";
 
-import { CenterContainer, PageBanner, Spinner } from "@catalog-frontend/ui";
+import { CenterContainer, PageBanner, Spinner } from "@catalog-frontend/ui-v2";
 import { localization } from "@catalog-frontend/utils";
 import { Heading } from "@digdir/designsystemet-react";
 import { signOut } from "next-auth/react";
@@ -20,11 +20,9 @@ export const SignOut = () => {
         subtitle={localization.auth.logout}
       />
       <CenterContainer>
-        <Heading level={2} size="small">
-          <>
-            <div>{localization.auth.loggingOut}</div>
-            <Spinner />
-          </>
+        <Heading level={2} data-size="sm">
+          <span>{localization.auth.loggingOut}</span>
+          <Spinner />
         </Heading>
       </CenterContainer>
     </>

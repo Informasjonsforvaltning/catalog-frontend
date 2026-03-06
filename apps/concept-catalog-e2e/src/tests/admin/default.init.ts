@@ -1,9 +1,5 @@
 import { runTestAsAdmin as initAsAdmin } from "../../fixtures/basePage";
-import {
-  adminAuthFile,
-  deleteAllConcepts,
-  deleteAllImportResults,
-} from "../../utils/helpers";
+import { adminAuthFile, deleteAllConcepts } from "../../utils/helpers";
 
 initAsAdmin("delete all existing concepts", async ({ playwright }) => {
   console.log(
@@ -26,14 +22,3 @@ initAsAdmin("Hide devtools", async ({ conceptsPage }) => {
   await conceptsPage.hideDevtools();
   console.log("[INIT] Devtools hidden.");
 });
-
-initAsAdmin(
-  "delete all existing import results",
-  async ({ playwright, conceptsPage }) => {
-    const apiRequestContext = await playwright.request.newContext({
-      storageState: adminAuthFile,
-    });
-
-    await deleteAllImportResults(apiRequestContext);
-  },
-);

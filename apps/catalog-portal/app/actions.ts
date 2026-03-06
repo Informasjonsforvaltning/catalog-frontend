@@ -2,10 +2,10 @@
 
 import {
   acceptTerms,
+  getAllDataServiceCatalogs,
   getAllDatasetCatalogs,
   getAllServiceCatalogs,
   getConceptCountByCatalogId,
-  oldGetAllDataServiceCatalogs,
 } from "@catalog-frontend/data-access";
 import {
   ServiceCatalogItem,
@@ -13,60 +13,58 @@ import {
   DataServiceCatalog,
   TermsAcceptation,
 } from "@catalog-frontend/types";
-import { getValidSession, redirectToSignIn } from "@catalog-frontend/utils";
-import { Session } from "next-auth";
+import {
+  getValidSession,
+  redirectToSignIn,
+  ValidSession,
+} from "@catalog-frontend/utils";
 import { updateTag } from "next/cache";
 
-export const getDatasetCount = async (catalogId: string) => {
-  const session: Session = await getValidSession();
+export const getDatasetCount = async (catalogId: string): Promise<number> => {
+  const session = await getValidSession();
   if (!session) {
-    redirectToSignIn({ callbackUrl: `/catalogs` });
+    return redirectToSignIn("/catalogs");
   }
 
-  return catalogId ? getDatasetCountByOrg(catalogId, session) : 0;
+  return getDatasetCountByOrg(catalogId, session);
 };
 
-export const getDataServiceCount = async (catalogId: string) => {
-  const session: Session = await getValidSession();
+export const getDataServiceCount = async (
+  catalogId: string,
+): Promise<number> => {
+  const session = await getValidSession();
   if (!session) {
-    redirectToSignIn({ callbackUrl: `/catalogs` });
+    return redirectToSignIn("/catalogs");
   }
 
-  return catalogId ? getDataServiceCountByOrg(catalogId, session) : 0;
+  return getDataServiceCountByOrg(catalogId, session);
 };
 
-export const getConceptCount = async (catalogId: string) => {
-  const session: Session = await getValidSession();
+export const getConceptCount = async (catalogId: string): Promise<number> => {
+  const session = await getValidSession();
   if (!session) {
-    redirectToSignIn({ callbackUrl: `/catalogs` });
+    return redirectToSignIn("/catalogs");
   }
 
-  return catalogId ? getConceptCountByOrg(catalogId, session) : 0;
+  return getConceptCountByOrg(catalogId, session);
 };
 
-export const getServiceCount = async (catalogId: string) => {
-  const session: Session = await getValidSession();
+export const getServiceCount = async (
+  catalogId: string,
+): Promise<{ serviceCount: number; publicServiceCount: number }> => {
+  const session = await getValidSession();
   if (!session) {
-    redirectToSignIn({ callbackUrl: `/catalogs` });
+    return redirectToSignIn("/catalogs");
   }
 
-  return catalogId
-    ? await getServiceCountByOrg(catalogId, session)
-    : { serviceCount: 0, publicServiceCount: 0 };
+  return getServiceCountByOrg(catalogId, session);
 };
 
 const getServiceCountByOrg = async (
-  orgId: string | null | undefined,
-  session: Session,
+  orgId: string,
+  session: ValidSession,
 ): Promise<{ serviceCount: number; publicServiceCount: number }> => {
-  if (!orgId || !session) {
-    return {
-      serviceCount: 0,
-      publicServiceCount: 0,
-    };
-  }
-
-  const response = await getAllServiceCatalogs(`${session?.accessToken}`);
+  const response = await getAllServiceCatalogs(session.accessToken);
   if (response.status !== 200) {
     throw new Error(
       "getServiceCatalogs failed with response code " + response.status,
@@ -98,13 +96,10 @@ const getServiceCountByOrg = async (
 };
 
 const getDatasetCountByOrg = async (
-  orgId: string | null | undefined,
-  session: Session,
+  orgId: string,
+  session: ValidSession,
 ): Promise<number> => {
-  if (!orgId || !session) {
-    return 0;
-  }
-  const response = await getAllDatasetCatalogs(`${session?.accessToken}`);
+  const response = await getAllDatasetCatalogs(session.accessToken);
   if (response.status !== 200) {
     console.error(
       "getAllDatasetCatalogs failed with response code " + response.status,
@@ -122,43 +117,31 @@ const getDatasetCountByOrg = async (
 };
 
 const getDataServiceCountByOrg = async (
-  orgId: string | null | undefined,
-  session: Session,
+  orgId: string,
+  session: ValidSession,
 ): Promise<number> => {
-  if (!orgId || !session) {
-    return 0;
-  }
-  const response = await oldGetAllDataServiceCatalogs(
-    `${session?.accessToken}`,
-  );
+  const response = await getAllDataServiceCatalogs(session.accessToken);
   if (response.status !== 200) {
     console.error(
-      "oldGetAllDataServiceCatalogs failed with response code " +
-        response.status,
+      "getAllDataServiceCatalogs failed with response code " + response.status,
     );
     return 0;
   }
   try {
     const result = (await response.json()) as DataServiceCatalog[];
-    const catalog = result.find((catalog) => catalog.id === orgId);
+    const catalog = result.find((catalog) => catalog.catalogId === orgId);
     return catalog?.dataServiceCount ?? 0;
   } catch (e) {
-    console.log("Failed to fetch json from dataservice response", e);
+    console.log("Failed to fetch json from data service response", e);
   }
   return 0;
 };
 
 const getConceptCountByOrg = async (
-  orgId: string | null | undefined,
-  session: Session,
+  orgId: string,
+  session: ValidSession,
 ): Promise<number> => {
-  if (!orgId || !session) {
-    return 0;
-  }
-  const response = await getConceptCountByCatalogId(
-    orgId,
-    `${session?.accessToken}`,
-  );
+  const response = await getConceptCountByCatalogId(orgId, session.accessToken);
   if (response.status !== 200) {
     console.error(
       "getConceptCountByCatalogId failed with response code " + response.status,
@@ -168,12 +151,14 @@ const getConceptCountByOrg = async (
   return (await response.json()) as number;
 };
 
-export async function acceptTermsAndConditions(acceptation: TermsAcceptation) {
+export async function acceptTermsAndConditions(
+  acceptation: TermsAcceptation,
+): Promise<void> {
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
   }
-  const response = await acceptTerms(acceptation, `${session?.accessToken}`);
+  const response = await acceptTerms(acceptation, session.accessToken);
   if (response.status !== 201) {
     console.error("status: " + response.status);
     throw new Error("acceptTerms failed with response code " + response.status);

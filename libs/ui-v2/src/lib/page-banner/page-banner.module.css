@@ -1,0 +1,94 @@
+.banner {
+  position: relative;
+  display: flex;
+  width: 100%;
+  align-items: flex-start;
+  color: #2d3741;
+  background-color: #ffffff;
+  overflow-wrap: break-word;
+}
+
+.contentContainer {
+  display: flex;
+}
+
+.logoContainer {
+  display: flex;
+  margin-right: 2rem;
+  margin-left: 2rem;
+  align-self: center;
+  max-width: 120px;
+  max-height: 120px;
+}
+
+.titleContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: flex-start;
+  overflow-wrap: break-word;
+  flex-grow: 1;
+  margin: 0 auto;
+}
+
+.pageTitle {
+  display: flex;
+  width: 100%;
+  height: 3rem;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 3rem;
+  line-height: 1.6rem;
+  color: currentColor;
+  flex-grow: 1;
+  margin: 0 auto;
+  padding-top: 3rem;
+  overflow-wrap: break-word;
+  z-index: 1;
+}
+
+.pageSubtitle {
+  width: 100%;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 1.4rem;
+  line-height: 1.6rem;
+  color: currentColor;
+  margin: 0 auto;
+  padding: 0 1.6rem 3rem 0;
+  overflow-wrap: break-word;
+  z-index: 1;
+}
+
+.svgEllipse {
+  position: absolute;
+  padding-top: 1.6rem;
+}
+
+.svgRectangle {
+  position: absolute;
+  right: 100px;
+  padding-bottom: 1.6rem;
+}
+
+@media screen and (max-width: 600px) {
+  .svgEllipse {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 940px) {
+  .svgRectangle {
+    display: none;
+  }
+}
+
+@media (max-width: 1620px) {
+  .svgEllipse {
+    position: relative;
+  }
+
+  .svgRectangle {
+    position: relative;
+  }
+}

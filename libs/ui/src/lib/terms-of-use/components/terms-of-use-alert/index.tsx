@@ -16,16 +16,13 @@ type TermsOfUseAlertProps = {
 const TermsOfUseAlert = async ({ catalogId }: TermsOfUseAlertProps) => {
   const session = await getValidSession();
   if (
-    !session?.accessToken ||
-    !hasOrganizationReadPermission(session?.accessToken, catalogId)
+    !session ||
+    !hasOrganizationReadPermission(session.accessToken, catalogId)
   ) {
     return null;
   }
 
-  const acceptedTerms = hasAcceptedTermsForOrg(
-    `${session?.accessToken}`,
-    catalogId,
-  );
+  const acceptedTerms = hasAcceptedTermsForOrg(session.accessToken, catalogId);
   if (acceptedTerms) {
     return null;
   }

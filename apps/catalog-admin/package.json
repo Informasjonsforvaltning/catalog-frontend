@@ -1,0 +1,9 @@
+{
+  "name": "@catalog-frontend/catalog-admin",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "@digdir/designsystemet-css": "1.11.1",
+    "@digdir/designsystemet-react": "1.11.1"
+  }
+}

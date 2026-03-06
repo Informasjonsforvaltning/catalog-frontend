@@ -15,10 +15,7 @@ export const GET = async (req: NextRequest, ctx: Context) => {
     const { slug } = params;
     const [catalogId] = slug;
     try {
-      const response = await getAllCodeLists(
-        catalogId,
-        `${session?.accessToken}`,
-      );
+      const response = await getAllCodeLists(catalogId, session.accessToken);
       if (response.status !== 200) {
         throw new Error();
       }
@@ -41,7 +38,7 @@ export const POST = async (req: NextRequest, ctx: Context) => {
       const { codeList } = await req.json();
       const response = await createCodeList(
         codeList,
-        `${session?.accessToken}`,
+        session.accessToken,
         catalogId,
       );
       if (response.status !== 201) {
@@ -64,7 +61,7 @@ export const PATCH = async (req: NextRequest, ctx: Context) => {
       const response = await patchCodeList(
         catalogId,
         codeListId,
-        `${session?.accessToken}`,
+        session.accessToken,
         diff,
       );
       if (response?.status !== 200) {
@@ -89,7 +86,7 @@ export const DELETE = async (req: NextRequest, ctx: Context) => {
       const response = await deleteCodeList(
         catalogId,
         codeListId,
-        `${session?.accessToken}`,
+        session.accessToken,
       );
       if (response.status !== 204) {
         throw new Error();

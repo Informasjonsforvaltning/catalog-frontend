@@ -29,6 +29,7 @@ import {
   ChangeRequest,
   ChangeRequestsPageSettings,
 } from "@catalog-frontend/types";
+import { useFeatureFlags } from "@concept-catalog/context/feature-flags";
 import styles from "./change-requests-page.module.css";
 import { useEffect, useMemo } from "react";
 
@@ -77,6 +78,7 @@ export const ChangeRequestsPageClient = ({
   }));
 
   const router = useRouter();
+  const { activityLogEnabled } = useFeatureFlags();
 
   // Memoize default values for query states
   const defaultSelectedSortOption = useMemo(
@@ -196,21 +198,29 @@ export const ChangeRequestsPageClient = ({
     <div className="container">
       <Tabs
         className={styles.tabs}
-        defaultValue={"changeRequestTab"}
+        defaultValue="changeRequestTab"
         size="medium"
       >
         <Tabs.List className={styles.tabsList}>
           <Tabs.Tab
-            value={"conceptTab"}
+            value="conceptTab"
             onClick={() => router.push(`/catalogs/${catalogId}/concepts`)}
           >
             {localization.concept.concepts}
           </Tabs.Tab>
-          <Tabs.Tab value={"changeRequestTab"}>
+          <Tabs.Tab value="changeRequestTab">
             {localization.changeRequest.changeRequest}
           </Tabs.Tab>
+          {activityLogEnabled && (
+            <Tabs.Tab
+              value="activityLogTab"
+              onClick={() => router.push(`/catalogs/${catalogId}/activity-log`)}
+            >
+              {localization.activityLog.title}
+            </Tabs.Tab>
+          )}
         </Tabs.List>
-        <Tabs.Content value={"changeRequestTab"} className={styles.tabsContent}>
+        <Tabs.Content value="changeRequestTab" className={styles.tabsContent}>
           <SearchHitsLayout>
             <SearchHitsLayout.SearchRow>
               <div className={styles.searchRow}>
@@ -258,7 +268,7 @@ export const ChangeRequestsPageClient = ({
                         >
                           <div className={styles.listContent}>
                             <div>
-                              <Heading level={3} size={"xsmall"}>
+                              <Heading level={3} size="xsmall">
                                 <Link
                                   prefetch={false}
                                   href={

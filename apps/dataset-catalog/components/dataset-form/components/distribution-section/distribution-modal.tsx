@@ -279,7 +279,7 @@ export const DistributionModal = ({
                   props.setFocus(
                     arrayHelpers.form.values.downloadURL
                       ? `downloadURL[${arrayHelpers.form.values.downloadURL.length}]`
-                      : `downloadURL[0]`,
+                      : "downloadURL[0]",
                   );
                 }}
               >
@@ -338,7 +338,7 @@ export const DistributionModal = ({
                 size="sm"
                 virtual
                 ref={(el: HTMLInputElement | null) =>
-                  setInputRef(`accessServices`, el)
+                  setInputRef("accessServices", el)
                 }
               >
                 {selectedAndSearchedAccessServices.map(
@@ -427,7 +427,7 @@ export const DistributionModal = ({
                 showCodeAsDescription={true}
                 hideClearButton={false}
                 ref={(el: HTMLInputElement | null) =>
-                  setInputRef(`mediaType`, el)
+                  setInputRef("mediaType", el)
                 }
               />
             </FieldsetWithDelete>
@@ -484,7 +484,7 @@ export const DistributionModal = ({
                   props.setFocus(
                     arrayHelpers.form.values.page
                       ? `page[${arrayHelpers.form.values.page.length}]`
-                      : `page[0]`,
+                      : "page[0]",
                   );
                 }}
               >
@@ -536,7 +536,7 @@ export const DistributionModal = ({
                           name={`conformsTo[${i}].prefLabel`}
                           ref={(
                             el: HTMLInputElement | HTMLTextAreaElement | null,
-                          ) => setInputRef(`conformsTo`, el)}
+                          ) => setInputRef("conformsTo", el)}
                         />
                       </div>
                       <FastField
@@ -555,7 +555,7 @@ export const DistributionModal = ({
                 <AddButton
                   onClick={() => {
                     push({ prefLabel: { nb: "", nn: "" }, uri: "" });
-                    setFocus(`conformsTo`);
+                    setFocus("conformsTo");
                   }}
                 >
                   {localization.datasetForm.button.addStandard}
@@ -681,26 +681,20 @@ export const DistributionModal = ({
                     </Modal.Header>
 
                     <Modal.Content className={styles.modalContent}>
-                      {distributionType === "distribution" && (
-                        <>
-                          <FormikLanguageFieldset
-                            as={Textfield}
-                            name="title"
-                            legend={
-                              <TitleWithHelpTextAndTag
-                                helpText={
-                                  localization.datasetForm.helptext.title
-                                }
-                                tagTitle={localization.tag.recommended}
-                                tagColor="info"
-                              >
-                                {localization.title}
-                              </TitleWithHelpTextAndTag>
-                            }
-                          />
-                          <FieldsetDivider />
-                        </>
-                      )}
+                      <FormikLanguageFieldset
+                        as={Textfield}
+                        name="title"
+                        legend={
+                          <TitleWithHelpTextAndTag
+                            helpText={localization.datasetForm.helptext.title}
+                            tagTitle={localization.tag.recommended}
+                            tagColor="info"
+                          >
+                            {localization.title}
+                          </TitleWithHelpTextAndTag>
+                        }
+                      />
+                      <FieldsetDivider />
                       <FormikLanguageFieldset
                         as={TextareaWithPrefix}
                         legend={
@@ -823,7 +817,7 @@ export const DistributionModal = ({
                                 setFocus(
                                   arrayHelpers.form.values.accessURL
                                     ? `accessURL[${arrayHelpers.form.values.accessURL.length}]`
-                                    : `accessURL[0]`,
+                                    : "accessURL[0]",
                                 );
                               }}
                             >
@@ -870,8 +864,8 @@ export const DistributionModal = ({
                               error={errors.mobilityDataStandard}
                             >
                               <Combobox.Option
-                                key={`mobilityDataStandard`}
-                                value={""}
+                                key="mobilityDataStandard"
+                                value=""
                               >
                                 {localization.none}
                               </Combobox.Option>
@@ -929,7 +923,7 @@ export const DistributionModal = ({
                               virtual
                               error={errors?.rights?.type}
                             >
-                              <Combobox.Option key={`right.type`} value={""}>
+                              <Combobox.Option key="right.type" value="">
                                 {localization.none}
                               </Combobox.Option>
                               {mobilityRights &&
@@ -991,7 +985,7 @@ export const DistributionModal = ({
                             portal={false}
                             hideClearButton={false}
                             ref={(el: HTMLInputElement | null) =>
-                              setInputRef(`format`, el)
+                              setInputRef("format", el)
                             }
                             error={errors.format}
                           />
@@ -1000,51 +994,41 @@ export const DistributionModal = ({
                         )}
                       </Fieldset>
                       <FieldsetDivider />
-                      {distributionType === "distribution" && (
-                        <>
-                          <Fieldset
-                            size="sm"
-                            legend={
-                              <TitleWithHelpTextAndTag
-                                tagTitle={localization.tag.recommended}
-                                tagColor="info"
-                                helpText={
-                                  localization.datasetForm.helptext.license
-                                }
-                              >
-                                {localization.datasetForm.fieldLabel.license}
-                              </TitleWithHelpTextAndTag>
-                            }
+                      <Fieldset
+                        size="sm"
+                        legend={
+                          <TitleWithHelpTextAndTag
+                            tagTitle={localization.tag.recommended}
+                            tagColor="info"
+                            helpText={localization.datasetForm.helptext.license}
                           >
-                            <Combobox
-                              value={values?.license ? [values?.license] : [""]}
-                              portal={false}
-                              onValueChange={(selectedValues) => {
-                                setFieldValue(
-                                  "license",
-                                  selectedValues.toString(),
-                                );
-                              }}
-                              size="sm"
-                              virtual
-                            >
-                              <Combobox.Option key={`license-none`} value={""}>
-                                {localization.none}
+                            {localization.datasetForm.fieldLabel.license}
+                          </TitleWithHelpTextAndTag>
+                        }
+                      >
+                        <Combobox
+                          value={values?.license ? [values?.license] : [""]}
+                          portal={false}
+                          onValueChange={(selectedValues) => {
+                            setFieldValue("license", selectedValues.toString());
+                          }}
+                          size="sm"
+                          virtual
+                        >
+                          <Combobox.Option key="license-none" value="">
+                            {localization.none}
+                          </Combobox.Option>
+                          {openLicenses?.map((license, i) => (
+                              <Combobox.Option
+                                key={`license-${license.uri}-${i}`}
+                                value={license.uri}
+                              >
+                                {getTranslateText(license.label)}
                               </Combobox.Option>
-                              {openLicenses &&
-                                openLicenses.map((license: any, i: number) => (
-                                  <Combobox.Option
-                                    key={`license-${license.uri}-${i}`}
-                                    value={license.uri}
-                                  >
-                                    {getTranslateText(license.label)}
-                                  </Combobox.Option>
-                                ))}
-                            </Combobox>
-                          </Fieldset>
-                          <FieldsetDivider />
-                        </>
-                      )}
+                            ))}
+                        </Combobox>
+                      </Fieldset>
+                      <FieldsetDivider />
                       {expandedFields.map((f, index) =>
                         renderField(
                           f,

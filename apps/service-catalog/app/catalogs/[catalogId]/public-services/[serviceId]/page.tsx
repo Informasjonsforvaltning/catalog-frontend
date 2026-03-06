@@ -1,9 +1,14 @@
 import {
   getAdmsStatuses,
+  getMainActivities,
   getOrganization,
 } from "@catalog-frontend/data-access";
 import { Service } from "@catalog-frontend/types";
-import { BreadcrumbType, Breadcrumbs, PageBanner } from "@catalog-frontend/ui";
+import {
+  BreadcrumbType,
+  Breadcrumbs,
+  PageBanner,
+} from "@catalog-frontend/ui-v2";
 import {
   getTranslateText,
   getValidSession,
@@ -22,9 +27,9 @@ export default async function PublicServiceDetailsPage(
 
   const session = await getValidSession();
   if (!session) {
-    return redirectToSignIn({
-      callbackUrl: `/catalogs/${catalogId}/public-services/${serviceId}`,
-    });
+    return redirectToSignIn(
+      `/catalogs/${catalogId}/public-services/${serviceId}`,
+    );
   }
 
   const service: Service | null = await getPublicServiceById(
@@ -32,13 +37,16 @@ export default async function PublicServiceDetailsPage(
     serviceId,
   );
   if (!service) {
-    redirect(`/notfound`, RedirectType.replace);
+    redirect("/notfound", RedirectType.replace);
   }
-  const hasWritePermission =
-    session && hasOrganizationWritePermission(session?.accessToken, catalogId);
-  const [organization, statusesResponse] = await Promise.all([
+  const hasWritePermission = hasOrganizationWritePermission(
+    session.accessToken,
+    catalogId,
+  );
+  const [organization, statusesResponse, mainActivities] = await Promise.all([
     getOrganization(catalogId),
     getAdmsStatuses(),
+    getMainActivities(),
   ]);
 
   const breadcrumbList: BreadcrumbType[] = [
@@ -65,6 +73,7 @@ export default async function PublicServiceDetailsPage(
       <PublicServiceDetailsPageClient
         catalogId={catalogId}
         hasWritePermission={hasWritePermission}
+        mainActivities={mainActivities.mainActivities}
         referenceDataEnv={process.env.FDK_BASE_URI ?? ""}
         searchEnv={process.env.FDK_SEARCH_SERVICE_BASE_URI ?? ""}
         service={service}

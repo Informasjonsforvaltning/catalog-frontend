@@ -55,18 +55,18 @@ const ImportRecordAccordionItem = ({
         </div>
         {errors.length > 0 && (
           <Tag
-            size={"sm"}
-            color={"danger"}
+            size="sm"
+            color="danger"
           >{`${localization.importResult.errors}: ${errors.length}`}</Tag>
         )}
         {warnings.length > 0 && (
           <Tag
-            size={"sm"}
-            color={"warning"}
+            size="sm"
+            color="warning"
           >{`${localization.importResult.warnings}: ${warnings.length}`}</Tag>
         )}
         {errors.length === 0 && warnings.length === 0 && (
-          <Tag size={"sm"} color={"success"}>
+          <Tag size="sm" color="success">
             {localization.ok}
           </Tag>
         )}
@@ -86,7 +86,7 @@ const ImportRecordAccordionItem = ({
               conceptExtraction.conceptExtractionStatus ===
                 ConceptExtractionStatus.COMPLETED) && (
               <LinkButton
-                variant={"tertiary"}
+                variant="tertiary"
                 href={`/${targetBaseHref}/${conceptExtraction.extractionRecord.internalId}`}
               >
                 {localization.importResult.goToImported}
@@ -96,9 +96,9 @@ const ImportRecordAccordionItem = ({
         )}
         <div className={styles.issuesContainer}>
           {errors.length > 0 && (
-            <Card key={"error-card"}>
+            <Card key="error-card">
               <Card.Content>
-                <Heading level={3} size={"xs"}>
+                <Heading level={3} size="xs">
                   <div className={styles.issuesHeader}>
                     <XMarkOctagonIcon className={styles.errorIcon} />
                     <span>{localization.importResult.errors}</span>
@@ -113,9 +113,9 @@ const ImportRecordAccordionItem = ({
             </Card>
           )}
           {warnings.length > 0 && (
-            <Card key={"warning-card"}>
+            <Card key="warning-card">
               <Card.Content>
-                <Heading level={3} size={"xs"}>
+                <Heading level={3} size="xs">
                   <div className={styles.issuesHeader}>
                     <ExclamationmarkTriangleIcon
                       className={styles.warningIcon}

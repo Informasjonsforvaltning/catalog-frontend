@@ -15,7 +15,7 @@ export const GET = async (req: NextRequest, ctx: Context) => {
     const { slug } = params;
     const [catalogId] = slug;
     try {
-      const response = await getFields(catalogId, `${session?.accessToken}`);
+      const response = await getFields(catalogId, session.accessToken);
       if (response.status !== 200) {
         throw new Error();
       }
@@ -38,7 +38,7 @@ export const POST = async (req: NextRequest, ctx: Context) => {
       const { field } = await req.json();
       const response = await createInternalField(
         field,
-        `${session?.accessToken}`,
+        session.accessToken,
         catalogId,
       );
       if (response.status !== 201) {
@@ -63,7 +63,7 @@ export const PATCH = async (req: NextRequest, ctx: Context) => {
       const response = await patchInternalField(
         catalogId,
         fieldId,
-        `${session?.accessToken}`,
+        session.accessToken,
         diff,
       );
       if (response?.status !== 200) {
@@ -88,7 +88,7 @@ export const DELETE = async (req: NextRequest, ctx: Context) => {
       const response = await deleteInternalField(
         catalogId,
         fieldId,
-        `${session?.accessToken}`,
+        session.accessToken,
       );
       if (response.status !== 204) {
         throw new Error();

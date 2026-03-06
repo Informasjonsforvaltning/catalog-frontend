@@ -11,13 +11,13 @@ export interface DataService extends DataServiceToBeCreated {
 export interface DataServiceToBeCreated {
   title: LocalizedStrings;
   description: LocalizedStrings;
-  modified?: string;
   status?: string;
   endpointUrl: string;
   endpointDescriptions?: string[];
   accessRights?: string;
   formats?: string[];
   keywords: LocalizedStrings;
+  version?: string;
   landingPage?: string;
   pages?: string[];
   license?: string;

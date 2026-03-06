@@ -80,6 +80,15 @@ export const nb = {
     "Kunne ikke laste inn tjenestemeldinger. Vennligst prøv igjen senere.",
   serviceMessageSeeMore: "Se detaljert driftsmelding for mer informasjon.",
   newConcept: "Nytt begrep",
+  activityLog: {
+    title: "Aktivitetslogg",
+    conceptActivity: "Begrepaktivitet",
+    commentActivity: "Kommentaraktivitet",
+    noComments: "Ingen kommentarer",
+    selectType: "Velg type",
+    createdByAt: "Opprettet: {0} av {1}",
+    updatedByAt: "Oppdatert: {0} av {1}",
+  },
   helpText: "Hjelpetekst",
   publisher: "Utgiver",
   helpWithCompleting: "Hjelp til utfylling",
@@ -222,6 +231,8 @@ export const nb = {
     addUrl: "Legg til lenke",
     backToOverview: "Tilbake til oversikten",
     gotoConcept: "Gå til begrepet",
+    publish: "Publiser",
+    unpublish: "Avpubliser",
   },
 
   dropdown: {
@@ -281,6 +292,7 @@ export const nb = {
     success: "Oppdatering vellykket!",
     unsavedChanges:
       "Du har ulagrede endringer. Er du sikker på at du vil forlate siden?",
+    unsavedChangesHeading: "Ulagrede endringer",
     updateFailed: "Oppdatering mislyktes. Prøv igjen senere.",
     deleteFailed: "Kunne ikke slette. Prøv igjen senere.",
     formUnsavedChanges: "Skjemaet har ulagrede endringer.",
@@ -386,7 +398,8 @@ rettigheter, eller at det har oppstått en feil ved henting av tilganger. Vennli
     basedOnSource: "Basert på kilde",
     concept: "Begrep",
     concepts: "Begreper",
-    confirmDelete: `Du er i ferd med å slette begrepet **{0}**. All historikk og endringsforslag knyttet til begrepet vil bli permanent slettet, og slettingen kan ikke angres. Er du sikker på at du vil fortsette?`,
+    confirmDelete:
+      "Du er i ferd med å slette begrepet **{0}**. All historikk og endringsforslag knyttet til begrepet vil bli permanent slettet, og slettingen kan ikke angres. Er du sikker på at du vil fortsette?",
     confirmEditWithChangeRequest:
       "Det finnes et åpent endringsforslag for dette begrepet. Er du sikker på at du vil redigere begrepet?",
     contactInformation: "Kontaktinformasjon for eksterne",
@@ -436,11 +449,11 @@ rettigheter, eller at det har oppstått en feil ved henting av tilganger. Vennli
       REJECTED: "neutral",
     },
     importModal: {
-      title: `__Import av begrep__`,
+      title: "__Import av begrep__",
       titleHelpText: `
 Ved import brukes __Import av RDF__ for Turtle-filer og __Import av CSV/JSON__ for CSV- og JSON-filer. Importen omfatter opplasting og analyse av filen, men begrep legges ikke automatisk til i katalogen. Etter at filen er behandlet, åpnes en resultatside. Hvis filen er uten feil, kan begrepene legges til etter behov. Tidligere importer kan åpnes igjen via __Resultater__.
 `,
-      titleConfirmSending: `__Begreper klare til import__`,
+      titleConfirmSending: "__Begreper klare til import__",
       conceptUploadDescription: `
 Begrepsbeskrivelser kan importeres ved å laste opp filer i Turtle (RDF)-, CSV- eller JSON-format. Etter import vises en side med resultater.
         `,
@@ -561,8 +574,10 @@ ___Merk:__ Maksimal filstørrelse for opplastning er {0} MB. CSV/JSON-filer kan 
   validation: {
     invalidValue: "Ugyldig verdi",
     invalidEmail: "Ugyldig epostadresse",
-    invalidUrl: `Ugyldig lenke. Vennligst sørg for at lenken har en gyldig adresse, og ender med et toppdomene (f.eks. ‘.no’).`,
-    invalidProtocol: `Ugyldig lenke. Vennligst sørg for at lenken starter med ‘https://’.`,
+    invalidUrl:
+      "Ugyldig lenke. Vennligst sørg for at lenken har en gyldig adresse, og ender med et toppdomene (f.eks. '.no').",
+    invalidProtocol:
+      "Ugyldig lenke. Vennligst sørg for at lenken starter med 'https://'.",
     invalidPhone: "Ugyldig telefonnummer.",
     multipleInvalidValues: "Inneholder en eller flere ugyldige verdier",
     nameRequired: "Må ha navn",
@@ -643,7 +658,8 @@ ___Merk:__ Maksimal filstørrelse for opplastning er {0} MB. CSV/JSON-filer kan 
     pageTitle: "Vilkår og betingelser",
     heading: "Bruksvilkår for registrering i Felles datakatalog",
     notAcceptedTitle: "Bruksvilkår ikke akseptert",
-    notAcceptedContent: `Bruksvilkår må aksepteres for å kunne ta i bruk katalogtjenestene. Hvis vilkårene nylig har blitt akseptert må du logge ut og inn igjen for at det skal tre i kraft. `,
+    notAcceptedContent:
+      "Bruksvilkår må aksepteres for å kunne ta i bruk katalogtjenestene. Hvis vilkårene nylig har blitt akseptert må du logge ut og inn igjen for at det skal tre i kraft.",
     gotoTermsOfUse: "Gå til bruksvilkår",
     cancel: "Avbryt",
     adminPermissionNeeded:
@@ -676,9 +692,10 @@ ___Merk:__ Maksimal filstørrelse for opplastning er {0} MB. CSV/JSON-filer kan 
     deleteImport: "Slett",
     confirmImport: "Legg til i katalog",
     tryAgain: "Prøv igjen",
-    deleteCanResultInDuplicates: `Sletting av denne kan resultere i duplikater hvis samme import gjennomføres senere.`,
-    cancelledImport: `Importen ble avvist før den ble fullført.`,
-    conceptId: "Begreps-ID ",
+    deleteCanResultInDuplicates:
+      "Sletting av denne kan resultere i duplikater hvis samme import gjennomføres senere.",
+    cancelledImport: "Importen ble avvist før den ble fullført.",
+    conceptId: "Begreps-ID",
     recordStatus: {
       addToCatalog: "Klar til i katalog",
       addedToCatalog: "Lagt til i katalog",

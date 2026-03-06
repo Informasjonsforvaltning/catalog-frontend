@@ -121,7 +121,7 @@ export const RelationSection = ({
       filters: {
         originalId: {
           value: relations
-            .filter((rel) => rel.internal)
+            .filter((rel) => rel.internal && rel.relatertBegrep)
             .map((rel) => rel.relatertBegrep as string),
         },
       },
@@ -133,7 +133,7 @@ export const RelationSection = ({
         filters: {
           uri: {
             value: relations
-              .filter((rel) => !rel.internal)
+              .filter((rel) => !rel.internal && rel.relatertBegrep)
               .map((rel) => rel.relatertBegrep as string),
           },
         },
@@ -251,7 +251,7 @@ export const RelationSection = ({
                   <Table.Cell>
                     <div className={styles.tableRowActions}>
                       <RelationModal
-                        header={"Rediger relasjon"}
+                        header="Rediger relasjon"
                         catalogId={catalogId}
                         conceptId={values.originaltBegrep || ""}
                         initialRelation={relation}
@@ -296,7 +296,7 @@ export const RelationSection = ({
       {!readOnly && (
         <Box className={styles.buttonRow}>
           <RelationModal
-            header={"Ny relasjon"}
+            header="Ny relasjon"
             catalogId={catalogId}
             conceptId={values.originaltBegrep || ""}
             trigger={

@@ -9,17 +9,11 @@ import { Concept } from "@catalog-frontend/types";
 import DetailPage from "./detailPage";
 import EditPage from "./editPage";
 import { ConceptStatus } from "../utils/helpers";
-import ImportResultsPage from "./importResultsPage";
-import ImportResultDetailsPage from "./importResultDetailsPage";
-import * as path from "node:path";
-import { localization } from "@catalog-frontend/utils";
 
 export default class ConceptsPage {
   url: string;
   page: Page;
   detailPage: DetailPage;
-  importResultsPage: ImportResultsPage;
-  importResultDetailsPage: ImportResultDetailsPage;
   editPage: EditPage;
   context: BrowserContext;
   accessibilityBuilder: AxeBuilder;
@@ -32,16 +26,6 @@ export default class ConceptsPage {
     this.url = `/catalogs/${process.env.E2E_CATALOG_ID}/concepts`;
     this.page = page;
     this.detailPage = new DetailPage(page, context, accessibilityBuilder);
-    this.importResultsPage = new ImportResultsPage(
-      page,
-      context,
-      accessibilityBuilder,
-    );
-    this.importResultDetailsPage = new ImportResultDetailsPage(
-      page,
-      context,
-      accessibilityBuilder,
-    );
     this.editPage = new EditPage(page, context, accessibilityBuilder);
     this.context = context;
     this.accessibilityBuilder = accessibilityBuilder;
@@ -295,72 +279,5 @@ export default class ConceptsPage {
         .getByRole("button", { name: "Open Next.js Dev Tools" })
         .waitFor({ state: "hidden", timeout: 5000 });
     }
-  }
-
-  public async importTurtleFile(fileName: string) {
-    const filePath = path.resolve(__dirname, `../data/${fileName}`);
-
-    console.log("File path: ", filePath);
-
-    await this.goto();
-
-    // Click the Import button
-    console.log("[TEST] Clicking Importer Button...");
-    await this.page
-      .getByRole("button", { name: `${localization.importResult.import}` })
-      .click();
-
-    // A modal should open
-    console.log("[TEST] Expecting an open modal...");
-    await expect(this.page.getByRole("dialog")).toBeVisible({ timeout: 20000 });
-
-    let dialog = this.page.getByRole("dialog", {});
-
-    const importerRdfButton = dialog
-      .getByRole("button")
-      .filter({ hasText: `${localization.button.importConceptRDF}` });
-
-    console.log("[TEST] Clicking Importer RDF Button...");
-
-    // Ensure button is visible and enabled before clicking
-    await expect(importerRdfButton).toBeVisible();
-    await expect(importerRdfButton).toBeEnabled();
-
-    // Find the hidden file input for RDF upload (accepts .ttl files)
-    // The dialog has two file inputs - one for CSV/JSON and one for RDF
-    const fileInput = dialog.locator('input[type="file"][accept=".ttl"]');
-    await fileInput.setInputFiles(filePath);
-
-    // Wait for modal state to change: import buttons disappear when upload starts
-    // This confirms the file was picked up and processing began
-    await expect(importerRdfButton).toBeHidden();
-
-    // Wait for continue button to be visible and enabled (upload complete)
-    dialog = this.page.getByRole("dialog", {});
-    const continueButton = dialog.getByRole("button", {
-      name: `${localization.importResult.continue}`,
-    });
-    await expect(continueButton).toBeVisible();
-    await expect(continueButton).toBeEnabled();
-
-    await Promise.all([
-      this.page.waitForURL("**/import-results/**"),
-      continueButton.click(),
-    ]);
-
-    await expect(this.page).toHaveURL(/\/import-results\/.+/i);
-
-    // Wait for network to be idle after navigation to ensure page is fully loaded
-    await this.page.waitForLoadState("networkidle");
-
-    const url = this.page.url();
-    console.log("Import result URL: ", url);
-
-    const importId = url.split("/").pop();
-    console.log("Import result ID: ", url);
-
-    expect(importId != null);
-
-    return importId;
   }
 }

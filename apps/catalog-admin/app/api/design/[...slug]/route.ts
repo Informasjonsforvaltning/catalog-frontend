@@ -14,7 +14,7 @@ export const GET = async (req: NextRequest, ctx: Context) => {
     const { slug } = params;
     if (slug?.length === 2 && slug[1] === "design") {
       try {
-        const response = await getDesign(slug[0], `${session?.accessToken}`);
+        const response = await getDesign(slug[0], session.accessToken);
         if (response.status !== 200) {
           throw new Error();
         }
@@ -31,10 +31,7 @@ export const GET = async (req: NextRequest, ctx: Context) => {
       slug[2] === "logo"
     ) {
       try {
-        const response = await getDesignLogo(
-          slug[0],
-          `${session?.accessToken}`,
-        );
+        const response = await getDesignLogo(slug[0], session.accessToken);
         if (response.status !== 200) {
           throw new Error();
         }
@@ -72,11 +69,7 @@ export const PATCH = async (req: NextRequest, ctx: Context) => {
     const catalogId = slug[0];
     try {
       const diff = await req.json();
-      const response = await patchDesign(
-        `${catalogId}`,
-        `${session?.accessToken}`,
-        diff,
-      );
+      const response = await patchDesign(catalogId, session.accessToken, diff);
 
       if (response?.status !== 200) {
         throw new Error();

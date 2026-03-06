@@ -17,7 +17,7 @@ export const DELETE = async (req: NextRequest, ctx: Context) => {
       const response = await removeImportResultConcept(
         catalogId,
         resultId,
-        session?.accessToken,
+        session.accessToken,
       );
       if (response.status !== 200) {
         throw new Error();
@@ -42,13 +42,12 @@ export const GET = async (req: NextRequest, ctx: Context) => {
       const response = await getConceptImportResultById(
         catalogId,
         resultId,
-        session?.accessToken,
+        session.accessToken,
       );
 
       const jsonResponse = await response.json();
       return new Response(JSON.stringify(jsonResponse), { status: 200 });
     } catch (err) {
-      console.log(err);
       return new Response(
         JSON.stringify({ message: "Failed to fetch concepts" }),
         { status: 500 },

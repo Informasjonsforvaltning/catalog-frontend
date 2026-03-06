@@ -1,0 +1,25 @@
+.tableItem {
+  cursor: pointer;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.successIcon {
+  color: var(--ds-color-success-text-default);
+}
+
+.errorIcon {
+  color: var(--ds-color-danger-text-default);
+}
+
+.warningIcon {
+  color: var(--ds-color-warning-text-subtle);
+}
+
+.titleTags {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}

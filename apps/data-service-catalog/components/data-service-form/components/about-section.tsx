@@ -3,15 +3,20 @@ import {
   FormikLanguageFieldset,
   TitleWithHelpTextAndTag,
   TextareaWithPrefix,
-} from "@catalog-frontend/ui";
+  FastFieldWithRef,
+} from "@catalog-frontend/ui-v2";
 import { localization } from "@catalog-frontend/utils";
-import { Box, Textfield } from "@digdir/designsystemet-react";
+import { Textfield } from "@digdir/designsystemet-react";
+import { DataService } from "@catalog-frontend/types";
+import { useFormikContext } from "formik";
 
 export const AboutSection = () => {
+  const { errors } = useFormikContext<DataService>();
+
   return (
-    <Box>
+    <div>
       <FormikLanguageFieldset
-        name={"title"}
+        name="title"
         as={Textfield}
         legend={
           <TitleWithHelpTextAndTag
@@ -52,6 +57,22 @@ export const AboutSection = () => {
         }
         multiple
       />
-    </Box>
+
+      <FieldsetDivider />
+
+      <FastFieldWithRef
+        as={Textfield}
+        name="version"
+        data-size="sm"
+        label={
+          <TitleWithHelpTextAndTag
+            helpText={localization.dataServiceForm.helptext.version}
+          >
+            {localization.dataServiceForm.fieldLabel.version}
+          </TitleWithHelpTextAndTag>
+        }
+        error={errors?.version}
+      />
+    </div>
   );
 };

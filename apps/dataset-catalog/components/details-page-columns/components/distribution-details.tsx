@@ -96,7 +96,7 @@ export const DistributionDetailsCard = ({
             </Heading>
             {distribution.accessURL.map((url: string, index: number) => {
               return (
-                <Paragraph size={"sm"} key={`accessURL-${index}`}>
+                <Paragraph size="sm" key={`accessURL-${index}`}>
                   <Link href={url}>{url}</Link>
                 </Paragraph>
               );
@@ -169,7 +169,7 @@ export const DistributionDetailsCard = ({
                 </Heading>
                 {distribution.downloadURL?.map((url: string, index: number) => {
                   return (
-                    <Paragraph size={"sm"} key={`downloadURL-${index}`}>
+                    <Paragraph size="sm" key={`downloadURL-${index}`}>
                       <Link href={url}>{url}</Link>
                     </Paragraph>
                   );
@@ -316,7 +316,7 @@ export const DistributionDetailsCard = ({
                 </Heading>
                 {distribution.page.map((page, index: number) => {
                   return (
-                    <Paragraph size={"sm"} key={`page-${index}`}>
+                    <Paragraph size="sm" key={`page-${index}`}>
                       <Link href={page}>{page}</Link>
                     </Paragraph>
                   );

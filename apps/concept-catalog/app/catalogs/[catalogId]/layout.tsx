@@ -1,5 +1,6 @@
 import { TermsOfUseModal } from "@catalog-frontend/ui";
 import { CatalogLayout } from "@concept-catalog/components/catalog-layout";
+import { FeatureFlagsProvider } from "@concept-catalog/context/feature-flags";
 
 const Layout = async (props: LayoutProps<"/catalogs/[catalogId]">) => {
   const { catalogId } = await props.params;
@@ -14,8 +15,12 @@ const Layout = async (props: LayoutProps<"/catalogs/[catalogId]">) => {
       fdkCommunityBaseUrl={process.env.FDK_COMMUNITY_BASE_URI}
       fdkBaseUrl={process.env.FDK_BASE_URI}
     >
-      <TermsOfUseModal catalogId={catalogId} />
-      {props.children}
+      <FeatureFlagsProvider
+        activityLogEnabled={process.env.ACTIVITY_LOG_ENABLED === "true"}
+      >
+        <TermsOfUseModal catalogId={catalogId} />
+        {props.children}
+      </FeatureFlagsProvider>
     </CatalogLayout>
   );
 };

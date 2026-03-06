@@ -3,10 +3,9 @@ import {
   BreadcrumbType,
   Breadcrumbs,
   DesignBanner,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import {
   localization,
-  redirectToSignIn,
   getServerDataServicesPageSettings,
 } from "@catalog-frontend/utils";
 
@@ -18,12 +17,7 @@ import { cookies } from "next/headers";
 
 const DataServicesSearchHits = withReadProtectedPage(
   ({ catalogId }) => `/catalogs/${catalogId}/data-services`,
-  async ({ catalogId, session, hasWritePermission, hasAdminPermission }) => {
-    if (!session) {
-      return redirectToSignIn({
-        callbackUrl: `/catalogs/${catalogId}/data-services`,
-      });
-    }
+  async ({ catalogId, hasWritePermission, hasAdminPermission }) => {
     const dataServices: DataService[] = await getDataServices(catalogId);
 
     const distributionStatuses = await getDistributionStatuses().then(

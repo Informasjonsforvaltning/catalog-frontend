@@ -1,0 +1,8 @@
+.breadcrumbs {
+  margin-top: var(--ds-size-8);
+  margin-bottom: var(--ds-size-8);
+}
+
+.breadcrumbLink {
+  color: inherit; /* override default ds-link color */
+}

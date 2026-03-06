@@ -3,7 +3,6 @@ import type { ParseResult } from "papaparse";
 import { Concept } from "@catalog-frontend/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { validOrganizationNumber } from "@catalog-frontend/utils";
-import { useSession } from "next-auth/react";
 import {
   importRdfConcepts,
   importConceptsCSV,
@@ -162,7 +161,7 @@ const attemptToParseJsonFile = (text: string): Promise<ConceptImport[]> => {
       const json = JSON.parse(text);
 
       resolve(Array.isArray(json) ? json : []);
-    } catch (error: any) {
+    } catch (error) {
       reject(error);
     }
   });
@@ -183,48 +182,34 @@ const attemptToParseCsvFile = (text: string): Promise<ConceptImport[]> => {
           }
 
           resolve(
-            rows.map((row: any) =>
+            rows.map((row) =>
               mapCsvTextToConcept(columnHeaders as string[], row as string[]),
             ),
           );
         },
       });
-    } catch (error: any) {
+    } catch (error) {
       reject(error);
     }
   });
 };
 
 export const useImportRdf = (catalogId: string) => {
-  const { data: session } = useSession();
-  const router = useRouter();
-  const accessToken = session?.accessToken ?? "";
   return useMutation({
     mutationKey: ["import-Concepts-RDF"],
-    mutationFn: async ({
-      ...mutationProps
-    }: {
-      fileContent: string;
-      contentType: string;
-    }) => {
+    mutationFn: async () => {
       if (!validOrganizationNumber(catalogId)) {
-        console.log("Invalid organization number", catalogId);
         return Promise.reject("Invalid organization number");
       }
     },
-    onSuccess: () => {
-      console.log("Concept RDF file has been uploaded successfully!");
-    },
-    onError: (error: any) => {
+    onError: () => {
       console.error("Error uploading concept RDF file");
     },
   });
 };
 
 export const useSendRdf = (catalogId: string) => {
-  const { data: session } = useSession();
   const router = useRouter();
-  const accessToken = session?.accessToken ?? "";
   return useMutation({
     mutationKey: ["sendConceptsRDF"],
     mutationFn: async ({
@@ -236,13 +221,12 @@ export const useSendRdf = (catalogId: string) => {
       const location = await createImportJob(catalogId);
       if (location) {
         const resultId = location.split("/").pop();
-        console.log("Created import result ID at ", location);
         if (!resultId) {
           console.error("No result ID found in the location URL");
           return Promise.reject("No result ID found");
         }
 
-        importRdfConcepts(
+        await importRdfConcepts(
           mutationProps.fileContent,
           mutationProps.contentType,
           catalogId,
@@ -254,17 +238,12 @@ export const useSendRdf = (catalogId: string) => {
           ),
         );
 
-        console.log("Created import result ID at ", location);
-
         router.push(
           `/catalogs/${catalogId}/concepts/import-results/${resultId}`,
         );
       }
     },
-    onSuccess: () => {
-      console.log("Concept RDF file has been sent!");
-    },
-    onError: (error: any) => {
+    onError: () => {
       console.error("Error sending concept RDF file");
     },
   });
@@ -283,13 +262,12 @@ export const useSendConcepts = (
       const location = await createImportJob(catalogId);
       if (location) {
         const resultId = location.split("/").pop();
-        console.log("Created import result ID at ", location);
         if (!resultId) {
           console.error("No result ID found in the location URL");
           return Promise.reject("No result ID found");
         }
 
-        importConceptsCSV(catalogId, resultId, concepts).catch((error) =>
+        await importConceptsCSV(catalogId, resultId, concepts).catch((error) =>
           console.error(
             "Failed to import CSV/JSON concepts in the background",
             error,
@@ -300,9 +278,6 @@ export const useSendConcepts = (
           `/catalogs/${catalogId}/concepts/import-results/${resultId}`,
         );
       }
-    },
-    onSuccess: () => {
-      console.log("Concepts have been sent!!");
     },
   });
 };
@@ -343,8 +318,6 @@ export const useImportConceptsCSV = (
 
       if (setIsUploaded) setIsUploaded(true);
       return concepts;
-
-      return Promise.reject("Canceled");
     },
     onSuccess: () => {
       // Invalidate and refetch

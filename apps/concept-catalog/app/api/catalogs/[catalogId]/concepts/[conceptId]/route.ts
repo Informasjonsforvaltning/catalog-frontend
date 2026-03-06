@@ -10,13 +10,12 @@ export const DELETE = async (
   return withValidSessionForApi(async (session) => {
     const { conceptId } = params;
     try {
-      const response = await deleteConcept(conceptId, session?.accessToken);
+      const response = await deleteConcept(conceptId, session.accessToken);
       if (!response.ok) {
         throw new Error();
       }
-      return new Response(response?.text?.toString(), { status: 200 });
+      return new Response(await response.text(), { status: 200 });
     } catch (err) {
-      console.log("Error", err);
       return new Response(
         JSON.stringify({ message: "Failed to delete concept" }),
         { status: 500 },

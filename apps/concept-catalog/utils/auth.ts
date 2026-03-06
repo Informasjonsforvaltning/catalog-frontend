@@ -6,9 +6,11 @@ import {
   hasSystemAdminPermission,
   redirectToSignIn,
   validOrganizationNumber,
+  ValidSession,
   validUUID,
 } from "@catalog-frontend/utils";
 import { RedirectType, redirect } from "next/navigation";
+import { ReactNode } from "react";
 
 type PageParams = {
   catalogId: string;
@@ -17,64 +19,78 @@ type PageParams = {
   changeRequestId?: string | undefined | null;
   conceptIdSearch?: string | undefined | null;
 };
+type SearchParams = {
+  concept?: string;
+  page?: string;
+  view?: string;
+};
 type PagePath = (params: PageParams) => string;
 type Render = (
   props: {
-    session: any;
+    session: ValidSession;
     hasWritePermission: boolean;
     hasAdminPermission: boolean;
+    searchParams: SearchParams;
   } & PageParams,
-) => Promise<any>;
+) => Promise<ReactNode>;
 
 const withProtectedPage = (
   pagePath: PagePath,
   permissions: "read" | "write" | "admin",
   render: Render,
 ) => {
-  return async ({ params, searchParams }) => {
+  return async ({
+    params,
+    searchParams,
+  }: {
+    params: Promise<PageParams>;
+    searchParams: Promise<SearchParams>;
+  }) => {
     const { catalogId, conceptId, resultId, changeRequestId } = await params;
-    const { concept: conceptIdSearch } = await searchParams;
+    const { concept: conceptIdSearch, ...restSearchParams } =
+      await searchParams;
 
     if (!validOrganizationNumber(catalogId)) {
-      redirect(`/notfound`, RedirectType.replace);
+      redirect("/notfound", RedirectType.replace);
     }
 
     [conceptId, conceptIdSearch, changeRequestId].forEach((param) => {
-      if (params[param] && !validUUID(params[param])) {
-        return redirect(`/notfound`, RedirectType.replace);
+      if (param && !validUUID(param)) {
+        return redirect("/notfound", RedirectType.replace);
       }
     });
 
     const session = await getValidSession();
     if (!session) {
-      return redirectToSignIn({
-        callbackUrl: pagePath({
+      return redirectToSignIn(
+        pagePath({
           catalogId,
           conceptId,
           conceptIdSearch,
           changeRequestId,
         }),
-      });
+      );
     }
 
     const hasReadPermission =
-      session?.accessToken &&
-      (hasOrganizationReadPermission(session?.accessToken, catalogId) ||
-        hasSystemAdminPermission(session.accessToken));
+      hasOrganizationReadPermission(session.accessToken, catalogId) ||
+      hasSystemAdminPermission(session.accessToken);
     if (!hasReadPermission) {
       redirect(`/catalogs/${catalogId}/no-access`, RedirectType.replace);
     }
 
-    const hasWritePermission =
-      session?.accessToken &&
-      hasOrganizationWritePermission(session.accessToken, catalogId);
+    const hasWritePermission = hasOrganizationWritePermission(
+      session.accessToken,
+      catalogId,
+    );
     if (!hasWritePermission && permissions === "write") {
       redirect(`/catalogs/${catalogId}/no-access`, RedirectType.replace);
     }
 
-    const hasAdminPermission =
-      session?.accessToken &&
-      hasOrganizationAdminPermission(session.accessToken, catalogId);
+    const hasAdminPermission = hasOrganizationAdminPermission(
+      session.accessToken,
+      catalogId,
+    );
     if (!hasAdminPermission && permissions === "admin") {
       redirect(`/catalogs/${catalogId}/no-access`, RedirectType.replace);
     }
@@ -85,6 +101,7 @@ const withProtectedPage = (
       resultId,
       changeRequestId,
       conceptIdSearch,
+      searchParams: restSearchParams,
       session,
       hasWritePermission,
       hasAdminPermission,

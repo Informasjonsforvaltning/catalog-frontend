@@ -45,10 +45,10 @@ export const TemporalModal = ({ label }: Props) => {
     <div className={styles.fieldContainer}>
       {typeof label === "string" ? <FormHeading>{label}</FormHeading> : label}
       <FieldArray
-        name={"temporal"}
+        name="temporal"
         render={(arrayHelpers) => (
           <div
-            className={get(errors, `temporal`) ? styles.errorBorder : undefined}
+            className={get(errors, "temporal") ? styles.errorBorder : undefined}
           >
             {values?.temporal && values?.temporal?.length > 0 && (
               <Table size="sm" className={styles.table}>
@@ -76,7 +76,7 @@ export const TemporalModal = ({ label }: Props) => {
                         <span className={styles.set}>
                           <FieldModal
                             template={item}
-                            type={"edit"}
+                            type="edit"
                             onSuccess={(updatedItem: DateRange) => {
                               arrayHelpers.replace(index, updatedItem);
                               setSnapshot([...(values.temporal ?? [])]);
@@ -104,7 +104,7 @@ export const TemporalModal = ({ label }: Props) => {
             <div>
               <FieldModal
                 template={{ startDate: "", endDate: "" }}
-                type={"new"}
+                type="new"
                 onSuccess={() => setSnapshot([...(values.temporal ?? [])])}
                 onCancel={() => setFieldValue("temporal", snapshot)}
                 onChange={(updatedItem: DateRange) => {
@@ -180,7 +180,7 @@ const FieldModal = ({
                       size="sm"
                       label={localization.from}
                       type="date"
-                      name={`startDate`}
+                      name="startDate"
                       error={errors.startDate}
                     />
 
@@ -191,7 +191,7 @@ const FieldModal = ({
                       size="sm"
                       label={localization.to}
                       type="date"
-                      name={`endDate`}
+                      name="endDate"
                       error={errors.endDate}
                       min={values.startDate}
                     />

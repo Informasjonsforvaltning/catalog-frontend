@@ -11,7 +11,7 @@ export const GET = async (req: NextRequest, ctx: Context) => {
     const { catalogId } = params;
 
     try {
-      const response = await getAllServices(catalogId, session?.accessToken);
+      const response = await getAllServices(catalogId, session.accessToken);
       if (response.status !== 200) {
         throw new Error();
       }
@@ -34,7 +34,7 @@ export const POST = async (req: NextRequest, ctx: Context) => {
       const response = await createService(
         service,
         catalogId,
-        session?.accessToken,
+        session.accessToken,
       );
       if (response.status !== 201) {
         console.log(
@@ -45,7 +45,7 @@ export const POST = async (req: NextRequest, ctx: Context) => {
           "Failed to create service with status " + response.status,
         );
       }
-      const serviceId = response?.headers?.get("location")?.split("/").pop();
+      const serviceId = response.headers.get("location")?.split("/").pop();
       return new Response(JSON.stringify(serviceId), { status: 200 });
     } catch (err) {
       console.log(err);

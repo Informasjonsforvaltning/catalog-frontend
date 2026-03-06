@@ -145,21 +145,22 @@ jobs:
       DIGDIR_FDK_AUTODEPLOY: ${{ secrets.DIGDIR_FDK_PROD_AUTODEPLOY }}
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
-  deploy-demo:
-    name: Deploy image for ${{ matrix.appname }} to demo
-    needs: [test, deploy-prod]
-    strategy:
-      matrix: ${{fromJSON(needs.test.outputs.matrix)}}
-      fail-fast: false
-    if: ${{ needs.test.outputs.changed != '[]' }}
-    uses: Informasjonsforvaltning/workflows/.github/workflows/kustomize-deploy.yaml@main
-    with:
-      app_name: ${{ matrix.appname }}-frontend
-      environment: demo
-      gh_environment: demo
-      monorepo_app: true
-      cluster: digdir-fdk-dev
-    secrets:
-      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      DIGDIR_FDK_AUTODEPLOY: ${{ secrets.DIGDIR_FDK_DEV_AUTODEPLOY }}
-      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+  # Temporarily disabled demo deployment
+  # deploy-demo:
+  #   name: Deploy image for ${{ matrix.appname }} to demo
+  #   needs: [test, deploy-prod]
+  #   strategy:
+  #     matrix: ${{fromJSON(needs.test.outputs.matrix)}}
+  #     fail-fast: false
+  #   if: ${{ needs.test.outputs.changed != '[]' }}
+  #   uses: Informasjonsforvaltning/workflows/.github/workflows/kustomize-deploy.yaml@main
+  #   with:
+  #     app_name: ${{ matrix.appname }}-frontend
+  #     environment: demo
+  #     gh_environment: demo
+  #     monorepo_app: true
+  #     cluster: digdir-fdk-dev
+  #   secrets:
+  #     GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #     DIGDIR_FDK_AUTODEPLOY: ${{ secrets.DIGDIR_FDK_DEV_AUTODEPLOY }}
+  #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

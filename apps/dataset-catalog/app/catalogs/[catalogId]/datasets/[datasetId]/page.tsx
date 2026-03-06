@@ -6,10 +6,8 @@ import {
 import { getDatasetById } from "../../../../actions/actions";
 import {
   getTranslateText,
-  getValidSession,
   hasOrganizationWritePermission,
   localization,
-  redirectToSignIn,
   validUUID,
 } from "@catalog-frontend/utils";
 import {
@@ -32,24 +30,19 @@ import { redirect, RedirectType } from "next/navigation";
 
 const DatasetDetailPage = withReadProtectedPage(
   ({ catalogId, datasetId }) => `/catalogs/${catalogId}/datasets/${datasetId}`,
-  async ({ catalogId, datasetId }) => {
+  async ({ catalogId, datasetId, session }) => {
     if (!datasetId || !validUUID(datasetId)) {
-      return redirect(`/catalogs/notfound`, RedirectType.replace);
+      return redirect("/catalogs/notfound", RedirectType.replace);
     }
     const dataset = await getDatasetById(catalogId, datasetId);
 
     const searchEnv = process.env.FDK_SEARCH_SERVICE_BASE_URI ?? "";
     const referenceDataEnv = process.env.FDK_BASE_URI ?? "";
 
-    const session = await getValidSession();
-    if (!session) {
-      return redirectToSignIn({
-        callbackUrl: `/catalogs/${catalogId}/datasets/${datasetId}`,
-      });
-    }
-    const hasWritePermission =
-      session &&
-      hasOrganizationWritePermission(session?.accessToken, catalogId);
+    const hasWritePermission = hasOrganizationWritePermission(
+      session.accessToken,
+      catalogId,
+    );
 
     const breadcrumbList = [
       {
@@ -102,10 +95,9 @@ const DatasetDetailPage = withReadProtectedPage(
       distributionStatuses: distributionStatusResponse.distributionStatuses,
     };
 
-    const accessToken = session?.accessToken;
     const datasetSeries = await getAllDatasetSeries(
       catalogId,
-      accessToken,
+      session.accessToken,
     ).then((res) => res.json());
 
     return (
@@ -129,7 +121,7 @@ const DatasetDetailPage = withReadProtectedPage(
               referenceDataEnv={referenceDataEnv}
               referenceData={referenceData}
               datasetSeries={datasetSeries}
-            ></DatasetDetailsPageClient>
+            />
           )}
         </div>
       </>

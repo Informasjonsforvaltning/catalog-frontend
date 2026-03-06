@@ -41,6 +41,7 @@ import SearchFilter from "@concept-catalog/components/search-filter";
 import ConceptSearchHits from "@concept-catalog/components/concept-search-hits";
 import styles from "./search-page.module.scss";
 import { ImportModal } from "@concept-catalog/components";
+import { useFeatureFlags } from "@concept-catalog/context/feature-flags";
 
 export type FilterType =
   | "published"
@@ -72,6 +73,7 @@ export const SearchPageClient = ({
   pageSettings,
 }: Props) => {
   const router = useRouter();
+  const { activityLogEnabled } = useFeatureFlags();
 
   // Memoize default values for query states
   const defaultSelectedFieldOption = useMemo(
@@ -450,21 +452,29 @@ export const SearchPageClient = ({
 
   return (
     <div className="container">
-      <Tabs className={styles.tabs} defaultValue={"conceptTab"} size="medium">
+      <Tabs className={styles.tabs} defaultValue="conceptTab" size="medium">
         <Tabs.List className={styles.tabsList}>
-          <Tabs.Tab value={"conceptTab"}>
+          <Tabs.Tab value="conceptTab">
             {localization.concept.concepts}
           </Tabs.Tab>
           <Tabs.Tab
-            value={"changeRequestTab"}
+            value="changeRequestTab"
             onClick={() =>
               router.push(`/catalogs/${catalogId}/change-requests`)
             }
           >
             {localization.changeRequest.changeRequest}
           </Tabs.Tab>
+          {activityLogEnabled && (
+            <Tabs.Tab
+              value="activityLogTab"
+              onClick={() => router.push(`/catalogs/${catalogId}/activity-log`)}
+            >
+              {localization.activityLog.title}
+            </Tabs.Tab>
+          )}
         </Tabs.List>
-        <Tabs.Content value={"conceptTab"} className={styles.tabsContent}>
+        <Tabs.Content value="conceptTab" className={styles.tabsContent}>
           <SearchHitsLayout>
             <SearchHitsLayout.SearchRow>
               <div className={styles.searchRow}>
@@ -521,11 +531,11 @@ export const SearchPageClient = ({
             </SearchHitsLayout.SearchRow>
             <SearchHitsLayout.LeftColumn>
               <SearchFilter
-                catalogId={catalogId}
                 internalFields={fieldsResult?.internal}
                 subjectCodeList={subjectCodeList}
                 conceptStatuses={conceptStatuses}
                 pageSettings={pageSettings}
+                users={usersResult?.users}
               />
             </SearchHitsLayout.LeftColumn>
             <SearchHitsLayout.MainColumn>

@@ -78,10 +78,12 @@ export const hasOrganizationWritePermission = (
   hasOrganizationRole(token, { orgNr, role: "admin" }) ||
   hasOrganizationRole(token, { orgNr, role: "write" });
 
-export const hasOrganizationAdminPermission = (token: Token, orgNr: string) =>
-  hasOrganizationRole(token, { orgNr, role: "admin" });
+export const hasOrganizationAdminPermission = (
+  token: Token,
+  orgNr: string,
+): boolean => hasOrganizationRole(token, { orgNr, role: "admin" });
 
-export const hasSystemAdminPermission = (token: Token) =>
+export const hasSystemAdminPermission = (token: Token): boolean =>
   hasResourceRole(token, {
     resource: "system",
     resourceId: "root",

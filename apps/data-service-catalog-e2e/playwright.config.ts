@@ -1,7 +1,6 @@
 import { defineConfig, devices } from "@playwright/test";
 import { nxE2EPreset } from "@nx/playwright/preset";
 import { workspaceRoot } from "@nx/devkit";
-// eslint-disable-next-line @typescript-eslint/no-require-imports
 import * as path from "path";
 import * as dotenv from "dotenv";
 
@@ -74,6 +73,13 @@ export default defineConfig({
       use: { ...devices["Desktop Firefox"] },
       dependencies: ["admin-init"],
       testMatch: "**/admin/*.spec.ts",
+    },
+    {
+      name: "admin-firefox-solo",
+      use: { ...devices["Desktop Firefox"] },
+      dependencies: ["admin-init"],
+      testMatch: "**/admin/*.spec.ts",
+      grep: /@solo/,
     },
     // Uncomment for mobile browsers support
     /* {

@@ -2,7 +2,11 @@ import {
   getAdmsStatuses,
   getOrganization,
 } from "@catalog-frontend/data-access";
-import { Breadcrumbs, BreadcrumbType, PageBanner } from "@catalog-frontend/ui";
+import {
+  Breadcrumbs,
+  BreadcrumbType,
+  PageBanner,
+} from "@catalog-frontend/ui-v2";
 import { getTranslateText, localization } from "@catalog-frontend/utils";
 import { getServiceById } from "../../../../../actions/services/actions";
 import { EditPage } from "./edit-page-client";

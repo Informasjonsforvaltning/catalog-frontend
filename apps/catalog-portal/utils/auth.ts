@@ -6,8 +6,10 @@ import {
   hasSystemAdminPermission,
   redirectToSignIn,
   validOrganizationNumber,
+  ValidSession,
 } from "@catalog-frontend/utils";
 import { RedirectType, redirect } from "next/navigation";
+import { ReactNode } from "react";
 
 type PageParams = {
   catalogId: string;
@@ -15,49 +17,48 @@ type PageParams = {
 type PagePath = (params: PageParams) => string;
 type Render = (
   props: {
-    session: any;
+    session: ValidSession;
     hasWritePermission: boolean;
     hasAdminPermission: boolean;
   } & PageParams,
-) => Promise<any>;
+) => Promise<ReactNode>;
 
 const withProtectedPage = (
   pagePath: PagePath,
   permissions: "read" | "write",
   render: Render,
 ) => {
-  return async ({ params }: any) => {
+  return async ({ params }: { params: Promise<PageParams> }) => {
     const { catalogId } = await params;
 
     if (catalogId && !validOrganizationNumber(catalogId)) {
-      redirect(`/no-access`, RedirectType.replace);
+      redirect("/no-access", RedirectType.replace);
     }
 
     const session = await getValidSession();
     if (!session) {
-      return redirectToSignIn({
-        callbackUrl: pagePath({ catalogId: catalogId }),
-      });
+      return redirectToSignIn(pagePath({ catalogId }));
     }
 
     const hasReadPermission =
-      session?.accessToken &&
-      (hasOrganizationReadPermission(session?.accessToken, catalogId) ||
-        hasSystemAdminPermission(session.accessToken));
+      hasOrganizationReadPermission(session.accessToken, catalogId) ||
+      hasSystemAdminPermission(session.accessToken);
     if (!hasReadPermission) {
-      redirect(`/no-access`, RedirectType.replace);
+      redirect("/no-access", RedirectType.replace);
     }
 
-    const hasWritePermission =
-      session?.accessToken &&
-      hasOrganizationWritePermission(session.accessToken, catalogId);
+    const hasWritePermission = hasOrganizationWritePermission(
+      session.accessToken,
+      catalogId,
+    );
     if (!hasWritePermission && permissions === "write") {
-      redirect(`/no-access`, RedirectType.replace);
+      redirect("/no-access", RedirectType.replace);
     }
 
-    const hasAdminPermission =
-      session?.accessToken &&
-      hasOrganizationAdminPermission(session.accessToken, catalogId);
+    const hasAdminPermission = hasOrganizationAdminPermission(
+      session.accessToken,
+      catalogId,
+    );
 
     return await render({
       catalogId,

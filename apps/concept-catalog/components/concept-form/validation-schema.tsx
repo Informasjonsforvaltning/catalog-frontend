@@ -11,7 +11,15 @@ import { nb } from "yup-locales";
 
 Yup.setLocale(nb);
 
-const getRevisions = async ({ baseUri, catalogId, conceptId }) => {
+const getRevisions = async ({
+  baseUri,
+  catalogId,
+  conceptId,
+}: {
+  baseUri: string;
+  catalogId: string;
+  conceptId: string;
+}) => {
   const response = await fetch(
     `${baseUri}/api/catalogs/${catalogId}/concepts/${conceptId}/revisions`,
   );
@@ -21,7 +29,10 @@ const getRevisions = async ({ baseUri, catalogId, conceptId }) => {
   return await response.json();
 };
 
-const isValidUrl = (value) => {
+const isValidUrl = (value: string | undefined | null): boolean => {
+  if (!value) {
+    return false;
+  }
   try {
     const url = new URL(value);
     return url.protocol === "https:";
@@ -48,7 +59,7 @@ const tekstMedSpraakKodeArray = (label: string) =>
         .label(`${label} (${localization.language.en})`),
     });
 
-const kilde = (required) =>
+const kilde = (required?: boolean) =>
   Yup.array()
     .of(
       Yup.object().shape({
@@ -100,44 +111,44 @@ const kilde = (required) =>
     })
     .nullable();
 
-export const definitionSchema = (required) =>
+export const definitionSchema = (required?: boolean) =>
   Yup.object()
     .shape({
       tekst: Yup.object().shape({
         nb: Yup.string().test({
           test() {
             const { nb, nn, en } = this.parent;
-            if (!nb && !nn && !en) {
-              return this.createError({
-                message: localization.conceptForm.validation.required,
-                path: this.path,
-              });
+            if (!required || nb || nn || en) {
+              return true;
             }
-            return true;
+            return this.createError({
+              message: localization.conceptForm.validation.required,
+              path: this.path,
+            });
           },
         }),
         nn: Yup.string().test({
           test() {
             const { nb, nn, en } = this.parent;
-            if (!nb && !nn && !en) {
-              return this.createError({
-                message: localization.conceptForm.validation.required,
-                path: this.path,
-              });
+            if (!required || nb || nn || en) {
+              return true;
             }
-            return true;
+            return this.createError({
+              message: localization.conceptForm.validation.required,
+              path: this.path,
+            });
           },
         }),
         en: Yup.string().test({
           test() {
             const { nb, nn, en } = this.parent;
-            if (!nb && !nn && !en) {
-              return this.createError({
-                message: localization.conceptForm.validation.required,
-                path: this.path,
-              });
+            if (!required || nb || nn || en) {
+              return true;
             }
-            return true;
+            return this.createError({
+              message: localization.conceptForm.validation.required,
+              path: this.path,
+            });
           },
         }),
       }),
@@ -203,7 +214,13 @@ const prefLabelNynorsk = Yup.string().label(
   `${localization.conceptForm.fieldLabel.prefLabel} (${localization.language.nn})`,
 );
 
-export const conceptSchema = ({ baseUri, required }) =>
+export const conceptSchema = ({
+  baseUri,
+  required,
+}: {
+  baseUri: string;
+  required?: boolean;
+}) =>
   Yup.object().shape({
     anbefaltTerm: Yup.object().shape({
       navn: Yup.object().shape({
@@ -290,12 +307,12 @@ export const conceptSchema = ({ baseUri, required }) =>
       .shape({
         harEpost: Yup.string()
           .nullable()
-          .email(localization.conceptForm.validation.email)
+          .email(localization.validation.invalidEmail)
           .label(localization.conceptForm.fieldLabel.emailAddress),
         harTelefon: Yup.string()
           .nullable()
           .matches(/^\+?(?:[0-9\s]){6,14}[0-9]$/i, {
-            message: localization.conceptForm.validation.phone,
+            message: localization.validation.invalidPhone,
             excludeEmptyString: true,
           })
           .label(localization.conceptForm.fieldLabel.phoneNumber),

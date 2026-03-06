@@ -160,7 +160,7 @@ export const NewConceptFormClient = ({
           <ArrowLeftIcon fontSize="1.25em" />
           {localization.button.backToOverview}
         </Button>
-        <div style={{ flexGrow: 1 }}></div>
+        <div style={{ flexGrow: 1 }} />
         {originalConcept && (
           <Button
             variant="secondary"

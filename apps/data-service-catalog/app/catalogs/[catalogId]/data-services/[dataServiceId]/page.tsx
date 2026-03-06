@@ -2,12 +2,11 @@ import {
   Breadcrumbs,
   BreadcrumbType,
   DesignBanner,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import {
   getTranslateText,
   hasOrganizationWritePermission,
   localization,
-  redirectToSignIn,
   validDataServiceID,
 } from "@catalog-frontend/utils";
 import {
@@ -26,28 +25,24 @@ const EditDataServicePage = withReadProtectedPage(
     `/catalogs/${catalogId}/data-services/${dataServiceId}`,
   async ({ catalogId, dataServiceId, session }) => {
     if (!dataServiceId || !validDataServiceID(dataServiceId)) {
-      return redirect(`/notfound`, RedirectType.replace);
-    }
-    if (!session) {
-      return redirectToSignIn({
-        callbackUrl: `/catalogs/${catalogId}/data-services/${dataServiceId}`,
-      });
+      return redirect("/notfound", RedirectType.replace);
     }
 
     // Fetch data service with retry mechanism
     const dataService = await fetchDataServiceWithRetry(
       catalogId,
       dataServiceId,
-      `${session?.accessToken}`,
+      session.accessToken,
     );
 
     if (!dataService || dataService.catalogId !== catalogId) {
-      redirect(`/not-found`, RedirectType.replace);
+      redirect("/not-found", RedirectType.replace);
     }
 
-    const hasWritePermission =
-      session &&
-      hasOrganizationWritePermission(session?.accessToken, catalogId);
+    const hasWritePermission = hasOrganizationWritePermission(
+      session.accessToken,
+      catalogId,
+    );
 
     const referenceDataEnv = process.env.FDK_BASE_URI ?? "";
     const searchEnv = process.env.FDK_SEARCH_SERVICE_BASE_URI ?? "";
@@ -101,7 +96,7 @@ const EditDataServicePage = withReadProtectedPage(
             referenceData={referenceData}
             referenceDataEnv={referenceDataEnv}
             searchEnv={searchEnv}
-          ></DataServiceDetailsPageClient>
+          />
         </div>
       </>
     );

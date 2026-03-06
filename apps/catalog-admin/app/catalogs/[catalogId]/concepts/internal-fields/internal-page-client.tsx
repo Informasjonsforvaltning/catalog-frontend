@@ -2,9 +2,9 @@
 
 import React from "react";
 import styles from "./internal-fields.module.css";
-import { Accordion, Heading } from "@digdir/designsystemet-react";
+import { Card, Details, Heading } from "@digdir/designsystemet-react";
 import { PlusCircleIcon } from "@navikt/aksel-icons";
-import { Button } from "@catalog-frontend/ui";
+import { Button } from "@catalog-frontend/ui-v2";
 import { getTranslateText, localization } from "@catalog-frontend/utils";
 import { InternalField } from "@catalog-frontend/types";
 import { useGetInternalFields } from "../../../../../hooks/internal-fields";
@@ -37,53 +37,42 @@ export const InternalFieldsPageClient = ({
     <PageLayout>
       <div className={styles.topButtonRow}>
         <Button onClick={handleCreateInternalField}>
-          <>
-            <PlusCircleIcon title="" />
-            {localization.catalogAdmin.create.newInternalField}
-          </>
+          <PlusCircleIcon title="" />
+          {localization.catalogAdmin.create.newInternalField}
         </Button>
       </div>
 
-      <Heading level={2} size="xsmall">
+      <Heading level={2} data-size="xs">
         {localization.catalogAdmin.internalFields}
       </Heading>
       <div className="accordionStructure">
         {showInternalFieldEditor && (
-          <Accordion
-            key={"create-editor"}
-            border={true}
-            className="accordionWidth"
-          >
-            <Accordion.Item defaultOpen={showInternalFieldEditor}>
-              <Accordion.Header>
-                <Heading
-                  size="small"
-                  className={styles.label}
-                  level={3}
-                ></Heading>
-              </Accordion.Header>
-              <Accordion.Content>
+          <Card className="accordionWidth">
+            <Details defaultOpen={showInternalFieldEditor}>
+              <Details.Summary>
+                <Heading data-size="sm" className={styles.label} level={3} />
+              </Details.Summary>
+              <Details.Content>
                 <InternalFieldEditor catalogId={catalogId} />
-              </Accordion.Content>
-            </Accordion.Item>
-          </Accordion>
+              </Details.Content>
+            </Details>
+          </Card>
         )}
-        {dbFields &&
-          dbFields.map((field: InternalField) => (
-            <Accordion key={field.id} border={true} className="accordionWidth">
-              <Accordion.Item>
-                <Accordion.Header>
-                  <Heading size="xsmall" className={styles.label}>
-                    {getTranslateText(field.label)}
-                  </Heading>
-                </Accordion.Header>
+        {dbFields?.map((field: InternalField) => (
+          <Card key={field.id} className="accordionWidth">
+            <Details>
+              <Details.Summary>
+                <Heading data-size="xs" className={styles.label}>
+                  {getTranslateText(field.label)}
+                </Heading>
+              </Details.Summary>
 
-                <Accordion.Content>
-                  <InternalFieldEditor field={field} catalogId={catalogId} />
-                </Accordion.Content>
-              </Accordion.Item>
-            </Accordion>
-          ))}
+              <Details.Content>
+                <InternalFieldEditor field={field} catalogId={catalogId} />
+              </Details.Content>
+            </Details>
+          </Card>
+        ))}
       </div>
     </PageLayout>
   );

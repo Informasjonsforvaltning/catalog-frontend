@@ -1,6 +1,6 @@
 import * as crypto from "crypto";
 import { Service } from "@catalog-frontend/types";
-import { runTestAsAdmin } from "../../fixtures/basePage";
+import { expect, runTestAsAdmin } from "../../fixtures/basePage";
 import {
   adminAuthFile,
   createService,
@@ -450,5 +450,58 @@ runTestAsAdmin(
         randomServices.filter((s) => s !== service),
       );
     }
+  },
+);
+
+runTestAsAdmin(
+  "empty submit check prevents save when only whitespace added",
+  async ({ page, servicesPage, playwright }) => {
+    const apiRequestContext = await playwright.request.newContext({
+      storageState: adminAuthFile,
+    });
+
+    // Create a service via API with structure matching form expectations
+    const service = await createService(apiRequestContext, {
+      title: { nb: "Test whitespace", nn: "", en: "" },
+      description: { nb: "Test description", nn: "", en: "" },
+      produces: [
+        {
+          identifier: "test-produce-1",
+          title: { nb: "Test produce", nn: "", en: "" },
+          description: { nb: "Test produce description", nn: "", en: "" },
+        },
+      ],
+      contactPoints: [
+        {
+          category: { nb: "Test category", nn: "", en: "" },
+          email: "test@example.com",
+        },
+      ],
+    });
+
+    // Navigate to edit page
+    await page.goto(
+      `/catalogs/${process.env.E2E_CATALOG_ID}/services/${service}/edit`,
+    );
+
+    // Wait for form to be ready
+    const saveButton = page.getByRole("button", { name: "Lagre", exact: true });
+    await expect(saveButton).toBeVisible();
+
+    // Add trailing whitespace to title
+    const titleField = page
+      .getByRole("group", { name: "Tittel Hjelp til utfylling Må fylles ut" })
+      .getByLabel("Bokmål");
+    await titleField.fill("Test whitespace ");
+
+    // Click save button
+    await saveButton.click();
+
+    // Wait for network to settle - if empty submit check works, no request is made
+    await page.waitForLoadState("networkidle");
+
+    // Verify NO snackbar appears (empty submit check should prevent save)
+    await expect(page.getByText("Endringene ble lagret.")).not.toBeVisible();
+    await expect(page.getByText("Lagring feilet")).not.toBeVisible();
   },
 );

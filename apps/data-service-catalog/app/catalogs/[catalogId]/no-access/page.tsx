@@ -3,7 +3,7 @@ import {
   Breadcrumbs,
   CenterContainer,
   PageBanner,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import { localization } from "@catalog-frontend/utils";
 import { Heading } from "@digdir/designsystemet-react";
 
@@ -15,7 +15,7 @@ const NoAccess = async (
   const breadcrumbList = catalogId
     ? ([
         {
-          href: `#`,
+          href: "#",
           text: localization.noAccess,
         },
       ] as BreadcrumbType[])
@@ -28,13 +28,11 @@ const NoAccess = async (
         catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
       />
       <PageBanner
-        title={localization.catalogType.dataset}
+        title={localization.catalogType.dataService}
         subtitle={localization.noAccess}
       />
       <CenterContainer>
-        <Heading level={2} size="small">
-          {localization.youHaveNoAccess}
-        </Heading>
+        <Heading level={2}>{localization.youHaveNoAccess}</Heading>
       </CenterContainer>
     </>
   );

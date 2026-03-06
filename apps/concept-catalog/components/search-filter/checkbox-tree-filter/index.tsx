@@ -100,7 +100,7 @@ export const CheckboxTreeFilter: FC<Props> = ({
         size="sm"
         onChange={handleSearchOnChange}
       >
-        <option value=""></option>
+        <option value="" />
         {options.map((option) => (
           <option value={option.value} key={option.value}>
             {option.label}

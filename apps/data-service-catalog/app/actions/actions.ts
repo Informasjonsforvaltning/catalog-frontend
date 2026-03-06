@@ -18,20 +18,15 @@ import {
 import { DataService, DataServiceToBeCreated } from "@catalog-frontend/types";
 import { updateTag } from "next/cache";
 import { compare } from "fast-json-patch";
-import omit from "lodash/omit";
-
-const dataServiceMetadataFieldsToOmit = ["modified"];
-
-export async function getDataServices(catalogId: string) {
+export async function getDataServices(
+  catalogId: string,
+): Promise<DataService[]> {
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
   }
 
-  const response = await getAllDataServices(
-    catalogId,
-    `${session?.accessToken}`,
-  );
+  const response = await getAllDataServices(catalogId, session.accessToken);
   if (response.status !== 200) {
     throw new Error(
       "getDataServices failed with response code " + response.status,
@@ -43,7 +38,7 @@ export async function getDataServices(catalogId: string) {
 export async function createDataService(
   catalogId: string,
   values: DataServiceToBeCreated,
-) {
+): Promise<string> {
   console.log(`[createDataService] Starting creation for catalog ${catalogId}`);
   const newDataService = removeEmptyValues({
     ...values,
@@ -64,7 +59,7 @@ export async function createDataService(
     const response = await postDataService(
       newDataService,
       catalogId,
-      `${session?.accessToken}`,
+      session.accessToken,
     );
     if (response.status !== 201) {
       throw new Error(
@@ -72,7 +67,7 @@ export async function createDataService(
       );
     }
 
-    const locationHeader = response?.headers?.get("location");
+    const locationHeader = response.headers.get("location");
     if (!locationHeader) {
       throw new Error("No location header returned from server");
     }
@@ -104,7 +99,7 @@ export async function createDataService(
 export async function deleteDataService(
   catalogId: string,
   dataServiceId: string,
-) {
+): Promise<void> {
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
@@ -114,7 +109,7 @@ export async function deleteDataService(
     const response = await removeDataService(
       catalogId,
       dataServiceId,
-      `${session?.accessToken}`,
+      session.accessToken,
     );
     if (response.status !== 204) {
       throw new Error();
@@ -133,7 +128,7 @@ export async function updateDataService(
   catalogId: string,
   initialDataService: DataService,
   values: DataService,
-) {
+): Promise<DataService> {
   const updatedDataService = removeEmptyValues({
     ...values,
     accessRights:
@@ -144,13 +139,10 @@ export async function updateDataService(
       values?.availability === "none" ? undefined : values?.availability,
   });
 
-  const diff = compare(
-    omit(initialDataService, dataServiceMetadataFieldsToOmit),
-    omit(updatedDataService, dataServiceMetadataFieldsToOmit),
-  );
+  const diff = compare(initialDataService, updatedDataService);
 
   if (diff.length === 0) {
-    throw new Error(localization.alert.noChanges);
+    return initialDataService;
   }
 
   let success = false;
@@ -164,7 +156,7 @@ export async function updateDataService(
       catalogId,
       initialDataService.id,
       diff,
-      `${session?.accessToken}`,
+      session.accessToken,
     );
     if (response.status !== 200) {
       throw new Error(`${response.status} ${response.statusText}`);
@@ -175,7 +167,7 @@ export async function updateDataService(
     return updatedDataService;
   } catch (error) {
     console.error(`${localization.alert.fail} ${error}`);
-    throw new Error(`Noe gikk galt, prøv igjen...`);
+    throw new Error("Noe gikk galt, prøv igjen...");
   } finally {
     if (success) {
       updateTag("data-service");
@@ -187,14 +179,17 @@ export async function updateDataService(
 export async function publishDataService(
   catalogId: string,
   dataServiceId: string,
-) {
+): Promise<void> {
   const session = await getValidSession();
+  if (!session) {
+    return redirectToSignIn();
+  }
   let success = false;
   try {
     const response = await publish(
       catalogId,
       dataServiceId,
-      `${session?.accessToken}`,
+      session.accessToken,
     );
     if (response.status !== 200) {
       throw new Error();
@@ -213,14 +208,17 @@ export async function publishDataService(
 export async function unpublishDataService(
   catalogId: string,
   dataServiceId: string,
-) {
+): Promise<void> {
   const session = await getValidSession();
+  if (!session) {
+    return redirectToSignIn();
+  }
   let success = false;
   try {
     const response = await unpublish(
       catalogId,
       dataServiceId,
-      `${session?.accessToken}`,
+      session.accessToken,
     );
     if (response.status !== 200) {
       throw new Error();
@@ -236,7 +234,10 @@ export async function unpublishDataService(
   }
 }
 
-export async function deleteImportResult(catalogId: string, resultId: string) {
+export async function deleteImportResult(
+  catalogId: string,
+  resultId: string,
+): Promise<void> {
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
@@ -246,7 +247,7 @@ export async function deleteImportResult(catalogId: string, resultId: string) {
     const response = await removeImportResult(
       catalogId,
       resultId,
-      `${session?.accessToken}`,
+      session.accessToken,
     );
     if (response.status !== 204) {
       throw new Error();

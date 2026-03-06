@@ -14,19 +14,19 @@ const ImportResultDetailsPage = withAdminProtectedPage(
     `/catalogs/${catalogId}/concepts/import-results/${resultId}`,
   async ({ catalogId, resultId, session }) => {
     if (!resultId || !validUUID(resultId)) {
-      return redirect(`/notfound`, RedirectType.replace);
+      return redirect("/notfound", RedirectType.replace);
     }
     const importResult = await getConceptImportResultById(
       catalogId,
       resultId,
-      `${session?.accessToken}`,
+      session.accessToken,
     ).then((response) => {
       if (response.ok) {
         return response.json();
       }
     });
     if (!importResult || importResult.catalogId !== catalogId) {
-      redirect(`/not-found`, RedirectType.replace);
+      redirect("/not-found", RedirectType.replace);
     }
 
     const breadcrumbList = [

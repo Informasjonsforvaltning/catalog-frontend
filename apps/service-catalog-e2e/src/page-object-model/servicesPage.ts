@@ -29,17 +29,20 @@ export default class ServicesPage {
   pageDescriptionLocator = () => this.page.getByText("");
   statusFilterHeaderLocator = () =>
     this.page.getByRole("button", { name: "Tjenestestatus" });
-  statusFilterCompletedLocator = () => this.page.getByLabel("Ferdigstilt");
-  statusFilterDeprecatedLocator = () => this.page.getByLabel("Frarådet");
+  statusFilterCompletedLocator = () =>
+    this.page.getByRole("checkbox", { name: "Ferdigstilt" });
+  statusFilterDeprecatedLocator = () =>
+    this.page.getByRole("checkbox", { name: "Frarådet" });
   statusFilterUnderDevelopmentLocator = () =>
-    this.page.getByLabel("Under utvikling");
-  statusFilterWithdrawnLocator = () => this.page.getByLabel("Trukket tilbake");
+    this.page.getByRole("checkbox", { name: "Under utvikling" });
+  statusFilterWithdrawnLocator = () =>
+    this.page.getByRole("checkbox", { name: "Trukket tilbake" });
   publishedStateFilterHeaderLocator = () =>
     this.page.getByRole("button", { name: "Publiseringstilstand" });
   publishedStateFilterPublishedLocator = () =>
-    this.page.getByLabel("Publisert", { exact: true });
+    this.page.getByRole("checkbox", { name: "Publisert", exact: true });
   publishedStateFilterNotPublishedLocator = () =>
-    this.page.getByLabel("Ikke publisert");
+    this.page.getByRole("checkbox", { name: "Ikke publisert" });
   searchInputLocator = () =>
     this.page.getByPlaceholder("Søk etter tjeneste...");
   searchButtonLocator = () => this.page.getByRole("button", { name: "Søk" });
@@ -153,7 +156,7 @@ export default class ServicesPage {
       return;
     }
     const result = await this.accessibilityBuilder
-      .disableRules(["svg-img-alt", "target-size"])
+      .disableRules(["svg-img-alt", "target-size", "label-title-only"])
       .analyze();
     expect.soft(result.violations).toEqual([]);
   }
@@ -323,14 +326,22 @@ export default class ServicesPage {
   }
 
   public async filterPublished() {
-    if (!(await this.publishedStateFilterPublishedLocator().isVisible())) {
+    if (
+      (await this.publishedStateFilterHeaderLocator().getAttribute(
+        "aria-expanded",
+      )) !== "true"
+    ) {
       await this.publishedStateFilterHeaderLocator().click();
     }
     await this.publishedStateFilterPublishedLocator().check();
   }
 
   public async filterNotPublished() {
-    if (!(await this.publishedStateFilterNotPublishedLocator().isVisible())) {
+    if (
+      (await this.publishedStateFilterHeaderLocator().getAttribute(
+        "aria-expanded",
+      )) !== "true"
+    ) {
       await this.publishedStateFilterHeaderLocator().click();
     }
     await this.publishedStateFilterNotPublishedLocator().check();

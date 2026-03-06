@@ -13,12 +13,12 @@ export const DELETE = async (
       const response = await deletePublicService(
         catalogId,
         serviceId,
-        session?.accessToken,
+        session.accessToken,
       );
       if (response.status !== 204) {
         throw new Error();
       }
-      return new Response(response?.text?.toString(), { status: 200 });
+      return new Response(await response.text(), { status: 200 });
     } catch (err) {
       return new Response("Failed to delete service", { status: 500 });
     }

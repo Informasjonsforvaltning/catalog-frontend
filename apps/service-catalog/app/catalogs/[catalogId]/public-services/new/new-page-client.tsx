@@ -5,7 +5,7 @@ import {
   Service,
   StorageData,
 } from "@catalog-frontend/types";
-import { Button, ButtonBar, ConfirmModal } from "@catalog-frontend/ui";
+import { Button, ButtonBar, ConfirmModal } from "@catalog-frontend/ui-v2";
 import { LocalDataStorage, localization } from "@catalog-frontend/utils";
 import { ArrowLeftIcon } from "@navikt/aksel-icons";
 import { useRef, useState } from "react";
@@ -15,13 +15,14 @@ import { serviceTemplate } from "@service-catalog/components/service-form/servic
 import { createPublicService } from "@service-catalog/app/actions/public-services/actions";
 
 type NewPageProps = {
+  mainActivities: ReferenceDataCode[];
   referenceDataEnv: string;
   searchEnv: string;
   statuses: ReferenceDataCode[];
 };
 
 export const NewPage = (props: NewPageProps) => {
-  const { referenceDataEnv, searchEnv, statuses } = props;
+  const { mainActivities, referenceDataEnv, searchEnv, statuses } = props;
   const router = useRouter();
   const { catalogId } = useParams<{ catalogId: string }>();
   const serviceIdRef = useRef<string | undefined>(undefined); // Ref to store the service id
@@ -70,8 +71,7 @@ export const NewPage = (props: NewPageProps) => {
       <ButtonBar>
         <Button
           variant="tertiary"
-          color="second"
-          size="sm"
+          data-size="sm"
           onClick={() => setShowCancelConfirm(true)}
         >
           <ArrowLeftIcon fontSize="1.25em" />
@@ -81,6 +81,7 @@ export const NewPage = (props: NewPageProps) => {
       <ServiceForm
         afterSubmit={handleAfterSubmit}
         autoSaveStorage={dataStorage}
+        mainActivities={mainActivities}
         onCancel={handleCancel}
         onSubmit={handleCreate}
         initialValues={serviceTemplate(undefined)}

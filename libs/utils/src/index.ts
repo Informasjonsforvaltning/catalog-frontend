@@ -1,3 +1,4 @@
+export * from "./lib/auth/actions";
 export * from "./lib/auth/auth-options";
 export * from "./lib/auth/helpers";
 export * from "./lib/auth/token";

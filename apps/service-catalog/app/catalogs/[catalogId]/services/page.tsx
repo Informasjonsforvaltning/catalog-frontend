@@ -3,7 +3,11 @@ import {
   ReferenceDataCode,
   Service,
 } from "@catalog-frontend/types";
-import { BreadcrumbType, Breadcrumbs, PageBanner } from "@catalog-frontend/ui";
+import {
+  BreadcrumbType,
+  Breadcrumbs,
+  PageBanner,
+} from "@catalog-frontend/ui-v2";
 import {
   getTranslateText,
   getValidSession,
@@ -25,7 +29,7 @@ export default async function ServiceSearchHitsPage(
 
   const session = await getValidSession();
   if (!session) {
-    return redirectToSignIn({ callbackUrl: `/catalogs/${catalogId}/services` });
+    return redirectToSignIn(`/catalogs/${catalogId}/services`);
   }
 
   const services: Service[] = await getServices(catalogId);

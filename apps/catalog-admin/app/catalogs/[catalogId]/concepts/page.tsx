@@ -4,12 +4,12 @@ import {
   BreadcrumbType,
   Breadcrumbs,
   DesignBanner,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import { localization } from "@catalog-frontend/utils";
 
 export default withProtectedPage(
   ({ catalogId }) => `/catalogs/${catalogId}/concepts`,
-  async ({ catalogId, session }) => {
+  async ({ catalogId }) => {
     const breadcrumbList = catalogId
       ? ([
           {

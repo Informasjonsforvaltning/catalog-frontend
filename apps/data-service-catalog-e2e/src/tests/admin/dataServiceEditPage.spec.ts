@@ -189,12 +189,21 @@ runTestAsAdmin(
       false,
     );
 
-    // Wait for network to be idle to allow autosave requests to complete
-    await page.waitForLoadState("networkidle");
+    // Wait for auto-save to persist to localStorage
+    await page.waitForFunction(
+      () => {
+        const data = localStorage.getItem("dataServiceForm");
+        return data !== null;
+      },
+      { timeout: 5000 },
+    );
 
-    // Navigate away and back
-    await page.goto("/");
+    // Navigate away (stay within the same app to avoid cross-app redirect issues)
+    await page.goto(`/catalogs/${process.env.E2E_CATALOG_ID}/data-services`);
+
+    // Navigate back to new form
     await dataServiceEditPage.gotoNew(process.env.E2E_CATALOG_ID as string);
+    await page.waitForLoadState("networkidle");
 
     // Should show restore dialog
     await expect(page.getByText("Vil du gjenopprette?")).toBeVisible();

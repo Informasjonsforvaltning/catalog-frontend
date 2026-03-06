@@ -3,7 +3,7 @@
 import { ImportResult } from "@catalog-frontend/types";
 import { localization } from "@catalog-frontend/utils";
 import { deleteImportResult } from "../../../../../actions/actions";
-import { ConfirmModal, ImportResultDetails } from "@catalog-frontend/ui";
+import { ConfirmModal, ImportResultDetails } from "@catalog-frontend/ui-v2";
 import { useState } from "react";
 
 interface Props {
@@ -47,6 +47,8 @@ const ImportResultDetailsPageClient = ({ catalogId, importResult }: Props) => {
         targetBaseHref={`catalogs/${catalogId}/data-services`}
         importResult={importResult}
         deleteHandler={handleDeleteClick}
+        isDeleting={false}
+        isCancelling={false}
       />
     </>
   );

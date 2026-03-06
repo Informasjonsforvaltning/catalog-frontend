@@ -111,7 +111,7 @@ export const EditPage = ({
       <DatasetForm
         autoSaveStorage={dataStorage}
         initialValues={dataset}
-        submitType={"update"}
+        submitType="update"
         searchEnv={searchEnv}
         referenceDataEnv={referenceDataEnv}
         referenceData={referenceData}

@@ -254,7 +254,7 @@ export default class EditPage {
     await this.page
       .getByRole("group", { name: "Begrepsstatus" })
       .locator(
-        `input[type="radio"][value="http://publications.europa.eu/resource/authority/concept-status/DRAFT"]`,
+        'input[type="radio"][value="http://publications.europa.eu/resource/authority/concept-status/DRAFT"]',
       )
       .click();
 

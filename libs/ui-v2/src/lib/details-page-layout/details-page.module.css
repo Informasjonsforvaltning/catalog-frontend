@@ -1,0 +1,51 @@
+.detailHeading {
+  margin-top: 3rem;
+  margin-bottom: 5rem;
+}
+
+.twoColumnRow {
+  display: flex;
+  justify-content: stretch;
+  gap: 2em;
+}
+
+.twoColumnRow:last-child {
+  padding-bottom: 20px;
+}
+
+.twoColumnRow > *:first-child {
+  flex-grow: 1;
+}
+
+.twoColumnRow > *:last-child {
+  min-width: 330px;
+  max-width: 330px;
+}
+
+.bottomSpace {
+  margin-bottom: 3rem;
+}
+
+.buttons {
+  display: flex;
+  width: fit-content;
+  align-items: flex-end;
+}
+
+.actionsRow {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 1rem;
+}
+
+.headingTitle {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.heading {
+  padding-bottom: var(--ds-size-4);
+  padding-top: var(--ds-size-8);
+}

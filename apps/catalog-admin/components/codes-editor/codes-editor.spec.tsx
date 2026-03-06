@@ -13,13 +13,13 @@ const codeList = {
   description: "Ny beskrivelse 1",
   codes: [
     {
-      id: 13,
+      id: "13",
       name: {
         nb: "Forelder lv 1",
         nn: "",
         en: "",
       },
-      parentID: 17,
+      parentID: "17",
     },
   ],
 };

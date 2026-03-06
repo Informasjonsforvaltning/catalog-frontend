@@ -2,7 +2,7 @@ import {
   Breadcrumbs,
   BreadcrumbType,
   DesignBanner,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import {
   getCurrencies,
   getDistributionStatuses,
@@ -12,7 +12,6 @@ import {
 import {
   getTranslateText,
   localization,
-  redirectToSignIn,
   validDataServiceID,
 } from "@catalog-frontend/utils";
 import { redirect, RedirectType } from "next/navigation";
@@ -25,23 +24,18 @@ const EditDataServicePage = withWriteProtectedPage(
     `/catalogs/${catalogId}/data-services/${dataServiceId}/edit`,
   async ({ catalogId, dataServiceId, session }) => {
     if (!dataServiceId || !validDataServiceID(dataServiceId)) {
-      return redirect(`/notfound`, RedirectType.replace);
-    }
-    if (!session) {
-      return redirectToSignIn({
-        callbackUrl: `/catalogs/${catalogId}/data-services/${dataServiceId}/edit`,
-      });
+      return redirect("/notfound", RedirectType.replace);
     }
 
     // Fetch data service with retry mechanism
     const dataService = await fetchDataServiceWithRetry(
       catalogId,
       dataServiceId,
-      `${session?.accessToken}`,
+      session.accessToken,
     );
 
     if (!dataService || dataService.catalogId !== catalogId) {
-      redirect(`/not-found`, RedirectType.replace);
+      redirect("/not-found", RedirectType.replace);
     }
     const searchEnv = process.env.FDK_SEARCH_SERVICE_BASE_URI ?? "";
     const referenceDataEnv = process.env.FDK_BASE_URI ?? "";

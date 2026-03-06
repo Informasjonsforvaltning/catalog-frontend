@@ -35,7 +35,7 @@ export const RelationsSection = ({
           {localization.datasetForm.fieldLabel.relatedResources}
         </TitleWithHelpTextAndTag>
         <UriWithLabelFieldsetTable
-          fieldName={"relatedResources"}
+          fieldName="relatedResources"
           errors={errors.relatedResources}
         />
       </div>

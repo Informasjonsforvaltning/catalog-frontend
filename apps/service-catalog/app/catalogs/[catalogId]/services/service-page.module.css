@@ -1,10 +1,10 @@
 .searchHit {
-  padding-bottom: var(--fds-spacing-4);
+  padding-bottom: var(--ds-size-4);
 }
 
 .search {
   display: flex;
-  gap: var(--fds-spacing-4);
+  gap: var(--ds-size-4);
   align-items: center;
   justify-content: space-between;
 }

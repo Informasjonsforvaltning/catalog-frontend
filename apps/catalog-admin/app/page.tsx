@@ -10,10 +10,10 @@ import HomePageClient from "./home-page-client";
 const Home = async () => {
   const session = await getValidSession();
   if (!session) {
-    return redirectToSignIn({ callbackUrl: `/` });
+    return redirectToSignIn("/");
   }
 
-  const resourceRoles = getResourceRoles(`${session?.accessToken}`);
+  const resourceRoles = getResourceRoles(session.accessToken);
   const organiztionIdsWithAdminRole = resourceRoles
     .filter((role) => role.resource === "organization" && role.role === "admin")
     .map((role) => role.resourceId);

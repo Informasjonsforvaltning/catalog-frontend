@@ -2,8 +2,6 @@ import { test as base } from "@playwright/test";
 import HomePage from "../page-object-model/homePage";
 import LoginPage from "../page-object-model/loginPage";
 import ConceptsPage from "../page-object-model/conceptsPage";
-import ImportResultsPage from "../page-object-model/importResultsPage";
-import ImportResultDetailsPage from "../page-object-model/importResultDetailsPage";
 import { adminAuthFile, generateAccessibilityBuilder } from "../utils/helpers";
 
 const PREFIX_TEXT = "concept-catalog: ";
@@ -11,8 +9,6 @@ export const test = base.extend<{
   loginPage: LoginPage;
   homePage: HomePage;
   conceptsPage: ConceptsPage;
-  importResultsPage: ImportResultsPage;
-  importResultDetailsPage: ImportResultDetailsPage;
 }>({
   loginPage: async ({ page, context }, use) => {
     const accessibilityBuilder = await generateAccessibilityBuilder(page);
@@ -28,24 +24,6 @@ export const test = base.extend<{
     const accessibilityBuilder = await generateAccessibilityBuilder(page);
     const conceptsPage = new ConceptsPage(page, context, accessibilityBuilder);
     await use(conceptsPage);
-  },
-  importResultsPage: async ({ page, context }, use) => {
-    const accessibilityBuilder = await generateAccessibilityBuilder(page);
-    const importResultsPage = new ImportResultsPage(
-      page,
-      context,
-      accessibilityBuilder,
-    );
-    await use(importResultsPage);
-  },
-  importResultDetailsPage: async ({ page, context }, use) => {
-    const accessibilityBuilder = await generateAccessibilityBuilder(page);
-    const importResultDetailsPage = new ImportResultDetailsPage(
-      page,
-      context,
-      accessibilityBuilder,
-    );
-    await use(importResultDetailsPage);
   },
 });
 
@@ -67,16 +45,18 @@ export const runSerialTestsAdmin = (
   tests: { name: string; fn: (e: any) => void }[],
   skippedTests?: { name: string; fn: (e: any) => void }[],
 ) => {
-  test.use({ storageState: adminAuthFile });
-  test.describe.serial(PREFIX_TEXT + " serial tests " + name, () => {
-    for (const { name, fn } of tests) {
-      test.use({ storageState: adminAuthFile });
-      runTest(`${PREFIX_TEXT} ${name}`, fn);
+  test.describe.serial(PREFIX_TEXT + name, () => {
+    test.use({ storageState: adminAuthFile });
+
+    for (const { name: testName, fn } of tests) {
+      test(testName, fn);
     }
   });
-  if (!skippedTests) return;
 
-  for (const { name, fn } of skippedTests) skipTest(name, fn);
+  if (!skippedTests) return;
+  for (const { name: testName, fn } of skippedTests) {
+    test.skip(PREFIX_TEXT + testName, fn);
+  }
 };
 
 export const skipTestAsAdmin = (name: string, fn: (e: any) => void) => {

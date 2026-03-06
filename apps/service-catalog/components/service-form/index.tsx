@@ -1,8 +1,8 @@
 "use client";
 
 import {
-  Box,
   Checkbox,
+  Combobox,
   Fieldset,
   Paragraph,
   Spinner,
@@ -27,7 +27,7 @@ import {
   StickyFooterBar,
   TextareaWithPrefix,
   TitleWithHelpTextAndTag,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import {
   localization,
   getTranslateText,
@@ -60,6 +60,7 @@ interface ServiceFormProps {
   afterSubmit?: () => void;
   autoSaveStorage: DataStorage<StorageData>;
   initialValues: ServiceToBeCreated;
+  mainActivities?: ReferenceDataCode[];
   onCancel?: () => void;
   onSubmit?: (values: Service) => Promise<Service | undefined>;
   referenceDataEnv: string;
@@ -79,14 +80,14 @@ const restoreConfirmMessage = ({ values, lastChanged }: StorageData) => {
   });
   return (
     <>
-      <Paragraph size="sm">
+      <Paragraph data-size="sm">
         {localization.alert.youHaveUnsavedChanges}
       </Paragraph>
-      <Paragraph size="sm">
+      <Paragraph data-size="sm">
         <span className={styles.bold}>{getTranslateText(values?.title)}</span> (
         {lastChangedFormatted})
       </Paragraph>
-      <Paragraph size="sm" className={styles.topMargin2}>
+      <Paragraph data-size="sm" className={styles.topMargin2}>
         {localization.alert.wantToRestoreChanges}
       </Paragraph>
     </>
@@ -98,6 +99,7 @@ export const ServiceForm = (props: ServiceFormProps) => {
     afterSubmit,
     autoSaveStorage,
     initialValues,
+    mainActivities,
     onCancel,
     onSubmit,
     referenceDataEnv,
@@ -211,15 +213,22 @@ export const ServiceForm = (props: ServiceFormProps) => {
         validateOnChange={validateOnChange}
         validateOnBlur={validateOnChange}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
+          // set produces identifiers
+          values.produces?.map((produce, index) => ({
+            ...produce,
+            identifier: index,
+          }));
+
+          const trimmedValues = trimObjectWhitespace(values);
+
+          if (isEqual(trimmedValues, initialValues)) {
+            resetForm();
+            return;
+          }
+
           if (onSubmit) {
             try {
-              // set produces identifiers
-              values.produces?.map((produce, index) => ({
-                ...produce,
-                identifier: index,
-              }));
-
-              const newValues = await onSubmit(trimObjectWhitespace(values));
+              const newValues = await onSubmit(trimmedValues as Service);
 
               showSnackbarMessage({
                 message: localization.snackbar.saveSuccessful,
@@ -254,6 +263,7 @@ export const ServiceForm = (props: ServiceFormProps) => {
           isValidating,
           submitForm,
           errors,
+          setFieldValue,
           setValues,
           values,
         }) => {
@@ -310,6 +320,7 @@ export const ServiceForm = (props: ServiceFormProps) => {
               "contactPoints",
               "spatial",
               "subject",
+              "dctType",
             ].forEach((name) => {
               if (isDirty(name)) {
                 dirtyFields.push(name);
@@ -343,6 +354,7 @@ export const ServiceForm = (props: ServiceFormProps) => {
                         "status",
                         "spatial",
                         "subject",
+                        "dctType",
                       ].includes(field),
                     )}
                     error={hasError([
@@ -352,9 +364,10 @@ export const ServiceForm = (props: ServiceFormProps) => {
                       "status",
                       "spatial",
                       "subject",
+                      "dctType",
                     ])}
                   >
-                    <Box>
+                    <div>
                       <FormikLanguageFieldset
                         name="title"
                         as={Textfield}
@@ -386,6 +399,7 @@ export const ServiceForm = (props: ServiceFormProps) => {
 
                       <FastField
                         as={Textfield}
+                        data-size="sm"
                         name="homepage"
                         label={
                           <TitleWithHelpTextAndTag
@@ -399,14 +413,10 @@ export const ServiceForm = (props: ServiceFormProps) => {
                           </TitleWithHelpTextAndTag>
                         }
                         error={errors?.homepage}
-                        size="sm"
                       />
                       <FieldsetDivider />
-                      <Field
-                        error={errors?.status}
-                        as={Select}
-                        size="sm"
-                        label={
+                      <Fieldset data-size="sm">
+                        <Fieldset.Legend>
                           <TitleWithHelpTextAndTag
                             helpText={localization.serviceForm.helptext.status}
                             tagColor="info"
@@ -414,20 +424,19 @@ export const ServiceForm = (props: ServiceFormProps) => {
                           >
                             {localization.serviceForm.fieldLabel.status}
                           </TitleWithHelpTextAndTag>
-                        }
-                        name="status"
-                      >
-                        <option value="">Ingen status</option>
-                        {statuses.map((status) => (
-                          <option key={status.code} value={status.uri}>
-                            {getTranslateText(status.label)}
-                          </option>
-                        ))}
-                      </Field>
+                        </Fieldset.Legend>
+                        <Field error={errors?.status} as={Select} name="status">
+                          <option value="">Ingen status</option>
+                          {statuses.map((status) => (
+                            <option key={status.code} value={status.uri}>
+                              {getTranslateText(status.label)}
+                            </option>
+                          ))}
+                        </Field>
+                      </Fieldset>
                       <FieldsetDivider />
-                      <Fieldset
-                        size="sm"
-                        legend={
+                      <Fieldset data-size="sm">
+                        <Fieldset.Legend>
                           <TitleWithHelpTextAndTag
                             tagTitle={localization.tag.recommended}
                             tagColor="info"
@@ -435,14 +444,12 @@ export const ServiceForm = (props: ServiceFormProps) => {
                           >
                             {localization.serviceForm.fieldLabel.spatial}
                           </TitleWithHelpTextAndTag>
-                        }
-                      >
+                        </Fieldset.Legend>
                         <SpatialCombobox referenceDataEnv={referenceDataEnv} />
                       </Fieldset>
                       <FieldsetDivider />
-                      <Fieldset
-                        size="sm"
-                        legend={
+                      <Fieldset data-size="sm">
+                        <Fieldset.Legend>
                           <TitleWithHelpTextAndTag
                             tagTitle={localization.tag.recommended}
                             tagColor="info"
@@ -450,14 +457,51 @@ export const ServiceForm = (props: ServiceFormProps) => {
                           >
                             {localization.serviceForm.fieldLabel.subject}
                           </TitleWithHelpTextAndTag>
-                        }
-                      >
+                        </Fieldset.Legend>
                         <ConceptCombobox
                           fieldLabel="subject"
                           searchEnv={searchEnv}
                         />
                       </Fieldset>
-                    </Box>
+
+                      {type === "public-services" && (
+                        <>
+                          <FieldsetDivider />
+                          <Fieldset data-size="sm">
+                            <Fieldset.Legend>
+                              <TitleWithHelpTextAndTag
+                                tagTitle={localization.tag.recommended}
+                                tagColor="info"
+                                helpText={
+                                  localization.serviceForm.helptext.dctType
+                                }
+                              >
+                                {localization.serviceForm.fieldLabel.dctType}
+                              </TitleWithHelpTextAndTag>
+                            </Fieldset.Legend>
+                            <Combobox
+                              error={Boolean(errors.dctType)}
+                              multiple
+                              onValueChange={(value) =>
+                                setFieldValue("dctType", value)
+                              }
+                              placeholder={`${localization.search.search}...`}
+                              size="sm"
+                              value={values.dctType || []}
+                            >
+                              {mainActivities?.map((item) => (
+                                <Combobox.Option
+                                  key={item.uri}
+                                  value={item.uri}
+                                >
+                                  {getTranslateText(item.label)}
+                                </Combobox.Option>
+                              ))}
+                            </Combobox>
+                          </Fieldset>
+                        </>
+                      )}
+                    </div>
                   </FormLayout.Section>
 
                   <FormLayout.Section
@@ -559,7 +603,7 @@ export const ServiceForm = (props: ServiceFormProps) => {
                 <div className={styles.footerContent}>
                   <Button
                     type="button"
-                    size="sm"
+                    data-size="sm"
                     disabled={
                       isSubmitting || isValidating || isCanceled || !dirty
                     }
@@ -569,7 +613,7 @@ export const ServiceForm = (props: ServiceFormProps) => {
                     }}
                   >
                     {isSubmitting ? (
-                      <Spinner title="Lagrer" size="sm" />
+                      <Spinner aria-label="Lagrer" data-size="sm" />
                     ) : (
                       localization.save
                     )}
@@ -577,25 +621,24 @@ export const ServiceForm = (props: ServiceFormProps) => {
 
                   <Button
                     type="button"
-                    size="sm"
+                    data-size="sm"
                     variant="secondary"
                     disabled={isSubmitting || isValidating || isCanceled}
                     onClick={handleCancel}
                   >
                     {localization.button.cancel}
                   </Button>
-                  <div className={styles.verticalLine}></div>
+                  <div className={styles.verticalLine} />
                   <div className={cn(styles.flex, styles.gap2, styles.noWrap)}>
                     <Checkbox
-                      size="sm"
+                      data-size="sm"
                       value="ignoreRequired"
                       checked={ignoreRequired}
                       onChange={(e) =>
                         handleIgnoreRequiredChange(e.target.checked)
                       }
-                    >
-                      {localization.serviceForm.fieldLabel.ignoreRequired}
-                    </Checkbox>
+                      label={localization.serviceForm.fieldLabel.ignoreRequired}
+                    />
                     <HelpMarkdown
                       aria-label={
                         localization.serviceForm.helptext.ignoreRequired

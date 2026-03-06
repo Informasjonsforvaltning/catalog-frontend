@@ -118,13 +118,11 @@ export function ImportModal({ catalogId }: ImportProps) {
     if (uploadType === UploadType.CSV)
       await sendConcepts.mutateAsync(uploadedConcepts);
     else if (uploadType === UploadType.RDF) {
-      console.log("Uploaded concepts: ", uploadedRdfConcepts);
       await sendRdf.mutateAsync(uploadedRdfConcepts);
     }
   };
 
   const cancel = () => {
-    console.log("Reader aborting: ", readerRdfRef?.current);
     readerRdfRef?.current?.abort();
     readerRdfRef.current = null;
     setIsUploading(false);
@@ -185,11 +183,6 @@ export function ImportModal({ catalogId }: ImportProps) {
 
         reader.onload = function (evt) {
           if (uploadSession !== sessionId.current || cancelled) {
-            console.log("Session ID", sessionId);
-            console.log("Upload session", uploadSession);
-            console.log(
-              "Will not upload, sessionId does not match or upload was cancelled",
-            );
             return;
           }
           if (evt.target && typeof evt.target.result === "string") {
@@ -236,7 +229,7 @@ export function ImportModal({ catalogId }: ImportProps) {
   return (
     <Modal.Root>
       <Modal.Trigger asChild>
-        <Button variant={"secondary"}>
+        <Button variant="secondary">
           <FileImportIcon />
           {localization.importResult.import}
         </Button>
@@ -318,7 +311,7 @@ export function ImportModal({ catalogId }: ImportProps) {
             <div className={styles.buttons}>
               <>
                 <Button
-                  variant={"secondary"}
+                  variant="secondary"
                   disabled={isGoingtoImportResults || isUploading}
                   onClick={goToImporResults}
                 >
@@ -358,16 +351,12 @@ export function ImportModal({ catalogId }: ImportProps) {
               <Button
                 onClick={send}
                 disabled={isUploading || isSending}
-                variant={"primary"}
+                variant="primary"
               >
                 <TasklistSendIcon />
                 {localization.importResult.continue}
               </Button>
-              <Button
-                variant={"secondary"}
-                onClick={cancel}
-                disabled={isSending}
-              >
+              <Button variant="secondary" onClick={cancel} disabled={isSending}>
                 {localization.importResult.cancel}
               </Button>
             </div>

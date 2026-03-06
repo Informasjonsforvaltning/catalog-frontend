@@ -177,6 +177,20 @@ export const getCurrencies = async (): Promise<{
   return response.json();
 };
 
+export const getMainActivities = async (): Promise<{
+  mainActivities: ReferenceDataCode[];
+}> => {
+  const resource = `${process.env.FDK_BASE_URI}/reference-data/eu/main-activities`;
+  const options = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "GET",
+  };
+  const response = await fetch(resource, options);
+  return response.json();
+};
+
 export const searchReferenceData = async (
   searchQuery: string,
   envVariable: string,

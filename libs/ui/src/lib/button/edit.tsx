@@ -9,7 +9,7 @@ const EditButton = ({
 }: ButtonProps) => (
   <Button variant="tertiary" size="sm" {...props}>
     <span className={styles.withIcon}>
-      <PencilWritingIcon fontSize={"1.3rem"} />
+      <PencilWritingIcon fontSize="1.3rem" />
       {children}
     </span>
   </Button>

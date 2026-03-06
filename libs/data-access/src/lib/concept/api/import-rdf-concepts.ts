@@ -13,7 +13,6 @@ export const createImportJob = async (catalogId: string) => {
   if (!session) {
     return redirectToSignIn();
   }
-  const accessToken = await session?.accessToken;
 
   validateOrganizationNumber(catalogId, "createImportJob");
   const encodedCatalogId = validateAndEncodeUrlSafe(
@@ -26,7 +25,7 @@ export const createImportJob = async (catalogId: string) => {
 
   const options = {
     headers: {
-      Authorization: `Bearer ${accessToken}`,
+      Authorization: `Bearer ${session.accessToken}`,
     },
     method: "GET",
   };
@@ -46,7 +45,6 @@ export const importRdfConcepts = async (
   if (!session) {
     return redirectToSignIn();
   }
-  const accessToken = await session?.accessToken;
 
   validateOrganizationNumber(catalogId, "importRdfConcepts");
   validateUUID(importId, "importRdfConcepts");
@@ -70,7 +68,7 @@ export const importRdfConcepts = async (
 
   const options = {
     headers: {
-      Authorization: `Bearer ${accessToken}`,
+      Authorization: `Bearer ${session.accessToken}`,
       "Content-Type": contentType,
     },
     method: "POST",

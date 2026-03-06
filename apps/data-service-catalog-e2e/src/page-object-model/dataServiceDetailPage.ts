@@ -13,9 +13,7 @@ export default class DataServiceDetailPage {
   readonly endpointUrl: Locator;
   readonly contactPoint: Locator;
   readonly publicationState: Locator;
-  readonly publicationDate: Locator;
   readonly dataServiceId: Locator;
-  readonly modifiedDate: Locator;
   readonly accessRights: Locator;
   readonly availability: Locator;
   readonly contactName: Locator;
@@ -37,14 +35,12 @@ export default class DataServiceDetailPage {
     this.editButton = page.getByTestId("edit-data-service-button");
     this.deleteButton = page.getByTestId("delete-data-service-button");
     this.publishSwitch = page.getByTestId("data-service-publish-switch");
-    this.title = page.locator("h2");
+    this.title = page.locator("main").locator("h2");
     this.description = page.getByTestId("data-service-description");
     this.endpointUrl = page.getByTestId("data-service-endpoint-url");
     this.contactPoint = page.getByTestId("data-service-contact-point");
     this.publicationState = page.getByTestId("data-service-publication-state");
-    this.publicationDate = page.getByTestId("data-service-publication-date");
     this.dataServiceId = page.getByTestId("data-service-id");
-    this.modifiedDate = page.getByTestId("data-service-modified-date");
     this.accessRights = page.getByTestId("data-service-access-rights");
     this.availability = page.getByTestId("data-service-availability");
     this.contactName = page.getByTestId("data-service-contact-name");
@@ -53,9 +49,11 @@ export default class DataServiceDetailPage {
     this.contactUrl = page.getByTestId("data-service-contact-url");
     this.confirmModal = page.locator("dialog[open]");
     this.confirmModalSuccessButton = page
-      .locator("dialog[open] button")
+      .locator('dialog[open] button:not([data-command="close"])')
       .first();
-    this.confirmModalCancelButton = page.locator("dialog[open] button").nth(1);
+    this.confirmModalCancelButton = page
+      .locator('dialog[open] button:not([data-command="close"])')
+      .nth(1);
   }
 
   // Navigation
@@ -150,9 +148,9 @@ export default class DataServiceDetailPage {
 
   async expectPublishedStatusToBe(published: boolean) {
     if (published) {
-      await expect(this.publicationDate).toContainText("Publisert");
+      await expect(this.publishSwitch).toBeChecked();
     } else {
-      await expect(this.publicationDate).not.toContainText("Publisert");
+      await expect(this.publishSwitch).not.toBeChecked();
     }
   }
 
@@ -183,10 +181,6 @@ export default class DataServiceDetailPage {
 
   async expectDataServiceIdToBe(id: string) {
     await expect(this.dataServiceId).toContainText(id);
-  }
-
-  async expectModifiedDateToBe(date: string) {
-    await expect(this.modifiedDate).toContainText(date);
   }
 
   async expectAccessRightsToBe(accessRights: string) {

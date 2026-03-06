@@ -10,18 +10,15 @@ import {
   SearchHitContainer,
   SearchHitsLayout,
   Select,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import SearchFilter from "../../../../components/search-filter";
 import React, { useState, useEffect, useMemo } from "react";
 import { Chip } from "@digdir/designsystemet-react";
 import {
   capitalizeFirstLetter,
-  dateStringToDate,
-  formatDate,
   getTranslateText,
   localization,
   sortAscending,
-  sortDateStringsDescending,
   sortDescending,
   setClientDataServicesPageSettings,
 } from "@catalog-frontend/utils";
@@ -34,11 +31,10 @@ import {
 } from "nuqs";
 import StatusTag from "../../../../components/status-tag";
 import { isEmpty } from "lodash";
-import ImportModal from "../../../../components/import-modal";
 
-type SortTypes = "titleAsc" | "titleDesc" | "lastChanged";
+type SortTypes = "titleAsc" | "titleDesc";
 type FilterType = "published" | "status";
-const sortTypes: SortTypes[] = ["titleAsc", "titleDesc", "lastChanged"];
+const sortTypes: SortTypes[] = ["titleAsc", "titleDesc"];
 const itemPerPage = 5;
 
 interface Props {
@@ -54,7 +50,6 @@ const DataServicesPageClient = ({
   dataServices,
   catalogId,
   hasWritePermission,
-  hasAdminPermission,
   distributionStatuses,
   pageSettings,
 }: Props) => {
@@ -105,9 +100,6 @@ const DataServicesPageClient = ({
               getTranslateText(a.title),
               getTranslateText(b.title),
             );
-        case "lastChanged":
-          return (a: DataService, b: DataService) =>
-            sortDateStringsDescending(a.modified || "", b.modified || "");
         default:
           return () => 0;
       }
@@ -191,46 +183,8 @@ const DataServicesPageClient = ({
     getSortFunction,
   ]);
 
-  const FilterChips = () => {
-    if (isEmpty(filterStatus) && isEmpty(filterPublicationState)) {
-      return undefined;
-    }
-
-    return (
-      <div className={styles.chips}>
-        <Chip.Group size="small" className={styles.wrap}>
-          {filterStatus?.map((filter, index) => (
-            <Chip.Removable
-              key={`status-${index}`}
-              aria-label={`Fjern filter for status ${filter}`}
-              onClick={() => {
-                removeFilter(filter, "status");
-              }}
-            >
-              {capitalizeFirstLetter(
-                getTranslateText(
-                  distributionStatuses?.find((s) => s.uri === filter)?.label,
-                ),
-              )}
-            </Chip.Removable>
-          ))}
-          {filterPublicationState?.map((filter, index) => (
-            <Chip.Removable
-              key={`published-${index}`}
-              aria-label={`Fjern filter for publisering ${filter}`}
-              onClick={() => {
-                removeFilter(filter, "published");
-              }}
-            >
-              {filter === "published"
-                ? localization.publicationState.published
-                : localization.publicationState.unpublished}
-            </Chip.Removable>
-          ))}
-        </Chip.Group>
-      </div>
-    );
-  };
+  const hasActiveFilters =
+    !isEmpty(filterStatus) || !isEmpty(filterPublicationState);
 
   const totalPages = Math.ceil(filteredDataServices.length / itemPerPage);
 
@@ -256,14 +210,11 @@ const DataServicesPageClient = ({
                 }}
               />
               <Select
-                size="sm"
+                data-size="sm"
                 onChange={(e) => setSortValue(e.target.value)}
                 value={sortValue}
               >
                 <option value="">{`${localization.choose} ${localization.search.sort.toLowerCase()}...`}</option>
-                <option value="lastChanged">
-                  {localization.search.sortOptions.LAST_UPDATED_FIRST}
-                </option>
                 <option value="titleAsc">
                   {localization.search.sortOptions.TITLE_AÅ}
                 </option>
@@ -273,7 +224,6 @@ const DataServicesPageClient = ({
               </Select>
             </div>
             <div className={styles.buttons}>
-              {hasAdminPermission && <ImportModal catalogId={catalogId} />}
               {hasWritePermission && (
                 <LinkButton href={`/catalogs/${catalogId}/data-services/new`}>
                   <PlusCircleIcon />
@@ -282,7 +232,35 @@ const DataServicesPageClient = ({
               )}
             </div>
           </div>
-          <FilterChips />
+          {hasActiveFilters && (
+            <div className={styles.chips}>
+              {filterStatus?.map((filter) => (
+                <Chip.Removable
+                  key={`status-${filter}`}
+                  aria-label={`Fjern filter for status ${filter}`}
+                  onClick={() => removeFilter(filter, "status")}
+                >
+                  {capitalizeFirstLetter(
+                    getTranslateText(
+                      distributionStatuses?.find((s) => s.uri === filter)
+                        ?.label,
+                    ),
+                  )}
+                </Chip.Removable>
+              ))}
+              {filterPublicationState?.map((filter) => (
+                <Chip.Removable
+                  key={`published-${filter}`}
+                  aria-label={`Fjern filter for publisering ${filter}`}
+                  onClick={() => removeFilter(filter, "published")}
+                >
+                  {filter === "published"
+                    ? localization.publicationState.published
+                    : localization.publicationState.unpublished}
+                </Chip.Removable>
+              ))}
+            </div>
+          )}
         </SearchHitsLayout.SearchRow>
         <SearchHitsLayout.LeftColumn>
           <SearchFilter distributionStatuses={distributionStatuses} />
@@ -302,24 +280,15 @@ const DataServicesPageClient = ({
                           <StatusTag
                             dataServiceStatus={dataService?.status}
                             distributionStatuses={distributionStatuses}
-                            language={"nb"}
+                            language="nb"
                           />
                         }
                         content={
-                          <>
-                            <div className={styles.set}>
-                              <p>
-                                {localization.lastChanged}{" "}
-                                {formatDate(
-                                  dateStringToDate(dataService.modified ?? ""),
-                                )}
-                              </p>
-                              <span>•</span>
-                              {dataService.published
-                                ? localization.publicationState.publishedInFDK
-                                : localization.publicationState.unpublished}
-                            </div>
-                          </>
+                          <div className={styles.set}>
+                            {dataService.published
+                              ? localization.publicationState.publishedInFDK
+                              : localization.publicationState.unpublished}
+                          </div>
                         }
                       />
                     </li>

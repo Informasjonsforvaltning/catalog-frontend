@@ -19,7 +19,7 @@ const NoAccess = async (
           text: localization.catalogType.concept,
         },
         {
-          href: `#`,
+          href: "#",
           text: localization.noAccess,
         },
       ] as BreadcrumbType[])

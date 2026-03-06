@@ -1,0 +1,55 @@
+.infoCard > .item {
+  border-width: 1px 1px 0 1px;
+  border-color: #d5d7d9;
+  border-style: solid;
+  background-color: #fff;
+  padding: 37px;
+}
+
+.fieldHeading {
+  font-weight: 500;
+}
+
+.infoCard > .item:first-child {
+  border-top-right-radius: 8px;
+  border-top-left-radius: 8px;
+}
+
+.infoCard > .item:last-child {
+  border-bottom-right-radius: 8px;
+  border-bottom-left-radius: 8px;
+  border-bottom: 1px solid #d5d7d9;
+}
+
+.infoCard.small > .item:not(:first-child) {
+  border-top: 0;
+}
+
+.infoCard.small > .item:not(:first-child) > div {
+  border-top: 1px solid #d5d7d9;
+}
+
+.infoCard.small > .item {
+  padding-top: 0;
+}
+
+.infoCard.small > .item > div {
+  padding-top: 37px;
+}
+
+.light,
+.light a {
+  font-weight: 400;
+  color: #6c737a;
+}
+
+.set {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  padding-bottom: 1rem;
+}
+.wrap {
+  display: block;
+  word-break: break-word;
+}

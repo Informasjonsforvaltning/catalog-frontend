@@ -12,6 +12,7 @@ import {
   localization,
   safeValues,
   deepMergeWithUndefinedHandling,
+  trimObjectWhitespace,
 } from "@catalog-frontend/utils";
 import type {
   CodeListsResult,
@@ -288,9 +289,21 @@ const ConceptForm = ({
             return;
           }
 
+          const trimmedValues = trimObjectWhitespace(values);
+
+          if (
+            isEqual(
+              mapPropsToValues(trimmedValues),
+              mapPropsToValues(initialConcept),
+            )
+          ) {
+            resetForm();
+            return;
+          }
+
           if (onSubmit) {
             try {
-              const newValues = await onSubmit(values);
+              const newValues = await onSubmit(trimmedValues);
 
               showSnackbarMessage({
                 message: localization.snackbar.saveSuccessful,

@@ -29,7 +29,7 @@ export const SourceForDefinitionField: FC<Props> = ({
         <Field
           name={sourceTitleFieldName}
           as={Textfield}
-          label={"Tittel på kilde"}
+          label="Tittel på kilde"
           readOnly={readOnly}
           cols={numColsInputField}
           rows={1}
@@ -37,7 +37,7 @@ export const SourceForDefinitionField: FC<Props> = ({
         <Field
           name={sourceUriFieldName}
           as={Textfield}
-          label={"Lenke til kilde"}
+          label="Lenke til kilde"
           readOnly={readOnly}
           cols={numColsInputField}
           rows={1}

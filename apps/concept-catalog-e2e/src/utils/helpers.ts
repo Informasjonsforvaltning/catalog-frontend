@@ -1,10 +1,5 @@
 import AxeBuilder from "@axe-core/playwright";
-import {
-  Concept,
-  FieldsResult,
-  ImportResult,
-  UsersResult,
-} from "@catalog-frontend/types";
+import { Concept, FieldsResult, UsersResult } from "@catalog-frontend/types";
 import { APIRequestContext, Locator, Page, expect } from "@playwright/test";
 import * as crypto from "crypto";
 
@@ -182,51 +177,6 @@ export const getFields = async (apiRequestContext: APIRequestContext) => {
 
   const result = (await response.json()) as FieldsResult;
   return result;
-};
-
-export const getImportResults = async (
-  apiRequestContext: APIRequestContext,
-) => {
-  const response = await apiRequestContext.get(
-    `/api/catalogs/${process.env.E2E_CATALOG_ID}/concepts/import-results`,
-  );
-
-  console.log("Response status for importing RDF results ", response.status);
-
-  return response.json();
-};
-
-async function deleteImportResult(
-  apiRequestContext: APIRequestContext,
-  resultId: string,
-) {
-  const response = await apiRequestContext.delete(
-    `/api/catalogs/${process.env.E2E_CATALOG_ID}/concepts/import-results/${resultId}`,
-  );
-
-  console.log(
-    "Import result delete response status ",
-    response.status,
-    " for import result ",
-    resultId,
-  );
-
-  console.log("Deleted import result ", resultId);
-}
-
-export const deleteAllImportResults = async (
-  apiRequestContext: APIRequestContext,
-) => {
-  try {
-    const importResults: ImportResult[] =
-      await getImportResults(apiRequestContext);
-
-    for (const importResult of importResults) {
-      await deleteImportResult(apiRequestContext, importResult?.id);
-    }
-  } catch (error) {
-    console.log("[TEST] No import results to remove: ", error);
-  }
 };
 
 export enum ConceptStatus {

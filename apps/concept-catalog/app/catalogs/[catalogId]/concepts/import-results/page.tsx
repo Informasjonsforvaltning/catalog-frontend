@@ -14,13 +14,12 @@ const ImportResultsPage = withAdminProtectedPage(
   async ({ catalogId, session }) => {
     const importResults: ImportResult[] = await getConceptImportResults(
       catalogId,
-      `${session.accessToken}`,
+      session.accessToken,
     )
       .then((response) => {
         return response.json();
       })
       .catch((error) => {
-        console.log(error);
         throw error;
       });
 

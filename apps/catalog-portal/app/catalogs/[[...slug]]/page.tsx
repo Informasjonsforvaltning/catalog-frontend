@@ -21,7 +21,7 @@ import {
   ServiceMessages,
   TermsOfUseAlert,
   MarkdownComponent,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import { Alert, Heading } from "@digdir/designsystemet-react";
 import styles from "./catalogs.module.css";
 import { CatalogCard } from "./components/catalog-card";
@@ -32,14 +32,14 @@ const CatalogsPage = async (props: PageProps<"/catalogs/[[...slug]]">) => {
 
   const session = await getValidSession();
   if (!session) {
-    redirectToSignIn({ callbackUrl: `/catalogs` });
+    return redirectToSignIn("/catalogs");
   }
 
   let organizations: Organization[] = [];
-  if (hasSystemAdminPermission(`${session?.accessToken}`)) {
+  if (hasSystemAdminPermission(session.accessToken)) {
     organizations = await getOrganizations();
   } else {
-    const resourceRoles = getResourceRoles(`${session?.accessToken}`);
+    const resourceRoles = getResourceRoles(session.accessToken);
     const organiztionIdsWithAdminRole = resourceRoles
       .filter((role) => role.resource === "organization")
       .map((role) => role.resourceId);
@@ -57,16 +57,14 @@ const CatalogsPage = async (props: PageProps<"/catalogs/[[...slug]]">) => {
     (org) => org.organizationId === catalogId,
   );
   const hasNonSystemAccess = catalogId
-    ? hasNonSystemAccessForOrg(`${session?.accessToken}`, catalogId)
+    ? hasNonSystemAccessForOrg(session.accessToken, catalogId)
     : false;
   const serviceMessages = await getServiceMessages();
 
   return (
     <div className="container">
       <ServiceMessages serviceMessages={serviceMessages} />
-      <Heading level={1} spacing>
-        Katalogoversikt
-      </Heading>
+      <Heading level={1}>{localization.catalogOverview}</Heading>
       {(organizations.length > 1 ||
         (organizations.length > 0 && !currentOrganization)) && (
         <OrganizationCombo
@@ -75,8 +73,8 @@ const CatalogsPage = async (props: PageProps<"/catalogs/[[...slug]]">) => {
         />
       )}
       {organizations.length === 0 ? (
-        <Alert severity="warning" style={{ marginTop: "1rem" }}>
-          <Heading level={2} size="xs" spacing>
+        <Alert data-color="warning" style={{ marginTop: "1rem" }}>
+          <Heading level={2} data-size="xs">
             {localization.alert.noOrganizationAvailable.heading}
           </Heading>
           <MarkdownComponent>
@@ -89,7 +87,7 @@ const CatalogsPage = async (props: PageProps<"/catalogs/[[...slug]]">) => {
           <Heading
             data-testid="catalog-portal-heading"
             className={styles.heading}
-            size="lg"
+            data-size="xs"
           >
             {getTranslateText(currentOrganization.prefLabel)}
           </Heading>
@@ -111,7 +109,7 @@ const CatalogsPage = async (props: PageProps<"/catalogs/[[...slug]]">) => {
               <CatalogCard
                 variant="data-service"
                 organizationId={currentOrganization.organizationId}
-                href={`${process.env.DATASERVICE_CATALOG_BASE_URI}/${currentOrganization.organizationId}`}
+                href={`${process.env.DATA_SERVICE_CATALOG_FRONTEND}/catalogs/${currentOrganization.organizationId}/data-services`}
               />
             </div>
 

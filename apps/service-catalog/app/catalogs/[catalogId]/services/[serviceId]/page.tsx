@@ -3,7 +3,11 @@ import {
   getOrganization,
 } from "@catalog-frontend/data-access";
 import { Service } from "@catalog-frontend/types";
-import { BreadcrumbType, Breadcrumbs, PageBanner } from "@catalog-frontend/ui";
+import {
+  BreadcrumbType,
+  Breadcrumbs,
+  PageBanner,
+} from "@catalog-frontend/ui-v2";
 import {
   getTranslateText,
   getValidSession,
@@ -22,16 +26,16 @@ export default async function ServiceDetailsPage(
 
   const session = await getValidSession();
   if (!session) {
-    return redirectToSignIn({
-      callbackUrl: `/catalogs/${catalogId}/services/${serviceId}`,
-    });
+    return redirectToSignIn(`/catalogs/${catalogId}/services/${serviceId}`);
   }
   const service: Service | null = await getServiceById(catalogId, serviceId);
   if (!service) {
-    return redirect(`/notfound`, RedirectType.replace);
+    return redirect("/notfound", RedirectType.replace);
   }
-  const hasWritePermission =
-    session && hasOrganizationWritePermission(session?.accessToken, catalogId);
+  const hasWritePermission = hasOrganizationWritePermission(
+    session.accessToken,
+    catalogId,
+  );
 
   const [organization, statusesResponse] = await Promise.all([
     getOrganization(catalogId),

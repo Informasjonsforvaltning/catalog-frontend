@@ -16,19 +16,18 @@ export const withProtectedPage = (
   return async ({ params }) => {
     const { catalogId } = await params;
     if (!validOrganizationNumber(catalogId)) {
-      redirect(`/notfound`, RedirectType.replace);
+      redirect("/notfound", RedirectType.replace);
     }
 
     const session = await getValidSession();
     if (!session) {
-      return redirectToSignIn({
-        callbackUrl: pagePath(catalogId),
-      });
+      return redirectToSignIn(pagePath(catalogId));
     }
 
-    const hasAdminPermission =
-      session?.accessToken &&
-      hasOrganizationAdminPermission(session.accessToken, catalogId);
+    const hasAdminPermission = hasOrganizationAdminPermission(
+      session.accessToken,
+      catalogId,
+    );
     if (!hasAdminPermission) {
       return redirect(`/catalogs/${catalogId}/no-access`);
     }

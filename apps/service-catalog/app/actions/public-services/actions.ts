@@ -20,12 +20,12 @@ import { compare } from "fast-json-patch";
 import { updateTag } from "next/cache";
 import { redirect } from "next/navigation";
 
-export async function getPublicServices(catalogId: string) {
+export async function getPublicServices(catalogId: string): Promise<Service[]> {
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
   }
-  const response = await getAll(catalogId, `${session?.accessToken}`);
+  const response = await getAll(catalogId, session.accessToken);
   if (response.status !== 200) {
     throw new Error(
       "getPublicServices failed with response code " + response.status,
@@ -38,16 +38,12 @@ export async function getPublicServices(catalogId: string) {
 export async function getPublicServiceById(
   catalogId: string,
   serviceId: string,
-) {
+): Promise<Service> {
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
   }
-  const response = await getById(
-    catalogId,
-    serviceId,
-    `${session?.accessToken}`,
-  );
+  const response = await getById(catalogId, serviceId, session.accessToken);
 
   if (response.status !== 200) {
     throw new Error(
@@ -62,7 +58,7 @@ export async function getPublicServiceById(
 export async function createPublicService(
   catalogId: string,
   values: ServiceToBeCreated,
-) {
+): Promise<string | undefined> {
   const newPublicService = removeEmptyValues(values);
   const session = await getValidSession();
   if (!session) {
@@ -74,12 +70,12 @@ export async function createPublicService(
     const response = await create(
       newPublicService,
       catalogId,
-      `${session?.accessToken}`,
+      session.accessToken,
     );
     if (response.status !== 201) {
       throw new Error();
     }
-    serviceId = response?.headers?.get("location")?.split("/").pop();
+    serviceId = response.headers.get("location")?.split("/").pop();
     success = true;
     return serviceId;
   } catch (error) {
@@ -95,18 +91,14 @@ export async function createPublicService(
 export async function deletePublicService(
   catalogId: string,
   serviceId: string,
-) {
+): Promise<void> {
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
   }
   let success = false;
   try {
-    const response = await deletePS(
-      catalogId,
-      serviceId,
-      `${session?.accessToken}`,
-    );
+    const response = await deletePS(catalogId, serviceId, session.accessToken);
     if (response.status !== 204) {
       throw new Error();
     }
@@ -125,13 +117,14 @@ export async function updatePublicService(
   catalogId: string,
   oldPublicService: Service,
   values: Service,
-) {
+): Promise<void> {
   const updatedService = removeEmptyValues(values);
 
   const updatedPublicServiceMerged = {
     ...oldPublicService,
     title: updatedService.title,
     description: updatedService.description,
+    dctType: updatedService.dctType,
     produces: updatedService.produces,
     contactPoints: updatedService.contactPoints,
     homepage: updatedService.homepage,
@@ -143,7 +136,7 @@ export async function updatePublicService(
   const diff = compare(oldPublicService, updatedPublicServiceMerged);
 
   if (diff.length === 0) {
-    throw new Error(localization.alert.noChanges);
+    return;
   }
 
   let success = false;
@@ -157,7 +150,7 @@ export async function updatePublicService(
       catalogId,
       oldPublicService.id,
       diff,
-      `${session?.accessToken}`,
+      session.accessToken,
     );
     if (response.status !== 200) {
       throw new Error();
@@ -176,18 +169,14 @@ export async function updatePublicService(
 export async function publishPublicService(
   catalogId: string,
   serviceId: string,
-) {
+): Promise<void> {
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
   }
   let success = false;
   try {
-    const response = await publish(
-      catalogId,
-      serviceId,
-      `${session?.accessToken}`,
-    );
+    const response = await publish(catalogId, serviceId, session.accessToken);
     if (response.status !== 200) {
       throw new Error();
     }
@@ -205,18 +194,14 @@ export async function publishPublicService(
 export async function unpublishPublicService(
   catalogId: string,
   serviceId: string,
-) {
+): Promise<void> {
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
   }
   let success = false;
   try {
-    const response = await unpublish(
-      catalogId,
-      serviceId,
-      `${session?.accessToken}`,
-    );
+    const response = await unpublish(catalogId, serviceId, session.accessToken);
     if (response.status !== 200) {
       throw new Error();
     }

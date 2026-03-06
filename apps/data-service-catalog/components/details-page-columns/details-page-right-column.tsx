@@ -1,11 +1,10 @@
-import { InfoCard } from "@catalog-frontend/ui";
+import { InfoCard } from "@catalog-frontend/ui-v2";
 import styles from "./details-columns.module.css";
 import { DataService, DataServiceReferenceData } from "@catalog-frontend/types";
 import {
   accessRights,
   getTranslateText,
   localization,
-  formatISO,
 } from "@catalog-frontend/utils";
 import { isEmpty } from "lodash";
 import { EnvelopeClosedIcon, LinkIcon, PhoneIcon } from "@navikt/aksel-icons";
@@ -53,21 +52,6 @@ export const RightColumn = ({
           ? localization.publicationState.publishedInFDK
           : localization.publicationState.unpublished}
       </InfoCard.Item>
-
-      {dataService?.modified && (
-        <InfoCard.Item
-          title={localization.dataServiceForm.fieldLabel.modified}
-          headingColor="light"
-          data-testid="data-service-modified-date"
-        >
-          {formatISO(dataService.modified, {
-            weekday: "long",
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          })}
-        </InfoCard.Item>
-      )}
 
       {!isEmpty(dataService?.accessRights) && (
         <InfoCard.Item

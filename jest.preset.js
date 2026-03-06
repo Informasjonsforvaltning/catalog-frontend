@@ -3,5 +3,5 @@ const nxPreset = require("@nx/jest/preset").default;
 
 module.exports = {
   ...nxPreset,
-  setupFiles: [path.join(__dirname, `jest.shim.js`)],
+  setupFiles: [path.join(__dirname, "jest.shim.js")],
 };

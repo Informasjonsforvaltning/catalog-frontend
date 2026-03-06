@@ -20,7 +20,7 @@ import _ from "lodash";
 import { updateTag } from "next/cache";
 import { conceptJsonPatchOperations } from "@concept-catalog/utils/json-patch";
 
-const clearValues = (object: Concept, path: string) => {
+const clearValues = (object: Concept, path: string): void => {
   const fields = path.split(".");
   const currentField = fields.shift();
 
@@ -67,7 +67,7 @@ const preProcessValues = (
     kontaktpunkt,
     ...conceptValues
   }: Concept,
-) => ({
+): Concept => ({
   ...conceptValues,
   merknad,
   eksempel,
@@ -80,7 +80,7 @@ export async function createConcept(
   values: Concept,
   catalogId: string,
   internalFields: InternalField[],
-) {
+): Promise<string | undefined> {
   const processedValues = preProcessValues(catalogId, values);
   internalFields.forEach((field) => {
     if (
@@ -102,12 +102,12 @@ export async function createConcept(
   try {
     const response = await createConceptApi(
       processedValues,
-      `${session?.accessToken}`,
+      session.accessToken,
     );
     if (response.status !== 201) {
       throw new Error();
     }
-    conceptId = response?.headers?.get("location")?.split("/").pop();
+    conceptId = response.headers.get("location")?.split("/").pop();
     success = true;
   } catch (error) {
     console.error(error);
@@ -122,17 +122,14 @@ export async function createConcept(
   return conceptId;
 }
 
-export async function deleteConcept(catalogId: string, conceptId: string) {
+export async function deleteConcept(conceptId: string): Promise<void> {
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
   }
   let success = false;
   try {
-    const response = await deleteConceptApi(
-      conceptId,
-      `${session?.accessToken}`,
-    );
+    const response = await deleteConceptApi(conceptId, session.accessToken);
     if (response.status !== 200) {
       throw new Error();
     }
@@ -151,7 +148,7 @@ export async function updateConcept(
   initialConcept: Concept,
   values: Concept,
   internalFields: InternalField[],
-) {
+): Promise<Concept> {
   if (!initialConcept.id) {
     throw new Error("Concept id cannot be null");
   }
@@ -186,7 +183,7 @@ export async function updateConcept(
   const diff = conceptJsonPatchOperations(initialConcept, values);
 
   if (diff.length === 0) {
-    throw new Error(localization.alert.noChanges);
+    return initialConcept;
   }
 
   let success = false;
@@ -199,7 +196,7 @@ export async function updateConcept(
     const response = await patchConceptApi(
       initialConcept.id,
       diff,
-      `${session?.accessToken}`,
+      session.accessToken,
     );
     if (response.status !== 200 && response.status !== 201) {
       throw new Error(`${response.status} ${response.statusText}`);
@@ -207,11 +204,11 @@ export async function updateConcept(
 
     success = true;
     if (response.status === 201) {
-      conceptId = response?.headers?.get("location")?.split("/").pop();
+      conceptId = response.headers.get("location")?.split("/").pop();
     }
   } catch (error) {
     console.error(`${localization.alert.fail} ${error}`);
-    throw new Error(`Noe gikk galt, prøv igjen...`);
+    throw new Error("Noe gikk galt, prøv igjen...");
   }
 
   if (success) {
@@ -219,12 +216,15 @@ export async function updateConcept(
     updateTag("concepts");
   }
 
-  return await getConcept(`${conceptId}`, `${session?.accessToken}`).then(
+  return await getConcept(`${conceptId}`, session.accessToken).then(
     (response) => (response.ok ? response.json() : undefined),
   );
 }
 
-export async function deleteImportResult(catalogId: string, resultId: string) {
+export async function deleteImportResult(
+  catalogId: string,
+  resultId: string,
+): Promise<void> {
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
@@ -234,13 +234,12 @@ export async function deleteImportResult(catalogId: string, resultId: string) {
     const response = await removeImportResult(
       catalogId,
       resultId,
-      `${session?.accessToken}`,
+      session.accessToken,
     );
     if (response.status !== 204) {
       throw new Error();
     }
     success = true;
-    console.log("Deleted import result", catalogId, resultId);
   } catch (error) {
     throw new Error(localization.alert.deleteFailed);
   } finally {
@@ -254,7 +253,7 @@ export async function saveImportedConcept(
   catalogId: string,
   resultId: string,
   externalId: string,
-) {
+): Promise<void> {
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
@@ -264,13 +263,12 @@ export async function saveImportedConcept(
       catalogId,
       resultId,
       externalId,
-      `${session?.accessToken}`,
+      session.accessToken,
     );
 
     if (response.status !== 200 && response.status !== 201) {
       throw new Error();
     }
-    console.log("Confirmed import result", catalogId, resultId);
   } catch (error) {
     console.error(error);
   } finally {
@@ -279,28 +277,26 @@ export async function saveImportedConcept(
   }
 }
 
-export async function cancelImport(catalogId: string, resultId: string) {
+export async function cancelImport(
+  catalogId: string,
+  resultId: string,
+): Promise<void> {
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
   }
   let success = false;
   try {
-    console.log("Sending import cancellation", catalogId, resultId);
-
     const response = await cancelConceptImport(
       catalogId,
       resultId,
-      `${session?.accessToken}`,
+      session.accessToken,
     );
-
-    console.log("Import cancellation has been sent", catalogId, resultId);
 
     if (response.status !== 200 && response.status !== 201) {
       throw new Error();
     }
     success = true;
-    console.log("Importing result has been cancelled", catalogId, resultId);
   } catch (error) {
     throw new Error(localization.alert.fail);
   } finally {

@@ -2,7 +2,11 @@
 
 import styles from "./editable-fields.module.css";
 import { Heading } from "@digdir/designsystemet-react";
-import { Button, Select, useWarnIfUnsavedChanges } from "@catalog-frontend/ui";
+import {
+  Button,
+  Select,
+  useWarnIfUnsavedChanges,
+} from "@catalog-frontend/ui-v2";
 import { localization } from "@catalog-frontend/utils";
 import { CodeList } from "@catalog-frontend/types";
 
@@ -60,7 +64,7 @@ export function EditableFieldsClient({ catalogId }: EditableFieldsClientProps) {
   };
 
   const codeListsOptions = [
-    <option key={"no-codelist"} value={undefined}>
+    <option key="no-codelist" value={undefined}>
       {localization.catalogAdmin.noListChosen}
     </option>,
     ...(dbCodeLists?.map((codeList: CodeList) => (
@@ -73,7 +77,7 @@ export function EditableFieldsClient({ catalogId }: EditableFieldsClientProps) {
   return (
     <PageLayout>
       <div className={styles.heading}>
-        <Heading level={2} size="xsmall">
+        <Heading level={2} data-size="xs">
           {localization.catalogAdmin.editableFields}
         </Heading>
       </div>
@@ -85,7 +89,7 @@ export function EditableFieldsClient({ catalogId }: EditableFieldsClientProps) {
               <p>Fagområde:</p>
 
               <Select
-                label={localization.catalogAdmin.chooseCodeList}
+                aria-label={localization.catalogAdmin.chooseCodeList}
                 value={updatedCodeListId || dbEditableFields?.domainCodeListId}
                 onChange={(event) => {
                   setUpdatedCodeListId(event.target.value);
@@ -98,8 +102,7 @@ export function EditableFieldsClient({ catalogId }: EditableFieldsClientProps) {
             <div className="accordionField">
               <div className={styles.accordionButtons}>
                 <Button
-                  fullWidth={true}
-                  size="small"
+                  className={styles.fullWidth}
                   onClick={() => handleUpdateDbCodeListId()}
                 >
                   {localization.button.save}

@@ -9,7 +9,7 @@ const DeleteButton = ({
 }: ButtonProps) => (
   <Button variant="tertiary" color="danger" size="sm" {...props}>
     <span className={styles.withIcon}>
-      <TrashIcon title={localization.icon.trash} fontSize={"1.2rem"} />
+      <TrashIcon title={localization.icon.trash} fontSize="1.2rem" />
       {children}
     </span>
   </Button>

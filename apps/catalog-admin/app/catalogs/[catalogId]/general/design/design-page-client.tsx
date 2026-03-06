@@ -5,7 +5,7 @@ import { useAdminState } from "../../../../../context/admin";
 import { ColorPicker } from "../../../../../components/color-picker";
 import { ImageUploader } from "../../../../../components/image-uploader";
 import styles from "./design.module.css";
-import { Breadcrumbs, Button, PageBanner } from "@catalog-frontend/ui";
+import { Breadcrumbs, Button, PageBanner } from "@catalog-frontend/ui-v2";
 import { Heading, Label, Textfield } from "@digdir/designsystemet-react";
 import {
   getTranslateText,
@@ -112,14 +112,14 @@ const DesignPageClient = ({
 
       <PageLayout>
         <div className={styles.heading}>
-          <Heading size="xlarge">{localization.catalogAdmin.design}</Heading>
+          <Heading data-size="xl">{localization.catalogAdmin.design}</Heading>
         </div>
         <div className={styles.subheading}>
-          <Heading size="small">{localization.catalogAdmin.preview}</Heading>
+          <Heading data-size="sm">{localization.catalogAdmin.preview}</Heading>
         </div>
         <PageBanner
           title={localization.manageCatalog}
-          subtitle={`${getTranslateText(organization?.prefLabel)}`}
+          subtitle={getTranslateText(organization?.prefLabel)}
           logoDescription={
             (dbDesign?.hasLogo && dbDesign?.logoDescription) || ""
           }
@@ -132,7 +132,7 @@ const DesignPageClient = ({
           }
         />
         <div className={styles.subheading}>
-          <Heading size="small">
+          <Heading data-size="sm">
             {localization.catalogAdmin.customizeDesign}
           </Heading>
         </div>
@@ -151,6 +151,7 @@ const DesignPageClient = ({
           </div>
           <div className={styles.textFieldContainer}>
             <Textfield
+              aria-label={localization.catalogAdmin.descriptionLogo}
               className={styles.textField}
               error={!isTextInputValid && localization.validation.invalidValue}
               value={imageLabel}
@@ -175,7 +176,7 @@ const DesignPageClient = ({
               <div className={styles.label}>
                 <Label>{localization.catalogAdmin.backgroundColor}</Label>
               </div>
-              <ColorPicker catalogId={catalogId} type={"background"} />
+              <ColorPicker catalogId={catalogId} type="background" />
             </div>
             <div>
               <div className={styles.label}>

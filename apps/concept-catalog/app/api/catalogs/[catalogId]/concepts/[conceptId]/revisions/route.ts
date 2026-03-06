@@ -12,14 +12,14 @@ export const GET = async (
     try {
       const response = await getConceptRevisions(
         conceptId,
-        session?.accessToken as string,
+        session.accessToken,
       );
       if (response.status !== 200) {
         throw new Error();
       }
       const jsonResponse = await response.json();
       return new Response(JSON.stringify(jsonResponse), {
-        status: response?.status,
+        status: response.status,
       });
     } catch (err) {
       return new Response(

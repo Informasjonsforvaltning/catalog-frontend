@@ -37,24 +37,24 @@ export const createTokenRoute = () => {
     // Enhanced debugging information for valid sessions
     const debugInfo: any = {
       hasSession: !!session,
-      hasAccessToken: !!session?.accessToken,
-      tokenLength: session?.accessToken?.length || 0,
-      tokenPrefix: session?.accessToken?.substring(0, 20) + "..." || "N/A",
-      expiresAt: session?.accessTokenExpiresAt,
-      isExpired: session?.accessTokenExpiresAt
+      hasAccessToken: !!session.accessToken,
+      tokenLength: session.accessToken.length || 0,
+      tokenPrefix: session.accessToken.substring(0, 20) + "..." || "N/A",
+      expiresAt: session.accessTokenExpiresAt,
+      isExpired: session.accessTokenExpiresAt
         ? session.accessTokenExpiresAt < Date.now() / 1000
         : true,
       currentTime: Math.floor(Date.now() / 1000),
-      timeUntilExpiry: session?.accessTokenExpiresAt
+      timeUntilExpiry: session.accessTokenExpiresAt
         ? session.accessTokenExpiresAt - Math.floor(Date.now() / 1000)
         : 0,
-      hasError: !!session?.error,
-      error: session?.error || null,
-      user: session?.user || null,
+      hasError: !!session.error,
+      error: session.error || null,
+      user: session.user || null,
     };
 
     // Add token payload information (without sensitive data)
-    if (session?.accessToken) {
+    if (session.accessToken) {
       try {
         const decoded = jwtDecode(session.accessToken) as any;
         debugInfo.tokenPayload = {
@@ -84,7 +84,7 @@ export const createTokenRoute = () => {
     const response = {
       ...debugInfo,
       // Include the actual access token for API calls (development only)
-      accessToken: allowTokenAccess ? session?.accessToken : undefined,
+      accessToken: allowTokenAccess ? session.accessToken : undefined,
     };
 
     return new Response(JSON.stringify(response, null, 2), {

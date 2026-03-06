@@ -5,7 +5,7 @@ import {
   Service,
   StorageData,
 } from "@catalog-frontend/types";
-import { Button, ButtonBar, ConfirmModal } from "@catalog-frontend/ui";
+import { Button, ButtonBar, ConfirmModal } from "@catalog-frontend/ui-v2";
 import { LocalDataStorage, localization } from "@catalog-frontend/utils";
 import { ArrowLeftIcon } from "@navikt/aksel-icons";
 import {
@@ -23,6 +23,7 @@ import {
 import { useEffect, useState } from "react";
 
 type EditPageProps = {
+  mainActivities: ReferenceDataCode[];
   referenceDataEnv: string;
   searchEnv: string;
   service: Service;
@@ -30,7 +31,8 @@ type EditPageProps = {
 };
 
 export const EditPage = (props: EditPageProps) => {
-  const { referenceDataEnv, searchEnv, service, statuses } = props;
+  const { mainActivities, referenceDataEnv, searchEnv, service, statuses } =
+    props;
   const router = useRouter();
   const { catalogId, serviceId } = useParams<{
     catalogId: string;
@@ -91,8 +93,7 @@ export const EditPage = (props: EditPageProps) => {
       <ButtonBar>
         <Button
           variant="tertiary"
-          color="second"
-          size="sm"
+          data-size="sm"
           onClick={() => setShowCancelConfirm(true)}
         >
           <ArrowLeftIcon fontSize="1.25em" />
@@ -101,6 +102,7 @@ export const EditPage = (props: EditPageProps) => {
       </ButtonBar>
       <ServiceForm
         autoSaveStorage={dataStorage}
+        mainActivities={mainActivities}
         onCancel={handleCancel}
         onSubmit={handleUpdate}
         initialValues={serviceTemplate(service)}

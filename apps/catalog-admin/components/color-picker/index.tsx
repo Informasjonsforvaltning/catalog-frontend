@@ -3,7 +3,6 @@
 import { Textfield } from "@digdir/designsystemet-react";
 import { useEffect, useState } from "react";
 import { colorRegex, localization } from "@catalog-frontend/utils";
-import { Design } from "@catalog-frontend/types";
 import { useGetDesign } from "../../hooks/design";
 import {
   AdminContextProvider,
@@ -18,16 +17,14 @@ interface ColorPicker {
 }
 
 export const ColorPicker = ({ catalogId, type }: ColorPicker) => {
-  const { data: getDesign } = useGetDesign(catalogId);
-  const dbDesign: Design = getDesign;
+  const { data: dbDesign } = useGetDesign(catalogId);
 
   const [inputColor, setInputColor] = useState("");
   const [isValidInput, setIsValidInput] = useState(true);
 
   const adminDispatch = useAdminDispatch();
 
-  const adminContext = useAdminState();
-  const { backgroundColor, fontColor } = adminContext;
+  const { backgroundColor, fontColor } = useAdminState();
 
   useEffect(() => {
     if (type === "background") {
@@ -76,6 +73,7 @@ export const ColorPicker = ({ catalogId, type }: ColorPicker) => {
       <div className={styles.container}>
         <div className={styles.color} style={{ background: inputColor }} />
         <Textfield
+          aria-label={localization.catalogAdmin.colors}
           className={styles.textField}
           error={!isValidInput && localization.validation.invalidValue}
           value={inputColor}
