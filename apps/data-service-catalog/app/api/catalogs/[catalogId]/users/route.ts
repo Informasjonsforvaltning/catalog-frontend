@@ -3,7 +3,7 @@ import { withValidSessionForApi } from "@catalog-frontend/utils";
 
 export async function GET(
   request: NextRequest,
-  context: { params: Promise<{ catalogId: string }> },
+  context: RouteContext<"/api/catalogs/[catalogId]/users">,
 ) {
   const { catalogId } = await context.params;
   return await withValidSessionForApi(async (session) => {

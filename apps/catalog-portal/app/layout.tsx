@@ -8,13 +8,13 @@ export const metadata: Metadata = {
   description: localization.catalogOverview,
 };
 
-const RootLayout = async ({ children }: { children: React.ReactNode }) => {
+const RootLayout = async (props: LayoutProps<"/">) => {
   const session = await getServerSession(authOptions);
 
   return (
     <html lang={localization.getLanguage()}>
       <body>
-        <NextAuthProvider session={session}>{children}</NextAuthProvider>
+        <NextAuthProvider session={session}>{props.children}</NextAuthProvider>
       </body>
     </html>
   );

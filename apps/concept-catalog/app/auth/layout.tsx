@@ -1,6 +1,6 @@
 import CatalogLayout from "@concept-catalog/components/catalog-layout";
 
-const PageLayout = ({ children }: { children: React.ReactNode }) => {
+const PageLayout = (props: LayoutProps<"/auth">) => {
   return (
     <CatalogLayout
       catalogAdminUrl={process.env.CATALOG_ADMIN_BASE_URI}
@@ -10,7 +10,7 @@ const PageLayout = ({ children }: { children: React.ReactNode }) => {
       fdkCommunityBaseUrl={process.env.FDK_COMMUNITY_BASE_URI}
       fdkBaseUrl={process.env.FDK_BASE_URI}
     >
-      {children}
+      {props.children}
     </CatalogLayout>
   );
 };

@@ -6,10 +6,9 @@ import {
   postDataService,
 } from "@catalog-frontend/data-access";
 
-export async function GET(
-  request: NextRequest,
-  context: { params: Promise<{ catalogId: string }> },
-) {
+type Context = RouteContext<"/api/catalogs/[catalogId]/data-services">;
+
+export async function GET(request: NextRequest, context: Context) {
   const { catalogId } = await context.params;
   return await withValidSessionForApi(async (session) => {
     if (!catalogId) {
@@ -44,10 +43,7 @@ export async function GET(
   });
 }
 
-export async function POST(
-  request: NextRequest,
-  context: { params: Promise<{ catalogId: string }> },
-) {
+export async function POST(request: NextRequest, context: Context) {
   const { catalogId } = await context.params;
   return await withValidSessionForApi(async (session) => {
     if (!catalogId) {

@@ -4,9 +4,9 @@ import { NextRequest } from "next/server";
 
 export const GET = async (
   request: NextRequest,
-  props: { params: Promise<{ catalogId: string }> },
+  context: RouteContext<"/api/catalogs/[catalogId]/fields">,
 ) => {
-  const params = await props.params;
+  const params = await context.params;
   return await withValidSessionForApi(async (session) => {
     const { catalogId } = params;
 

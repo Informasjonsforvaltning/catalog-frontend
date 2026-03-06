@@ -4,9 +4,9 @@ import { getConceptImportResults } from "@catalog-frontend/data-access";
 
 export const GET = async (
   req: NextRequest,
-  props: { params: Promise<{ catalogId: string }> },
+  ctx: RouteContext<"/api/catalogs/[catalogId]/concepts/import-results">,
 ) => {
-  const params = await props.params;
+  const params = await ctx.params;
   return await withValidSessionForApi(async (session) => {
     const { catalogId } = params;
 

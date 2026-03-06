@@ -65,7 +65,7 @@ export const EditPage = ({
   };
 
   const handleUpdate = async (values: Dataset) => {
-    await updateDataset(dataset.catalogId.toString(), dataset, values);
+    await updateDataset(dataset.catalogId, dataset, values);
     const newValues = await getDatasetById(dataset.catalogId, dataset.id);
     return newValues;
   };

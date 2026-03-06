@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   description: localization.catalogType.admin,
 };
 
-const RootLayout = async ({ children }: { children: React.ReactNode }) => {
+const RootLayout = async (props: LayoutProps<"/">) => {
   const session = await getServerSession(authOptions);
 
   return (
@@ -21,7 +21,9 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
       <body>
         <NextAuthProvider session={session}>
           <AdminContextProvider>
-            <ReactQueryClientProvider>{children}</ReactQueryClientProvider>
+            <ReactQueryClientProvider>
+              {props.children}
+            </ReactQueryClientProvider>
           </AdminContextProvider>
         </NextAuthProvider>
       </body>

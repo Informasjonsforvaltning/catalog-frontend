@@ -1,7 +1,6 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { useRouter } from "next/navigation";
 import { ArrowLeftIcon } from "@navikt/aksel-icons";
 import type { Concept, StorageData } from "@catalog-frontend/types";
 import { Button, ButtonBar, ConfirmModal } from "@catalog-frontend/ui";
@@ -31,7 +30,7 @@ export const NewPage = ({
   const handleCreate = async (values: Concept) => {
     const conceptId = await createConcept(
       values,
-      catalogId.toString(),
+      catalogId,
       fieldsResult.internal,
     );
     conceptIdRef.current = conceptId;

@@ -4,7 +4,7 @@ import { deleteDataService } from "@catalog-frontend/data-access";
 
 export async function DELETE(
   request: NextRequest,
-  context: { params: Promise<{ catalogId: string; dataServiceId: string }> },
+  context: RouteContext<"/api/catalogs/[catalogId]/data-services/[dataServiceId]">,
 ) {
   const { catalogId, dataServiceId } = await context.params;
   return await withValidSessionForApi(async (session) => {

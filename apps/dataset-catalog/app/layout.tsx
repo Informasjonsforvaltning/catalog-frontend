@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   description: localization.catalogType.dataset,
 };
 
-const RootLayout = async ({ children }: { children: React.ReactNode }) => {
+const RootLayout = async (props: LayoutProps<"/">) => {
   const session = await getServerSession(authOptions);
 
   return (
@@ -22,7 +22,9 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
         <NextAuthProvider session={session}>
           <AuthSessionModal storageKey="datasetForm" />
           <NuqsAdapter>
-            <ReactQueryClientProvider>{children}</ReactQueryClientProvider>
+            <ReactQueryClientProvider>
+              {props.children}
+            </ReactQueryClientProvider>
           </NuqsAdapter>
         </NextAuthProvider>
       </body>

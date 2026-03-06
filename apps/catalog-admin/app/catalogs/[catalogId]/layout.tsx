@@ -8,13 +8,8 @@ export const metadata: Metadata = {
   description: localization.catalogType.admin,
 };
 
-const PageLayout = async (props: {
-  children: React.ReactNode;
-  params: Promise<{ catalogId: string }>;
-}) => {
-  const params = await props.params;
-  const { catalogId } = params;
-  const { children } = props;
+const PageLayout = async (props: LayoutProps<"/catalogs/[catalogId]">) => {
+  const { catalogId } = await props.params;
 
   return (
     <Layout
@@ -25,7 +20,7 @@ const PageLayout = async (props: {
       termsOfUseUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/terms-and-conditions/${catalogId}`}
     >
       <TermsOfUseModal catalogId={catalogId} />
-      {children}
+      {props.children}
     </Layout>
   );
 };

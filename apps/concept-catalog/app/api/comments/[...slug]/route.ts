@@ -7,11 +7,10 @@ import {
 import { withValidSessionForApi } from "@catalog-frontend/utils";
 import { NextRequest } from "next/server";
 
-export const GET = async (
-  req: NextRequest,
-  props: { params: Promise<{ slug: string }> },
-) => {
-  const params = await props.params;
+type Context = RouteContext<"/api/comments/[...slug]">;
+
+export const GET = async (req: NextRequest, ctx: Context) => {
+  const params = await ctx.params;
   return await withValidSessionForApi(async (session) => {
     const { slug } = params;
 
@@ -44,11 +43,8 @@ export const GET = async (
   });
 };
 
-export const POST = async (
-  req: NextRequest,
-  props: { params: Promise<{ slug: string }> },
-) => {
-  const params = await props.params;
+export const POST = async (req: NextRequest, ctx: Context) => {
+  const params = await ctx.params;
   return await withValidSessionForApi(async (session) => {
     const { slug } = params;
     if (slug?.length >= 2 && slug?.length <= 3) {
@@ -81,11 +77,8 @@ export const POST = async (
   });
 };
 
-export const PUT = async (
-  req: NextRequest,
-  props: { params: Promise<{ slug: string }> },
-) => {
-  const params = await props.params;
+export const PUT = async (req: NextRequest, ctx: Context) => {
+  const params = await ctx.params;
   return await withValidSessionForApi(async (session) => {
     const { slug } = params;
     if (slug?.length >= 2 && slug?.length <= 3) {
@@ -120,11 +113,8 @@ export const PUT = async (
   });
 };
 
-export const DELETE = async (
-  req: NextRequest,
-  props: { params: Promise<{ slug: string }> },
-) => {
-  const params = await props.params;
+export const DELETE = async (req: NextRequest, ctx: Context) => {
+  const params = await ctx.params;
   return await withValidSessionForApi(async (session) => {
     const { slug } = params;
     if (slug?.length >= 2 && slug?.length <= 3) {
