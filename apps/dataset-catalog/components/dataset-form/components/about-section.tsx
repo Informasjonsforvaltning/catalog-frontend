@@ -119,7 +119,7 @@ export const AboutSection = ({
               onValueChange={(selectedValues) => {
                 setFieldValue("frequency", selectedValues.toString());
               }}
-              data-size="sm"
+              size="sm"
               virtual
               error={errors.frequency}
             >

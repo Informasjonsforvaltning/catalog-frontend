@@ -21,7 +21,9 @@ export const AccessRightFields = ({ isMobility: isMobility }: Props) => {
 
   const { getRadioProps } = useRadioGroup({
     value: values.accessRight,
-    onChange: (value) => setFieldValue("accessRight", value),
+    onChange: (nextValue) => {
+      setFieldValue("accessRight", nextValue);
+    },
     error: errors.accessRight,
   });
 
@@ -44,8 +46,8 @@ export const AccessRightFields = ({ isMobility: isMobility }: Props) => {
           />
           {accessRights?.map((option) => (
             <Radio
-              label={getTranslateText(option.label)}
               key={option.uri}
+              label={getTranslateText(option.label)}
               {...getRadioProps({ value: option.uri })}
             />
           ))}

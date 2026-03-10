@@ -69,7 +69,7 @@ export const InformationModelSection = ({ searchEnv }: Props) => {
             </TitleWithHelpTextAndTag>
           </Fieldset.Legend>
           <Combobox
-            data-size="sm"
+            size="sm"
             onValueChange={(selectedValues: string[]) =>
               setFieldValue("informationModelsFromFDK", selectedValues)
             }

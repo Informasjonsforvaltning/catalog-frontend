@@ -5,11 +5,12 @@ import {
   Option,
   MobilityTheme,
 } from "@catalog-frontend/types";
-import { TitleWithHelpTextAndTag } from "@catalog-frontend/ui-v2";
+import { TitleWithHelpTextAndTag, SafeCombobox } from "@catalog-frontend/ui-v2";
 import { Combobox } from "@digdir/designsystemet-react";
 import { getTranslateText, localization } from "@catalog-frontend/utils";
 import { FastField, useFormikContext } from "formik";
 import { get } from "lodash";
+import { useMemo } from "react";
 
 type Props = {
   losThemes: LosTheme[];
@@ -28,6 +29,74 @@ export const ThemeSection = ({
   const containsFilter = (inputValue: string, option: Option): boolean => {
     return option.label.toLowerCase().includes(inputValue.toLowerCase());
   };
+
+  //TODO: reuseable themes mapping function
+
+  //map mobility themes with uri as key and theme as value. Add unique items from values.mobilityTheme
+  const mobilityThemeMap = useMemo(() => {
+    // Map from existing mobilityThemes by uri
+    const map = new Map<string, MobilityTheme>();
+    mobilityThemes?.forEach((theme) => {
+      if (theme?.uri) {
+        map.set(theme.uri, theme);
+      }
+    });
+    // If formik values already exist, add their items if not present and structure fits
+    const selectedUris: string[] = Array.isArray(values?.mobilityTheme)
+      ? values.mobilityTheme
+      : [];
+    selectedUris.forEach((uri) => {
+      if (uri && !map.has(uri)) {
+        // Add a mock theme with only uri if not found in the original list
+        map.set(uri, { uri } as MobilityTheme);
+      }
+    });
+    return map;
+  }, [mobilityThemes, values?.mobilityTheme]);
+
+  //map eu themes with uri as key and theme as value. Add unique items from values.euDataThemes
+  const euThemeMap = useMemo(() => {
+    // Map from existing euDataThemes by uri
+    const map = new Map<string, DataTheme>();
+    euDataThemes?.forEach((theme) => {
+      if (theme?.uri) {
+        map.set(theme.uri, theme);
+      }
+    });
+    // If formik values already exist, add their items if not present and structure fits
+    const selectedUris: string[] = Array.isArray(values?.euDataTheme)
+      ? values.euDataTheme
+      : [];
+    selectedUris.forEach((uri) => {
+      if (uri && !map.has(uri)) {
+        // Add a mock theme with only uri if not found in the original list
+        map.set(uri, { uri } as DataTheme);
+      }
+    });
+    return map;
+  }, [euDataThemes, values?.euDataTheme]);
+
+  //map los themes with uri as key and theme as value. Add unique items from values.losTheme
+  const losThemeMap = useMemo(() => {
+    // Map from existing losThemes by uri
+    const map = new Map<string, LosTheme>();
+    losThemes?.forEach((theme) => {
+      if (theme?.uri) {
+        map.set(theme.uri, theme);
+      }
+    });
+    // If formik values already exist, add their items if not present and structure fits
+    const selectedUris: string[] = Array.isArray(values?.losTheme)
+      ? values.losTheme
+      : [];
+    selectedUris.forEach((uri) => {
+      if (uri && !map.has(uri)) {
+        // Add a mock theme with only uri if not found in the original list
+        map.set(uri, { uri } as LosTheme);
+      }
+    });
+    return map;
+  }, [losThemes, values?.losTheme]);
 
   return (
     <>
@@ -52,16 +121,16 @@ export const ThemeSection = ({
             setFieldValue("mobilityTheme", values)
           }
           error={errors.mobilityTheme}
-          data-size="sm"
+          size="sm"
         >
           <Combobox.Empty>{localization.search.noHits}</Combobox.Empty>
-          {mobilityThemes
-            ?.sort((a, b) =>
+          {Array.from(mobilityThemeMap.values())
+            .sort((a, b) =>
               (get(a.label, "nb")?.toString() ?? "").localeCompare(
                 get(b.label, "nb")?.toString() ?? "",
               ),
             )
-            ?.map((theme) => (
+            .map((theme) => (
               <Combobox.Option key={theme.uri} value={theme.uri}>
                 {getTranslateText(theme.label)}
               </Combobox.Option>
@@ -88,11 +157,16 @@ export const ThemeSection = ({
         onValueChange={(values: string[]) =>
           setFieldValue("euDataTheme", values)
         }
-        data-size="sm"
+        size="sm"
       >
         <Combobox.Empty>{localization.search.noHits}</Combobox.Empty>
-        {euDataThemes &&
-          euDataThemes.map((theme) => (
+        {Array.from(euThemeMap.values())
+          .sort((a, b) =>
+            (get(a.label, "nb")?.toString() ?? "").localeCompare(
+              get(b.label, "nb")?.toString() ?? "",
+            ),
+          )
+          .map((theme) => (
             <Combobox.Option key={theme.uri} value={theme.uri}>
               {getTranslateText(theme.label)}
             </Combobox.Option>
@@ -114,16 +188,16 @@ export const ThemeSection = ({
         filter={containsFilter}
         placeholder={`${localization.search.search}...`}
         onValueChange={(values: string[]) => setFieldValue("losTheme", values)}
-        data-size="sm"
+        size="sm"
       >
         <Combobox.Empty>{localization.search.noHits}</Combobox.Empty>
-        {losThemes
-          ?.sort((a, b) =>
+        {Array.from(losThemeMap.values())
+          .sort((a, b) =>
             (get(a.name, "nb")?.toString() ?? "").localeCompare(
               get(b.name, "nb")?.toString() ?? "",
             ),
           )
-          ?.map((theme) => (
+          .map((theme) => (
             <Combobox.Option key={theme.uri} value={theme.uri}>
               {getTranslateText(theme.name)}
             </Combobox.Option>
