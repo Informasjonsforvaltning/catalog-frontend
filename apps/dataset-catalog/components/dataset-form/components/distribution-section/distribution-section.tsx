@@ -247,7 +247,7 @@ export const DistributionSection = ({
   return (
     <div>
       <Fieldset data-size="sm">
-        <Fieldset.Legend>
+        <Fieldset.Legend className={styles.field}>
           <TitleWithHelpTextAndTag
             helpText={localization.datasetForm.helptext.distribution}
             tagTitle={
@@ -465,7 +465,7 @@ export const DistributionSection = ({
       </Fieldset>
       <FieldsetDivider />
       <Fieldset data-size="sm">
-        <Fieldset.Legend>
+        <Fieldset.Legend className={styles.field}>
           <TitleWithHelpTextAndTag
             helpText={localization.datasetForm.helptext.sample}
           >

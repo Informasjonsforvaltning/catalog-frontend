@@ -171,7 +171,7 @@ export const LeftColumn = ({
                 const match =
                   referenceData.losThemes &&
                   referenceData.losThemes.find((theme) => theme?.uri === item);
-                return match ? getTranslateText(match?.name, language) : item;
+                return match ? getTranslateText(match?.label, language) : item;
               }}
             />
           }

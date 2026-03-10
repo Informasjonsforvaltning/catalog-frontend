@@ -1,16 +1,22 @@
 .field {
-  padding-bottom: 1.5rem;
+  padding-bottom: var(--ds-size-4);
 }
 
-.modalContent {
-  margin: var(--ds-size-8);
-  padding: var(--ds-size-4);
-  border: 1px solid var(--ds-semantic-border-neutral-subtle);
-  border-radius: var(--ds-border-radius-md);
+.dialogContent {
+  margin: var(--ds-size-4);
+  border: 1px solid var(--ds-color-neutral-border-subtle);
+  border-radius: var(--ds-border-radius-lg);
   height: calc(100vh - 400px);
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+}
+
+.scrollable {
+  padding: var(--ds-size-4);
+  overflow-y: auto;
   overflow-x: hidden;
+  height: 100%;
 }
 
 .list {
@@ -33,6 +39,11 @@
   display: flex;
   height: fit-content;
   align-items: center;
+}
+
+.addCard {
+  flex-grow: 2;
+  border-color: var(--ds-color-neutral-border-subtle);
 }
 
 .format {
@@ -96,4 +107,10 @@
 
 .padding-bottom-4 {
   padding-bottom: var(--ds-size-4);
+}
+
+.divider {
+  background-color: var(--ds-color-neutral-border-subtle);
+  width: calc(1000px - var(--ds-size-18));
+  margin: 1rem -1rem;
 }
