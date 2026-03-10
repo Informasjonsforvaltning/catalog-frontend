@@ -98,28 +98,30 @@ export const RelationFieldset = ({
   const [search, setSearch] = useState("");
   const [searchTriggered, setSearchTriggered] = useState(false);
 
-  const { data: internalConcepts } = useSearchInternalConcepts({
-    catalogId,
-    searchTerm: search,
-    page: 0,
-    fields: {
-      anbefaltTerm: true,
-      frarådetTerm: false,
-      tillattTerm: false,
-      definisjon: false,
-      merknad: false,
-    },
-  });
-
-  const { data: externalConcepts } = useDataNorgeSearchConcepts({
-    searchOperation: {
-      query: search,
+  const { data: internalConcepts, isFetching: isFetchingInternal } =
+    useSearchInternalConcepts({
+      catalogId,
+      searchTerm: search,
+      page: 0,
       fields: {
-        title: true,
+        anbefaltTerm: true,
+        frarådetTerm: false,
+        tillattTerm: false,
+        definisjon: false,
+        merknad: false,
       },
-    },
-    enabled: Boolean(search),
-  });
+    });
+
+  const { data: externalConcepts, isFetching: isFetchingExternal } =
+    useDataNorgeSearchConcepts({
+      searchOperation: {
+        query: search,
+        fields: {
+          title: true,
+        },
+      },
+      enabled: Boolean(search),
+    });
 
   const relationTypeOptions = relationTypes
     .map((item) => ({
@@ -298,6 +300,7 @@ export const RelationFieldset = ({
               value={internalRelatedConceptComboValue()}
               label="Søk begrep"
               hideLabel
+              loading={isFetchingInternal}
               onChange={handleSearchConceptChange}
               onValueChange={handleRelatedConceptChange}
               error={errors.relatertBegrep}
@@ -321,6 +324,7 @@ export const RelationFieldset = ({
               value={externalRelatedConceptComboValue()}
               label="Søk begrep"
               hideLabel
+              loading={isFetchingExternal}
               onChange={handleSearchConceptChange}
               onValueChange={handleRelatedConceptChange}
               error={errors.relatertBegrep}
