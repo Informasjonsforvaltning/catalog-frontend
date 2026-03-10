@@ -181,16 +181,25 @@ export const RelationFieldset = ({
   }
 
   if (relatedConceptType === "external" && searchTriggered) {
-    externalRelatedConceptOptions =
+    const mapped =
       externalConcepts?.hits
         .filter((rel) => !conceptId || !rel.uri?.includes(conceptId))
-        .map((concept) => ({
-          label: getTranslateText(concept.title),
-          description: getTranslateText(
-            concept.organization?.prefLabel,
-          ) as string,
-          value: concept.uri as string,
-        })) ?? [];
+        .filter((concept) => Boolean(concept.uri))
+        .map(
+          (concept) =>
+            [
+              concept.uri,
+              {
+                label: getTranslateText(concept.title),
+                description: getTranslateText(
+                  concept.organization?.prefLabel,
+                ) as string,
+                value: concept.uri as string,
+              },
+            ] as const,
+        ) ?? [];
+
+    externalRelatedConceptOptions = [...new Map(mapped).values()];
   } else if (
     relatedConceptType === "external" &&
     !searchTriggered &&
