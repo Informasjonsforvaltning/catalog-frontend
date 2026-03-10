@@ -87,6 +87,7 @@ export const nb = {
     noComments: "Ingen kommentarer",
     selectType: "Velg type",
     createdByAt: "Opprettet: {0} av {1}",
+    updatedByAt: "Oppdatert: {0} av {1}",
   },
   helpText: "Hjelpetekst",
   publisher: "Utgiver",
