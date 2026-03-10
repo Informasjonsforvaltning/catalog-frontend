@@ -27,7 +27,7 @@ import {
   useSearchDatasetsByUri,
   useSearchDatasetSuggestions,
 } from "@catalog-frontend/ui-v2";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { referenceSchema } from "../../utils/validation-schema";
 import { compact, get, isEmpty } from "lodash";
 import styles from "../../dataset-form.module.css";
@@ -269,6 +269,31 @@ const FieldDialog = ({
     setComboboxOptions(options);
   }, [selectedValue, searchHits]);
 
+  //--------------
+  const titleFromSearch = searchHits?.find(
+    (item: { uri: string }) => item.uri === selectedUri,
+  )?.title;
+  const titleFromSelected = selectedValue?.title;
+  const uriOption = selectedUri
+    ? [
+        {
+          uri: selectedUri,
+          title: titleFromSearch ?? titleFromSelected ?? undefined,
+        },
+      ]
+    : [];
+  //handle combobox options with memoization instead of useState
+  const comboboxOptions2 = useMemo(
+    () => [
+      ...new Map(
+        [...(searchHits ?? []), ...[selectedValue], ...uriOption]
+          .filter(Boolean)
+          .map((option) => [option.uri, option]),
+      ).values(),
+    ],
+    [selectedUri, searchHits, selectedValue],
+  );
+
   return (
     <>
       <Dialog.TriggerContext>
@@ -307,6 +332,13 @@ const FieldDialog = ({
                 }
               }, [values, dirty]);
 
+              console.log(
+                ".............reference type: " + values?.referenceType,
+              );
+              const validReferenceType =
+                values?.referenceType && !isEmpty(values.referenceType) //&& relations.hasValue values.referenceType
+                  ? [values.referenceType]
+                  : undefined;
               return (
                 <>
                   <Dialog.Block>
@@ -325,9 +357,7 @@ const FieldDialog = ({
                         onValueChange={(value) =>
                           setFieldValue("referenceType", value.toString())
                         }
-                        value={
-                          values.referenceType ? [values.referenceType] : []
-                        }
+                        //value={validReferenceType}
                         placeholder={`${localization.datasetForm.fieldLabel.choseRelation}...`}
                         portal={false}
                         data-size="sm"
@@ -375,7 +405,7 @@ const FieldDialog = ({
                         <Combobox.Empty>
                           {localization.search.noHits}
                         </Combobox.Empty>
-                        {comboboxOptions?.map((dataset) => {
+                        {comboboxOptions2?.map((dataset) => {
                           return (
                             <Combobox.Option
                               key={dataset.uri}
