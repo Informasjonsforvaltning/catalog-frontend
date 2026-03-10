@@ -384,7 +384,7 @@ export default class DetailPage {
     await expect(
       this.page
         .getByRole("button", {
-          name: `LAMA LEDENDE ${formatISO(new Date().toISOString(), {
+          name: `LEDENDE LAMA ${formatISO(new Date().toISOString(), {
             weekday: "long",
             year: "numeric",
             month: "long",
@@ -540,7 +540,7 @@ export default class DetailPage {
       .locator("div")
       .filter({ has: createdByHeading })
       .last();
-    await expect(createdByContainer.getByText("LAMA LEDENDE")).toBeVisible();
+    await expect(createdByContainer.getByText("LEDENDE LAMA")).toBeVisible();
 
     if (concept.kontaktpunkt?.harEpost || concept.kontaktpunkt?.harTelefon) {
       const contactHeading = this.page.getByRole("heading", {
