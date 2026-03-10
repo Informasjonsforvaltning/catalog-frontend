@@ -34,7 +34,7 @@ import {
   NotificationCarousel,
   Snackbar,
   SnackbarSeverity,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import { conceptSchema } from "./validation-schema";
 import { TermSection } from "./components/term-section";
 import { DefinitionSection } from "./components/definition-section";
@@ -236,13 +236,13 @@ const ConceptForm = ({
     });
     return (
       <>
-        <Paragraph size="sm">
+        <Paragraph data-size="sm">
           {localization.alert.youHaveUnsavedChanges}
         </Paragraph>
-        <Paragraph size="sm">
+        <Paragraph data-size="sm">
           <span className={styles.bold}>{name}</span> ({lastChangedFormatted})
         </Paragraph>
-        <Paragraph size="sm" className={styles.topMargin2}>
+        <Paragraph data-size="sm" className={styles.topMargin2}>
           {localization.alert.wantToRestoreChanges}
         </Paragraph>
       </>
@@ -787,7 +787,7 @@ const ConceptForm = ({
                       <div>
                         <div className={classNames(styles.flex, styles.gap4)}>
                           <Button
-                            size="sm"
+                            data-size="sm"
                             type="button"
                             disabled={
                               readOnly ||
@@ -802,13 +802,13 @@ const ConceptForm = ({
                             }}
                           >
                             {isSubmitting ? (
-                              <Spinner title="Lagrer" size="sm" />
+                              <Spinner aria-label="Lagrer" data-size="sm" />
                             ) : (
                               "Lagre"
                             )}
                           </Button>
                           <Button
-                            size="sm"
+                            data-size="sm"
                             disabled={
                               readOnly ||
                               isSubmitting ||
@@ -828,18 +828,17 @@ const ConceptForm = ({
                             )}
                           >
                             <Checkbox
-                              size="sm"
+                              data-size="sm"
                               value="ignoreRequired"
                               checked={ignoreRequired}
                               onChange={(e) =>
                                 setIgnoreRequired(e.target.checked)
                               }
-                            >
-                              {
+                              label={
                                 localization.conceptForm.fieldLabel
                                   .ignoreRequired
                               }
-                            </Checkbox>
+                            />
                             <HelpMarkdown
                               aria-label={`Help ${localization.conceptForm.fieldLabel.ignoreRequired}`}
                             >

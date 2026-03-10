@@ -8,9 +8,9 @@ import {
   ImportResultsTable,
   SearchHitContainer,
   SearchHitsLayout,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import styles from "./import-results-page-client.module.css";
-import { Accordion, Chip, NativeSelect } from "@digdir/designsystemet-react";
+import { Card, Chip, Select } from "@digdir/designsystemet-react";
 import {
   parseAsArrayOf,
   parseAsInteger,
@@ -111,7 +111,7 @@ const ImportResultsPageClient = ({ catalogId, importResults }: Props) => {
 
   const FilterChips = () => (
     <div className={styles.chips}>
-      <Chip.Group size="small" className={styles.wrap}>
+      <div data-size="sm" className={styles.wrap}>
         {filterStatus?.map((filter, index) => (
           <Chip.Removable
             key={`status-${index}`}
@@ -124,7 +124,7 @@ const ImportResultsPageClient = ({ catalogId, importResults }: Props) => {
             {importStatuses?.find((s) => s.value === filter)?.label}
           </Chip.Removable>
         ))}
-      </Chip.Group>
+      </div>
     </div>
   );
 
@@ -156,9 +156,9 @@ const ImportResultsPageClient = ({ catalogId, importResults }: Props) => {
   return (
     <SearchHitsLayout>
       <SearchHitsLayout.SearchRow>
-        <NativeSelect
+        <Select
           aria-label={localization.search.sort}
-          size="sm"
+          data-size="sm"
           className={styles.select}
           onChange={handleSortChange}
         >
@@ -168,13 +168,11 @@ const ImportResultsPageClient = ({ catalogId, importResults }: Props) => {
           <option value="createdAsc">
             {localization.search.sortOptions.LAST_UPDATED_LAST}
           </option>
-        </NativeSelect>
+        </Select>
       </SearchHitsLayout.SearchRow>
       <SearchHitsLayout.LeftColumn>
         <div className={styles.importFilter}>
-          <Accordion border={true} className={styles.accordion}>
-            {filterItems}
-          </Accordion>
+          <Card className={styles.accordion}>{filterItems}</Card>
         </div>
         <FilterChips />
       </SearchHitsLayout.LeftColumn>

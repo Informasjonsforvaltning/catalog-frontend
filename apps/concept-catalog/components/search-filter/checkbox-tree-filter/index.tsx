@@ -2,7 +2,7 @@
 
 import React, { FC, useEffect, useMemo, useState } from "react";
 import classes from "./checkbox-tree.module.css";
-import { Select } from "@catalog-frontend/ui";
+import { Select } from "@catalog-frontend/ui-v2";
 import { getPath, localization } from "@catalog-frontend/utils";
 import { Button } from "@digdir/designsystemet-react";
 import {
@@ -97,7 +97,7 @@ export const CheckboxTreeFilter: FC<Props> = ({
       <Select
         aria-label={ariaLabel}
         value={searchOption}
-        size="sm"
+        data-size="sm"
         onChange={handleSearchOnChange}
       >
         <option value="" />
@@ -122,7 +122,7 @@ export const CheckboxTreeFilter: FC<Props> = ({
       {nodes && nodes.length > expandCutoff && (
         <Button
           variant="tertiary"
-          size="sm"
+          data-size="sm"
           onClick={() => setCollapsed(!collapsed)}
         >
           {collapsed ? <ChevronDownDoubleIcon /> : <ChevronUpDoubleIcon />}

@@ -10,8 +10,9 @@ import {
   LinkButton,
   SearchField,
   SearchHitsLayout,
+  Select,
   Tag,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import {
   capitalizeFirstLetter,
   convertTimestampToDateAndTime,
@@ -23,11 +24,11 @@ import {
   validUUID,
 } from "@catalog-frontend/utils";
 import ChangeRequestFilter from "@concept-catalog/components/change-request-filter";
-import ChangeRequestSort from "@concept-catalog/components/change-request-sort";
 import { getTranslatedStatus } from "@concept-catalog/utils/change-request";
 import {
   ChangeRequest,
   ChangeRequestsPageSettings,
+  Option,
 } from "@catalog-frontend/types";
 import { useFeatureFlags } from "@concept-catalog/context/feature-flags";
 import styles from "./change-requests-page.module.css";
@@ -199,7 +200,7 @@ export const ChangeRequestsPageClient = ({
       <Tabs
         className={styles.tabs}
         defaultValue="changeRequestTab"
-        size="medium"
+        data-size="md"
       >
         <Tabs.List className={styles.tabsList}>
           <Tabs.Tab
@@ -220,7 +221,7 @@ export const ChangeRequestsPageClient = ({
             </Tabs.Tab>
           )}
         </Tabs.List>
-        <Tabs.Content value="changeRequestTab" className={styles.tabsContent}>
+        <Tabs.Panel value="changeRequestTab" className={styles.tabsContent}>
           <SearchHitsLayout>
             <SearchHitsLayout.SearchRow>
               <div className={styles.searchRow}>
@@ -233,11 +234,13 @@ export const ChangeRequestsPageClient = ({
                       setSearchTerm(value);
                     }}
                   />
-                  <ChangeRequestSort
-                    options={sortOptions}
-                    selected={sort}
-                    onChange={onSortChange}
-                  />
+                  <Select onChange={onSortChange} value={sort} data-size="sm">
+                    {sortOptions.map((option: Option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </Select>
                 </div>
                 <LinkButton href={`/catalogs/${catalogId}/change-requests/new`}>
                   {localization.suggestionForNewConcept}
@@ -268,7 +271,7 @@ export const ChangeRequestsPageClient = ({
                         >
                           <div className={styles.listContent}>
                             <div>
-                              <Heading level={3} size="xsmall">
+                              <Heading level={3} data-size="xs">
                                 <Link
                                   prefetch={false}
                                   href={
@@ -332,7 +335,7 @@ export const ChangeRequestsPageClient = ({
               )}
             </SearchHitsLayout.MainColumn>
           </SearchHitsLayout>
-        </Tabs.Content>
+        </Tabs.Panel>
       </Tabs>
     </div>
   );

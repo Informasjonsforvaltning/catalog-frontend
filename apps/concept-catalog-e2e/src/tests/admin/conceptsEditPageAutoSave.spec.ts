@@ -310,7 +310,9 @@ runTestAsAdmin(
     await editPage.clickAddRelation();
 
     // Fill in the relation form
-    await editPage.page.getByText("Publisert begrep på data.norge.no").click();
+    await editPage.page
+      .getByRole("radio", { name: "Publisert begrep på data.norge.no" })
+      .click();
     await editPage.page
       .getByRole("group", { name: "Relatert begrep" })
       .getByRole("combobox")
@@ -327,8 +329,8 @@ runTestAsAdmin(
       .first()
       .waitFor({ state: "visible" });
     await editPage.page.getByLabel("Test status").first().click();
-    await editPage.page.getByLabel("RelasjonMå fylles ut").click();
-    await editPage.page.getByLabel("Se også").click();
+    await editPage.page.getByRole("combobox", { name: /Relasjon/ }).click();
+    await editPage.page.getByRole("option", { name: "Se også" }).click();
     await editPage.waitForRelationAutoSaveToComplete();
 
     // Don't close the modal, just refresh the page

@@ -7,7 +7,6 @@ import {
   TrashIcon,
 } from "@navikt/aksel-icons";
 import {
-  Box,
   Button,
   Fieldset,
   Skeleton,
@@ -31,7 +30,7 @@ import {
 } from "../../../hooks/search";
 import { RelationModal } from "./relation-modal";
 import styles from "../concept-form.module.scss";
-import { TitleWithHelpTextAndTag } from "@catalog-frontend/ui";
+import { TitleWithHelpTextAndTag } from "@catalog-frontend/ui-v2";
 import {
   updateUnionRelation,
   removeUnionRelation,
@@ -210,22 +209,19 @@ export const RelationSection = ({
   };
 
   if (isLoadingInternalConcepts || isLoadingExternalConcepts) {
-    return <Skeleton.Rectangle height="100px" width="100%" />;
+    return <Skeleton variant="rectangle" height="100px" width="100%" />;
   }
 
   return (
-    <Box>
-      <Box className={styles.fieldSet}>
-        <Fieldset
-          legend={
+    <div>
+      <div className={styles.fieldSet}>
+        <Fieldset data-size="sm">
+          <Fieldset.Legend>
             <TitleWithHelpTextAndTag changed={isDirty}>
               Tabell over relasjoner
             </TitleWithHelpTextAndTag>
-          }
-          readOnly={readOnly}
-          size="sm"
-        >
-          <Table size="sm" className={styles.table}>
+          </Fieldset.Legend>
+          <Table data-size="sm" className={styles.table}>
             <Table.Head>
               <Table.Row>
                 <Table.HeaderCell>Relasjon</Table.HeaderCell>
@@ -259,8 +255,8 @@ export const RelationSection = ({
                         trigger={
                           <Button
                             variant="tertiary"
-                            color="first"
-                            size="sm"
+                            data-color="first"
+                            data-size="sm"
                             disabled={readOnly}
                           >
                             <PencilWritingIcon aria-hidden fontSize="1rem" />
@@ -277,8 +273,8 @@ export const RelationSection = ({
                       />
                       <Button
                         variant="tertiary"
-                        color="danger"
-                        size="sm"
+                        data-color="danger"
+                        data-size="sm"
                         disabled={readOnly}
                         onClick={() => handleRemoveRelation(relation)}
                       >
@@ -292,15 +288,15 @@ export const RelationSection = ({
             </Table.Body>
           </Table>
         </Fieldset>
-      </Box>
+      </div>
       {!readOnly && (
-        <Box className={styles.buttonRow}>
+        <div className={styles.buttonRow}>
           <RelationModal
             header="Ny relasjon"
             catalogId={catalogId}
             conceptId={values.originaltBegrep || ""}
             trigger={
-              <Button variant="tertiary" color="first" size="sm">
+              <Button variant="tertiary" data-color="first" data-size="sm">
                 <PlusCircleIcon aria-hidden fontSize="1rem" />
                 Legg til relasjon
               </Button>
@@ -309,8 +305,8 @@ export const RelationSection = ({
             onChange={(values) => handleChangeRelationInModal(values)}
             onClose={() => handleCloseRelationModal()}
           />
-        </Box>
+        </div>
       )}
-    </Box>
+    </div>
   );
 };

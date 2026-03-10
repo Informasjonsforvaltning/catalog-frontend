@@ -6,10 +6,10 @@ import {
   Textfield,
   Button,
   Radio,
-  Box,
-  ErrorMessage,
+  ValidationMessage,
+  useRadioGroup,
 } from "@digdir/designsystemet-react";
-import { TitleWithHelpTextAndTag } from "@catalog-frontend/ui";
+import { TitleWithHelpTextAndTag } from "@catalog-frontend/ui-v2";
 import { localization } from "@catalog-frontend/utils";
 import styles from "./source-description-fieldset.module.scss";
 import _ from "lodash";
@@ -48,31 +48,34 @@ export const SourceDescriptionFieldset = <T,>({
     }
   }, [relationToSource]);
 
+  const { getRadioProps, validationMessageProps } = useRadioGroup({
+    value: relationToSource,
+    onChange: (nextValue) => setRelationToSource(nextValue),
+    error: errors?.[name]?.forholdTilKilde,
+  });
+
   return (
-    <Box className={styles.sourceDescription}>
-      <Radio.Group
-        size="sm"
-        legend={
+    <div className={styles.sourceDescription}>
+      <Fieldset data-size="sm">
+        <Fieldset.Legend>
           <TitleWithHelpTextAndTag
             helpText={localization.conceptForm.helpText.relationToSource}
           >
             {localization.conceptForm.fieldLabel.relationToSource}
           </TitleWithHelpTextAndTag>
-        }
-        value={relationToSource}
-        onChange={setRelationToSource}
-        error={errors?.[name]?.forholdTilKilde}
-      >
+        </Fieldset.Legend>
         {relationshipToSources.map((rel) => (
-          <Radio key={rel.value} value={rel.value}>
-            {rel.label}
-          </Radio>
+          <Radio
+            key={rel.value}
+            {...getRadioProps(rel.value)}
+            label={rel.label}
+          />
         ))}
-      </Radio.Group>
+        <ValidationMessage {...validationMessageProps} />
+      </Fieldset>
       {relationToSource !== "egendefinert" && (
-        <Fieldset
-          size="sm"
-          legend={
+        <Fieldset data-size="sm">
+          <Fieldset.Legend>
             <TitleWithHelpTextAndTag
               helpText={localization.conceptForm.helpText.sources}
               tagColor="second"
@@ -80,8 +83,7 @@ export const SourceDescriptionFieldset = <T,>({
             >
               {localization.conceptForm.fieldLabel.sources}
             </TitleWithHelpTextAndTag>
-          }
-        >
+          </Fieldset.Legend>
           <FieldArray
             name={`${name}.kilde`}
             render={(arrayHelpers) => (
@@ -93,7 +95,7 @@ export const SourceDescriptionFieldset = <T,>({
                         <td>
                           <FastField
                             as={Textfield}
-                            size="sm"
+                            data-size="sm"
                             name={`${name}.kilde.${index}.tekst`}
                             aria-label=""
                             placeholder="Kildebeskrivelse"
@@ -103,7 +105,7 @@ export const SourceDescriptionFieldset = <T,>({
                         <td>
                           <FastField
                             as={Textfield}
-                            size="sm"
+                            data-size="sm"
                             name={`${name}.kilde.${index}.uri`}
                             aria-label=""
                             placeholder="https://kilde.no"
@@ -113,8 +115,8 @@ export const SourceDescriptionFieldset = <T,>({
                         <td>
                           <Button
                             variant="tertiary"
-                            size="sm"
-                            color="danger"
+                            data-size="sm"
+                            data-color="danger"
                             onClick={() => arrayHelpers.remove(index)}
                           >
                             <TrashIcon
@@ -132,8 +134,8 @@ export const SourceDescriptionFieldset = <T,>({
                 <div className={styles.languageButtons}>
                   <Button
                     variant="tertiary"
-                    color="first"
-                    size="sm"
+                    data-color="first"
+                    data-size="sm"
                     type="button"
                     onClick={() => {
                       arrayHelpers.push({ text: "", uri: "" });
@@ -147,10 +149,10 @@ export const SourceDescriptionFieldset = <T,>({
             )}
           />
           {typeof _.get(errors, `${name}.kilde`) === "string" && (
-            <ErrorMessage size="sm">{`${_.get(errors, `${name}.kilde`)}`}</ErrorMessage>
+            <ValidationMessage data-size="sm">{`${_.get(errors, `${name}.kilde`)}`}</ValidationMessage>
           )}
         </Fieldset>
       )}
-    </Box>
+    </div>
   );
 };

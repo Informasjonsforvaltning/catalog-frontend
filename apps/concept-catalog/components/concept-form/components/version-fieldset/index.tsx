@@ -1,12 +1,12 @@
 import { FastField, useFormikContext } from "formik";
 import {
-  ErrorMessage,
+  ValidationMessage,
   Fieldset,
   Textfield,
 } from "@digdir/designsystemet-react";
 import styles from "./version-fieldset.module.scss";
 import { Concept } from "@catalog-frontend/types";
-import { TitleWithHelpTextAndTag } from "@catalog-frontend/ui";
+import { TitleWithHelpTextAndTag } from "@catalog-frontend/ui-v2";
 import { localization } from "@catalog-frontend/utils";
 import { get } from "lodash";
 
@@ -21,24 +21,22 @@ export const VersionFieldset = ({ name, changed, readOnly }) => {
 
   return (
     <>
-      <Fieldset
-        size="sm"
-        legend={
+      <Fieldset data-size="sm">
+        <Fieldset.Legend>
           <TitleWithHelpTextAndTag
             helpText={localization.conceptForm.helpText.versionNumber}
             changed={changed?.includes(name)}
           >
             {localization.conceptForm.fieldLabel.versionNumber}
           </TitleWithHelpTextAndTag>
-        }
-      >
+        </Fieldset.Legend>
         <div className={styles.versionFieldset}>
           <FastField
             as={Textfield}
             type="number"
             label="Major"
             min="0"
-            size="sm"
+            data-size="sm"
             name={`${name}.major`}
             error={typeof get(errors, name) === "string"}
             readOnly={readOnly}
@@ -48,7 +46,7 @@ export const VersionFieldset = ({ name, changed, readOnly }) => {
             type="number"
             label="Minor"
             min="0"
-            size="sm"
+            data-size="sm"
             name={`${name}.minor`}
             error={typeof get(errors, name) === "string"}
             readOnly={readOnly}
@@ -58,7 +56,7 @@ export const VersionFieldset = ({ name, changed, readOnly }) => {
             type="number"
             label="Patch"
             min="0"
-            size="sm"
+            data-size="sm"
             name={`${name}.patch`}
             error={typeof get(errors, name) === "string"}
             readOnly={readOnly}
@@ -66,7 +64,9 @@ export const VersionFieldset = ({ name, changed, readOnly }) => {
         </div>
       </Fieldset>
       {typeof get(errors, name) === "string" ? (
-        <ErrorMessage size="sm">{get(errors, name)}</ErrorMessage>
+        <ValidationMessage data-size="sm">
+          {get(errors, name)}
+        </ValidationMessage>
       ) : undefined}
     </>
   );

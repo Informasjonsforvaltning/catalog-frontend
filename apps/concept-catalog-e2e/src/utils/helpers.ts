@@ -1,6 +1,6 @@
 import AxeBuilder from "@axe-core/playwright";
 import { Concept, FieldsResult, UsersResult } from "@catalog-frontend/types";
-import { APIRequestContext, Locator, Page, expect } from "@playwright/test";
+import { APIRequestContext, Page } from "@playwright/test";
 import * as crypto from "crypto";
 
 export const adminAuthFile = `${__dirname}/../../.playwright/auth/admin.json`;
@@ -37,26 +37,14 @@ export const getStatusText = (uri: string): string => {
   }
 };
 
-export const getParentLocator = (locator: Locator, n = 1) => {
-  let parent = locator;
-  for (let i = 0; i < n; i++) {
-    parent = parent.locator("..");
-  }
-  return parent;
-};
-
 export const clearCombobox = async (page: Page, label: string) => {
-  // Workaround to clear and close a combobox.
-  const currentValue = await page
-    .getByRole("combobox", { name: label })
-    .inputValue();
-  await page.getByRole("combobox", { name: label }).click();
-
-  for (let i = 0; i < currentValue.length; i++) {
-    await page.getByLabel(label).press("Backspace");
-  }
-  await expect(page.getByLabel(label)).toHaveValue("");
-  await page.getByLabel(label).press("Tab");
+  // Use getByLabel as primary locator — more stable with Designsystemet's
+  // Combobox where nested <label> from TitleWithHelpTextAndTag can break
+  // getByRole accessible name resolution.
+  const combobox = page.getByLabel(label);
+  await combobox.fill("");
+  await page.keyboard.press("Escape");
+  await page.waitForTimeout(200);
 };
 
 export const relationToSourceText = (relationToSource?: string) => {

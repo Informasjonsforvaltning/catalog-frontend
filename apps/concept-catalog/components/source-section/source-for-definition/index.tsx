@@ -6,7 +6,7 @@ import { Field } from "formik";
 import { Textfield } from "@digdir/designsystemet-react";
 import { TrashIcon } from "@navikt/aksel-icons";
 import { localization } from "@catalog-frontend/utils";
-import { Button } from "@catalog-frontend/ui";
+import { Button } from "@catalog-frontend/ui-v2";
 
 interface Props {
   sourceTitleFieldName: string;
@@ -44,7 +44,7 @@ export const SourceForDefinitionField: FC<Props> = ({
         />
         {!readOnly && (
           <Button
-            color="danger"
+            data-color="danger"
             variant="tertiary"
             onClick={deleteClickHandler}
           >

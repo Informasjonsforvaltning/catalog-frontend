@@ -19,7 +19,7 @@ import {
   Breadcrumbs,
   BreadcrumbType,
   DesignBanner,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import { SearchPageClient } from "./search-page-client";
 import { cookies } from "next/headers";
 

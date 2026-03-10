@@ -4,11 +4,11 @@
 }
 
 .gap2 {
-  gap: var(--fds-spacing-2);
+  gap: var(--ds-size-2);
 }
 
 .gap4 {
-  gap: var(--fds-spacing-4);
+  gap: var(--ds-size-4);
 }
 
 .noWrap {
@@ -33,15 +33,10 @@
 
 .definitionContent {
   display: flex;
-
-  & div:last-child {
-    display: flex;
-    gap: 0.5rem;
-  }
-
-  & > * {
-    background-color: inherit;
-  }
+  flex-direction: column;
+  padding: 0 var(--dsc-card-padding) var(--dsc-card-padding);
+  margin: 0;
+  gap: var(--ds-size-2);
 }
 
 .definitionHeader {
@@ -49,6 +44,7 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+  padding-bottom: 0;
 
   & > div {
     display: flex;
@@ -130,11 +126,11 @@
 }
 
 .borderDanger {
-  border-color: var(--fds-semantic-border-danger-default);
+  border-color: var(--ds-color-danger-border-default);
 }
 
 .topMargin2 {
-  margin-top: var(--fds-spacing-2);
+  margin-top: var(--ds-size-2);
 }
 
 .bold {
@@ -142,10 +138,15 @@
 }
 
 .forwardedTag {
-  background-color: var(--fds-semantic-surface-warning-default);
+  background-color: var(--ds-color-warning-surface-default);
   border: none;
-  min-height: var(--fds-sizing-7);
-  min-height: var(--fds-sizing-7);
+  min-height: var(--ds-size-7);
+  min-height: var(--ds-size-7);
   font-size: 1rem;
-  color: var(--fds-semantic-text-neutral-default);
+  color: var(--ds-color-neutral-text-default);
+}
+
+.languageTags {
+  display: flex;
+  gap: var(--ds-size-2);
 }

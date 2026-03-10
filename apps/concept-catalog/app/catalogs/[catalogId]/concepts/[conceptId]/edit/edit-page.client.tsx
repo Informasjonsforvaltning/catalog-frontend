@@ -5,7 +5,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { ArrowLeftIcon } from "@navikt/aksel-icons";
 import { LocalDataStorage, localization } from "@catalog-frontend/utils";
 import type { Concept, StorageData } from "@catalog-frontend/types";
-import { Button, ButtonBar, ConfirmModal } from "@catalog-frontend/ui";
+import { Button, ButtonBar, ConfirmModal } from "@catalog-frontend/ui-v2";
 import ConceptForm from "@concept-catalog/components/concept-form";
 import { updateConcept } from "@concept-catalog/app/actions/concept/actions";
 
@@ -103,8 +103,8 @@ export const EditPage = ({
       <ButtonBar>
         <Button
           variant="tertiary"
-          color="second"
-          size="sm"
+          data-color="second"
+          data-size="sm"
           onClick={() => setShowCancelConfirm(true)}
         >
           <ArrowLeftIcon fontSize="1.25em" />

@@ -9,7 +9,7 @@ import {
   validUUID,
 } from "@catalog-frontend/utils";
 import cn from "classnames";
-import { ConceptStatusTagProps, SearchHit, Tag } from "@catalog-frontend/ui";
+import { ConceptStatusTagProps, SearchHit, Tag } from "@catalog-frontend/ui-v2";
 import Link from "next/link";
 import styles from "./concept-search-hits.module.css";
 import { Chip } from "@digdir/designsystemet-react";
@@ -37,17 +37,17 @@ const ConceptSearchHits: React.FC<Props> = ({
 
   const ConceptLabels: React.FC<{ searchHit: Concept }> = ({ searchHit }) => (
     <div className={styles.rowSpaceBetween}>
-      <Chip.Group size="small" className={styles.chipGroup}>
+      <div data-size="sm" className={styles.chipGroup}>
         {searchHit.merkelapp &&
           searchHit.merkelapp.map((label) => (
-            <Chip.Toggle
+            <Chip.Button
               key={`label-${label}`}
               onClick={() => onLabelClick?.(label)}
             >
               {label}
-            </Chip.Toggle>
+            </Chip.Button>
           ))}
-      </Chip.Group>
+      </div>
     </div>
   );
 

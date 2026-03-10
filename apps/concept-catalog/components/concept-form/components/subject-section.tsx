@@ -11,7 +11,7 @@ import {
   FormikLanguageFieldset,
   FormikMultivalueTextfield,
   TitleWithHelpTextAndTag,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import { localization } from "@catalog-frontend/utils";
 import styles from "../concept-form.module.scss";
 import { getParentPath } from "../../../utils/codeList";
@@ -38,16 +38,16 @@ export const SubjectSection = ({
   const ConflictAlert = () => {
     if (!codeListActivated && !isEmpty(values.fagområdeKoder)) {
       return (
-        <Alert size="sm" severity="warning">
-          <Heading level={3} size="xxsmall" spacing>
+        <Alert data-size="sm" data-color="warning">
+          <Heading level={3} data-size="2xs">
             {localization.conceptForm.alert.warning}
           </Heading>
-          <Paragraph size="sm">
+          <Paragraph data-size="sm">
             {localization.conceptForm.alert.codeListToText}
           </Paragraph>
           <div className={styles.topMargin2}>
             <Button
-              size="sm"
+              data-size="sm"
               variant="secondary"
               disabled={readOnly}
               onClick={() => setFieldValue("fagområdeKoder", [])}
@@ -61,16 +61,16 @@ export const SubjectSection = ({
 
     if (codeListActivated && !isEmpty(values.fagområde)) {
       return (
-        <Alert size="sm" severity="warning">
-          <Heading level={3} size="xxsmall" spacing>
+        <Alert data-size="sm" data-color="warning">
+          <Heading level={3} data-size="2xs">
             {localization.conceptForm.alert.warning}
           </Heading>
-          <Paragraph size="sm">
+          <Paragraph data-size="sm">
             {localization.conceptForm.alert.textToCodeList}
           </Paragraph>
           <div className={styles.topMargin2}>
             <Button
-              size="sm"
+              data-size="sm"
               variant="secondary"
               disabled={readOnly}
               onClick={() => setFieldValue("fagområde", null)}
@@ -133,7 +133,7 @@ export const SubjectSection = ({
         <Combobox
           key="fagområdeKoder"
           multiple
-          size="sm"
+          data-size="sm"
           hideClearButton
           readOnly={!codeListActivated || readOnly}
           label={codeListLabel}
