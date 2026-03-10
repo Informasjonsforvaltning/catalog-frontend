@@ -162,7 +162,7 @@ export const RelationFieldset = ({
   if (relatedConceptType === "internal" && searchTriggered) {
     internalRelatedConceptOptions =
       internalConcepts?.hits
-        .filter((rel) => rel.originaltBegrep !== conceptId)
+        .filter((rel) => !conceptId || rel.originaltBegrep !== conceptId)
         .map((concept) => ({
           label: getTranslateText(concept.anbefaltTerm?.navn),
           value: concept.originaltBegrep as string,
@@ -183,7 +183,7 @@ export const RelationFieldset = ({
   if (relatedConceptType === "external" && searchTriggered) {
     externalRelatedConceptOptions =
       externalConcepts?.hits
-        .filter((rel) => !rel.uri?.includes(conceptId))
+        .filter((rel) => !conceptId || !rel.uri?.includes(conceptId))
         .map((concept) => ({
           label: getTranslateText(concept.title),
           description: getTranslateText(
