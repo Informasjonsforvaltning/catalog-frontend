@@ -216,8 +216,6 @@ export const RelationFieldset = ({
   }
 
   const handleRelatedConceptTypeChange = (value) => {
-    setFieldValue("internal", value === "internal");
-
     setRelatedConceptType(value as RelatedConceptType);
     setRelatedConcept([]);
   };
@@ -266,6 +264,10 @@ export const RelationFieldset = ({
       ? relatedConcept
       : [];
   };
+
+  useEffect(() => {
+    setFieldValue("internal", relatedConceptType === "internal");
+  }, [relatedConceptType]);
 
   useEffect(() => {
     setFieldValue("relatertBegrep", relatedConcept[0]);
