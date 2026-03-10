@@ -33,6 +33,7 @@ import {
   Skeleton,
   Textfield,
   Heading,
+  Select,
 } from "@digdir/designsystemet-react";
 import { FastField, FieldArray, Formik } from "formik";
 import styles from "./distributions.module.scss";
@@ -514,7 +515,7 @@ export const DistributionModal = ({
               <>
                 {form.values.conformsTo?.map((_: any, i: number) => (
                   <div className={styles.add} key={`conformsTo-${i}`}>
-                    <Card>
+                    <Card className={styles.addCard}>
                       <div>
                         <FormikLanguageFieldset
                           legend={
@@ -588,6 +589,7 @@ export const DistributionModal = ({
             errors,
             isSubmitting,
             submitForm,
+            resetForm,
             values,
             dirty,
             setFieldValue,
@@ -665,135 +667,136 @@ export const DistributionModal = ({
               <>
                 {initialValues && (
                   <>
-                    <Dialog.Block>
-                      <Heading>
-                        {type === "new"
-                          ? distributionType === "distribution"
-                            ? localization.datasetForm.button.addDistribution
-                            : localization.datasetForm.button.addSample
-                          : `${localization.edit} ${distributionType === "distribution" ? localization.datasetForm.fieldLabel.distribution.toLowerCase() : localization.datasetForm.fieldLabel.sample.toLowerCase()}`}
-                      </Heading>
-                    </Dialog.Block>
-
-                    <Dialog.Block className={styles.dialogContent}>
-                      <FormikLanguageFieldset
-                        as={Textfield}
-                        name="title"
-                        legend={
-                          <TitleWithHelpTextAndTag
-                            helpText={localization.datasetForm.helptext.title}
-                            tagTitle={localization.tag.recommended}
-                            tagColor="info"
-                          >
-                            {localization.title}
-                          </TitleWithHelpTextAndTag>
-                        }
-                      />
-                      <FieldsetDivider />
-                      <FormikLanguageFieldset
-                        as={TextareaWithPrefix}
-                        legend={
-                          <TitleWithHelpTextAndTag
-                            helpText={
-                              localization.datasetForm.helptext
-                                .distributionDescription
-                            }
-                            tagColor="info"
-                            tagTitle={localization.tag.recommended}
-                          >
-                            {localization.description}
-                          </TitleWithHelpTextAndTag>
-                        }
-                        name="description"
-                      />
-                      <FieldsetDivider />
-                      <FieldArray name="accessURL">
-                        {(arrayHelpers) => (
-                          <>
-                            {(arrayHelpers.form.values.accessURL || []).map(
-                              (_: any, index: number, array: string[]) => {
-                                return (
-                                  <React.Fragment key={`accessURL-${index}`}>
-                                    <div>
-                                      {index > 0 ? (
-                                        <FieldsetWithDelete
-                                          onDelete={() =>
-                                            arrayHelpers.remove(index)
-                                          }
-                                          style={{ marginTop: "1rem" }}
-                                        >
+                    <Heading>
+                      {type === "new"
+                        ? distributionType === "distribution"
+                          ? localization.datasetForm.button.addDistribution
+                          : localization.datasetForm.button.addSample
+                        : `${localization.edit} ${distributionType === "distribution" ? localization.datasetForm.fieldLabel.distribution.toLowerCase() : localization.datasetForm.fieldLabel.sample.toLowerCase()}`}
+                    </Heading>
+                    <div
+                      className={styles.dialogContent} //extra wrapper div to keep border and border radius when scrolling is activated
+                    >
+                      <div className={styles.scrollable}>
+                        <FormikLanguageFieldset
+                          as={Textfield}
+                          name="title"
+                          legend={
+                            <TitleWithHelpTextAndTag
+                              helpText={localization.datasetForm.helptext.title}
+                              tagTitle={localization.tag.recommended}
+                              tagColor="info"
+                            >
+                              {localization.title}
+                            </TitleWithHelpTextAndTag>
+                          }
+                        />
+                        <FieldsetDivider />
+                        <FormikLanguageFieldset
+                          as={TextareaWithPrefix}
+                          legend={
+                            <TitleWithHelpTextAndTag
+                              helpText={
+                                localization.datasetForm.helptext
+                                  .distributionDescription
+                              }
+                              tagColor="info"
+                              tagTitle={localization.tag.recommended}
+                            >
+                              {localization.description}
+                            </TitleWithHelpTextAndTag>
+                          }
+                          name="description"
+                        />
+                        <FieldsetDivider />
+                        <FieldArray name="accessURL">
+                          {(arrayHelpers) => (
+                            <>
+                              {(arrayHelpers.form.values.accessURL || []).map(
+                                (_: any, index: number, array: string[]) => {
+                                  return (
+                                    <React.Fragment key={`accessURL-${index}`}>
+                                      <div>
+                                        {index > 0 ? (
+                                          <FieldsetWithDelete
+                                            onDelete={() =>
+                                              arrayHelpers.remove(index)
+                                            }
+                                            style={{ marginTop: "1rem" }}
+                                          >
+                                            <FastFieldWithRef
+                                              name={`accessURL[${index}]`}
+                                              ref={(
+                                                el:
+                                                  | HTMLInputElement
+                                                  | HTMLTextAreaElement
+                                                  | null,
+                                              ) =>
+                                                setInputRef(
+                                                  `accessURL[${index}]`,
+                                                  el,
+                                                )
+                                              }
+                                              as={Textfield}
+                                              data-size="sm"
+                                              error={errors?.accessURL?.[index]}
+                                            />
+                                          </FieldsetWithDelete>
+                                        ) : (
                                           <FastFieldWithRef
-                                            name={`accessURL[${index}]`}
+                                            name={`accessURL[0]`}
                                             ref={(
                                               el:
                                                 | HTMLInputElement
                                                 | HTMLTextAreaElement
                                                 | null,
                                             ) =>
-                                              setInputRef(
-                                                `accessURL[${index}]`,
-                                                el,
-                                              )
+                                              setInputRef("accessURL[0]", el)
+                                            }
+                                            label={
+                                              <TitleWithHelpTextAndTag
+                                                tagColor="warning"
+                                                tagTitle={
+                                                  localization.tag.required
+                                                }
+                                                helpText={
+                                                  localization.datasetForm
+                                                    .helptext.accessURL
+                                                }
+                                              >
+                                                {
+                                                  localization.datasetForm
+                                                    .fieldLabel.accessURL
+                                                }
+                                              </TitleWithHelpTextAndTag>
                                             }
                                             as={Textfield}
                                             data-size="sm"
                                             error={errors?.accessURL?.[index]}
                                           />
-                                        </FieldsetWithDelete>
-                                      ) : (
-                                        <FastFieldWithRef
-                                          name={`accessURL[0]`}
-                                          ref={(
-                                            el:
-                                              | HTMLInputElement
-                                              | HTMLTextAreaElement
-                                              | null,
-                                          ) => setInputRef("accessURL[0]", el)}
-                                          label={
-                                            <TitleWithHelpTextAndTag
-                                              tagColor="warning"
-                                              tagTitle={
-                                                localization.tag.required
-                                              }
-                                              helpText={
-                                                localization.datasetForm
-                                                  .helptext.accessURL
-                                              }
-                                            >
-                                              {
-                                                localization.datasetForm
-                                                  .fieldLabel.accessURL
-                                              }
-                                            </TitleWithHelpTextAndTag>
-                                          }
-                                          as={Textfield}
-                                          data-size="sm"
-                                          error={errors?.accessURL?.[index]}
-                                        />
-                                      )}
-                                    </div>
-                                  </React.Fragment>
-                                );
-                              },
-                            )}
-                            <AddButton
-                              onClick={() => {
-                                arrayHelpers.push("");
-                                setFocus(
-                                  arrayHelpers.form.values.accessURL
-                                    ? `accessURL[${arrayHelpers.form.values.accessURL.length}]`
-                                    : "accessURL[0]",
-                                );
-                              }}
-                            >
-                              {`${localization.datasetForm.fieldLabel.accessURL}`}
-                            </AddButton>
-                            <FieldsetDivider />
-                          </>
-                        )}
-                      </FieldArray>
-                      {isMobility && "mobilityDataStandard" in values ? (
-                        <>
+                                        )}
+                                      </div>
+                                    </React.Fragment>
+                                  );
+                                },
+                              )}
+                              <AddButton
+                                onClick={() => {
+                                  arrayHelpers.push("");
+                                  setFocus(
+                                    arrayHelpers.form.values.accessURL
+                                      ? `accessURL[${arrayHelpers.form.values.accessURL.length}]`
+                                      : "accessURL[0]",
+                                  );
+                                }}
+                              >
+                                {`${localization.datasetForm.fieldLabel.accessURL}`}
+                              </AddButton>
+                            </>
+                          )}
+                        </FieldArray>
+                        <FieldsetDivider />
+                        {isMobility && "mobilityDataStandard" in values ? (
                           <Fieldset data-size="sm">
                             <Fieldset.Legend>
                               <TitleWithHelpTextAndTag
@@ -846,12 +849,10 @@ export const DistributionModal = ({
                                   ),
                                 )}
                             </Combobox>
+                            <FieldsetDivider />
                           </Fieldset>
-                          <FieldsetDivider />
-                        </>
-                      ) : undefined}
-                      {isMobility && values.rights ? (
-                        <>
+                        ) : undefined}
+                        {isMobility && values.rights ? (
                           <Fieldset data-size="sm">
                             <Fieldset.Legend>
                               <TitleWithHelpTextAndTag
@@ -899,135 +900,141 @@ export const DistributionModal = ({
                                   ),
                                 )}
                             </Combobox>
+                            <FieldsetDivider />
                           </Fieldset>
-                          <FieldsetDivider />
-                        </>
-                      ) : undefined}
-                      <Fieldset data-size="sm">
-                        <Fieldset.Legend>
-                          <TitleWithHelpTextAndTag
-                            helpText={
-                              localization.datasetForm.helptext.fileType
-                            }
-                            tagTitle={
-                              isMobility
-                                ? localization.tag.required
-                                : localization.tag.recommended
-                            }
-                            tagColor={isMobility ? undefined : "info"}
-                          >
-                            {localization.datasetForm.fieldLabel.format}
-                          </TitleWithHelpTextAndTag>
-                        </Fieldset.Legend>
-                        {!selectedFileTypeUris ||
-                        selectedFileTypeUris?.every((v) =>
-                          selectedAndSearchedFileTypes?.find(
-                            (option: ReferenceDataCode | undefined) =>
-                              option?.uri === v,
-                          ),
-                        ) ? (
-                          <FormikReferenceDataCombobox
-                            onChange={(event) =>
-                              setSearchQueryFileTypes(event.target.value)
-                            }
-                            onValueChange={(selectedValues) => {
-                              setFieldValue("format", selectedValues);
-                              setSelectedFileTypeUris(selectedValues);
-                            }}
-                            value={selectedFileTypeUris}
-                            selectedValuesSearchHits={
-                              selectedAndSearchedFileTypes ?? []
-                            }
-                            querySearchHits={fileTypes ?? []}
-                            formikValues={initialValues?.format ?? []}
-                            loading={searchingFileTypes}
-                            portal={false}
-                            hideClearButton={false}
-                            ref={(el: HTMLInputElement | null) =>
-                              setInputRef("format", el)
-                            }
-                            error={errors.format}
-                          />
-                        ) : (
-                          <Skeleton variant="rectangle" />
-                        )}
-                      </Fieldset>
-                      <FieldsetDivider />
-                      <Fieldset data-size="sm">
-                        <Fieldset.Legend>
-                          <TitleWithHelpTextAndTag
-                            tagTitle={localization.tag.recommended}
-                            tagColor="info"
-                            helpText={localization.datasetForm.helptext.license}
-                          >
-                            {localization.datasetForm.fieldLabel.license}
-                          </TitleWithHelpTextAndTag>
-                        </Fieldset.Legend>
-                        <Combobox
-                          value={values?.license ? [values?.license] : [""]}
-                          portal={false}
-                          onValueChange={(selectedValues) => {
-                            setFieldValue("license", selectedValues.toString());
-                          }}
-                          data-size="sm"
-                          virtual
-                        >
-                          <Combobox.Option key="license-none" value="">
-                            {localization.none}
-                          </Combobox.Option>
-                          {openLicenses?.map((license, i) => (
-                            <Combobox.Option
-                              key={`license-${license.uri}-${i}`}
-                              value={license.uri}
-                            >
-                              {getTranslateText(license.label)}
-                            </Combobox.Option>
-                          ))}
-                        </Combobox>
-                      </Fieldset>
-                      <FieldsetDivider />
-                      {expandedFields.map((f, index) =>
-                        renderField(
-                          f,
-                          !(
-                            minimizedFields.length === 0 &&
-                            index === expandedFields.length - 1
-                          ),
-                        ),
-                      )}
-                      {minimizedFields.map((f) => renderField(f))}
-                    </Dialog.Block>
+                        ) : undefined}
 
-                    <Dialog.Block>
-                      <div
-                        style={{
-                          display: "flex",
-                          gap: "var(--ds-size-4)",
-                          marginTop: "var(--ds-size-4)",
-                        }}
-                      >
-                        <Button
-                          type="button"
-                          disabled={isSubmitting}
-                          onClick={() => submitForm()}
-                          data-size="sm"
-                        >
-                          {type === "new"
-                            ? localization.add
-                            : localization.datasetForm.button
-                                .updateDistribution}
-                        </Button>
-                        <Button
-                          variant="secondary"
-                          type="button"
-                          onClick={handleCancel}
-                          disabled={isSubmitting}
-                          data-size="sm"
-                        >
-                          {localization.button.cancel}
-                        </Button>
+                        <Fieldset data-size="sm">
+                          <Fieldset.Legend>
+                            <TitleWithHelpTextAndTag
+                              helpText={
+                                localization.datasetForm.helptext.fileType
+                              }
+                              tagTitle={
+                                isMobility
+                                  ? localization.tag.required
+                                  : localization.tag.recommended
+                              }
+                              tagColor={isMobility ? undefined : "info"}
+                            >
+                              {localization.datasetForm.fieldLabel.format}
+                            </TitleWithHelpTextAndTag>
+                          </Fieldset.Legend>
+                          {!selectedFileTypeUris ||
+                          selectedFileTypeUris?.every((v) =>
+                            selectedAndSearchedFileTypes?.find(
+                              (option: ReferenceDataCode | undefined) =>
+                                option?.uri === v,
+                            ),
+                          ) ? (
+                            <FormikReferenceDataCombobox
+                              onChange={(event) =>
+                                setSearchQueryFileTypes(event.target.value)
+                              }
+                              onValueChange={(selectedValues) => {
+                                setFieldValue("format", selectedValues);
+                                setSelectedFileTypeUris(selectedValues);
+                              }}
+                              value={selectedFileTypeUris}
+                              selectedValuesSearchHits={
+                                selectedAndSearchedFileTypes ?? []
+                              }
+                              querySearchHits={fileTypes ?? []}
+                              formikValues={initialValues?.format ?? []}
+                              loading={searchingFileTypes}
+                              portal={false}
+                              hideClearButton={false}
+                              ref={(el: HTMLInputElement | null) =>
+                                setInputRef("format", el)
+                              }
+                              error={errors.format}
+                            />
+                          ) : (
+                            <Skeleton variant="rectangle" />
+                          )}
+                        </Fieldset>
+                        <FieldsetDivider />
+                        <Fieldset data-size="sm">
+                          <Fieldset.Legend>
+                            <TitleWithHelpTextAndTag
+                              tagTitle={localization.tag.recommended}
+                              tagColor="info"
+                              helpText={
+                                localization.datasetForm.helptext.license
+                              }
+                            >
+                              {localization.datasetForm.fieldLabel.license}
+                            </TitleWithHelpTextAndTag>
+                          </Fieldset.Legend>
+                          <Select
+                            value={values?.license}
+                            data-size="sm"
+                            onChange={(selectedValue) =>
+                              setFieldValue(
+                                "license",
+                                selectedValue.target.value,
+                              )
+                            }
+                          >
+                            <Select.Option key="license-none" value="">
+                              {localization.none}
+                            </Select.Option>
+                            {openLicenses?.map((license, i) => (
+                              <Select.Option
+                                key={`license-${license.uri}-${i}`}
+                                value={license.uri}
+                              >
+                                {getTranslateText(license.label)}
+                              </Select.Option>
+                            ))}
+                          </Select>
+                        </Fieldset>
+                        <FieldsetDivider />
+                        {expandedFields.map((f, index) =>
+                          renderField(
+                            f,
+                            !(
+                              minimizedFields.length === 0 &&
+                              index === expandedFields.length - 1
+                            ),
+                          ),
+                        )}
+                        {minimizedFields.map((f) => renderField(f))}
                       </div>
-                    </Dialog.Block>
+                    </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        gap: "var(--ds-size-4)",
+                        marginTop: "var(--ds-size-4)",
+                      }}
+                    >
+                      <Button
+                        type="button"
+                        disabled={isSubmitting}
+                        onClick={() => {
+                          submitForm();
+                          resetForm();
+                        }}
+                        data-size="sm"
+                      >
+                        {type === "new"
+                          ? localization.add
+                          : localization.datasetForm.button.updateDistribution}
+                      </Button>
+                      <Button
+                        variant="secondary"
+                        type="button"
+                        onClick={() => {
+                          resetForm();
+                          handleCancel();
+                        }}
+                        disabled={isSubmitting}
+                        data-size="sm"
+                      >
+                        {localization.button.cancel}
+                      </Button>
+                    </div>
                   </>
                 )}
               </>
