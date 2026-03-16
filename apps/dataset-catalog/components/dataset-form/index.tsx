@@ -555,6 +555,7 @@ export const DatasetForm = ({
                   <div className={styles.verticalLine} />
                   <Switch
                     position="start"
+                    data-color="success"
                     checked={values.approved}
                     onChange={(event) =>
                       handleSwitchChange(event, setFieldValue)

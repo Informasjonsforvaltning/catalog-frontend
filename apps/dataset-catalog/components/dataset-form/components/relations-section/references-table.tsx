@@ -16,12 +16,14 @@ import {
   Fieldset,
   Dialog,
   Table,
+  Heading,
 } from "@digdir/designsystemet-react";
 import { Formik, useFormikContext } from "formik";
 import relations from "../../utils/relations.json";
 import {
   AddButton,
   DeleteButton,
+  DialogActions,
   EditButton,
   TitleWithHelpTextAndTag,
   useSearchDatasetsByUri,
@@ -63,11 +65,12 @@ export const ReferenceTable = ({
   const { values, errors, setFieldValue } = useFormikContext<Dataset>();
 
   const getUriList = () => {
-    return (
-      values.references
-        ?.map((reference) => reference?.source)
-        .filter((uri) => uri !== undefined) ?? []
-    );
+    const list = values.references?.map((reference) => reference?.source) ?? [];
+    // If list is empty or all elements are undefined, return []; otherwise, filter out undefined
+    if (list.length === 0 || list.every((uri) => uri === undefined)) {
+      return [];
+    }
+    return list.filter((uri): uri is string => uri !== undefined);
   };
 
   const { data: selectedValues } = useSearchDatasetsByUri(
@@ -262,14 +265,14 @@ const FieldDialog = ({
     const options = [
       ...new Map(
         [...(searchHits ?? []), ...[selectedValue], ...uriOption]
-          .filter(Boolean)
+          .filter((option) => Boolean(option?.uri))
           .map((option) => [option.uri, option]),
       ).values(),
     ];
     setComboboxOptions(options);
   }, [selectedValue, searchHits]);
 
-  //--------------
+  //handle combobox options with memoization
   const titleFromSearch = searchHits?.find(
     (item: { uri: string }) => item.uri === selectedUri,
   )?.title;
@@ -282,7 +285,7 @@ const FieldDialog = ({
         },
       ]
     : [];
-  //handle combobox options with memoization instead of useState
+
   const comboboxOptions2 = useMemo(
     () => [
       ...new Map(
@@ -304,17 +307,21 @@ const FieldDialog = ({
             <EditButton />
           )}
         </Dialog.Trigger>
-        <Dialog ref={dialogRef} closeButton={false}>
+        <Dialog
+          ref={dialogRef}
+          closeButton={false} //TODO: enable close button
+        >
           <Formik
             initialValues={template}
             validateOnChange={submitted}
             validateOnBlur={submitted}
             validationSchema={referenceSchema}
-            onSubmit={(formValues, { setSubmitting }) => {
+            onSubmit={(formValues, { setSubmitting, resetForm }) => {
               const trimmedValues = trimObjectWhitespace(formValues);
               onSuccess(trimmedValues);
               setSubmitting(false);
               setSubmitted(true);
+              resetForm();
               dialogRef.current?.close();
             }}
           >
@@ -322,6 +329,7 @@ const FieldDialog = ({
               errors,
               isSubmitting,
               submitForm,
+              resetForm,
               values,
               dirty,
               setFieldValue,
@@ -332,19 +340,14 @@ const FieldDialog = ({
                 }
               }, [values, dirty]);
 
-              console.log(
-                ".............reference type: " + values?.referenceType,
-              );
-              const validReferenceType =
-                values?.referenceType && !isEmpty(values.referenceType) //&& relations.hasValue values.referenceType
-                  ? [values.referenceType]
-                  : undefined;
               return (
                 <>
                   <Dialog.Block>
-                    {type === "edit"
-                      ? `${localization.edit} ${localization.relation.toLowerCase()}`
-                      : `${localization.add} ${localization.relation.toLowerCase()}`}
+                    <Heading>
+                      {type === "edit"
+                        ? `${localization.edit} ${localization.relation.toLowerCase()}`
+                        : `${localization.add} ${localization.relation.toLowerCase()}`}
+                    </Heading>
                   </Dialog.Block>
                   <Dialog.Block
                     className={cn(styles.modalContent, styles.fieldContainer)}
@@ -357,7 +360,12 @@ const FieldDialog = ({
                         onValueChange={(value) =>
                           setFieldValue("referenceType", value.toString())
                         }
-                        //value={validReferenceType}
+                        value={
+                          values?.referenceType &&
+                          !isEmpty(values.referenceType)
+                            ? [values.referenceType]
+                            : []
+                        }
                         placeholder={`${localization.datasetForm.fieldLabel.choseRelation}...`}
                         portal={false}
                         data-size="sm"
@@ -387,8 +395,12 @@ const FieldDialog = ({
                         onChange={(input: any) =>
                           setSearchQuery(input.target.value)
                         }
-                        onValueChange={(value) => {
-                          setSelectedUri(value.toString());
+                        onValueChange={(value: string[]) => {
+                          setSelectedValue(
+                            comboboxOptions.find(
+                              (dataset) => dataset.uri === value[0],
+                            ),
+                          );
                           setFieldValue("source", value.toString());
                         }}
                         loading={searching}
@@ -436,28 +448,34 @@ const FieldDialog = ({
                   </Dialog.Block>
 
                   <Dialog.Block>
-                    <Button
-                      type="button"
-                      disabled={
-                        isSubmitting || !dirty || hasNoFieldValues(values)
-                      }
-                      onClick={() => submitForm()}
-                      data-size="sm"
-                    >
-                      {type === "new" ? localization.add : localization.update}
-                    </Button>
-                    <Button
-                      variant="secondary"
-                      type="button"
-                      onClick={() => {
-                        onCancel();
-                        dialogRef.current?.close();
-                      }}
-                      disabled={isSubmitting}
-                      data-size="sm"
-                    >
-                      {localization.button.cancel}
-                    </Button>
+                    <DialogActions>
+                      <Button
+                        type="button"
+                        disabled={
+                          isSubmitting || !dirty || hasNoFieldValues(values)
+                        }
+                        onClick={() => {
+                          submitForm();
+                        }}
+                        data-size="sm"
+                      >
+                        {type === "new"
+                          ? localization.add
+                          : localization.update}
+                      </Button>
+                      <Button
+                        variant="secondary"
+                        type="button"
+                        onClick={() => {
+                          resetForm();
+                          dialogRef.current?.close();
+                        }}
+                        disabled={isSubmitting}
+                        data-size="sm"
+                      >
+                        {localization.button.cancel}
+                      </Button>
+                    </DialogActions>
                   </Dialog.Block>
                 </>
               );
