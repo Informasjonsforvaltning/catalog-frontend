@@ -115,15 +115,12 @@ export const UriWithLabelFieldsetTable = ({
                 fieldName={fieldName}
                 template={{ prefLabel: {}, uri: "" }}
                 type="new"
-                onSuccess={() => setSnapshot([...(fieldValues ?? [])])}
-                onCancel={() => setFieldValue(fieldName, snapshot)}
-                onChange={(updatedItem: UriWithLabel) => {
-                  if (snapshot.length === (fieldValues?.length ?? 0)) {
-                    arrayHelpers.push(updatedItem);
-                  } else {
-                    arrayHelpers.replace(snapshot.length, updatedItem);
-                  }
+                onSuccess={(values: UriWithLabel) => {
+                  arrayHelpers.push(values);
+                  setSnapshot([...(fieldValues ?? []), values]);
                 }}
+                onCancel={() => setFieldValue(fieldName, snapshot)}
+                onChange={() => {}}
               />
             </div>
           </div>
@@ -178,7 +175,7 @@ const FieldModal = ({
           >
             {({ errors, isSubmitting, submitForm, values, dirty }) => {
               useEffect(() => {
-                if (dirty && !hasNoFieldValues(values)) {
+                if (dirty) {
                   onChange({ ...values });
                 }
               }, [values, dirty]);
