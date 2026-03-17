@@ -47,14 +47,13 @@ export const PublishSwitch = ({ catalogId, dataset, disabled }: Props) => {
     <>
       <Switch
         className={styles.center}
-        size="small"
-        position="right"
+        data-size="sm"
+        position="end"
         onChange={() => handlePublishDataset()}
         checked={dataset.published}
         disabled={disabled || !(dataset.approved || dataset.published)}
-      >
-        {localization.publicationState.published}
-      </Switch>
+        label={localization.publicationState.published}
+      />
     </>
   );
 };

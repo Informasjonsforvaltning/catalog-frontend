@@ -5,7 +5,7 @@ import {
   localization,
   onlyNumbersRegex,
 } from "@catalog-frontend/utils";
-import { Box, Combobox, Fieldset } from "@digdir/designsystemet-react";
+import { Combobox, Fieldset } from "@digdir/designsystemet-react";
 import {
   useSearchEnheter,
   useSearchEnheterByOrgNmbs,
@@ -49,17 +49,15 @@ export const QualifiedAttributionsSection = ({
   ];
 
   return (
-    <Box>
-      <Fieldset
-        data-size="sm"
-        legend={
+    <div>
+      <Fieldset data-size="sm">
+        <Fieldset.Legend>
           <TitleWithHelpTextAndTag
             helpText={localization.datasetForm.helptext.qualifiedAttributions}
           >
             {localization.datasetForm.fieldLabel.qualifiedAttributions}
           </TitleWithHelpTextAndTag>
-        }
-      >
+        </Fieldset.Legend>
         <Combobox
           data-size="sm"
           onValueChange={(selectedValues: string[]) =>
@@ -93,6 +91,6 @@ export const QualifiedAttributionsSection = ({
           ))}
         </Combobox>
       </Fieldset>
-    </Box>
+    </div>
   );
 };

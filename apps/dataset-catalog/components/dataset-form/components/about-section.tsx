@@ -11,7 +11,6 @@ import {
   localization,
 } from "@catalog-frontend/utils";
 import {
-  Box,
   Textfield,
   Fieldset,
   Combobox,
@@ -39,10 +38,9 @@ export const AboutSection = ({
   const { setFieldValue, errors, values } = useFormikContext<Dataset>();
 
   return (
-    <Box>
-      <Fieldset
-        data-size="sm"
-        legend={
+    <div>
+      <Fieldset data-size="sm">
+        <Fieldset.Legend>
           <TitleWithHelpTextAndTag
             helpText={
               values?.applicationProfile === ApplicationProfile.MOBILITYDCATAP
@@ -53,8 +51,7 @@ export const AboutSection = ({
           >
             {localization.tag.applicationProfile}
           </TitleWithHelpTextAndTag>
-        }
-      >
+        </Fieldset.Legend>
         <Paragraph data-size="sm">
           {values?.applicationProfile === ApplicationProfile.MOBILITYDCATAP
             ? localization.tag.mobilityDcatAp
@@ -90,9 +87,8 @@ export const AboutSection = ({
       <FieldsetDivider />
       {isMobility && (
         <>
-          <Fieldset
-            data-size="sm"
-            legend={
+          <Fieldset data-size="sm">
+            <Fieldset.Legend>
               <TitleWithHelpTextAndTag
                 tagColor={isMobility ? undefined : "info"}
                 tagTitle={
@@ -104,22 +100,19 @@ export const AboutSection = ({
               >
                 {localization.datasetForm.fieldLabel.spatial}
               </TitleWithHelpTextAndTag>
-            }
-          >
+            </Fieldset.Legend>
             <SpatialCombobox referenceDataEnv={referenceDataEnv} />
           </Fieldset>
           <FieldsetDivider />
-          <Fieldset
-            data-size="sm"
-            legend={
+          <Fieldset data-size="sm">
+            <Fieldset.Legend>
               <TitleWithHelpTextAndTag
                 helpText={localization.datasetForm.helptext.frequency}
                 tagTitle={localization.tag.required}
               >
                 {localization.datasetForm.fieldLabel.frequency}
               </TitleWithHelpTextAndTag>
-            }
-          >
+            </Fieldset.Legend>
             <Combobox
               value={values?.frequency ? [values.frequency] : [""]}
               portal={false}
@@ -165,6 +158,6 @@ export const AboutSection = ({
           </TitleWithHelpTextAndTag>
         }
       />
-    </Box>
+    </div>
   );
 };

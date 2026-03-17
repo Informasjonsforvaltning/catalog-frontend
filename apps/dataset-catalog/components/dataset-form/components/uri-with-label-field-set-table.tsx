@@ -6,13 +6,14 @@ import {
   FieldsetDivider,
   FormikLanguageFieldset,
   FormHeading,
+  DialogActions,
 } from "@catalog-frontend/ui-v2";
 import {
   getTranslateText,
   localization,
   trimObjectWhitespace,
 } from "@catalog-frontend/utils";
-import { Button, Modal, Table, Textfield } from "@digdir/designsystemet-react";
+import { Button, Dialog, Table, Textfield } from "@digdir/designsystemet-react";
 import { FastField, FieldArray, Formik, useFormikContext } from "formik";
 import styles from "../dataset-form.module.css";
 import { ReactNode, useEffect, useRef, useState } from "react";
@@ -146,8 +147,8 @@ const FieldModal = ({
 
   return (
     <>
-      <Modal.Root>
-        <Modal.Trigger asChild>
+      <Dialog.TriggerContext>
+        <Dialog.Trigger asChild>
           {type === "edit" ? (
             <EditButton />
           ) : (
@@ -158,8 +159,8 @@ const FieldModal = ({
               ]?.toLowerCase()}
             </AddButton>
           )}
-        </Modal.Trigger>
-        <Modal.Dialog ref={modalRef}>
+        </Dialog.Trigger>
+        <Dialog ref={modalRef}>
           <Formik
             initialValues={template}
             validateOnChange={submitted}
@@ -182,14 +183,14 @@ const FieldModal = ({
 
               return (
                 <>
-                  <Modal.Header closeButton={false}>
+                  <div>
                     {type === "edit" ? localization.edit : localization.add}{" "}
                     {localization.datasetForm.fieldLabel?.[
                       fieldName as keyof typeof localization.datasetForm.fieldLabel
                     ].toLowerCase()}
-                  </Modal.Header>
+                  </div>
 
-                  <Modal.Content className={styles.modalContent}>
+                  <div className={styles.modalContent}>
                     <FormikLanguageFieldset
                       as={Textfield}
                       name="prefLabel"
@@ -203,9 +204,9 @@ const FieldModal = ({
                       error={errors?.uri}
                       data-size="sm"
                     />
-                  </Modal.Content>
+                  </div>
 
-                  <Modal.Footer>
+                  <DialogActions>
                     <Button
                       type="button"
                       disabled={
@@ -228,13 +229,13 @@ const FieldModal = ({
                     >
                       {localization.button.cancel}
                     </Button>
-                  </Modal.Footer>
+                  </DialogActions>
                 </>
               );
             }}
           </Formik>
-        </Modal.Dialog>
-      </Modal.Root>
+        </Dialog>
+      </Dialog.TriggerContext>
     </>
   );
 };

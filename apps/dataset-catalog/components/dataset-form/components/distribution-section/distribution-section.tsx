@@ -3,10 +3,9 @@
 import { useEffect, useState } from "react";
 import { useFormikContext } from "formik";
 import {
-  Box,
   Button,
   Card,
-  ErrorMessage,
+  ValidationMessage,
   Fieldset,
   Heading,
   Paragraph,
@@ -246,10 +245,9 @@ export const DistributionSection = ({
   }
 
   return (
-    <Box>
-      <Fieldset
-        data-size="sm"
-        legend={
+    <div>
+      <Fieldset data-size="sm">
+        <Fieldset.Legend>
           <TitleWithHelpTextAndTag
             helpText={localization.datasetForm.helptext.distribution}
             tagTitle={
@@ -261,9 +259,7 @@ export const DistributionSection = ({
           >
             {localization.datasetForm.fieldLabel.distributions}
           </TitleWithHelpTextAndTag>
-        }
-        error={errors.distribution}
-      >
+        </Fieldset.Legend>
         {values?.distribution &&
           !distributionArrayIsEmpty(values?.distribution) &&
           values?.distribution?.map(
@@ -274,7 +270,7 @@ export const DistributionSection = ({
                     <div className={styles.field}>
                       {!isEmpty(item?.title) && (
                         <>
-                          <Heading data-size="2xs" spacing level={3}>
+                          <Heading data-size="2xs" level={3}>
                             {localization.datasetForm.fieldLabel.title}
                           </Heading>
                           <Paragraph data-size="sm">
@@ -410,9 +406,9 @@ export const DistributionSection = ({
                     />
                   )}
                   {get(errors, "distribution[" + index + "]") && (
-                    <ErrorMessage data-size="sm">
+                    <ValidationMessage data-size="sm">
                       {localization.validation.multipleInvalidValues}
-                    </ErrorMessage>
+                    </ValidationMessage>
                   )}
                 </Card>
               ),
@@ -468,16 +464,14 @@ export const DistributionSection = ({
         </div>
       </Fieldset>
       <FieldsetDivider />
-      <Fieldset
-        data-size="sm"
-        legend={
+      <Fieldset data-size="sm">
+        <Fieldset.Legend>
           <TitleWithHelpTextAndTag
             helpText={localization.datasetForm.helptext.sample}
           >
             {localization.datasetForm.fieldLabel.sample}
           </TitleWithHelpTextAndTag>
-        }
-      >
+        </Fieldset.Legend>
         {values?.sample &&
           !distributionArrayIsEmpty(values?.sample) &&
           values?.sample
@@ -611,9 +605,9 @@ export const DistributionSection = ({
                       />
                     )}
                     {get(errors, "sample[" + index + "]") && (
-                      <ErrorMessage data-size="sm">
+                      <ValidationMessage data-size="sm">
                         Inneholder en eller flere ugyldige verdier
-                      </ErrorMessage>
+                      </ValidationMessage>
                     )}
                   </Card>
                 ),
@@ -664,6 +658,6 @@ export const DistributionSection = ({
           />
         </div>
       </Fieldset>
-    </Box>
+    </div>
   );
 };

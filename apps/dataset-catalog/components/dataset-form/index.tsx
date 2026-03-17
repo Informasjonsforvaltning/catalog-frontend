@@ -537,7 +537,7 @@ export const DatasetForm = ({
                     }}
                   >
                     {isSubmitting ? (
-                      <Spinner title="Lagrer" data-size="sm" />
+                      <Spinner aria-label="Lagrer" data-size="sm" />
                     ) : (
                       localization.save
                     )}
@@ -554,25 +554,22 @@ export const DatasetForm = ({
                   </Button>
                   <div className={styles.verticalLine} />
                   <Switch
-                    position="left"
+                    position="start"
                     data-size="sm"
                     checked={values.approved}
                     onChange={(event) =>
                       handleSwitchChange(event, setFieldValue)
                     }
+                    label={localization.tag.approve}
+                  />
+                  <HelpMarkdown
+                    title={
+                      localization.datasetForm.fieldLabel.registrationStatus
+                    }
+                    aria-label="statusSwitch"
                   >
-                    <div className={styles.footerContent}>
-                      {localization.tag.approve}
-                      <HelpMarkdown
-                        title={
-                          localization.datasetForm.fieldLabel.registrationStatus
-                        }
-                        aria-label="statusSwitch"
-                      >
-                        {localization.datasetForm.helptext.statusSwitch}
-                      </HelpMarkdown>
-                    </div>
-                  </Switch>
+                    {localization.datasetForm.helptext.statusSwitch}
+                  </HelpMarkdown>
                   <div className={styles.verticalLine} />
                   <div
                     className={classNames(
@@ -588,9 +585,8 @@ export const DatasetForm = ({
                       onChange={(e) =>
                         handleIgnoreRequiredChange(e.target.checked)
                       }
-                    >
-                      {localization.datasetForm.fieldLabel.ignoreRequired}
-                    </Checkbox>
+                      label={localization.datasetForm.fieldLabel.ignoreRequired}
+                    />
                     <HelpMarkdown
                       aria-label={`Help ${localization.datasetForm.fieldLabel.ignoreRequired}`}
                     >
