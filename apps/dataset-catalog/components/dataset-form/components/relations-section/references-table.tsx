@@ -235,6 +235,7 @@ const FieldModal = ({
     Search.SearchObject | undefined
   >();
   const [comboboxOptions, setComboboxOptions] = useState<any[]>([]);
+  const [formKey, setFormKey] = useState(0);
 
   useEffect(() => {
     const allDatasets = [
@@ -280,8 +281,19 @@ const FieldModal = ({
             <EditButton />
           )}
         </Dialog.Trigger>
-        <Dialog ref={modalRef}>
+        <Dialog
+          ref={modalRef}
+          onClose={() => {
+            setSelectedUri(initialUri);
+            setSearchQuery("");
+            setSelectedValue(undefined);
+            setComboboxOptions([]);
+            setSubmitted(false);
+            setFormKey((k) => k + 1);
+          }}
+        >
           <Formik
+            key={formKey}
             initialValues={template}
             validateOnChange={submitted}
             validateOnBlur={submitted}
@@ -328,7 +340,10 @@ const FieldModal = ({
                           setFieldValue("referenceType", value.toString())
                         }
                         value={
-                          values.referenceType ? [values.referenceType] : []
+                          values.referenceType &&
+                          relations.some((r) => r.code === values.referenceType)
+                            ? [values.referenceType]
+                            : []
                         }
                         placeholder={`${localization.datasetForm.fieldLabel.choseRelation}...`}
                         portal={false}
@@ -365,7 +380,11 @@ const FieldModal = ({
                         }}
                         loading={searching}
                         value={
-                          values?.source && !isEmpty(values.source)
+                          values?.source &&
+                          !isEmpty(values.source) &&
+                          comboboxOptions?.some(
+                            (opt) => opt.uri === values.source,
+                          )
                             ? [values.source]
                             : []
                         }
