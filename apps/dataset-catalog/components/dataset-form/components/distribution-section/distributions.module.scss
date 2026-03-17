@@ -3,8 +3,7 @@
 }
 
 .modalContent {
-  margin: var(--ds-size-8);
-  padding: var(--ds-size-4);
+  margin: var(--ds-size-8) 0;
   height: calc(100vh - 400px);
   display: flex;
   flex-direction: column;
