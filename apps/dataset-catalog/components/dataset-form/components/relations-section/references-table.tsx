@@ -234,8 +234,8 @@ const FieldModal = ({
   const [selectedValue, setSelectedValue] = useState<
     Search.SearchObject | undefined
   >();
-  const [comboboxOptions, setComboboxOptions] = useState<any[]>([]);
-  const [formKey, setFormKey] = useState(0);
+  const [comboboxOptions, setComboboxOptions] =
+    useState<any[]>(initialDatasets);
 
   useEffect(() => {
     const allDatasets = [
@@ -287,22 +287,22 @@ const FieldModal = ({
             setSelectedUri(initialUri);
             setSearchQuery("");
             setSelectedValue(undefined);
-            setComboboxOptions([]);
+            setComboboxOptions(initialDatasets);
             setSubmitted(false);
-            setFormKey((k) => k + 1);
           }}
         >
           <Formik
-            key={formKey}
             initialValues={template}
+            enableReinitialize={true}
             validateOnChange={submitted}
             validateOnBlur={submitted}
             validationSchema={referenceSchema}
-            onSubmit={(formValues, { setSubmitting }) => {
+            onSubmit={(formValues, { setSubmitting, resetForm }) => {
               const trimmedValues = trimObjectWhitespace(formValues);
               onSuccess(trimmedValues);
               setSubmitting(false);
               setSubmitted(true);
+              resetForm();
               modalRef.current?.close();
             }}
           >

@@ -163,14 +163,16 @@ const FieldModal = ({
         <Dialog ref={modalRef}>
           <Formik
             initialValues={template}
+            enableReinitialize={true}
             validateOnChange={submitted}
             validateOnBlur={submitted}
             validationSchema={uriWithLabelSchema}
-            onSubmit={(formValues, { setSubmitting }) => {
+            onSubmit={(formValues, { setSubmitting, resetForm }) => {
               const trimmedValues = trimObjectWhitespace(formValues);
               onSuccess(trimmedValues);
               setSubmitting(false);
               setSubmitted(true);
+              resetForm();
               modalRef.current?.close();
             }}
           >
