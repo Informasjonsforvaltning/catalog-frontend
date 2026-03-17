@@ -1,5 +1,8 @@
 import { Dataset, StorageData } from "@catalog-frontend/types";
-import { FieldsetDivider, TitleWithHelpTextAndTag } from "@catalog-frontend/ui";
+import {
+  FieldsetDivider,
+  TitleWithHelpTextAndTag,
+} from "@catalog-frontend/ui-v2";
 import { localization, DataStorage } from "@catalog-frontend/utils";
 import { Box } from "@digdir/designsystemet-react";
 import { useFormikContext } from "formik";

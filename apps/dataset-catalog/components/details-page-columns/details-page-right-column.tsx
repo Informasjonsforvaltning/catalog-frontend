@@ -1,4 +1,4 @@
-import { InfoCard } from "@catalog-frontend/ui";
+import { InfoCard } from "@catalog-frontend/ui-v2";
 import {
   formatISO,
   getTranslateText,
@@ -34,7 +34,7 @@ export const RightColumn = ({
             : localization.datasetForm.helptext.applicationProfileDcat
         }
       >
-        <Paragraph size="sm">
+        <Paragraph data-size="sm">
           {dataset?.applicationProfile === ApplicationProfile.MOBILITYDCATAP
             ? localization.tag.mobilityDcatAp
             : localization.tag.dcatApNo}

@@ -1,5 +1,8 @@
 import { Dataset } from "@catalog-frontend/types";
-import { FieldsetDivider, TitleWithHelpTextAndTag } from "@catalog-frontend/ui";
+import {
+  FieldsetDivider,
+  TitleWithHelpTextAndTag,
+} from "@catalog-frontend/ui-v2";
 import {
   accessRights,
   getTranslateText,
@@ -20,7 +23,7 @@ export const AccessRightFields = ({ isMobility: isMobility }: Props) => {
     <>
       <Box>
         <Radio.Group
-          size="sm"
+          data-size="sm"
           legend={
             <TitleWithHelpTextAndTag
               helpText={localization.datasetForm.helptext.accessRights}

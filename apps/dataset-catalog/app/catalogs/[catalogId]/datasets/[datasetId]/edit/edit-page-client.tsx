@@ -5,7 +5,7 @@ import {
   Dataset,
   StorageData,
 } from "@catalog-frontend/types";
-import { Button, ButtonBar, ConfirmModal } from "@catalog-frontend/ui";
+import { Button, ButtonBar, ConfirmModal } from "@catalog-frontend/ui-v2";
 import { LocalDataStorage, localization } from "@catalog-frontend/utils";
 import {
   getDatasetById,
@@ -100,8 +100,8 @@ export const EditPage = ({
       <ButtonBar>
         <Button
           variant="tertiary"
-          color="second"
-          size="sm"
+          data-color="second"
+          data-size="sm"
           onClick={() => setShowCancelConfirm(true)}
         >
           <ArrowLeftIcon fontSize="1.25em" />

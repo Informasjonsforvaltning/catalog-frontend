@@ -5,7 +5,7 @@ import {
   useDebounce,
   useSearchInformationModelsByUri,
   useSearchInformationModelsSuggestions,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import {
   capitalizeFirstLetter,
   getTranslateText,
@@ -59,7 +59,7 @@ export const InformationModelSection = ({ searchEnv }: Props) => {
     <>
       {!isLoading && (
         <Fieldset
-          size="sm"
+          data-size="sm"
           legend={
             <TitleWithHelpTextAndTag
               helpText={
@@ -71,7 +71,7 @@ export const InformationModelSection = ({ searchEnv }: Props) => {
           }
         >
           <Combobox
-            size="sm"
+            data-size="sm"
             onValueChange={(selectedValues: string[]) =>
               setFieldValue("informationModelsFromFDK", selectedValues)
             }

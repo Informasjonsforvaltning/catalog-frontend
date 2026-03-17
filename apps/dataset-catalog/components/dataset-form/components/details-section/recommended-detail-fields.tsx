@@ -3,7 +3,7 @@ import {
   FieldsetDivider,
   SpatialCombobox,
   TitleWithHelpTextAndTag,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import { getTranslateText, localization } from "@catalog-frontend/utils";
 import { Checkbox, Fieldset } from "@digdir/designsystemet-react";
 import { useFormikContext } from "formik";
@@ -50,7 +50,7 @@ export const RecommendedDetailFields = ({
             {localization.datasetForm.fieldLabel.language}
           </TitleWithHelpTextAndTag>
         }
-        size="sm"
+        data-size="sm"
       >
         {values.language &&
           values.language.some((lang) => lang.includes("NOR")) && (
@@ -71,7 +71,7 @@ export const RecommendedDetailFields = ({
       {!isMobility && (
         <>
           <Fieldset
-            size="sm"
+            data-size="sm"
             legend={
               <TitleWithHelpTextAndTag
                 tagTitle={localization.tag.recommended}

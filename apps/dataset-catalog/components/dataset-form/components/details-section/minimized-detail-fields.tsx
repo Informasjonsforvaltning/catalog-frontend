@@ -7,7 +7,7 @@ import {
   TextareaWithPrefix,
   FastFieldWithRef,
   FieldsetDivider,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import {
   capitalizeFirstLetter,
   getTranslateText,
@@ -38,7 +38,7 @@ const FIELD_CONFIG = [
     getValue: (values: Dataset) => values?.type,
     render: (props: any) => (
       <Fieldset
-        size="sm"
+        data-size="sm"
         legend={
           <TitleWithHelpTextAndTag
             helpText={localization.datasetForm.helptext.type}
@@ -50,7 +50,7 @@ const FIELD_CONFIG = [
         <FastFieldWithRef
           as={Combobox}
           ref={props.ref}
-          size="sm"
+          data-size="sm"
           value={[props.values.type]}
           virtual
           placeholder={`${localization.search.search}...`}
@@ -58,9 +58,7 @@ const FIELD_CONFIG = [
             props.setFieldValue("type", value.toString())
           }
         >
-          <Combobox.Option
-            value=""
-          >{`${localization.choose}...`}</Combobox.Option>
+          <Combobox.Option value="">{`${localization.choose}...`}</Combobox.Option>
           {props.datasetTypeOptions}
         </FastFieldWithRef>
       </Fieldset>
@@ -72,7 +70,7 @@ const FIELD_CONFIG = [
     getValue: (values: Dataset) => values?.provenance,
     render: (props: any) => (
       <Fieldset
-        size="sm"
+        data-size="sm"
         legend={
           <TitleWithHelpTextAndTag
             helpText={localization.datasetForm.helptext.provenance}
@@ -89,7 +87,7 @@ const FIELD_CONFIG = [
           onValueChange={(value: string[]) =>
             props.setFieldValue("provenance", value.toString())
           }
-          size="sm"
+          data-size="sm"
         >
           <Combobox.Empty>{`${localization.choose}...`}</Combobox.Empty>
           {props.provenanceOptions}
@@ -103,7 +101,7 @@ const FIELD_CONFIG = [
     getValue: (values: Dataset) => values?.frequency,
     render: (props: any) => (
       <Fieldset
-        size="sm"
+        data-size="sm"
         legend={
           <TitleWithHelpTextAndTag
             helpText={localization.datasetForm.helptext.frequency}
@@ -113,7 +111,7 @@ const FIELD_CONFIG = [
         }
       >
         <FastFieldWithRef
-          size="sm"
+          data-size="sm"
           as={Combobox}
           ref={props.ref}
           value={[props.values?.frequency ?? ""]}
@@ -135,7 +133,7 @@ const FIELD_CONFIG = [
     getValue: (values: Dataset) => values?.modified,
     render: (props: any) => (
       <Fieldset
-        size="sm"
+        data-size="sm"
         legend={
           <TitleWithHelpTextAndTag
             helpText={localization.datasetForm.helptext.modified}
@@ -150,7 +148,7 @@ const FIELD_CONFIG = [
           ref={props.ref}
           name="modified"
           type="date"
-          size="sm"
+          data-size="sm"
         />
       </Fieldset>
     ),
@@ -291,7 +289,7 @@ const FIELD_CONFIG = [
                           )
                         }
                         as={Textfield}
-                        size="sm"
+                        data-size="sm"
                         error={props.errors?.landingPage?.[index]}
                       />
                     </FieldsetWithDelete>
