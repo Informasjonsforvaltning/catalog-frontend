@@ -5,8 +5,6 @@
 .modalContent {
   margin: var(--ds-size-8);
   padding: var(--ds-size-4);
-  border: 1px solid var(--ds-color-neutral-border-default);
-  border-radius: var(--ds-border-radius-md);
   height: calc(100vh - 400px);
   display: flex;
   flex-direction: column;
