@@ -178,7 +178,7 @@ const FieldModal = ({
           >
             {({ errors, isSubmitting, submitForm, values, dirty }) => {
               useEffect(() => {
-                if (dirty) {
+                if (dirty && !hasNoFieldValues(values)) {
                   onChange({ ...values });
                 }
               }, [values, dirty]);
