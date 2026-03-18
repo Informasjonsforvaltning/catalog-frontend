@@ -31,6 +31,7 @@ import {
   Combobox,
   Dialog,
   Fieldset,
+  Heading,
   Skeleton,
   Textfield,
 } from "@digdir/designsystemet-react";
@@ -102,6 +103,7 @@ export const DistributionModal = ({
   const template = distributionTemplate(initialValues);
   const [submitted, setSubmitted] = useState(false);
   const modalRef = useRef<HTMLDialogElement>(null);
+  const resetFormRef = useRef<(() => void) | null>(null);
 
   const [searchQueryMediaTypes, setSearchQueryMediaTypes] =
     useState<string>("");
@@ -110,6 +112,18 @@ export const DistributionModal = ({
     useState<string>("");
 
   const [focus, setFocus] = useState<string | null>();
+
+  const resetLocalState = () => {
+    setSelectedFileTypeUris(initialValues?.format ?? []);
+    setSelectedMediaTypeUris(initialValues?.mediaType ?? []);
+    setSelectedAccessServiceUris(initialValues?.accessServices ?? []);
+    setSearchQueryMediaTypes("");
+    setSearchQueryFileTypes("");
+    setSearchDataServicesQuery("");
+    setSubmitted(false);
+    setFocus(null);
+  };
+
   const inputRefs = useRef<
     Record<string, HTMLInputElement | HTMLTextAreaElement | null>
   >({});
@@ -186,14 +200,10 @@ export const DistributionModal = ({
     });
   }, [dataServices, selectedAccessServiceUris, initialAccessServices]);
 
-  const handleCancel = () => {
-    if (onCancel) {
-      onCancel();
-    }
-    modalRef.current?.close();
-  };
-
-  const handleSubmit = (values: Distribution, { setSubmitting }: any) => {
+  const handleSubmit = (
+    values: Distribution,
+    { setSubmitting, resetForm }: any,
+  ) => {
     const trimmedValues: Distribution = trimObjectWhitespace(values);
     if (trimmedValues.mediaType) {
       trimmedValues.mediaType = trimmedValues.mediaType.filter(
@@ -207,7 +217,8 @@ export const DistributionModal = ({
     }
     onSuccess(trimmedValues);
     setSubmitting(false);
-    setSubmitted(true);
+    resetForm();
+    resetLocalState();
     modalRef.current?.close();
   };
 
@@ -555,9 +566,17 @@ export const DistributionModal = ({
   return (
     <Dialog.TriggerContext>
       <Dialog.Trigger asChild>{trigger}</Dialog.Trigger>
-      <Dialog ref={modalRef} className={styles.dialog}>
+      <Dialog
+        ref={modalRef}
+        className={styles.dialog}
+        onClose={() => {
+          resetFormRef.current?.();
+          resetLocalState();
+        }}
+      >
         <Formik
           initialValues={{ ...template }}
+          enableReinitialize
           name="distribution"
           validateOnChange={submitted}
           validateOnBlur={submitted}
@@ -575,7 +594,10 @@ export const DistributionModal = ({
             values,
             dirty,
             setFieldValue,
+            resetForm,
           }) => {
+            resetFormRef.current = resetForm;
+
             // Call onChange whenever values change for autosave
             useEffect(() => {
               if (dirty && onChange && modalRef.current?.open) {
@@ -649,13 +671,13 @@ export const DistributionModal = ({
               <>
                 {initialValues && (
                   <>
-                    <div>
+                    <Heading data-size="xs">
                       {type === "new"
                         ? distributionType === "distribution"
                           ? localization.datasetForm.button.addDistribution
                           : localization.datasetForm.button.addSample
                         : `${localization.edit} ${distributionType === "distribution" ? localization.datasetForm.fieldLabel.distribution.toLowerCase() : localization.datasetForm.fieldLabel.sample.toLowerCase()}`}
-                    </div>
+                    </Heading>
 
                     <div className={styles.modalContent}>
                       <FormikLanguageFieldset
@@ -1028,7 +1050,12 @@ export const DistributionModal = ({
                       <Button
                         variant="secondary"
                         type="button"
-                        onClick={handleCancel}
+                        onClick={() => {
+                          resetForm();
+                          resetLocalState();
+                          onCancel?.();
+                          modalRef.current?.close();
+                        }}
                         disabled={isSubmitting}
                         data-size="sm"
                       >

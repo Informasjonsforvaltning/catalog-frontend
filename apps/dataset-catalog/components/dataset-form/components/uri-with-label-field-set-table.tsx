@@ -13,7 +13,13 @@ import {
   localization,
   trimObjectWhitespace,
 } from "@catalog-frontend/utils";
-import { Button, Dialog, Table, Textfield } from "@digdir/designsystemet-react";
+import {
+  Button,
+  Dialog,
+  Heading,
+  Table,
+  Textfield,
+} from "@digdir/designsystemet-react";
 import { FastField, FieldArray, Formik, useFormikContext } from "formik";
 import styles from "../dataset-form.module.css";
 import { ReactNode, useEffect, useRef, useState } from "react";
@@ -182,12 +188,12 @@ const FieldModal = ({
 
               return (
                 <>
-                  <div>
+                  <Heading data-size="xs">
                     {type === "edit" ? localization.edit : localization.add}{" "}
                     {localization.datasetForm.fieldLabel?.[
                       fieldName as keyof typeof localization.datasetForm.fieldLabel
                     ].toLowerCase()}
-                  </div>
+                  </Heading>
 
                   <div className={styles.modalContent}>
                     <FormikLanguageFieldset

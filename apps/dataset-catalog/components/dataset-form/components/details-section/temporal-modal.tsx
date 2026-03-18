@@ -11,7 +11,13 @@ import {
   localization,
   trimObjectWhitespace,
 } from "@catalog-frontend/utils";
-import { Button, Dialog, Table, Textfield } from "@digdir/designsystemet-react";
+import {
+  Button,
+  Dialog,
+  Heading,
+  Table,
+  Textfield,
+} from "@digdir/designsystemet-react";
 import { FastField, FieldArray, Formik, useFormikContext } from "formik";
 import styles from "../../dataset-form.module.css";
 import { ReactNode, useEffect, useRef, useState } from "react";
@@ -169,11 +175,11 @@ const FieldModal = ({
 
               return (
                 <>
-                  <div>
+                  <Heading data-size="xs">
                     {type === "edit"
                       ? `${localization.edit} `
                       : `${localization.add} `}
-                  </div>
+                  </Heading>
 
                   <div className={cn(styles.modalContent, styles.calendar)}>
                     <FastField

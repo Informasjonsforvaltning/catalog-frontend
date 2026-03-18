@@ -15,6 +15,7 @@ import {
   Combobox,
   Dialog,
   Fieldset,
+  Heading,
   Table,
 } from "@digdir/designsystemet-react";
 import { Formik, useFormikContext } from "formik";
@@ -322,11 +323,11 @@ const FieldModal = ({
 
               return (
                 <>
-                  <div>
+                  <Heading data-size="xs">
                     {type === "edit"
                       ? `${localization.edit} ${localization.relation.toLowerCase()}`
                       : `${localization.add} ${localization.relation.toLowerCase()}`}
-                  </div>
+                  </Heading>
 
                   <div
                     className={cn(styles.modalContent, styles.fieldContainer)}
