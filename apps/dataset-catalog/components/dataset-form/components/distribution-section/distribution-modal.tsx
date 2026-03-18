@@ -133,72 +133,58 @@ export const DistributionModal = ({
   );
 
   useEffect(() => {
-    const allMediaTypes = [
-      ...selectedAndSearchedMediaTypes,
-      ...initialMediaTypes,
-    ];
-    const selectedMediaTypes = selectedMediaTypeUris
-      ?.map((uri) => allMediaTypes.find((mediaType) => mediaType.uri === uri))
-      .filter((mediaType) => mediaType !== undefined);
-    const unique = Array.from(
-      new Map(
-        [...(selectedMediaTypes ?? []), ...(mediaTypes ?? [])].map((item) => [
-          item.uri,
-          item,
-        ]),
-      ).values(),
-    );
-    setSelectedAndSearchedMediaTypes(unique);
-  }, [
-    mediaTypes,
-    selectedMediaTypeUris,
-    initialMediaTypes,
-    setSelectedAndSearchedMediaTypes,
-  ]);
+    setSelectedAndSearchedMediaTypes((prev) => {
+      const allKnown = [...prev, ...initialMediaTypes, ...(mediaTypes ?? [])];
+      const selectedMediaTypes = selectedMediaTypeUris
+        ?.map((uri) => allKnown.find((mediaType) => mediaType.uri === uri))
+        .filter((mediaType) => mediaType !== undefined);
+      return Array.from(
+        new Map(
+          [...prev, ...(selectedMediaTypes ?? []), ...(mediaTypes ?? [])].map(
+            (item) => [item.uri, item],
+          ),
+        ).values(),
+      );
+    });
+  }, [mediaTypes, selectedMediaTypeUris, initialMediaTypes]);
 
   useEffect(() => {
-    const allFileTypes = [...selectedAndSearchedFileTypes, ...initialFileTypes];
-    const selectedFileTypes = selectedFileTypeUris
-      ?.map((uri) => allFileTypes.find((fileType) => fileType.uri === uri))
-      .filter((fileType) => fileType !== undefined);
-    const unique = Array.from(
-      new Map(
-        [...(selectedFileTypes ?? []), ...(fileTypes ?? [])].map((item) => [
-          item.uri,
-          item,
-        ]),
-      ).values(),
-    );
-    setSelectedAndSearchedFileTypes(unique);
-  }, [
-    fileTypes,
-    selectedFileTypeUris,
-    initialFileTypes,
-    setSelectedAndSearchedFileTypes,
-  ]);
+    setSelectedAndSearchedFileTypes((prev) => {
+      const allKnown = [...prev, ...initialFileTypes, ...(fileTypes ?? [])];
+      const selectedFileTypes = selectedFileTypeUris
+        ?.map((uri) => allKnown.find((fileType) => fileType.uri === uri))
+        .filter((fileType) => fileType !== undefined);
+      return Array.from(
+        new Map(
+          [...prev, ...(selectedFileTypes ?? []), ...(fileTypes ?? [])].map(
+            (item) => [item.uri, item],
+          ),
+        ).values(),
+      );
+    });
+  }, [fileTypes, selectedFileTypeUris, initialFileTypes]);
 
   useEffect(() => {
-    const allAccessServices = [
-      ...selectedAndSearchedAccessServices,
-      ...initialAccessServices,
-    ];
-    const selectedAccessServices = selectedAccessServiceUris
-      ?.map((uri) => allAccessServices.find((service) => service.uri === uri))
-      .filter((service) => service !== undefined);
-    const unique = Array.from(
-      new Map(
-        [...(selectedAccessServices ?? []), ...(dataServices ?? [])].map(
-          (item) => [item.uri, item],
-        ),
-      ).values(),
-    );
-    setSelectedAndSearchedAccessServices(unique);
-  }, [
-    dataServices,
-    selectedAccessServiceUris,
-    initialAccessServices,
-    setSelectedAndSearchedAccessServices,
-  ]);
+    setSelectedAndSearchedAccessServices((prev) => {
+      const allKnown = [
+        ...prev,
+        ...initialAccessServices,
+        ...(dataServices ?? []),
+      ];
+      const selectedAccessServices = selectedAccessServiceUris
+        ?.map((uri) => allKnown.find((service) => service.uri === uri))
+        .filter((service) => service !== undefined);
+      return Array.from(
+        new Map(
+          [
+            ...prev,
+            ...(selectedAccessServices ?? []),
+            ...(dataServices ?? []),
+          ].map((item) => [item.uri, item]),
+        ).values(),
+      );
+    });
+  }, [dataServices, selectedAccessServiceUris, initialAccessServices]);
 
   const handleCancel = () => {
     if (onCancel) {
