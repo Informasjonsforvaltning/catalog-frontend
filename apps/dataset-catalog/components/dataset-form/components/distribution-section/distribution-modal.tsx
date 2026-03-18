@@ -132,10 +132,6 @@ export const DistributionModal = ({
     searchDataServicesQuery,
   );
 
-  if (initialValues?.accessURL?.length === 0) {
-    initialValues.accessURL = [""];
-  }
-
   useEffect(() => {
     const allMediaTypes = [
       ...selectedAndSearchedMediaTypes,

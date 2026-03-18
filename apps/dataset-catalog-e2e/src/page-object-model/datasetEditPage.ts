@@ -677,6 +677,12 @@ export default class DatasetEditPage {
 
   // Save button
   async clickSaveButton(success: boolean = true) {
+    const collapseButton = this.page.getByRole("button", {
+      name: "Collapse issues badge",
+    });
+    if (await collapseButton.isVisible()) {
+      await collapseButton.click();
+    }
     await this.page.getByRole("button", { name: "Lagre" }).click();
     if (success) {
       await this.page
