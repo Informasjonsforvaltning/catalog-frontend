@@ -592,7 +592,7 @@ export const DistributionModal = ({
           }) => {
             // Call onChange whenever values change for autosave
             useEffect(() => {
-              if (dirty && onChange) {
+              if (dirty && onChange && modalRef.current?.open) {
                 onChange(values);
               }
             }, [values, dirty, onChange]);

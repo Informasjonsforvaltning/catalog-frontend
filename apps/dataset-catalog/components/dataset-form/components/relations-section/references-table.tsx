@@ -315,7 +315,7 @@ const FieldModal = ({
               setFieldValue,
             }) => {
               useEffect(() => {
-                if (dirty) {
+                if (dirty && modalRef.current?.open) {
                   onChange({ ...values });
                 }
               }, [values, dirty]);

@@ -175,7 +175,7 @@ const FieldModal = ({
           >
             {({ errors, isSubmitting, submitForm, values, dirty }) => {
               useEffect(() => {
-                if (dirty) {
+                if (dirty && modalRef.current?.open) {
                   onChange({ ...values });
                 }
               }, [values, dirty]);
