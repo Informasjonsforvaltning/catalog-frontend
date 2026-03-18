@@ -6,7 +6,7 @@ import { LocalDataStorage, localization } from "@catalog-frontend/utils";
 import { createDataset } from "@dataset-catalog/app/actions/actions";
 import DatasetForm from "@dataset-catalog/components/dataset-form";
 import { ArrowLeftIcon } from "@navikt/aksel-icons";
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
 type NewPageProps = {
@@ -28,13 +28,17 @@ export const NewPage = ({
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
   const router = useRouter();
 
-  const dataStorage = new LocalDataStorage<StorageData>({
-    key: "datasetForm",
-    secondaryKeys: {
-      distribution: "datasetFormDistribution",
-      reference: "datasetFormReference",
-    },
-  });
+  const dataStorage = useMemo(
+    () =>
+      new LocalDataStorage<StorageData>({
+        key: "datasetForm",
+        secondaryKeys: {
+          distribution: "datasetFormDistribution",
+          reference: "datasetFormReference",
+        },
+      }),
+    [],
+  );
 
   const handleGotoOverview = () => {
     dataStorage.delete();

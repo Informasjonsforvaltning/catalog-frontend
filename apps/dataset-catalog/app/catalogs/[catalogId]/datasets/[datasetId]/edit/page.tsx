@@ -25,6 +25,7 @@ import { getDatasetById } from "@dataset-catalog/app/actions/actions";
 import { EditPage } from "./edit-page-client";
 import { withWriteProtectedPage } from "@dataset-catalog/utils/auth";
 import { redirect, RedirectType } from "next/navigation";
+import { Suspense } from "react";
 
 const EditDatasetPage = withWriteProtectedPage(
   ({ catalogId, datasetId }) =>
@@ -103,12 +104,14 @@ const EditDatasetPage = withWriteProtectedPage(
           catalogId={catalogId}
           title={localization.catalogType.dataset}
         />
-        <EditPage
-          dataset={dataset}
-          referenceData={referenceData}
-          referenceDataEnv={referenceDataEnv}
-          searchEnv={searchEnv}
-        />
+        <Suspense>
+          <EditPage
+            dataset={dataset}
+            referenceData={referenceData}
+            referenceDataEnv={referenceDataEnv}
+            searchEnv={searchEnv}
+          />
+        </Suspense>
       </>
     );
   },
