@@ -5,7 +5,7 @@ import {
   Option,
   MobilityTheme,
 } from "@catalog-frontend/types";
-import { TitleWithHelpTextAndTag } from "@catalog-frontend/ui";
+import { TitleWithHelpTextAndTag } from "@catalog-frontend/ui-v2";
 import { Combobox } from "@digdir/designsystemet-react";
 import { getTranslateText, localization } from "@catalog-frontend/utils";
 import { FastField, useFormikContext } from "formik";
@@ -52,7 +52,7 @@ export const ThemeSection = ({
             setFieldValue("mobilityTheme", values)
           }
           error={errors.mobilityTheme}
-          size="sm"
+          data-size="sm"
         >
           <Combobox.Empty>{localization.search.noHits}</Combobox.Empty>
           {mobilityThemes
@@ -88,7 +88,7 @@ export const ThemeSection = ({
         onValueChange={(values: string[]) =>
           setFieldValue("euDataTheme", values)
         }
-        size="sm"
+        data-size="sm"
       >
         <Combobox.Empty>{localization.search.noHits}</Combobox.Empty>
         {euDataThemes &&
@@ -114,7 +114,7 @@ export const ThemeSection = ({
         filter={containsFilter}
         placeholder={`${localization.search.search}...`}
         onValueChange={(values: string[]) => setFieldValue("losTheme", values)}
-        size="sm"
+        data-size="sm"
       >
         <Combobox.Empty>{localization.search.noHits}</Combobox.Empty>
         {losThemes

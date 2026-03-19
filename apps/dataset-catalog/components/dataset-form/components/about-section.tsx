@@ -4,14 +4,13 @@ import {
   TitleWithHelpTextAndTag,
   TextareaWithPrefix,
   SpatialCombobox,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import {
   capitalizeFirstLetter,
   getTranslateText,
   localization,
 } from "@catalog-frontend/utils";
 import {
-  Box,
   Textfield,
   Fieldset,
   Combobox,
@@ -39,10 +38,9 @@ export const AboutSection = ({
   const { setFieldValue, errors, values } = useFormikContext<Dataset>();
 
   return (
-    <Box>
-      <Fieldset
-        size="sm"
-        legend={
+    <div>
+      <Fieldset data-size="sm">
+        <Fieldset.Legend>
           <TitleWithHelpTextAndTag
             helpText={
               values?.applicationProfile === ApplicationProfile.MOBILITYDCATAP
@@ -53,9 +51,8 @@ export const AboutSection = ({
           >
             {localization.tag.applicationProfile}
           </TitleWithHelpTextAndTag>
-        }
-      >
-        <Paragraph size="sm">
+        </Fieldset.Legend>
+        <Paragraph data-size="sm">
           {values?.applicationProfile === ApplicationProfile.MOBILITYDCATAP
             ? localization.tag.mobilityDcatAp
             : localization.tag.dcatApNo}
@@ -90,9 +87,8 @@ export const AboutSection = ({
       <FieldsetDivider />
       {isMobility && (
         <>
-          <Fieldset
-            size="sm"
-            legend={
+          <Fieldset data-size="sm">
+            <Fieldset.Legend>
               <TitleWithHelpTextAndTag
                 tagColor={isMobility ? undefined : "info"}
                 tagTitle={
@@ -104,29 +100,26 @@ export const AboutSection = ({
               >
                 {localization.datasetForm.fieldLabel.spatial}
               </TitleWithHelpTextAndTag>
-            }
-          >
+            </Fieldset.Legend>
             <SpatialCombobox referenceDataEnv={referenceDataEnv} />
           </Fieldset>
           <FieldsetDivider />
-          <Fieldset
-            size="sm"
-            legend={
+          <Fieldset data-size="md">
+            <Fieldset.Legend>
               <TitleWithHelpTextAndTag
                 helpText={localization.datasetForm.helptext.frequency}
                 tagTitle={localization.tag.required}
               >
                 {localization.datasetForm.fieldLabel.frequency}
               </TitleWithHelpTextAndTag>
-            }
-          >
+            </Fieldset.Legend>
             <Combobox
               value={values?.frequency ? [values.frequency] : [""]}
               portal={false}
               onValueChange={(selectedValues) => {
                 setFieldValue("frequency", selectedValues.toString());
               }}
-              size="sm"
+              data-size="md"
               virtual
               error={errors.frequency}
             >
@@ -152,7 +145,7 @@ export const AboutSection = ({
       <FastField
         style={{ width: "fit-content" }}
         as={Textfield}
-        size="sm"
+        data-size="sm"
         type="date"
         name="issued"
         label={
@@ -165,6 +158,6 @@ export const AboutSection = ({
           </TitleWithHelpTextAndTag>
         }
       />
-    </Box>
+    </div>
   );
 };

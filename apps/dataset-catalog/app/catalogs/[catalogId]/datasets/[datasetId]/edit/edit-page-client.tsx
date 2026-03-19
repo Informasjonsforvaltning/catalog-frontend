@@ -5,7 +5,7 @@ import {
   Dataset,
   StorageData,
 } from "@catalog-frontend/types";
-import { Button, ButtonBar, ConfirmModal } from "@catalog-frontend/ui";
+import { Button, ButtonBar, ConfirmModal } from "@catalog-frontend/ui-v2";
 import { LocalDataStorage, localization } from "@catalog-frontend/utils";
 import {
   getDatasetById,
@@ -14,7 +14,7 @@ import {
 import DatasetForm from "@dataset-catalog/components/dataset-form";
 import { ArrowLeftIcon } from "@navikt/aksel-icons";
 import { usePathname, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 type EditPageProps = {
   dataset: Dataset;
@@ -35,22 +35,28 @@ export const EditPage = ({
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const dataStorage = new LocalDataStorage<StorageData>({
-    key: "datasetForm",
-    secondaryKeys: {
-      distribution: "datasetFormDistribution",
-      reference: "datasetFormReference",
-    },
-  });
+  const dataStorage = useMemo(
+    () =>
+      new LocalDataStorage<StorageData>({
+        key: "datasetForm",
+        secondaryKeys: {
+          distribution: "datasetFormDistribution",
+          reference: "datasetFormReference",
+        },
+      }),
+    [],
+  );
 
   const isMobility: boolean =
     dataset.applicationProfile == ApplicationProfile.MOBILITYDCATAP;
 
-  if (dataset.specializedType === "SERIES") {
-    window.location.replace(
-      `/catalogs/${dataset.catalogId}/datasets/${dataset.id}`,
-    );
-  }
+  useEffect(() => {
+    if (dataset.specializedType === "SERIES") {
+      window.location.replace(
+        `/catalogs/${dataset.catalogId}/datasets/${dataset.id}`,
+      );
+    }
+  }, [dataset.specializedType, dataset.catalogId, dataset.id]);
 
   const handleGotoOverview = () => {
     dataStorage.delete();
@@ -100,8 +106,8 @@ export const EditPage = ({
       <ButtonBar>
         <Button
           variant="tertiary"
-          color="second"
-          size="sm"
+          data-color="second"
+          data-size="sm"
           onClick={() => setShowCancelConfirm(true)}
         >
           <ArrowLeftIcon fontSize="1.25em" />

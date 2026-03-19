@@ -40,7 +40,8 @@
     "apps/data-service-catalog",
     "apps/catalog-admin",
     "apps/catalog-portal",
-    "apps/service-catalog"
+    "apps/service-catalog",
+    "apps/dataset-catalog"
   ],
   "dependencies": {
     "@digdir/designsystemet-css": "0.10.0",

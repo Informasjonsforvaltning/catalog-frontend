@@ -105,28 +105,32 @@ export const datasetToBeCreatedTemplate = (
 };
 
 export const distributionTemplate = (dist: Distribution | undefined) => {
-  return (
-    dist
-      ? {
-          ...dist,
-          title: dist?.title ?? {},
-          downloadURL:
-            dist?.downloadURL && dist?.downloadURL[0] ? dist?.downloadURL : [],
-          conformsTo: !isEmpty(dist.conformsTo) ? dist.conformsTo : [],
-        }
-      : {
-          title: {},
-          description: {},
-          downloadURL: [],
-          accessURL: [],
-          format: [],
-          mediaType: [],
-          license: {},
-          conformsTo: [],
-          page: [],
-          accessServices: [],
-          mobilityDataStandard: {},
-          rights: [],
-        }
-  ) as Distribution;
+  const result = dist
+    ? {
+        ...dist,
+        title: dist?.title ?? {},
+        downloadURL:
+          dist?.downloadURL && dist?.downloadURL[0] ? dist?.downloadURL : [],
+        conformsTo: !isEmpty(dist.conformsTo) ? dist.conformsTo : [],
+      }
+    : {
+        title: {},
+        description: {},
+        downloadURL: [],
+        accessURL: [""],
+        format: [],
+        mediaType: [],
+        license: {},
+        conformsTo: [],
+        page: [],
+        accessServices: [],
+        mobilityDataStandard: {},
+        rights: [],
+      };
+
+  if (result.accessURL?.length === 0) {
+    result.accessURL = [""];
+  }
+
+  return result as Distribution;
 };

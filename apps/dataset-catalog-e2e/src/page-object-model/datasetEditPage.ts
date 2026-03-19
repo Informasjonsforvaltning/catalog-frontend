@@ -677,6 +677,12 @@ export default class DatasetEditPage {
 
   // Save button
   async clickSaveButton(success: boolean = true) {
+    const collapseButton = this.page.getByRole("button", {
+      name: "Collapse issues badge",
+    });
+    if (await collapseButton.isVisible()) {
+      await collapseButton.click();
+    }
     await this.page.getByRole("button", { name: "Lagre" }).click();
     if (success) {
       await this.page
@@ -897,11 +903,11 @@ export default class DatasetEditPage {
   // Concept section
   async selectConcept(concept: string) {
     await this.page
-      .getByRole("group", { name: "Begreper Hjelp til utfylling Anbefalt" })
+      .getByRole("group", { name: "Begreper" })
       .getByRole("combobox")
       .click();
     await this.page
-      .getByRole("group", { name: "Begreper Hjelp til utfylling Anbefalt" })
+      .getByRole("group", { name: "Begreper" })
       .getByPlaceholder("Søk")
       .fill(concept);
     await this.page.getByRole("option", { name: concept }).click();
@@ -912,7 +918,7 @@ export default class DatasetEditPage {
   async fillKeywords(keywords: LocalizedStrings) {
     await this.fillLanguageField(
       keywords,
-      "Emneord Hjelp til utfylling Anbefalt",
+      "Emneord",
       ["Bokmål", "Nynorsk", "Engelsk"],
       false,
     );

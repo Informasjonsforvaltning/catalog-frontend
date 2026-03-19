@@ -6,13 +6,20 @@ import {
   FieldsetDivider,
   FormikLanguageFieldset,
   FormHeading,
-} from "@catalog-frontend/ui";
+  DialogActions,
+} from "@catalog-frontend/ui-v2";
 import {
   getTranslateText,
   localization,
   trimObjectWhitespace,
 } from "@catalog-frontend/utils";
-import { Button, Modal, Table, Textfield } from "@digdir/designsystemet-react";
+import {
+  Button,
+  Dialog,
+  Heading,
+  Table,
+  Textfield,
+} from "@digdir/designsystemet-react";
 import { FastField, FieldArray, Formik, useFormikContext } from "formik";
 import styles from "../dataset-form.module.css";
 import { ReactNode, useEffect, useRef, useState } from "react";
@@ -65,7 +72,7 @@ export const UriWithLabelFieldsetTable = ({
         name={fieldName}
         render={(arrayHelpers) => (
           <div className={errors ? styles.errorBorder : undefined}>
-            <Table size="sm" className={styles.table}>
+            <Table data-size="sm" className={styles.table}>
               {showHead && (
                 <Table.Head>
                   <Table.Row>
@@ -114,15 +121,12 @@ export const UriWithLabelFieldsetTable = ({
                 fieldName={fieldName}
                 template={{ prefLabel: {}, uri: "" }}
                 type="new"
-                onSuccess={() => setSnapshot([...(fieldValues ?? [])])}
-                onCancel={() => setFieldValue(fieldName, snapshot)}
-                onChange={(updatedItem: UriWithLabel) => {
-                  if (snapshot.length === (fieldValues?.length ?? 0)) {
-                    arrayHelpers.push(updatedItem);
-                  } else {
-                    arrayHelpers.replace(snapshot.length, updatedItem);
-                  }
+                onSuccess={(values: UriWithLabel) => {
+                  arrayHelpers.push(values);
+                  setSnapshot([...(fieldValues ?? []), values]);
                 }}
+                onCancel={() => setFieldValue(fieldName, snapshot)}
+                onChange={() => {}}
               />
             </div>
           </div>
@@ -146,8 +150,8 @@ const FieldModal = ({
 
   return (
     <>
-      <Modal.Root>
-        <Modal.Trigger asChild>
+      <Dialog.TriggerContext>
+        <Dialog.Trigger asChild>
           {type === "edit" ? (
             <EditButton />
           ) : (
@@ -158,38 +162,40 @@ const FieldModal = ({
               ]?.toLowerCase()}
             </AddButton>
           )}
-        </Modal.Trigger>
-        <Modal.Dialog ref={modalRef}>
+        </Dialog.Trigger>
+        <Dialog ref={modalRef}>
           <Formik
             initialValues={template}
+            enableReinitialize={true}
             validateOnChange={submitted}
             validateOnBlur={submitted}
             validationSchema={uriWithLabelSchema}
-            onSubmit={(formValues, { setSubmitting }) => {
+            onSubmit={(formValues, { setSubmitting, resetForm }) => {
               const trimmedValues = trimObjectWhitespace(formValues);
               onSuccess(trimmedValues);
               setSubmitting(false);
               setSubmitted(true);
+              resetForm();
               modalRef.current?.close();
             }}
           >
             {({ errors, isSubmitting, submitForm, values, dirty }) => {
               useEffect(() => {
-                if (dirty) {
+                if (dirty && modalRef.current?.open) {
                   onChange({ ...values });
                 }
               }, [values, dirty]);
 
               return (
                 <>
-                  <Modal.Header closeButton={false}>
+                  <Heading data-size="xs">
                     {type === "edit" ? localization.edit : localization.add}{" "}
                     {localization.datasetForm.fieldLabel?.[
                       fieldName as keyof typeof localization.datasetForm.fieldLabel
                     ].toLowerCase()}
-                  </Modal.Header>
+                  </Heading>
 
-                  <Modal.Content className={styles.modalContent}>
+                  <div className={styles.modalContent}>
                     <FormikLanguageFieldset
                       as={Textfield}
                       name="prefLabel"
@@ -201,18 +207,18 @@ const FieldModal = ({
                       as={Textfield}
                       label={localization.link}
                       error={errors?.uri}
-                      size="sm"
+                      data-size="sm"
                     />
-                  </Modal.Content>
+                  </div>
 
-                  <Modal.Footer>
+                  <DialogActions>
                     <Button
                       type="button"
                       disabled={
                         isSubmitting || !dirty || hasNoFieldValues(values)
                       }
                       onClick={() => submitForm()}
-                      size="sm"
+                      data-size="sm"
                     >
                       {type === "new" ? localization.add : localization.update}
                     </Button>
@@ -224,17 +230,17 @@ const FieldModal = ({
                         modalRef.current?.close();
                       }}
                       disabled={isSubmitting}
-                      size="sm"
+                      data-size="sm"
                     >
                       {localization.button.cancel}
                     </Button>
-                  </Modal.Footer>
+                  </DialogActions>
                 </>
               );
             }}
           </Formik>
-        </Modal.Dialog>
-      </Modal.Root>
+        </Dialog>
+      </Dialog.TriggerContext>
     </>
   );
 };

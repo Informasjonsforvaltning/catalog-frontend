@@ -1,11 +1,11 @@
 import { Dataset } from "@catalog-frontend/types";
-import { TitleWithHelpTextAndTag, useDebounce } from "@catalog-frontend/ui";
+import { TitleWithHelpTextAndTag, useDebounce } from "@catalog-frontend/ui-v2";
 import {
   containsNonNumberRegex,
   localization,
   onlyNumbersRegex,
 } from "@catalog-frontend/utils";
-import { Box, Combobox, Fieldset } from "@digdir/designsystemet-react";
+import { Combobox, Fieldset } from "@digdir/designsystemet-react";
 import {
   useSearchEnheter,
   useSearchEnheterByOrgNmbs,
@@ -49,19 +49,17 @@ export const QualifiedAttributionsSection = ({
   ];
 
   return (
-    <Box>
-      <Fieldset
-        size="sm"
-        legend={
+    <div>
+      <Fieldset data-size="sm">
+        <Fieldset.Legend>
           <TitleWithHelpTextAndTag
             helpText={localization.datasetForm.helptext.qualifiedAttributions}
           >
             {localization.datasetForm.fieldLabel.qualifiedAttributions}
           </TitleWithHelpTextAndTag>
-        }
-      >
+        </Fieldset.Legend>
         <Combobox
-          size="sm"
+          data-size="sm"
           onValueChange={(selectedValues: string[]) =>
             setFieldValue("qualifiedAttributions", selectedValues)
           }
@@ -93,6 +91,6 @@ export const QualifiedAttributionsSection = ({
           ))}
         </Combobox>
       </Fieldset>
-    </Box>
+    </div>
   );
 };

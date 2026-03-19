@@ -90,7 +90,7 @@ export default class DatasetDetailPage {
 
   async expectPublishSwitch() {
     await expect(
-      this.page.getByRole("checkbox", { name: "Publisert" }),
+      this.page.getByRole("switch", { name: "Publisert" }),
     ).toBeVisible();
   }
 
@@ -182,7 +182,7 @@ export default class DatasetDetailPage {
   }
 
   async expectCoverageArea(area: string) {
-    await expect(this.page.getByText(area)).toBeVisible();
+    await expect(this.page.getByText(area, { exact: true })).toBeVisible();
   }
 
   async expectPeriod(from: string, to: string) {

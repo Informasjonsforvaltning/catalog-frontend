@@ -100,7 +100,9 @@ export const FormikLanguageFieldset = ({
   const getError = () => {
     if (langErrors.length > 0) {
       return langErrors.map((error, index) => (
-        <div key={`error-${index}`}>{getTranslateText(error)}</div>
+        <span key={`error-${index}`} style={{ display: "block" }}>
+          {getTranslateText(error)}
+        </span>
       ));
     }
 

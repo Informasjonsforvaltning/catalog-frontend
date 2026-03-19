@@ -5,7 +5,7 @@ import {
   ConceptCombobox,
   FormikLanguageFieldset,
   TitleWithHelpTextAndTag,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 
 interface Props {
   searchEnv: string; // Environment variable to search service
@@ -14,9 +14,8 @@ interface Props {
 export const ConceptSection = ({ searchEnv }: Props) => {
   return (
     <>
-      <Fieldset
-        size="sm"
-        legend={
+      <Fieldset data-size="sm">
+        <Fieldset.Legend>
           <TitleWithHelpTextAndTag
             tagTitle={localization.tag.recommended}
             tagColor="info"
@@ -24,8 +23,7 @@ export const ConceptSection = ({ searchEnv }: Props) => {
           >
             {localization.datasetForm.fieldLabel.concepts}
           </TitleWithHelpTextAndTag>
-        }
-      >
+        </Fieldset.Legend>
         <ConceptCombobox fieldLabel="concepts" searchEnv={searchEnv} />
       </Fieldset>
 

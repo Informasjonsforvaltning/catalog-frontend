@@ -2,7 +2,7 @@ import {
   Breadcrumbs,
   BreadcrumbType,
   DesignBanner,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import { localization } from "@catalog-frontend/utils";
 import {
   getDatasetTypes,
@@ -17,6 +17,7 @@ import { datasetToBeCreatedTemplate } from "@dataset-catalog/components/dataset-
 import { NewPage } from "./new-page-client";
 import { withWriteProtectedPage } from "@dataset-catalog/utils/auth";
 import { ApplicationProfile } from "@catalog-frontend/types";
+import { Suspense } from "react";
 
 const NewDatasetPage = withWriteProtectedPage(
   ({ catalogId }) => `/catalogs/${catalogId}/datasets/new`,
@@ -74,13 +75,15 @@ const NewDatasetPage = withWriteProtectedPage(
           catalogId={catalogId}
           title={localization.catalogType.dataset}
         />
-        <NewPage
-          catalogId={catalogId}
-          dataset={dataset}
-          referenceData={referenceData}
-          referenceDataEnv={referenceDataEnv}
-          searchEnv={searchEnv}
-        />
+        <Suspense>
+          <NewPage
+            catalogId={catalogId}
+            dataset={dataset}
+            referenceData={referenceData}
+            referenceDataEnv={referenceDataEnv}
+            searchEnv={searchEnv}
+          />
+        </Suspense>
       </>
     );
   },

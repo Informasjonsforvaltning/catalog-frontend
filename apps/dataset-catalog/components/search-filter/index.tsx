@@ -1,12 +1,12 @@
 "use client";
 
 import { memo, useMemo } from "react";
-import { Accordion } from "@digdir/designsystemet-react";
+import { Card } from "@digdir/designsystemet-react";
 import {
   AccordionItem,
   AccordionItemProps,
   CheckboxGroupFilter,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import {
   ApplicationProfile,
   DatasetsPageSettings,
@@ -144,15 +144,13 @@ const SearchFilter = ({ pageSettings }: SearchFilterProps) => {
     },
   ];
 
-  const accordionItems = accordionItemContents.map((item) => (
-    <AccordionItem key={`accordion-item-${item.header}`} {...item} />
-  ));
-
   return (
     <div className={styles.searchFilter}>
-      <Accordion border={true} className={styles.accordion}>
-        {accordionItems}
-      </Accordion>
+      <Card className={styles.accordion}>
+        {accordionItemContents.map((item) => (
+          <AccordionItem key={`accordion-item-${item.header}`} {...item} />
+        ))}
+      </Card>
     </div>
   );
 };

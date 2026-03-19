@@ -1,11 +1,14 @@
 import { Dataset } from "@catalog-frontend/types";
-import { FieldsetDivider, TitleWithHelpTextAndTag } from "@catalog-frontend/ui";
+import {
+  FieldsetDivider,
+  TitleWithHelpTextAndTag,
+} from "@catalog-frontend/ui-v2";
 import {
   accessRights,
   getTranslateText,
   localization,
 } from "@catalog-frontend/utils";
-import { Box, Radio } from "@digdir/designsystemet-react";
+import { Fieldset, Radio, useRadioGroup } from "@digdir/designsystemet-react";
 import { useFormikContext } from "formik";
 import { UriWithLabelFieldsetTable } from "./uri-with-label-field-set-table";
 
@@ -16,12 +19,16 @@ interface Props {
 export const AccessRightFields = ({ isMobility: isMobility }: Props) => {
   const { values, errors, setFieldValue } = useFormikContext<Dataset>();
 
+  const { getRadioProps } = useRadioGroup({
+    value: values?.accessRight || "none",
+    onChange: (nextValue) => setFieldValue("accessRight", nextValue.toString()),
+  });
+
   return (
     <>
-      <Box>
-        <Radio.Group
-          size="sm"
-          legend={
+      <div>
+        <Fieldset data-size="sm">
+          <Fieldset.Legend>
             <TitleWithHelpTextAndTag
               helpText={localization.datasetForm.helptext.accessRights}
               tagColor="info"
@@ -29,18 +36,20 @@ export const AccessRightFields = ({ isMobility: isMobility }: Props) => {
             >
               {localization.access}
             </TitleWithHelpTextAndTag>
-          }
-          value={values?.accessRight || "none"}
-          onChange={(values) => setFieldValue("accessRight", values.toString())}
-        >
-          <Radio value="none">{`${localization.accessRight.none}`}</Radio>
+          </Fieldset.Legend>
+          <Radio
+            {...getRadioProps("none")}
+            label={`${localization.accessRight.none}`}
+          />
           {accessRights?.map((option, index) => (
-            <Radio key={`${option.uri}-${index}`} value={option.uri}>
-              {getTranslateText(option.label)}
-            </Radio>
+            <Radio
+              key={`${option.uri}-${index}`}
+              {...getRadioProps(option.uri)}
+              label={getTranslateText(option.label)}
+            />
           ))}
-        </Radio.Group>
-      </Box>
+        </Fieldset>
+      </div>
 
       {!isMobility && (
         <div>

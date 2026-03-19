@@ -3,10 +3,9 @@
 import { useEffect, useState } from "react";
 import { useFormikContext } from "formik";
 import {
-  Box,
   Button,
   Card,
-  ErrorMessage,
+  ValidationMessage,
   Fieldset,
   Heading,
   Paragraph,
@@ -29,7 +28,7 @@ import {
   DeleteButton,
   FieldsetDivider,
   TitleWithHelpTextAndTag,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import {
   getTranslateText,
   localization,
@@ -246,10 +245,9 @@ export const DistributionSection = ({
   }
 
   return (
-    <Box>
-      <Fieldset
-        size="sm"
-        legend={
+    <div>
+      <Fieldset data-size="sm">
+        <Fieldset.Legend>
           <TitleWithHelpTextAndTag
             helpText={localization.datasetForm.helptext.distribution}
             tagTitle={
@@ -261,9 +259,7 @@ export const DistributionSection = ({
           >
             {localization.datasetForm.fieldLabel.distributions}
           </TitleWithHelpTextAndTag>
-        }
-        error={errors.distribution}
-      >
+        </Fieldset.Legend>
         {values?.distribution &&
           !distributionArrayIsEmpty(values?.distribution) &&
           values?.distribution?.map(
@@ -274,10 +270,10 @@ export const DistributionSection = ({
                     <div className={styles.field}>
                       {!isEmpty(item?.title) && (
                         <>
-                          <Heading size="2xs" spacing level={3}>
+                          <Heading data-size="2xs" level={3}>
                             {localization.datasetForm.fieldLabel.title}
                           </Heading>
-                          <Paragraph size="sm">
+                          <Paragraph data-size="sm">
                             {getTranslateText(item.title)}
                           </Paragraph>
                         </>
@@ -315,7 +311,7 @@ export const DistributionSection = ({
                         }
                         isMobility={isMobility}
                         trigger={
-                          <Button variant="tertiary" size="sm">
+                          <Button variant="tertiary" data-size="sm">
                             <PencilWritingIcon
                               title="Rediger"
                               fontSize="1.5rem"
@@ -338,12 +334,15 @@ export const DistributionSection = ({
                   <div className={styles.field}>
                     {item?.accessURL && (
                       <>
-                        <Heading size="2xs" level={4}>
+                        <Heading data-size="2xs" level={4}>
                           {localization.datasetForm.fieldLabel.accessURL}
                         </Heading>
                         {item.accessURL.map((url: string, index: number) => {
                           return (
-                            <Paragraph key={`accessURL-${index}`} size="sm">
+                            <Paragraph
+                              key={`accessURL-${index}`}
+                              data-size="sm"
+                            >
                               {url}
                             </Paragraph>
                           );
@@ -354,13 +353,13 @@ export const DistributionSection = ({
 
                   <div className={styles.field}>
                     {!isEmpty(item?.format) && (
-                      <Heading size="2xs" level={4}>
+                      <Heading data-size="2xs" level={4}>
                         {localization.datasetForm.fieldLabel.format}
                       </Heading>
                     )}
                     <div className={styles.tags}>
                       {item?.format?.map((uri) => (
-                        <Tag key={uri} color="third" size="sm">
+                        <Tag key={uri} data-color="third" data-size="sm">
                           {(
                             selectedFileTypes?.find(
                               (format) => format?.uri === uri,
@@ -381,7 +380,7 @@ export const DistributionSection = ({
                           );
                         }}
                         className={styles.button}
-                        size="sm"
+                        data-size="sm"
                       >
                         {expandedIndexDistribution === index ? (
                           <>
@@ -407,9 +406,9 @@ export const DistributionSection = ({
                     />
                   )}
                   {get(errors, "distribution[" + index + "]") && (
-                    <ErrorMessage size="sm">
+                    <ValidationMessage data-size="sm">
                       {localization.validation.multipleInvalidValues}
-                    </ErrorMessage>
+                    </ValidationMessage>
                   )}
                 </Card>
               ),
@@ -465,16 +464,14 @@ export const DistributionSection = ({
         </div>
       </Fieldset>
       <FieldsetDivider />
-      <Fieldset
-        size="sm"
-        legend={
+      <Fieldset data-size="sm">
+        <Fieldset.Legend>
           <TitleWithHelpTextAndTag
             helpText={localization.datasetForm.helptext.sample}
           >
             {localization.datasetForm.fieldLabel.sample}
           </TitleWithHelpTextAndTag>
-        }
-      >
+        </Fieldset.Legend>
         {values?.sample &&
           !distributionArrayIsEmpty(values?.sample) &&
           values?.sample
@@ -487,12 +484,15 @@ export const DistributionSection = ({
                       <div className={styles.field}>
                         {item?.accessURL && (
                           <>
-                            <Heading size="2xs" level={4}>
+                            <Heading data-size="2xs" level={4}>
                               {localization.datasetForm.fieldLabel.accessURL}
                             </Heading>
                             {item.accessURL.map(
                               (url: string, index: number) => (
-                                <Paragraph key={`accessURL-${index}`} size="sm">
+                                <Paragraph
+                                  key={`accessURL-${index}`}
+                                  data-size="sm"
+                                >
                                   {url}
                                 </Paragraph>
                               ),
@@ -529,7 +529,7 @@ export const DistributionSection = ({
                             )
                           }
                           trigger={
-                            <Button variant="tertiary" size="sm">
+                            <Button variant="tertiary" data-size="sm">
                               <PencilWritingIcon
                                 title="Rediger"
                                 fontSize="1.5rem"
@@ -552,13 +552,13 @@ export const DistributionSection = ({
 
                     <div className={styles.field}>
                       {!isEmpty(item?.format) && (
-                        <Heading size="2xs" level={4}>
+                        <Heading data-size="2xs" level={4}>
                           {localization.datasetForm.fieldLabel.format}
                         </Heading>
                       )}
                       <div className={styles.tags}>
                         {item?.format?.map((uri) => (
-                          <Tag key={uri} color="info" size="sm">
+                          <Tag key={uri} data-color="info" data-size="sm">
                             {(
                               selectedFileTypes?.find(
                                 (format) => format?.uri === uri,
@@ -579,7 +579,7 @@ export const DistributionSection = ({
                             );
                           }}
                           className={styles.button}
-                          size="sm"
+                          data-size="sm"
                         >
                           {expandedIndexExampleData === index ? (
                             <>
@@ -605,9 +605,9 @@ export const DistributionSection = ({
                       />
                     )}
                     {get(errors, "sample[" + index + "]") && (
-                      <ErrorMessage size="sm">
+                      <ValidationMessage data-size="sm">
                         Inneholder en eller flere ugyldige verdier
-                      </ErrorMessage>
+                      </ValidationMessage>
                     )}
                   </Card>
                 ),
@@ -658,6 +658,6 @@ export const DistributionSection = ({
           />
         </div>
       </Fieldset>
-    </Box>
+    </div>
   );
 };

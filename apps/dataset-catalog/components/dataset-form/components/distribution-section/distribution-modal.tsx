@@ -18,7 +18,8 @@ import {
   useSearchFileTypes,
   useSearchMediaTypes,
   useSearchDataServiceSuggestions,
-} from "@catalog-frontend/ui";
+  DialogActions,
+} from "@catalog-frontend/ui-v2";
 import {
   getTranslateText,
   localization,
@@ -28,9 +29,10 @@ import {
   Button,
   Card,
   Combobox,
+  Dialog,
   Fieldset,
-  Modal,
-  SkeletonRectangle,
+  Heading,
+  Skeleton,
   Textfield,
 } from "@digdir/designsystemet-react";
 import { FastField, FieldArray, Formik } from "formik";
@@ -101,6 +103,7 @@ export const DistributionModal = ({
   const template = distributionTemplate(initialValues);
   const [submitted, setSubmitted] = useState(false);
   const modalRef = useRef<HTMLDialogElement>(null);
+  const resetFormRef = useRef<(() => void) | null>(null);
 
   const [searchQueryMediaTypes, setSearchQueryMediaTypes] =
     useState<string>("");
@@ -109,6 +112,18 @@ export const DistributionModal = ({
     useState<string>("");
 
   const [focus, setFocus] = useState<string | null>();
+
+  const resetLocalState = () => {
+    setSelectedFileTypeUris(initialValues?.format ?? []);
+    setSelectedMediaTypeUris(initialValues?.mediaType ?? []);
+    setSelectedAccessServiceUris(initialValues?.accessServices ?? []);
+    setSearchQueryMediaTypes("");
+    setSearchQueryFileTypes("");
+    setSearchDataServicesQuery("");
+    setSubmitted(false);
+    setFocus(null);
+  };
+
   const inputRefs = useRef<
     Record<string, HTMLInputElement | HTMLTextAreaElement | null>
   >({});
@@ -131,86 +146,64 @@ export const DistributionModal = ({
     searchDataServicesQuery,
   );
 
-  if (initialValues?.accessURL?.length === 0) {
-    initialValues.accessURL = [""];
-  }
+  useEffect(() => {
+    setSelectedAndSearchedMediaTypes((prev) => {
+      const allKnown = [...prev, ...initialMediaTypes, ...(mediaTypes ?? [])];
+      const selectedMediaTypes = selectedMediaTypeUris
+        ?.map((uri) => allKnown.find((mediaType) => mediaType.uri === uri))
+        .filter((mediaType) => mediaType !== undefined);
+      return Array.from(
+        new Map(
+          [...prev, ...(selectedMediaTypes ?? []), ...(mediaTypes ?? [])].map(
+            (item) => [item.uri, item],
+          ),
+        ).values(),
+      );
+    });
+  }, [mediaTypes, selectedMediaTypeUris, initialMediaTypes]);
 
   useEffect(() => {
-    const allMediaTypes = [
-      ...selectedAndSearchedMediaTypes,
-      ...initialMediaTypes,
-    ];
-    const selectedMediaTypes = selectedMediaTypeUris
-      ?.map((uri) => allMediaTypes.find((mediaType) => mediaType.uri === uri))
-      .filter((mediaType) => mediaType !== undefined);
-    const unique = Array.from(
-      new Map(
-        [...(selectedMediaTypes ?? []), ...(mediaTypes ?? [])].map((item) => [
-          item.uri,
-          item,
-        ]),
-      ).values(),
-    );
-    setSelectedAndSearchedMediaTypes(unique);
-  }, [
-    mediaTypes,
-    selectedMediaTypeUris,
-    initialMediaTypes,
-    setSelectedAndSearchedMediaTypes,
-  ]);
+    setSelectedAndSearchedFileTypes((prev) => {
+      const allKnown = [...prev, ...initialFileTypes, ...(fileTypes ?? [])];
+      const selectedFileTypes = selectedFileTypeUris
+        ?.map((uri) => allKnown.find((fileType) => fileType.uri === uri))
+        .filter((fileType) => fileType !== undefined);
+      return Array.from(
+        new Map(
+          [...prev, ...(selectedFileTypes ?? []), ...(fileTypes ?? [])].map(
+            (item) => [item.uri, item],
+          ),
+        ).values(),
+      );
+    });
+  }, [fileTypes, selectedFileTypeUris, initialFileTypes]);
 
   useEffect(() => {
-    const allFileTypes = [...selectedAndSearchedFileTypes, ...initialFileTypes];
-    const selectedFileTypes = selectedFileTypeUris
-      ?.map((uri) => allFileTypes.find((fileType) => fileType.uri === uri))
-      .filter((fileType) => fileType !== undefined);
-    const unique = Array.from(
-      new Map(
-        [...(selectedFileTypes ?? []), ...(fileTypes ?? [])].map((item) => [
-          item.uri,
-          item,
-        ]),
-      ).values(),
-    );
-    setSelectedAndSearchedFileTypes(unique);
-  }, [
-    fileTypes,
-    selectedFileTypeUris,
-    initialFileTypes,
-    setSelectedAndSearchedFileTypes,
-  ]);
+    setSelectedAndSearchedAccessServices((prev) => {
+      const allKnown = [
+        ...prev,
+        ...initialAccessServices,
+        ...(dataServices ?? []),
+      ];
+      const selectedAccessServices = selectedAccessServiceUris
+        ?.map((uri) => allKnown.find((service) => service.uri === uri))
+        .filter((service) => service !== undefined);
+      return Array.from(
+        new Map(
+          [
+            ...prev,
+            ...(selectedAccessServices ?? []),
+            ...(dataServices ?? []),
+          ].map((item) => [item.uri, item]),
+        ).values(),
+      );
+    });
+  }, [dataServices, selectedAccessServiceUris, initialAccessServices]);
 
-  useEffect(() => {
-    const allAccessServices = [
-      ...selectedAndSearchedAccessServices,
-      ...initialAccessServices,
-    ];
-    const selectedAccessServices = selectedAccessServiceUris
-      ?.map((uri) => allAccessServices.find((service) => service.uri === uri))
-      .filter((service) => service !== undefined);
-    const unique = Array.from(
-      new Map(
-        [...(selectedAccessServices ?? []), ...(dataServices ?? [])].map(
-          (item) => [item.uri, item],
-        ),
-      ).values(),
-    );
-    setSelectedAndSearchedAccessServices(unique);
-  }, [
-    dataServices,
-    selectedAccessServiceUris,
-    initialAccessServices,
-    setSelectedAndSearchedAccessServices,
-  ]);
-
-  const handleCancel = () => {
-    if (onCancel) {
-      onCancel();
-    }
-    modalRef.current?.close();
-  };
-
-  const handleSubmit = (values: Distribution, { setSubmitting }: any) => {
+  const handleSubmit = (
+    values: Distribution,
+    { setSubmitting, resetForm }: any,
+  ) => {
     const trimmedValues: Distribution = trimObjectWhitespace(values);
     if (trimmedValues.mediaType) {
       trimmedValues.mediaType = trimmedValues.mediaType.filter(
@@ -224,7 +217,8 @@ export const DistributionModal = ({
     }
     onSuccess(trimmedValues);
     setSubmitting(false);
-    setSubmitted(true);
+    resetForm();
+    resetLocalState();
     modalRef.current?.close();
   };
 
@@ -265,7 +259,7 @@ export const DistributionModal = ({
                             )
                           }
                           as={Textfield}
-                          size="sm"
+                          data-size="sm"
                           error={props.errors?.downloadURL?.[index]}
                         />
                       </FieldsetWithDelete>
@@ -304,16 +298,14 @@ export const DistributionModal = ({
         setSearchDataServicesQuery,
         selectedAndSearchedAccessServices,
       }: any) => (
-        <Fieldset
-          size="sm"
-          legend={
+        <Fieldset data-size="sm">
+          <Fieldset.Legend>
             <TitleWithHelpTextAndTag
               helpText={localization.datasetForm.helptext.accessServices}
             >
               {localization.datasetForm.fieldLabel.accessServices}
             </TitleWithHelpTextAndTag>
-          }
-        >
+          </Fieldset.Legend>
           {selectedAccessServiceUris?.every((v) =>
             selectedAndSearchedAccessServices.find(
               (option: { uri: string }) => option.uri === v,
@@ -335,7 +327,7 @@ export const DistributionModal = ({
                   setSelectedAccessServiceUris(selectedValues);
                 }}
                 placeholder={`${localization.search.search}...`}
-                size="sm"
+                data-size="sm"
                 virtual
                 ref={(el: HTMLInputElement | null) =>
                   setInputRef("accessServices", el)
@@ -375,7 +367,7 @@ export const DistributionModal = ({
               </Combobox>
             </FieldsetWithDelete>
           ) : (
-            <SkeletonRectangle />
+            <Skeleton variant="rectangle" height="100px" width="100%" />
           )}
         </Fieldset>
       ),
@@ -392,16 +384,14 @@ export const DistributionModal = ({
         mediaTypes,
         searchingMediaTypes,
       }: any) => (
-        <Fieldset
-          size="sm"
-          legend={
+        <Fieldset data-size="sm">
+          <Fieldset.Legend>
             <TitleWithHelpTextAndTag
               helpText={localization.datasetForm.helptext.mediaType}
             >
               {localization.datasetForm.fieldLabel.mediaType}
             </TitleWithHelpTextAndTag>
-          }
-        >
+          </Fieldset.Legend>
           {selectedMediaTypeUris?.every((v) =>
             selectedAndSearchedMediaTypes?.find(
               (option: ReferenceDataCode | undefined) => option?.uri === v,
@@ -429,10 +419,11 @@ export const DistributionModal = ({
                 ref={(el: HTMLInputElement | null) =>
                   setInputRef("mediaType", el)
                 }
+                size="md"
               />
             </FieldsetWithDelete>
           ) : (
-            <SkeletonRectangle />
+            <Skeleton variant="rectangle" height="100px" width="100%" />
           )}
         </Fieldset>
       ),
@@ -470,7 +461,7 @@ export const DistributionModal = ({
                             )
                           }
                           as={Textfield}
-                          size="sm"
+                          data-size="sm"
                           error={props.errors?.page?.[index]}
                         />
                       </FieldsetWithDelete>
@@ -504,9 +495,8 @@ export const DistributionModal = ({
       shouldShow: ({ distributionType }: any) =>
         distributionType === "distribution",
       render: ({ errors }: any) => (
-        <Fieldset
-          size="sm"
-          legend={
+        <Fieldset data-size="sm">
+          <Fieldset.Legend>
             <TitleWithHelpTextAndTag
               helpText={
                 localization.datasetForm.helptext.distributionConformsTo
@@ -514,8 +504,7 @@ export const DistributionModal = ({
             >
               {localization.datasetForm.fieldLabel.conformsTo}
             </TitleWithHelpTextAndTag>
-          }
-        >
+          </Fieldset.Legend>
           <FieldArray name="conformsTo">
             {({ push, remove, form }) => (
               <>
@@ -540,7 +529,7 @@ export const DistributionModal = ({
                         />
                       </div>
                       <FastField
-                        size="sm"
+                        data-size="sm"
                         as={Textfield}
                         label={localization.link}
                         name={`conformsTo[${i}].uri`}
@@ -576,11 +565,19 @@ export const DistributionModal = ({
   }, [focus]);
 
   return (
-    <Modal.Root>
-      <Modal.Trigger asChild>{trigger}</Modal.Trigger>
-      <Modal.Dialog ref={modalRef} className={styles.dialog}>
+    <Dialog.TriggerContext>
+      <Dialog.Trigger asChild>{trigger}</Dialog.Trigger>
+      <Dialog
+        ref={modalRef}
+        className={styles.dialog}
+        onClose={() => {
+          resetFormRef.current?.();
+          resetLocalState();
+        }}
+      >
         <Formik
           initialValues={{ ...template }}
+          enableReinitialize
           name="distribution"
           validateOnChange={submitted}
           validateOnBlur={submitted}
@@ -598,10 +595,13 @@ export const DistributionModal = ({
             values,
             dirty,
             setFieldValue,
+            resetForm,
           }) => {
+            resetFormRef.current = resetForm;
+
             // Call onChange whenever values change for autosave
             useEffect(() => {
-              if (dirty && onChange) {
+              if (dirty && onChange && modalRef.current?.open) {
                 onChange(values);
               }
             }, [values, dirty, onChange]);
@@ -672,15 +672,15 @@ export const DistributionModal = ({
               <>
                 {initialValues && (
                   <>
-                    <Modal.Header closeButton={false}>
+                    <Heading data-size="xs">
                       {type === "new"
                         ? distributionType === "distribution"
                           ? localization.datasetForm.button.addDistribution
                           : localization.datasetForm.button.addSample
                         : `${localization.edit} ${distributionType === "distribution" ? localization.datasetForm.fieldLabel.distribution.toLowerCase() : localization.datasetForm.fieldLabel.sample.toLowerCase()}`}
-                    </Modal.Header>
+                    </Heading>
 
-                    <Modal.Content className={styles.modalContent}>
+                    <div className={styles.modalContent}>
                       <FormikLanguageFieldset
                         as={Textfield}
                         name="title"
@@ -762,7 +762,7 @@ export const DistributionModal = ({
                                               )
                                             }
                                             as={Textfield}
-                                            size="sm"
+                                            data-size="sm"
                                             error={errors?.accessURL?.[index]}
                                           />
                                         </FieldsetWithDelete>
@@ -802,7 +802,7 @@ export const DistributionModal = ({
                                             )
                                           }
                                           as={Textfield}
-                                          size="sm"
+                                          data-size="sm"
                                           error={errors?.accessURL?.[index]}
                                         />
                                       )}
@@ -829,9 +829,8 @@ export const DistributionModal = ({
                       </FieldArray>
                       {isMobility && "mobilityDataStandard" in values ? (
                         <>
-                          <Fieldset
-                            size="sm"
-                            legend={
+                          <Fieldset data-size="sm">
+                            <Fieldset.Legend>
                               <TitleWithHelpTextAndTag
                                 tagTitle={localization.tag.required}
                                 helpText={
@@ -844,8 +843,7 @@ export const DistributionModal = ({
                                     .mobilityDataStandard
                                 }
                               </TitleWithHelpTextAndTag>
-                            }
-                          >
+                            </Fieldset.Legend>
                             <Combobox
                               value={
                                 values?.mobilityDataStandard
@@ -859,7 +857,7 @@ export const DistributionModal = ({
                                   selectedValues.toString(),
                                 );
                               }}
-                              size="sm"
+                              data-size="sm"
                               virtual
                               error={errors.mobilityDataStandard}
                             >
@@ -889,9 +887,8 @@ export const DistributionModal = ({
                       ) : undefined}
                       {isMobility && values.rights ? (
                         <>
-                          <Fieldset
-                            size="sm"
-                            legend={
+                          <Fieldset data-size="sm">
+                            <Fieldset.Legend>
                               <TitleWithHelpTextAndTag
                                 helpText={
                                   localization.datasetForm.helptext
@@ -904,8 +901,7 @@ export const DistributionModal = ({
                                     .distributionRights
                                 }
                               </TitleWithHelpTextAndTag>
-                            }
-                          >
+                            </Fieldset.Legend>
                             <Combobox
                               value={
                                 values?.rights?.type
@@ -919,7 +915,7 @@ export const DistributionModal = ({
                                   selectedValues.toString(),
                                 );
                               }}
-                              size="sm"
+                              data-size="sm"
                               virtual
                               error={errors?.rights?.type}
                             >
@@ -942,9 +938,8 @@ export const DistributionModal = ({
                           <FieldsetDivider />
                         </>
                       ) : undefined}
-                      <Fieldset
-                        size="sm"
-                        legend={
+                      <Fieldset data-size="sm">
+                        <Fieldset.Legend>
                           <TitleWithHelpTextAndTag
                             helpText={
                               localization.datasetForm.helptext.fileType
@@ -958,8 +953,7 @@ export const DistributionModal = ({
                           >
                             {localization.datasetForm.fieldLabel.format}
                           </TitleWithHelpTextAndTag>
-                        }
-                      >
+                        </Fieldset.Legend>
                         {!selectedFileTypeUris ||
                         selectedFileTypeUris?.every((v) =>
                           selectedAndSearchedFileTypes?.find(
@@ -988,15 +982,19 @@ export const DistributionModal = ({
                               setInputRef("format", el)
                             }
                             error={errors.format}
+                            size="md"
                           />
                         ) : (
-                          <SkeletonRectangle />
+                          <Skeleton
+                            variant="rectangle"
+                            height="100px"
+                            width="100%"
+                          />
                         )}
                       </Fieldset>
                       <FieldsetDivider />
-                      <Fieldset
-                        size="sm"
-                        legend={
+                      <Fieldset data-size="sm">
+                        <Fieldset.Legend>
                           <TitleWithHelpTextAndTag
                             tagTitle={localization.tag.recommended}
                             tagColor="info"
@@ -1004,28 +1002,26 @@ export const DistributionModal = ({
                           >
                             {localization.datasetForm.fieldLabel.license}
                           </TitleWithHelpTextAndTag>
-                        }
-                      >
+                        </Fieldset.Legend>
                         <Combobox
                           value={values?.license ? [values?.license] : [""]}
                           portal={false}
                           onValueChange={(selectedValues) => {
                             setFieldValue("license", selectedValues.toString());
                           }}
-                          size="sm"
                           virtual
                         >
                           <Combobox.Option key="license-none" value="">
                             {localization.none}
                           </Combobox.Option>
                           {openLicenses?.map((license, i) => (
-                              <Combobox.Option
-                                key={`license-${license.uri}-${i}`}
-                                value={license.uri}
-                              >
-                                {getTranslateText(license.label)}
-                              </Combobox.Option>
-                            ))}
+                            <Combobox.Option
+                              key={`license-${license.uri}-${i}`}
+                              value={license.uri}
+                            >
+                              {getTranslateText(license.label)}
+                            </Combobox.Option>
+                          ))}
                         </Combobox>
                       </Fieldset>
                       <FieldsetDivider />
@@ -1039,14 +1035,14 @@ export const DistributionModal = ({
                         ),
                       )}
                       {minimizedFields.map((f) => renderField(f))}
-                    </Modal.Content>
+                    </div>
 
-                    <Modal.Footer>
+                    <DialogActions>
                       <Button
                         type="button"
                         disabled={isSubmitting}
                         onClick={() => submitForm()}
-                        size="sm"
+                        data-size="sm"
                       >
                         {type === "new"
                           ? localization.add
@@ -1055,20 +1051,25 @@ export const DistributionModal = ({
                       <Button
                         variant="secondary"
                         type="button"
-                        onClick={handleCancel}
+                        onClick={() => {
+                          resetForm();
+                          resetLocalState();
+                          onCancel?.();
+                          modalRef.current?.close();
+                        }}
                         disabled={isSubmitting}
-                        size="sm"
+                        data-size="sm"
                       >
                         {localization.button.cancel}
                       </Button>
-                    </Modal.Footer>
+                    </DialogActions>
                   </>
                 )}
               </>
             );
           }}
         </Formik>
-      </Modal.Dialog>
-    </Modal.Root>
+      </Dialog>
+    </Dialog.TriggerContext>
   );
 };

@@ -4,13 +4,20 @@ import {
   DeleteButton,
   EditButton,
   FormHeading,
-} from "@catalog-frontend/ui";
+  DialogActions,
+} from "@catalog-frontend/ui-v2";
 import {
   formatDateToDDMMYYYY,
   localization,
   trimObjectWhitespace,
 } from "@catalog-frontend/utils";
-import { Button, Modal, Table, Textfield } from "@digdir/designsystemet-react";
+import {
+  Button,
+  Dialog,
+  Heading,
+  Table,
+  Textfield,
+} from "@digdir/designsystemet-react";
 import { FastField, FieldArray, Formik, useFormikContext } from "formik";
 import styles from "../../dataset-form.module.css";
 import { ReactNode, useEffect, useRef, useState } from "react";
@@ -51,7 +58,7 @@ export const TemporalModal = ({ label }: Props) => {
             className={get(errors, "temporal") ? styles.errorBorder : undefined}
           >
             {values?.temporal && values?.temporal?.length > 0 && (
-              <Table size="sm" className={styles.table}>
+              <Table data-size="sm" className={styles.table}>
                 <Table.Head>
                   <Table.Row>
                     <Table.HeaderCell>{localization.from}</Table.HeaderCell>
@@ -135,49 +142,49 @@ const FieldModal = ({
 
   return (
     <>
-      <Modal.Root>
-        <Modal.Trigger asChild>
+      <Dialog.TriggerContext>
+        <Dialog.Trigger asChild>
           {type === "edit" ? (
             <EditButton />
           ) : (
             <AddButton>{localization.datasetForm.button.addDate}</AddButton>
           )}
-        </Modal.Trigger>
-        <Modal.Dialog ref={modalRef}>
+        </Dialog.Trigger>
+        <Dialog ref={modalRef}>
           <Formik
             initialValues={template}
+            enableReinitialize={true}
             validateOnChange={submitted}
             validateOnBlur={submitted}
             validationSchema={dateSchema}
-            onSubmit={(formValues, { setSubmitting }) => {
+            onSubmit={(formValues, { setSubmitting, resetForm }) => {
               const trimmedValues = trimObjectWhitespace(formValues);
               onSuccess(trimmedValues);
               setSubmitting(false);
               setSubmitted(true);
+              resetForm();
               modalRef.current?.close();
             }}
           >
             {({ isSubmitting, submitForm, values, dirty, errors }) => {
               useEffect(() => {
-                if (dirty) {
+                if (dirty && modalRef.current?.open) {
                   onChange({ ...values });
                 }
               }, [values, dirty]);
 
               return (
                 <>
-                  <Modal.Header closeButton={false}>
+                  <Heading data-size="xs">
                     {type === "edit"
                       ? `${localization.edit} `
                       : `${localization.add} `}
-                  </Modal.Header>
+                  </Heading>
 
-                  <Modal.Content
-                    className={cn(styles.modalContent, styles.calendar)}
-                  >
+                  <div className={cn(styles.modalContent, styles.calendar)}>
                     <FastField
                       as={Textfield}
-                      size="sm"
+                      data-size="sm"
                       label={localization.from}
                       type="date"
                       name="startDate"
@@ -188,23 +195,23 @@ const FieldModal = ({
 
                     <FastField
                       as={Textfield}
-                      size="sm"
+                      data-size="sm"
                       label={localization.to}
                       type="date"
                       name="endDate"
                       error={errors.endDate}
                       min={values.startDate}
                     />
-                  </Modal.Content>
+                  </div>
 
-                  <Modal.Footer>
+                  <DialogActions>
                     <Button
                       type="button"
                       disabled={
                         isSubmitting || !dirty || hasNoFieldValues(values)
                       }
                       onClick={() => submitForm()}
-                      size="sm"
+                      data-size="sm"
                     >
                       {type === "new" ? localization.add : localization.update}
                     </Button>
@@ -216,17 +223,17 @@ const FieldModal = ({
                         modalRef.current?.close();
                       }}
                       disabled={isSubmitting}
-                      size="sm"
+                      data-size="sm"
                     >
                       {localization.button.cancel}
                     </Button>
-                  </Modal.Footer>
+                  </DialogActions>
                 </>
               );
             }}
           </Formik>
-        </Modal.Dialog>
-      </Modal.Root>
+        </Dialog>
+      </Dialog.TriggerContext>
     </>
   );
 };

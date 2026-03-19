@@ -7,7 +7,7 @@ import {
   TextareaWithPrefix,
   FastFieldWithRef,
   FieldsetDivider,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import {
   capitalizeFirstLetter,
   getTranslateText,
@@ -37,20 +37,18 @@ const FIELD_CONFIG = [
     name: "type",
     getValue: (values: Dataset) => values?.type,
     render: (props: any) => (
-      <Fieldset
-        size="sm"
-        legend={
+      <Fieldset data-size="sm">
+        <Fieldset.Legend>
           <TitleWithHelpTextAndTag
             helpText={localization.datasetForm.helptext.type}
           >
             {localization.datasetForm.fieldLabel.type}
           </TitleWithHelpTextAndTag>
-        }
-      >
+        </Fieldset.Legend>
         <FastFieldWithRef
           as={Combobox}
           ref={props.ref}
-          size="sm"
+          data-size="sm"
           value={[props.values.type]}
           virtual
           placeholder={`${localization.search.search}...`}
@@ -58,9 +56,7 @@ const FIELD_CONFIG = [
             props.setFieldValue("type", value.toString())
           }
         >
-          <Combobox.Option
-            value=""
-          >{`${localization.choose}...`}</Combobox.Option>
+          <Combobox.Option value="">{`${localization.choose}...`}</Combobox.Option>
           {props.datasetTypeOptions}
         </FastFieldWithRef>
       </Fieldset>
@@ -71,16 +67,14 @@ const FIELD_CONFIG = [
     name: "provenance",
     getValue: (values: Dataset) => values?.provenance,
     render: (props: any) => (
-      <Fieldset
-        size="sm"
-        legend={
+      <Fieldset data-size="sm">
+        <Fieldset.Legend>
           <TitleWithHelpTextAndTag
             helpText={localization.datasetForm.helptext.provenance}
           >
             {localization.datasetForm.fieldLabel.provenance}
           </TitleWithHelpTextAndTag>
-        }
-      >
+        </Fieldset.Legend>
         <FastFieldWithRef
           as={Combobox}
           ref={props.ref}
@@ -89,7 +83,7 @@ const FIELD_CONFIG = [
           onValueChange={(value: string[]) =>
             props.setFieldValue("provenance", value.toString())
           }
-          size="sm"
+          data-size="sm"
         >
           <Combobox.Empty>{`${localization.choose}...`}</Combobox.Empty>
           {props.provenanceOptions}
@@ -102,18 +96,16 @@ const FIELD_CONFIG = [
     name: "frequency",
     getValue: (values: Dataset) => values?.frequency,
     render: (props: any) => (
-      <Fieldset
-        size="sm"
-        legend={
+      <Fieldset data-size="sm">
+        <Fieldset.Legend>
           <TitleWithHelpTextAndTag
             helpText={localization.datasetForm.helptext.frequency}
           >
             {localization.datasetForm.fieldLabel.frequency}
           </TitleWithHelpTextAndTag>
-        }
-      >
+        </Fieldset.Legend>
         <FastFieldWithRef
-          size="sm"
+          data-size="sm"
           as={Combobox}
           ref={props.ref}
           value={[props.values?.frequency ?? ""]}
@@ -134,23 +126,21 @@ const FIELD_CONFIG = [
     name: "modified",
     getValue: (values: Dataset) => values?.modified,
     render: (props: any) => (
-      <Fieldset
-        size="sm"
-        legend={
+      <Fieldset data-size="sm">
+        <Fieldset.Legend>
           <TitleWithHelpTextAndTag
             helpText={localization.datasetForm.helptext.modified}
           >
             {localization.datasetForm.fieldLabel.modified}
           </TitleWithHelpTextAndTag>
-        }
-      >
+        </Fieldset.Legend>
         <FastFieldWithRef
           className={styles.calendar}
           as={Textfield}
           ref={props.ref}
           name="modified"
           type="date"
-          size="sm"
+          data-size="sm"
         />
       </Fieldset>
     ),
@@ -291,7 +281,7 @@ const FIELD_CONFIG = [
                           )
                         }
                         as={Textfield}
-                        size="sm"
+                        data-size="sm"
                         error={props.errors?.landingPage?.[index]}
                       />
                     </FieldsetWithDelete>

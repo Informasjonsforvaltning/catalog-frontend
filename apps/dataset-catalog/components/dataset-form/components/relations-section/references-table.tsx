@@ -11,11 +11,11 @@ import {
   DataStorage,
 } from "@catalog-frontend/utils";
 import {
-  Box,
   Button,
   Combobox,
+  Dialog,
   Fieldset,
-  Modal,
+  Heading,
   Table,
 } from "@digdir/designsystemet-react";
 import { Formik, useFormikContext } from "formik";
@@ -27,7 +27,8 @@ import {
   TitleWithHelpTextAndTag,
   useSearchDatasetsByUri,
   useSearchDatasetSuggestions,
-} from "@catalog-frontend/ui";
+  DialogActions,
+} from "@catalog-frontend/ui-v2";
 import { useState, useRef, useEffect } from "react";
 import { referenceSchema } from "../../utils/validation-schema";
 import { compact, get, isEmpty } from "lodash";
@@ -107,7 +108,7 @@ export const ReferenceTable = ({
   };
 
   return (
-    <Box className={styles.fieldContainer}>
+    <div className={styles.fieldContainer}>
       <TitleWithHelpTextAndTag
         helpText={localization.datasetForm.helptext.references}
       >
@@ -117,7 +118,7 @@ export const ReferenceTable = ({
         <div
           className={get(errors, "references") ? styles.errorBorder : undefined}
         >
-          <Table size="sm" className={styles.table}>
+          <Table data-size="sm" className={styles.table}>
             <Table.Head>
               <Table.Row>
                 <Table.HeaderCell>
@@ -207,7 +208,7 @@ export const ReferenceTable = ({
           initialDatasets={[]}
         />
       </div>
-    </Box>
+    </div>
   );
 };
 
@@ -234,7 +235,8 @@ const FieldModal = ({
   const [selectedValue, setSelectedValue] = useState<
     Search.SearchObject | undefined
   >();
-  const [comboboxOptions, setComboboxOptions] = useState<any[]>([]);
+  const [comboboxOptions, setComboboxOptions] =
+    useState<any[]>(initialDatasets);
 
   useEffect(() => {
     const allDatasets = [
@@ -272,25 +274,36 @@ const FieldModal = ({
 
   return (
     <>
-      <Modal.Root>
-        <Modal.Trigger asChild>
+      <Dialog.TriggerContext>
+        <Dialog.Trigger asChild>
           {type === "new" ? (
             <AddButton>{`${localization.add} ${localization.relation.toLowerCase()}`}</AddButton>
           ) : (
             <EditButton />
           )}
-        </Modal.Trigger>
-        <Modal.Dialog ref={modalRef}>
+        </Dialog.Trigger>
+        <Dialog
+          ref={modalRef}
+          onClose={() => {
+            setSelectedUri(initialUri);
+            setSearchQuery("");
+            setSelectedValue(undefined);
+            setComboboxOptions(initialDatasets);
+            setSubmitted(false);
+          }}
+        >
           <Formik
             initialValues={template}
+            enableReinitialize={true}
             validateOnChange={submitted}
             validateOnBlur={submitted}
             validationSchema={referenceSchema}
-            onSubmit={(formValues, { setSubmitting }) => {
+            onSubmit={(formValues, { setSubmitting, resetForm }) => {
               const trimmedValues = trimObjectWhitespace(formValues);
               onSuccess(trimmedValues);
               setSubmitting(false);
               setSubmitted(true);
+              resetForm();
               modalRef.current?.close();
             }}
           >
@@ -303,36 +316,39 @@ const FieldModal = ({
               setFieldValue,
             }) => {
               useEffect(() => {
-                if (dirty) {
+                if (dirty && modalRef.current?.open) {
                   onChange({ ...values });
                 }
               }, [values, dirty]);
 
               return (
                 <>
-                  <Modal.Header closeButton={false}>
+                  <Heading data-size="xs">
                     {type === "edit"
                       ? `${localization.edit} ${localization.relation.toLowerCase()}`
                       : `${localization.add} ${localization.relation.toLowerCase()}`}
-                  </Modal.Header>
+                  </Heading>
 
-                  <Modal.Content
+                  <div
                     className={cn(styles.modalContent, styles.fieldContainer)}
                   >
-                    <Fieldset
-                      legend={localization.datasetForm.fieldLabel.relationType}
-                      size="sm"
-                    >
+                    <Fieldset data-size="sm">
+                      <Fieldset.Legend>
+                        {localization.datasetForm.fieldLabel.relationType}
+                      </Fieldset.Legend>
                       <Combobox
                         onValueChange={(value) =>
                           setFieldValue("referenceType", value.toString())
                         }
                         value={
-                          values.referenceType ? [values.referenceType] : []
+                          values.referenceType &&
+                          relations.some((r) => r.code === values.referenceType)
+                            ? [values.referenceType]
+                            : []
                         }
                         placeholder={`${localization.datasetForm.fieldLabel.choseRelation}...`}
                         portal={false}
-                        size="sm"
+                        data-size="sm"
                         error={errors?.referenceType}
                         virtual
                       >
@@ -351,10 +367,10 @@ const FieldModal = ({
                       </Combobox>
                     </Fieldset>
 
-                    <Fieldset
-                      legend={localization.datasetForm.fieldLabel.dataset}
-                      size="sm"
-                    >
+                    <Fieldset data-size="sm">
+                      <Fieldset.Legend>
+                        {localization.datasetForm.fieldLabel.dataset}
+                      </Fieldset.Legend>
                       <Combobox
                         onChange={(input: any) =>
                           setSearchQuery(input.target.value)
@@ -365,13 +381,17 @@ const FieldModal = ({
                         }}
                         loading={searching}
                         value={
-                          values?.source && !isEmpty(values.source)
+                          values?.source &&
+                          !isEmpty(values.source) &&
+                          comboboxOptions?.some(
+                            (opt) => opt.uri === values.source,
+                          )
                             ? [values.source]
                             : []
                         }
                         placeholder={`${localization.search.search}...`}
                         portal={false}
-                        size="sm"
+                        data-size="sm"
                         error={errors?.source}
                       >
                         <Combobox.Empty>
@@ -405,16 +425,16 @@ const FieldModal = ({
                         })}
                       </Combobox>
                     </Fieldset>
-                  </Modal.Content>
+                  </div>
 
-                  <Modal.Footer>
+                  <DialogActions>
                     <Button
                       type="button"
                       disabled={
                         isSubmitting || !dirty || hasNoFieldValues(values)
                       }
                       onClick={() => submitForm()}
-                      size="sm"
+                      data-size="sm"
                     >
                       {type === "new" ? localization.add : localization.update}
                     </Button>
@@ -426,17 +446,17 @@ const FieldModal = ({
                         modalRef.current?.close();
                       }}
                       disabled={isSubmitting}
-                      size="sm"
+                      data-size="sm"
                     >
                       {localization.button.cancel}
                     </Button>
-                  </Modal.Footer>
+                  </DialogActions>
                 </>
               );
             }}
           </Formik>
-        </Modal.Dialog>
-      </Modal.Root>
+        </Dialog>
+      </Dialog.TriggerContext>
     </>
   );
 };

@@ -16,7 +16,7 @@ import {
   SearchHitContainer,
   SearchHitsLayout,
   Select,
-} from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui-v2";
 import { Button, Chip, Tag } from "@digdir/designsystemet-react";
 import {
   dateStringToDate,
@@ -248,7 +248,7 @@ const DatasetsPageClient = ({
 
     return (
       <div className={styles.chips}>
-        <Chip.Group size="small" className={styles.wrap}>
+        <div data-size="sm" className={styles.wrap}>
           {filterStatus?.map((filter, index) => (
             <Chip.Removable
               key={filter}
@@ -283,7 +283,7 @@ const DatasetsPageClient = ({
                 : localization.tag.dcatApNo}
             </Chip.Removable>
           ))}
-        </Chip.Group>
+        </div>
       </div>
     );
   };
@@ -328,7 +328,7 @@ const DatasetsPageClient = ({
                 }}
               />
               <Select
-                size="sm"
+                data-size="sm"
                 onChange={(e) => setSortValue(e.target.value)}
                 value={sortValue}
               >
@@ -349,7 +349,7 @@ const DatasetsPageClient = ({
                 <NewDatasetModal
                   catalogId={catalogId}
                   trigger={
-                    <Button variant="primary" size="sm">
+                    <Button variant="primary" data-size="sm">
                       <PlusCircleIcon fontSize="1.2rem" />
                       {localization.datasetForm.button.addDataset}
                     </Button>
