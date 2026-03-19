@@ -104,7 +104,7 @@ export const AboutSection = ({
             <SpatialCombobox referenceDataEnv={referenceDataEnv} />
           </Fieldset>
           <FieldsetDivider />
-          <Fieldset data-size="sm">
+          <Fieldset data-size="md">
             <Fieldset.Legend>
               <TitleWithHelpTextAndTag
                 helpText={localization.datasetForm.helptext.frequency}
@@ -119,7 +119,7 @@ export const AboutSection = ({
               onValueChange={(selectedValues) => {
                 setFieldValue("frequency", selectedValues.toString());
               }}
-              data-size="sm"
+              data-size="md"
               virtual
               error={errors.frequency}
             >

@@ -11,7 +11,14 @@
   margin: 0;
   display: flex;
   flex-direction: column;
+  border-color: var(--ds-color-border-default);
   gap: var(--ds-size-4);
+  p {
+    font-size: var(--ds-size-4);
+  }
+  div {
+    border-color: var(--ds-color-border-subtle);
+  }
 }
 
 .searchFieldWrapper {
@@ -44,10 +51,7 @@
 .set {
   display: flex;
   gap: 0.5rem;
-}
-
-.greyFont {
-  color: #6c737a;
+  font-size: var(--ds-size-4);
 }
 
 .chips {

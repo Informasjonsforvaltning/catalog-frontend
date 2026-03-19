@@ -419,6 +419,7 @@ export const DistributionModal = ({
                 ref={(el: HTMLInputElement | null) =>
                   setInputRef("mediaType", el)
                 }
+                size="md"
               />
             </FieldsetWithDelete>
           ) : (
@@ -981,6 +982,7 @@ export const DistributionModal = ({
                               setInputRef("format", el)
                             }
                             error={errors.format}
+                            size="md"
                           />
                         ) : (
                           <Skeleton
@@ -1007,7 +1009,6 @@ export const DistributionModal = ({
                           onValueChange={(selectedValues) => {
                             setFieldValue("license", selectedValues.toString());
                           }}
-                          data-size="sm"
                           virtual
                         >
                           <Combobox.Option key="license-none" value="">
