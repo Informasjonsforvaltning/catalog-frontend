@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "dependencies": {
-    "@digdir/designsystemet-css": "1.11.1",
+    "@digdir/designsystemet-css": "1.13.0",
     "@digdir/designsystemet-react": "1.11.1"
   }
 }
