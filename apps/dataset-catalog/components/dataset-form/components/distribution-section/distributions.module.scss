@@ -30,6 +30,10 @@
   display: flex;
   height: fit-content;
   align-items: center;
+
+  > :first-child {
+    width: 100%;
+  }
 }
 
 .format {
