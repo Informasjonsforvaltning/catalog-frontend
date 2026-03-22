@@ -26,7 +26,7 @@ jobs:
           # We need to fetch all branches and commits so that Nx affected has a base to compare against.
           fetch-depth: 0
 
-      - uses: nrwl/nx-set-shas@v4
+      - uses: nrwl/nx-set-shas@v5
 
       - name: Enable corepack
         run: corepack enable
@@ -75,7 +75,7 @@ jobs:
           git submodule foreach --recursive git checkout origin/main
 
       - name: Set SHAs
-        uses: nrwl/nx-set-shas@v4
+        uses: nrwl/nx-set-shas@v5
 
       - name: Enable corepack
         run: corepack enable
