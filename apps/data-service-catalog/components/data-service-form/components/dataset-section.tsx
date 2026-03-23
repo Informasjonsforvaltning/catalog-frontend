@@ -14,7 +14,7 @@ import {
   useDebounce,
   useSearchDatasetsByUri,
   useSearchDatasetSuggestions,
-} from "@catalog-frontend/ui-v2";
+} from "@catalog-frontend/ui";
 
 interface Props {
   searchEnv: string;

@@ -4,7 +4,7 @@ import React from "react";
 import styles from "./internal-fields.module.css";
 import { Card, Details, Heading } from "@digdir/designsystemet-react";
 import { PlusCircleIcon } from "@navikt/aksel-icons";
-import { Button } from "@catalog-frontend/ui-v2";
+import { Button } from "@catalog-frontend/ui";
 import { getTranslateText, localization } from "@catalog-frontend/utils";
 import { InternalField } from "@catalog-frontend/types";
 import { useGetInternalFields } from "../../../../../hooks/internal-fields";

@@ -4,7 +4,7 @@ import {
   TitleWithHelpTextAndTag,
   TextareaWithPrefix,
   FastFieldWithRef,
-} from "@catalog-frontend/ui-v2";
+} from "@catalog-frontend/ui";
 import { localization } from "@catalog-frontend/utils";
 import { Textfield } from "@digdir/designsystemet-react";
 import { DataService } from "@catalog-frontend/types";

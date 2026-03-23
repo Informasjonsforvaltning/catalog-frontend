@@ -30,7 +30,7 @@ import {
 } from "../../../hooks/search";
 import { RelationModal } from "./relation-modal";
 import styles from "../concept-form.module.scss";
-import { TitleWithHelpTextAndTag } from "@catalog-frontend/ui-v2";
+import { TitleWithHelpTextAndTag } from "@catalog-frontend/ui";
 import {
   updateUnionRelation,
   removeUnionRelation,

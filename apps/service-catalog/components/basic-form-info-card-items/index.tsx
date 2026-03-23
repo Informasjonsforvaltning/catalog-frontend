@@ -12,7 +12,7 @@ import {
   ReferenceDataTags,
   useSearchAdministrativeUnitsByUri,
   useSearchConceptsByUri,
-} from "@catalog-frontend/ui-v2";
+} from "@catalog-frontend/ui";
 import { getTranslateText, localization } from "@catalog-frontend/utils";
 import styles from "./basic-form-info-card-items.module.css";
 

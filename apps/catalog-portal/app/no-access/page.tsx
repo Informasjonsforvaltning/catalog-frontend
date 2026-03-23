@@ -3,7 +3,7 @@ import {
   Breadcrumbs,
   CenterContainer,
   PageBanner,
-} from "@catalog-frontend/ui-v2";
+} from "@catalog-frontend/ui";
 import { localization } from "@catalog-frontend/utils";
 import { Heading, Link } from "@digdir/designsystemet-react";
 

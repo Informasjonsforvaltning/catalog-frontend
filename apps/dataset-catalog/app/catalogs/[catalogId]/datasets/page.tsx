@@ -3,7 +3,7 @@ import {
   BreadcrumbType,
   Breadcrumbs,
   DesignBanner,
-} from "@catalog-frontend/ui-v2";
+} from "@catalog-frontend/ui";
 import {
   getServerDatasetsPageSettings,
   hasOrganizationWritePermission,

@@ -1,5 +1,5 @@
 import React, { CSSProperties, PropsWithChildren } from "react";
-import { DeleteButton } from "@catalog-frontend/ui-v2";
+import { DeleteButton } from "@catalog-frontend/ui";
 import styles from "./fieldset-with-delete.module.scss";
 
 type Props = {

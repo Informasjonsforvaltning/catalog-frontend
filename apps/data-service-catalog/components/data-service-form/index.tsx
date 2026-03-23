@@ -23,7 +23,7 @@ import {
   NotificationCarousel,
   SnackbarSeverity,
   StickyFooterBar,
-} from "@catalog-frontend/ui-v2";
+} from "@catalog-frontend/ui";
 import { Formik, Form, FormikProps } from "formik";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import {

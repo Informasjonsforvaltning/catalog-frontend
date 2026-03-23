@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { Card, Details, Heading } from "@digdir/designsystemet-react";
-import { Button, SearchField } from "@catalog-frontend/ui-v2";
+import { Button, SearchField } from "@catalog-frontend/ui";
 import { PlusCircleIcon } from "@navikt/aksel-icons";
 import { localization } from "@catalog-frontend/utils";
 import { useGetUsers } from "../../../../../hooks/users";

@@ -1,8 +1,4 @@
-import {
-  Breadcrumbs,
-  BreadcrumbType,
-  PageBanner,
-} from "@catalog-frontend/ui-v2";
+import { Breadcrumbs, BreadcrumbType, PageBanner } from "@catalog-frontend/ui";
 import {
   getAdmsStatuses,
   getOrganization,

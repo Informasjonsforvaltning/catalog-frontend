@@ -1,4 +1,4 @@
-import { Tag } from "@digdir/designsystemet-react";
+import { Label, Tag } from "@digdir/designsystemet-react";
 import { localization } from "@catalog-frontend/utils";
 import styles from "./label.module.css";
 import { HelpMarkdown } from "../help-markdown";
@@ -22,7 +22,7 @@ type TagColor =
   | "info"
   | "warning";
 
-type TagSize = "sm" | "md" | "lg" | "small" | "medium" | "large";
+type TagSize = "sm" | "md" | "lg";
 
 export function TitleWithHelpTextAndTag({
   children: title,
@@ -34,19 +34,22 @@ export function TitleWithHelpTextAndTag({
 }: Props) {
   return (
     <div className={styles.container}>
-      {title}
+      <Label data-size="sm">{title}</Label>
       {helpText && (
         <HelpMarkdown aria-label={`${localization.helpWithCompleting}`}>
           {helpText}
         </HelpMarkdown>
       )}
       {tagTitle && (
-        <Tag color={tagColor} size={tagSize}>
+        <Tag data-color={tagColor} data-size={tagSize}>
           {tagTitle}
         </Tag>
       )}
       {changed && (
-        <Tag size="sm" color="warning">{`${localization.changed}`}</Tag>
+        <Tag
+          data-size="sm"
+          data-color="warning"
+        >{`${localization.changed}`}</Tag>
       )}
     </div>
   );

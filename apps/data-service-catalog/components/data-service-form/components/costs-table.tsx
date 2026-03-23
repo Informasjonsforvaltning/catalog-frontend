@@ -14,7 +14,7 @@ import {
   Tag,
 } from "@digdir/designsystemet-react";
 import { useFormikContext } from "formik";
-import { TitleWithHelpTextAndTag } from "@catalog-frontend/ui-v2";
+import { TitleWithHelpTextAndTag } from "@catalog-frontend/ui";
 import styles from "../data-service-form.module.css";
 import { TrashIcon } from "@navikt/aksel-icons";
 import { CostsModal } from "./costs-modal/costs-modal";

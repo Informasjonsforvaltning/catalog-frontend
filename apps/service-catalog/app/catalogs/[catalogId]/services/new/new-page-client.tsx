@@ -5,7 +5,7 @@ import {
   Service,
   StorageData,
 } from "@catalog-frontend/types";
-import { Button, ButtonBar, ConfirmModal } from "@catalog-frontend/ui-v2";
+import { Button, ButtonBar, ConfirmModal } from "@catalog-frontend/ui";
 import { LocalDataStorage, localization } from "@catalog-frontend/utils";
 import { ArrowLeftIcon } from "@navikt/aksel-icons";
 import { useRef, useState } from "react";

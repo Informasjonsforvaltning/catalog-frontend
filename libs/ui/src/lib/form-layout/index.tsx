@@ -34,7 +34,7 @@ type SectionProps = {
 const SideMenu = ({ heading, children }: SideMenuProps) => {
   return (
     <div>
-      <Heading size="sm" className={styles.sideMenuHeading}>
+      <Heading data-size="sm" className={styles.sideMenuHeading}>
         {heading}
       </Heading>
       <ol>
@@ -133,8 +133,8 @@ export const FormLayout = ({ children }: FormLayoutProps) => {
                     </span>
                     {changed && (
                       <Tag
-                        size="sm"
-                        color="warning"
+                        data-size="sm"
+                        data-color="warning"
                         style={{ scale: 0.8, margin: "-0.25rem 0" }}
                       >
                         {localization.changed}
@@ -142,8 +142,8 @@ export const FormLayout = ({ children }: FormLayoutProps) => {
                     )}
                     {error && (
                       <Tag
-                        size="sm"
-                        color="danger"
+                        data-size="sm"
+                        data-color="danger"
                         style={{ scale: 0.8, margin: "-0.25rem 0" }}
                       >
                         {localization.error}

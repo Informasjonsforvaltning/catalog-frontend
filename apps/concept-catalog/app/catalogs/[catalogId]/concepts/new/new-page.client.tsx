@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeftIcon } from "@navikt/aksel-icons";
 import type { Concept, StorageData } from "@catalog-frontend/types";
-import { Button, ButtonBar, ConfirmModal } from "@catalog-frontend/ui-v2";
+import { Button, ButtonBar, ConfirmModal } from "@catalog-frontend/ui";
 import { LocalDataStorage, localization } from "@catalog-frontend/utils";
 import { createConcept } from "@concept-catalog/app/actions/concept/actions";
 import ConceptForm from "@concept-catalog/components/concept-form";

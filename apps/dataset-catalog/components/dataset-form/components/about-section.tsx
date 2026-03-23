@@ -4,7 +4,7 @@ import {
   TitleWithHelpTextAndTag,
   TextareaWithPrefix,
   SpatialCombobox,
-} from "@catalog-frontend/ui-v2";
+} from "@catalog-frontend/ui";
 import {
   capitalizeFirstLetter,
   getTranslateText,

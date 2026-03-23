@@ -3,7 +3,7 @@
 import { ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { Tabs } from "@digdir/designsystemet-react";
-import { SearchHitsLayout } from "@catalog-frontend/ui-v2";
+import { SearchHitsLayout } from "@catalog-frontend/ui";
 import { localization } from "@catalog-frontend/utils";
 import ActivityLogFilter from "../../../../components/activity-log-filter";
 import styles from "./activity-log-page.module.css";

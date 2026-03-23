@@ -7,15 +7,15 @@
 }
 
 .successIcon {
-  color: var(--fds-semantic-text-success-default);
+  color: var(--ds-color-success-text-default);
 }
 
 .errorIcon {
-  color: var(--fds-semantic-text-danger-default);
+  color: var(--ds-color-danger-text-default);
 }
 
 .warningIcon {
-  color: var(--fds-semantic-text-warning-icon_warning);
+  color: var(--ds-color-warning-text-subtle);
 }
 
 .titleTags {

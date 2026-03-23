@@ -28,7 +28,7 @@ import {
   useSearchDatasetsByUri,
   useSearchDatasetSuggestions,
   DialogActions,
-} from "@catalog-frontend/ui-v2";
+} from "@catalog-frontend/ui";
 import { useState, useRef, useEffect } from "react";
 import { referenceSchema } from "../../utils/validation-schema";
 import { compact, get, isEmpty } from "lodash";

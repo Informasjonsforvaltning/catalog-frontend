@@ -2,7 +2,7 @@ import {
   Breadcrumbs,
   BreadcrumbType,
   DesignBanner,
-} from "@catalog-frontend/ui-v2";
+} from "@catalog-frontend/ui";
 import { localization, validUUID } from "@catalog-frontend/utils";
 import { getConceptImportResultById } from "@catalog-frontend/data-access";
 import { redirect, RedirectType } from "next/navigation";

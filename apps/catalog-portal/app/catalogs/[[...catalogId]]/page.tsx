@@ -21,7 +21,7 @@ import {
   ServiceMessages,
   TermsOfUseAlert,
   MarkdownComponent,
-} from "@catalog-frontend/ui-v2";
+} from "@catalog-frontend/ui";
 import { Alert, Heading } from "@digdir/designsystemet-react";
 import styles from "./catalogs.module.css";
 import { CatalogCard } from "./components/catalog-card";

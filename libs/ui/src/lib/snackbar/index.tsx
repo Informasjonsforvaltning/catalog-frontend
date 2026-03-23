@@ -28,11 +28,11 @@ const SnackbarItem = ({
   return (
     <Alert
       className={classNames(styles.snackbarItem)}
-      size="sm"
-      severity={severity}
+      data-size="sm"
+      data-color={severity}
     >
       <div>{children}</div>
-      <Button size="sm" variant="tertiary" onClick={onClose}>
+      <Button data-size="sm" variant="tertiary" onClick={onClose}>
         <XMarkIcon fontSize="1.5rem" />
       </Button>
     </Alert>

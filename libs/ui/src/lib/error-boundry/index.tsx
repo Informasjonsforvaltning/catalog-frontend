@@ -52,7 +52,7 @@ class ErrorBoundary extends Component<Props, State> {
           />
           <PageBanner title={this.title ?? "Feil"} subtitle={pageSubtitle} />
           <CenterContainer>
-            <Heading level={2} size="small">
+            <Heading level={2} data-size="sm">
               {localization.somethingWentWrong}
             </Heading>
           </CenterContainer>

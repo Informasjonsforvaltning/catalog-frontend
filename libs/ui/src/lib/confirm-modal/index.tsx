@@ -1,9 +1,10 @@
 "use client";
 
 import { ReactNode, useEffect, useRef } from "react";
-import { Button, Modal } from "@digdir/designsystemet-react";
+import { Button, Dialog, Heading } from "@digdir/designsystemet-react";
 import { localization } from "@catalog-frontend/utils";
 import style from "./confirm-modal.module.scss";
+import { DialogActions } from "@catalog-frontend/ui";
 
 type ConfirmModalProps = {
   title: string;
@@ -49,19 +50,21 @@ export const ConfirmModal = ({
   }, [show]);
 
   return (
-    <Modal ref={modalRef}>
-      <Modal.Header closeButton={false}>{title}</Modal.Header>
-      <Modal.Content className={style.content}>{content}</Modal.Content>
-      <Modal.Footer>
-        <Button size="sm" onClick={handleSuccess}>
+    <Dialog ref={modalRef}>
+      <Heading className={style.heading} data-size="2xs">
+        {title}
+      </Heading>
+      <div className={style.content}>{content}</div>
+      <DialogActions>
+        <Button data-size="sm" onClick={handleSuccess}>
           {successButtonText ?? localization.button.success}
         </Button>
         {!hideCancel && (
-          <Button size="sm" variant="secondary" onClick={handleCancel}>
+          <Button data-size="sm" variant="secondary" onClick={handleCancel}>
             {cancelButtonText ?? localization.button.cancel}
           </Button>
         )}
-      </Modal.Footer>
-    </Modal>
+      </DialogActions>
+    </Dialog>
   );
 };

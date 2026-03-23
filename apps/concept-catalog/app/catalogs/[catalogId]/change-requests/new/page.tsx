@@ -26,7 +26,7 @@ import {
   BreadcrumbType,
   Breadcrumbs,
   DesignBanner,
-} from "@catalog-frontend/ui-v2";
+} from "@catalog-frontend/ui";
 import { withReadProtectedPage } from "@concept-catalog/utils/auth";
 import { NewConceptFormClient } from "./new-concept-form-client";
 

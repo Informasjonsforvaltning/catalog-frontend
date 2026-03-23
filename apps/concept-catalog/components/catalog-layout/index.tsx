@@ -2,7 +2,7 @@
 
 import React, { ReactNode } from "react";
 import { useParams } from "next/navigation";
-import { Layout } from "@catalog-frontend/ui-v2";
+import { Layout } from "@catalog-frontend/ui";
 import { localization } from "@catalog-frontend/utils";
 import { useGetCatalogDesign } from "@concept-catalog/hooks/catalog-admin";
 

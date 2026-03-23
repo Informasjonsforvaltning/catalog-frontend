@@ -8,7 +8,7 @@ import {
   ImportResultsTable,
   SearchHitContainer,
   SearchHitsLayout,
-} from "@catalog-frontend/ui-v2";
+} from "@catalog-frontend/ui";
 import styles from "./import-results-page-client.module.css";
 import { Card, Chip, Select } from "@digdir/designsystemet-react";
 import {

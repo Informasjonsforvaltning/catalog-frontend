@@ -8,7 +8,7 @@ import { FieldArray } from "formik";
 import { SourceForDefinitionField } from "./source-for-definition";
 import { PlusCircleIcon } from "@navikt/aksel-icons";
 import { RelationToSource } from "./relation-to-source";
-import { Button } from "@catalog-frontend/ui-v2";
+import { Button } from "@catalog-frontend/ui";
 
 interface Props {
   fieldName: string;

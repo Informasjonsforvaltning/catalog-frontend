@@ -6,7 +6,7 @@ import {
   EditButton,
   FieldsetDivider,
   FormikLanguageFieldset,
-} from "@catalog-frontend/ui-v2";
+} from "@catalog-frontend/ui";
 import cn from "classnames";
 import {
   getTranslateText,

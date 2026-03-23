@@ -25,7 +25,7 @@ import {
 import { forwardRef, useState } from "react";
 import { DefinitionModal } from "./definition-modal";
 import { getTranslateText, localization } from "@catalog-frontend/utils";
-import { TitleWithHelpTextAndTag } from "@catalog-frontend/ui-v2";
+import { TitleWithHelpTextAndTag } from "@catalog-frontend/ui";
 import { DataStorage } from "@catalog-frontend/utils";
 
 function getFirstErrorByRootKeys(

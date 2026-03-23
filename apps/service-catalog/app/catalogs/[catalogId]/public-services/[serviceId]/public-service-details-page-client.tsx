@@ -6,7 +6,7 @@ import {
   LinkButton,
   ServiceStatusTagProps,
   Tag,
-} from "@catalog-frontend/ui-v2";
+} from "@catalog-frontend/ui";
 import { getTranslateText, localization } from "@catalog-frontend/utils";
 import { DeleteServiceButton } from "../../../../../components/buttons";
 import PublishSwitch from "../../../../../components/publish-switch";

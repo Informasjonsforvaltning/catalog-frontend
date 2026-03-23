@@ -1,6 +1,6 @@
 "use client";
 
-import { NavigationCard, Spinner } from "@catalog-frontend/ui-v2";
+import { NavigationCard, Spinner } from "@catalog-frontend/ui";
 import {
   getConceptCount,
   getDataServiceCount,

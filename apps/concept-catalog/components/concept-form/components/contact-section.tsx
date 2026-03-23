@@ -7,7 +7,7 @@ import {
   useCheckboxGroup,
 } from "@digdir/designsystemet-react";
 import { Concept } from "@catalog-frontend/types";
-import { TitleWithHelpTextAndTag } from "@catalog-frontend/ui-v2";
+import { TitleWithHelpTextAndTag } from "@catalog-frontend/ui";
 import { localization } from "@catalog-frontend/utils";
 import styles from "../concept-form.module.scss";
 

@@ -10,7 +10,7 @@ import {
 } from "@navikt/aksel-icons";
 import cn from "classnames";
 import styles from "./codes-editor.module.css";
-import { Button, InfoCard, Select } from "@catalog-frontend/ui-v2";
+import { Button, InfoCard, Select } from "@catalog-frontend/ui";
 import {
   Textfield,
   Button as FdsButton,

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import { ArrowLeftIcon } from "@navikt/aksel-icons";
-import { Button, ButtonBar, ConfirmModal } from "@catalog-frontend/ui-v2";
+import { Button, ButtonBar, ConfirmModal } from "@catalog-frontend/ui";
 import type {
   Concept,
   ChangeRequestUpdateBody,

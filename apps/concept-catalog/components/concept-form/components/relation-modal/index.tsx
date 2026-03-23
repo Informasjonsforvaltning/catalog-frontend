@@ -3,7 +3,7 @@
 import { ReactNode, useEffect, useRef, useState } from "react";
 import { Formik } from "formik";
 import { Button, Dialog, Heading } from "@digdir/designsystemet-react";
-import { DialogActions } from "@catalog-frontend/ui-v2";
+import { DialogActions } from "@catalog-frontend/ui";
 import { RelatedConcept, UnionRelation } from "@catalog-frontend/types";
 import { relationSchema } from "../../validation-schema";
 import { RelationFieldset } from "../relation-fieldset";

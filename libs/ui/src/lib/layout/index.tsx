@@ -4,11 +4,12 @@ import { ReactNode } from "react";
 import { Footer } from "../footer";
 import { Header } from "../header";
 import cn from "classnames";
+import ErrorBoundary from "../error-boundry";
 
 import "./global.css";
-
+import "@digdir/designsystemet-css";
+import "@digdir/designsystemet-css/theme";
 import style from "./layout.module.css";
-import ErrorBoundary from "../error-boundry";
 
 interface LayoutProps {
   children: ReactNode;

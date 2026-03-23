@@ -4,7 +4,7 @@ import {
   FormikLanguageFieldset,
   FormikOptionalFieldsFieldset,
   TitleWithHelpTextAndTag,
-} from "@catalog-frontend/ui-v2";
+} from "@catalog-frontend/ui";
 import { localization } from "@catalog-frontend/utils";
 import { useFormikContext } from "formik";
 import { get as lodashGet } from "lodash";

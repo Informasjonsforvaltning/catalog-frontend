@@ -1,7 +1,7 @@
 .snackbar {
   position: fixed;
   bottom: 65px;
-  margin: var(--fds-spacing-2);
+  margin: var(--ds-size-2);
 }
 
 .snackbarItem {
@@ -15,15 +15,15 @@
     flex-grow: 1;
   }
 
-  :global(.fds-alert__content) {
+  :global(.ds-alert__content) {
     display: flex;
     align-items: center;
     flex-direction: row;
     flex-grow: 1;
-    gap: var(--fds-spacing-4);
+    gap: var(--ds-size-4);
   }
 
-  :global(.fds-btn) {
+  :global(.ds-btn) {
     &:hover {
       background: rgba(0, 0, 0, 0.125);
     }

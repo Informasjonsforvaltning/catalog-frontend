@@ -19,7 +19,7 @@ import {
   useSearchMediaTypes,
   useSearchDataServiceSuggestions,
   DialogActions,
-} from "@catalog-frontend/ui-v2";
+} from "@catalog-frontend/ui";
 import {
   getTranslateText,
   localization,

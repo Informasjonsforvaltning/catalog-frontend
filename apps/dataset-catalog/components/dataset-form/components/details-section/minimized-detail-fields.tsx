@@ -7,7 +7,7 @@ import {
   TextareaWithPrefix,
   FastFieldWithRef,
   FieldsetDivider,
-} from "@catalog-frontend/ui-v2";
+} from "@catalog-frontend/ui";
 import {
   capitalizeFirstLetter,
   getTranslateText,

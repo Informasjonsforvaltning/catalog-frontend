@@ -4,7 +4,7 @@ import {
   BreadcrumbType,
   Breadcrumbs,
   DesignBanner,
-} from "@catalog-frontend/ui-v2";
+} from "@catalog-frontend/ui";
 import { localization } from "@catalog-frontend/utils";
 
 export default withProtectedPage(

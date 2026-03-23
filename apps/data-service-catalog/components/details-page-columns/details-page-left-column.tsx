@@ -4,7 +4,7 @@ import {
   ISOLanguage,
 } from "@catalog-frontend/types";
 import styles from "./details-columns.module.css";
-import { InfoCard } from "@catalog-frontend/ui-v2";
+import { InfoCard } from "@catalog-frontend/ui";
 import { isEmpty } from "lodash";
 import { localization, getTranslateText } from "@catalog-frontend/utils";
 import { Paragraph, Tag } from "@digdir/designsystemet-react";

@@ -4,7 +4,7 @@ import {
   TitleWithHelpTextAndTag,
   useSearchFileTypeByUri,
   useSearchFileTypes,
-} from "@catalog-frontend/ui-v2";
+} from "@catalog-frontend/ui";
 import { localization } from "@catalog-frontend/utils";
 import { Fieldset } from "@digdir/designsystemet-react";
 import { useFormikContext } from "formik";

@@ -4,7 +4,7 @@ import {
   DialogActions,
   HelpMarkdown,
   UploadButton,
-} from "@catalog-frontend/ui-v2";
+} from "@catalog-frontend/ui";
 import {
   useImportConceptsCSV,
   useSendConcepts,

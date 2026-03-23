@@ -1,7 +1,7 @@
 import {
   NextAuthProvider,
   ReactQueryClientProvider,
-} from "@catalog-frontend/ui-v2";
+} from "@catalog-frontend/ui";
 import { authOptions, localization } from "@catalog-frontend/utils";
 import { Metadata } from "next";
 import { getServerSession } from "next-auth";

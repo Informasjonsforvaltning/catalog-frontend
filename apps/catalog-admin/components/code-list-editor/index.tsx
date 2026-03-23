@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Button } from "@catalog-frontend/ui-v2";
+import { Button } from "@catalog-frontend/ui";
 import { Textfield } from "@digdir/designsystemet-react";
 import { CodeList, EditorType } from "@catalog-frontend/types";
 import { localization } from "@catalog-frontend/utils";
