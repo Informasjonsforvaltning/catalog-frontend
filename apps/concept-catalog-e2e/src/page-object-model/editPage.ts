@@ -252,7 +252,7 @@ export default class EditPage {
     // Loop 3: Clear relations table to exactly 1 row (header)
     // The table is replaced with a skeleton when loading, so wait for the table to be visible
     const relTable = this.page.getByRole("table").filter({
-      has: this.page.getByRole("columnheader", { name: "Relasjon" }),
+      has: this.page.getByRole("cell", { name: "Relasjon" }),
     });
 
     iterations = 0;
