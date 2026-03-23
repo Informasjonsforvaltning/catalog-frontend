@@ -108,7 +108,6 @@ const FIELD_CONFIG = [
           data-size="sm"
           as={Combobox}
           ref={props.ref}
-          // value={[props.values?.frequency ?? ""]}
           value={props.values?.frequency ? [props.values.frequency] : []}
           virtual
           placeholder={`${localization.search.search}...`}
