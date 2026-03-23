@@ -37,7 +37,6 @@
   "dependencies": {
     "@digdir/designsystemet-css": "1.11.1",
     "@digdir/designsystemet-react": "1.11.1",
-    "@digdir/designsystemet-theme": "^0.15.3",
     "@fellesdatakatalog/icons": "^0.8.5",
     "@navikt/aksel-icons": "^8.5.2",
     "@tanstack/react-query": "^5.90.21",
