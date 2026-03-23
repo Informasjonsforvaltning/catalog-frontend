@@ -9,7 +9,7 @@ import {
   ValidationMessage,
   useRadioGroup,
 } from "@digdir/designsystemet-react";
-import { TitleWithHelpTextAndTag } from "@catalog-frontend/ui-v2";
+import { TitleWithHelpTextAndTag } from "@catalog-frontend/ui";
 import { localization } from "@catalog-frontend/utils";
 import styles from "./source-description-fieldset.module.scss";
 import _ from "lodash";

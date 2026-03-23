@@ -11,7 +11,7 @@ import {
   FormikLanguageFieldset,
   FormikMultivalueTextfield,
   TitleWithHelpTextAndTag,
-} from "@catalog-frontend/ui-v2";
+} from "@catalog-frontend/ui";
 import { localization } from "@catalog-frontend/utils";
 import styles from "../concept-form.module.scss";
 import { getParentPath } from "../../../utils/codeList";

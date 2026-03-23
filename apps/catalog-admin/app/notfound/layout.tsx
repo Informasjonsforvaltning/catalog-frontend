@@ -1,4 +1,4 @@
-import { Layout } from "@catalog-frontend/ui-v2";
+import { Layout } from "@catalog-frontend/ui";
 import { localization } from "@catalog-frontend/utils";
 import { Metadata } from "next";
 import "../global.css";

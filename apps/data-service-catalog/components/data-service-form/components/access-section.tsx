@@ -1,8 +1,5 @@
 import { DataService, ReferenceDataCode } from "@catalog-frontend/types";
-import {
-  FieldsetDivider,
-  TitleWithHelpTextAndTag,
-} from "@catalog-frontend/ui-v2";
+import { FieldsetDivider, TitleWithHelpTextAndTag } from "@catalog-frontend/ui";
 import { accessRights, localization } from "@catalog-frontend/utils";
 import { Fieldset } from "@digdir/designsystemet-react";
 import { useFormikContext } from "formik";

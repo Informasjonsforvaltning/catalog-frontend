@@ -3,8 +3,7 @@
 import { FC, ReactNode, useEffect, useRef, useState } from "react";
 import {
   Button,
-  Combobox,
-  NativeSelect,
+  Select,
   Spinner,
   Textfield,
 } from "@digdir/designsystemet-react";
@@ -81,7 +80,7 @@ const SearchField: FC<SearchFieldProps> = ({
           autoComplete="off"
           className={styles.inputTextfield}
           placeholder={placeholder}
-          size="large"
+          data-size="lg"
           value={query}
           type="search"
           label={label}
@@ -90,8 +89,8 @@ const SearchField: FC<SearchFieldProps> = ({
         />
         <div ref={searchActionsRef} className={styles.searchActions}>
           {options && (
-            <NativeSelect
-              size="sm"
+            <Select
+              data-size="sm"
               aria-label="Velg alternativ"
               value={optionValue}
               className={styles.searchOptions}
@@ -104,20 +103,16 @@ const SearchField: FC<SearchFieldProps> = ({
                   {label}
                 </option>
               ))}
-            </NativeSelect>
+            </Select>
           )}
           <Button
             className={styles.searchButton}
             type="submit"
-            size="sm"
+            data-size="sm"
             onClick={handleClick}
           >
             {loading ? (
-              <Spinner
-                title={localization.loading}
-                size="xsmall"
-                variant="inverted"
-              />
+              <Spinner aria-label={localization.loading} data-size="xs" />
             ) : (
               <>
                 <MagnifyingGlassIcon

@@ -12,7 +12,7 @@ import {
   Snackbar,
   SnackbarSeverity,
   Tag,
-} from "@catalog-frontend/ui-v2";
+} from "@catalog-frontend/ui";
 import ConceptForm from "@concept-catalog/components/concept-form";
 import { getTranslatedStatus } from "@concept-catalog/utils/change-request";
 import {

@@ -18,7 +18,7 @@ import {
   AccordionItem,
   AccordionItemProps,
   CheckboxGroupFilter,
-} from "@catalog-frontend/ui-v2";
+} from "@catalog-frontend/ui";
 import { Card } from "@digdir/designsystemet-react";
 
 export type PublishedFilterType = "published" | "unpublished";

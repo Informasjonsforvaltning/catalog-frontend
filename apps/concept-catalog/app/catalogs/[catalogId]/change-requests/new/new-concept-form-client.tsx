@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 import jsonpatch from "fast-json-patch";
 import { ArrowLeftIcon } from "@navikt/aksel-icons";
-import { Button, ButtonBar, ConfirmModal } from "@catalog-frontend/ui-v2";
+import { Button, ButtonBar, ConfirmModal } from "@catalog-frontend/ui";
 import type {
   Concept,
   ChangeRequestUpdateBody,

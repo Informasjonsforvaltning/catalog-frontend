@@ -11,7 +11,7 @@ import {
 } from "@digdir/designsystemet-react";
 import styles from "./distributions.module.scss";
 import { isEmpty } from "lodash";
-import { FieldsetDivider } from "@catalog-frontend/ui-v2";
+import { FieldsetDivider } from "@catalog-frontend/ui";
 import { SearchObject } from "../../../../../../libs/types/src/lib/search";
 
 interface Props {

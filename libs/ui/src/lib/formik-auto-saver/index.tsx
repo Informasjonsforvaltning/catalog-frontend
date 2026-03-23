@@ -2,10 +2,12 @@
 
 import { ReactNode, useEffect, useRef, useState } from "react";
 import { useFormikContext } from "formik";
-import { Button, Modal } from "@digdir/designsystemet-react";
+import { Button, Dialog, Heading } from "@digdir/designsystemet-react";
 import { DataStorage, localization } from "@catalog-frontend/utils";
 import type { StorageData } from "@catalog-frontend/types";
 import { isEqual } from "lodash";
+import { DialogActions } from "@catalog-frontend/ui";
+import style from "./formik-auto-saver.module.scss";
 
 export type FormikAutoSaverProps = {
   id?: string;
@@ -85,23 +87,25 @@ export const FormikAutoSaver = ({
   }, [initialValues, values, isInitialized, id, storage]);
 
   return (
-    <Modal ref={modalRef}>
-      <Modal.Header closeButton={false}>Ulagrede endringer</Modal.Header>
-      <Modal.Content>{modalContent}</Modal.Content>
-      <Modal.Footer>
-        <Button size="sm" onClick={handleRestoreClick}>
+    <Dialog ref={modalRef}>
+      <Heading data-size="2xs">
+        {localization.alert.unsavedChangesHeading}
+      </Heading>
+      <div className={style.content}>{modalContent}</div>
+      <DialogActions>
+        <Button data-size="sm" onClick={handleRestoreClick}>
           {localization.button.restore}
         </Button>
         <Button
-          size="sm"
+          data-size="sm"
           variant="secondary"
-          color="danger"
+          data-color="danger"
           onClick={handleDiscardClick}
         >
           {localization.button.discard}
         </Button>
-      </Modal.Footer>
-    </Modal>
+      </DialogActions>
+    </Dialog>
   );
 };
 

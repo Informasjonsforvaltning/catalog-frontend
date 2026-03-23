@@ -1,14 +1,9 @@
 /* This is a global stylesheet */
 
-@layer reset, fds;
-
 @import url("./reset.css");
-@import url("@digdir/designsystemet-theme");
-@import url("@digdir/designsystemet-css");
+@layer reset, ds;
 
 html * {
-  font-display: swap;
-  font-size: 16;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-family:
@@ -20,11 +15,12 @@ html * {
     "Helvetica Neue",
     Arial,
     sans-serif;
+  @media (max-width: 650px) {
+    font-size: 14px;
+  }
 }
 
 body {
-  font-family: inherit;
-  line-height: inherit;
   background-color: #fafafa;
   margin: 0;
   padding: 0;
@@ -67,7 +63,7 @@ body {
 }
 
 .error {
-  font-size: 1.5rem;
+  font-size: 24px;
 }
 
 .hide-text {
@@ -80,4 +76,31 @@ body {
   clip: rect(0, 0, 0, 0);
   border: 0;
   white-space: nowrap;
+}
+
+hr {
+  border: 0;
+  height: 1px;
+  background: var(--ds-color-neutral-border-subtle);
+}
+
+.ds-button {
+  font-weight: var(--ds-font-weight-regular);
+}
+
+/*
+ * Override width: 100% to let input wrap in flex container
+ * Introduced in https://github.com/digdir/designsystemet/pull/2570
+ */
+.ds-combobox__input {
+  width: auto;
+}
+
+/* Remove validation icon from ValidationMessage, keep only text */
+.ds-validation-message::before {
+  display: none;
+}
+
+.ds-validation-message {
+  padding-inline-start: 0;
 }

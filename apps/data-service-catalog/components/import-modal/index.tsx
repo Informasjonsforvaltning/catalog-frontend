@@ -5,7 +5,7 @@ import {
   LinkButton,
   TitleWithHelpTextAndTag,
   UploadButton,
-} from "@catalog-frontend/ui-v2";
+} from "@catalog-frontend/ui";
 import { useImport } from "../../hooks/import";
 import {
   Dialog,

@@ -16,7 +16,7 @@
     "lint-all": "yarn nx run-many --target=lint --skip-nx-cache --verbose",
     "affected:build": "nx affected -t build",
     "affected:e2e": "nx affected -t e2e",
-    "affected:test": "nx affected -t test --exclude=ui-v2",
+    "affected:test": "nx affected -t test --exclude=ui",
     "affected:lint": "nx affected -t lint",
     "affected": "nx affected",
     "affected:matrix": "nx show projects --affected --type=app | tr '\n' ',' | jq -cR 'split(\",\")[:-1]'",
@@ -34,18 +34,9 @@
     "graphql:codegen": "graphql-codegen --config codegen.ts"
   },
   "private": true,
-  "workspaces": [
-    "libs/ui-v2",
-    "apps/concept-catalog",
-    "apps/data-service-catalog",
-    "apps/catalog-admin",
-    "apps/catalog-portal",
-    "apps/service-catalog",
-    "apps/dataset-catalog"
-  ],
   "dependencies": {
-    "@digdir/designsystemet-css": "0.10.0",
-    "@digdir/designsystemet-react": "0.63.1",
+    "@digdir/designsystemet-css": "1.11.1",
+    "@digdir/designsystemet-react": "1.11.1",
     "@digdir/designsystemet-theme": "^0.15.3",
     "@fellesdatakatalog/icons": "^0.8.5",
     "@navikt/aksel-icons": "^8.5.2",

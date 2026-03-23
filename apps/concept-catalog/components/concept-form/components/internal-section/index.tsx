@@ -22,7 +22,7 @@ import {
 import {
   FormikMultivalueTextfield,
   TitleWithHelpTextAndTag,
-} from "@catalog-frontend/ui-v2";
+} from "@catalog-frontend/ui";
 import styles from "../../concept-form.module.scss";
 import { getParentPath } from "../../../../utils/codeList";
 

@@ -2,7 +2,7 @@ import React from "react";
 import { withProtectedPage } from "../../../../utils/auth";
 import GeneralPageClient from "./general-page-client";
 import { localization } from "@catalog-frontend/utils";
-import { Breadcrumbs, DesignBanner } from "@catalog-frontend/ui-v2";
+import { Breadcrumbs, DesignBanner } from "@catalog-frontend/ui";
 
 export default withProtectedPage(
   ({ catalogId }) => `/catalogs/${catalogId}/general`,

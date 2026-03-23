@@ -3,11 +3,7 @@ import {
   ReferenceDataCode,
   Service,
 } from "@catalog-frontend/types";
-import {
-  BreadcrumbType,
-  Breadcrumbs,
-  PageBanner,
-} from "@catalog-frontend/ui-v2";
+import { BreadcrumbType, Breadcrumbs, PageBanner } from "@catalog-frontend/ui";
 import {
   getValidSession,
   getTranslateText,

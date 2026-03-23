@@ -10,7 +10,7 @@ import {
   SearchHitContainer,
   SearchHitsLayout,
   Select,
-} from "@catalog-frontend/ui-v2";
+} from "@catalog-frontend/ui";
 import SearchFilter from "../../../../components/search-filter";
 import React, { useState, useEffect, useMemo } from "react";
 import { Chip } from "@digdir/designsystemet-react";

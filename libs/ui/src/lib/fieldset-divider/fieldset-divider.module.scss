@@ -1,3 +1,9 @@
 .fieldsetDivider {
   margin: 1rem -2rem;
 }
+
+:global(.ds-dialog) {
+  .fieldsetDivider {
+    margin: 1rem -1.5rem;
+  }
+}

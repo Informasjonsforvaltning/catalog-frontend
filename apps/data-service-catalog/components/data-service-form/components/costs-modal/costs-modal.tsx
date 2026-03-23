@@ -25,7 +25,7 @@ import {
   DeleteButton,
   FastFieldWithRef,
   DialogActions,
-} from "@catalog-frontend/ui-v2";
+} from "@catalog-frontend/ui";
 import React, { useState, useRef, useEffect } from "react";
 import { isEmpty, isNumber } from "lodash";
 import FieldsetWithDelete from "../../../fieldset-with-delete";

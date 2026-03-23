@@ -32,7 +32,7 @@ import {
   Snackbar,
   SnackbarSeverity,
   StickyFooterBar,
-} from "@catalog-frontend/ui-v2";
+} from "@catalog-frontend/ui";
 import { Formik, Form, FormikProps } from "formik";
 import { useParams, useSearchParams } from "next/navigation";
 import { datasetTemplate } from "./utils/dataset-initial-values";

@@ -2,7 +2,7 @@
 
 import React, { FC, useEffect, useMemo, useState } from "react";
 import classes from "./checkbox-tree.module.css";
-import { Select } from "@catalog-frontend/ui-v2";
+import { Select } from "@catalog-frontend/ui";
 import { getPath, localization } from "@catalog-frontend/utils";
 import { Button } from "@digdir/designsystemet-react";
 import {

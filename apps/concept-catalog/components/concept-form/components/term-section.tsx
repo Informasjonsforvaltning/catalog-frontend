@@ -2,7 +2,7 @@ import {
   FieldsetDivider,
   FormikLanguageFieldset,
   TitleWithHelpTextAndTag,
-} from "@catalog-frontend/ui-v2";
+} from "@catalog-frontend/ui";
 import { localization } from "@catalog-frontend/utils";
 import { useFormikContext } from "formik";
 import { Concept } from "@catalog-frontend/types";

@@ -5,7 +5,7 @@ import {
   Dataset,
   StorageData,
 } from "@catalog-frontend/types";
-import { Button, ButtonBar, ConfirmModal } from "@catalog-frontend/ui-v2";
+import { Button, ButtonBar, ConfirmModal } from "@catalog-frontend/ui";
 import { LocalDataStorage, localization } from "@catalog-frontend/utils";
 import {
   getDatasetById,

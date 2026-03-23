@@ -28,22 +28,11 @@ export const ServiceStatusTag = forwardRef<
   ServiceStatusTagProps
 >(
   (
-    {
-      children,
-      statusKey,
-      statusLabel,
-      size = "medium",
-      ...rest
-    }: ServiceStatusTagProps,
+    { children, statusKey, statusLabel, ...rest }: ServiceStatusTagProps,
     ref,
   ) => {
     return (
-      <DSTag
-        ref={ref}
-        color={getColorFromStatusKey(statusKey)}
-        size={size}
-        {...rest}
-      >
+      <DSTag ref={ref} data-color={getColorFromStatusKey(statusKey)} {...rest}>
         {statusLabel}
       </DSTag>
     );

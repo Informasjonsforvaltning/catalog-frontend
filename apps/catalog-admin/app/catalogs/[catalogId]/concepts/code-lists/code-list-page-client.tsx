@@ -7,7 +7,7 @@ import {
   Button,
   SearchField,
   useWarnIfUnsavedChanges,
-} from "@catalog-frontend/ui-v2";
+} from "@catalog-frontend/ui";
 import { PlusCircleIcon } from "@navikt/aksel-icons";
 import { useGetAllCodeLists } from "../../../../../hooks/code-lists";
 import { Code, CodeList } from "@catalog-frontend/types";

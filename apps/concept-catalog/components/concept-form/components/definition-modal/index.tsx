@@ -7,7 +7,7 @@ import {
   FormikLanguageFieldset,
   TextareaWithPrefix,
   TitleWithHelpTextAndTag,
-} from "@catalog-frontend/ui-v2";
+} from "@catalog-frontend/ui";
 import { Definisjon } from "@catalog-frontend/types";
 import { localization } from "@catalog-frontend/utils";
 import { SourceDescriptionFieldset } from "../source-description-fieldset";

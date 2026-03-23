@@ -6,7 +6,7 @@ import {
 } from "@digdir/designsystemet-react";
 import styles from "./version-fieldset.module.scss";
 import { Concept } from "@catalog-frontend/types";
-import { TitleWithHelpTextAndTag } from "@catalog-frontend/ui-v2";
+import { TitleWithHelpTextAndTag } from "@catalog-frontend/ui";
 import { localization } from "@catalog-frontend/utils";
 import { get } from "lodash";
 

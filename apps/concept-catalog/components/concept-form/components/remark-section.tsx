@@ -2,7 +2,7 @@ import {
   FormikLanguageFieldset,
   TextareaWithPrefix,
   TitleWithHelpTextAndTag,
-} from "@catalog-frontend/ui-v2";
+} from "@catalog-frontend/ui";
 import { localization } from "@catalog-frontend/utils";
 import { get, isEmpty, isEqual } from "lodash";
 import { useFormikContext } from "formik";

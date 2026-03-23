@@ -1,8 +1,5 @@
 import { Dataset } from "@catalog-frontend/types";
-import {
-  FieldsetDivider,
-  TitleWithHelpTextAndTag,
-} from "@catalog-frontend/ui-v2";
+import { FieldsetDivider, TitleWithHelpTextAndTag } from "@catalog-frontend/ui";
 import {
   accessRights,
   getTranslateText,

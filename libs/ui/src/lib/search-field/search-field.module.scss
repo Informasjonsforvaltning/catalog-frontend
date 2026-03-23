@@ -11,11 +11,12 @@
   right: 0.5rem;
   bottom: 0.5rem;
   display: flex;
-  gap: var(--fds-spacing-2);
+  gap: var(--ds-size-2);
 }
 
 .searchButton {
   font-size: medium;
+  min-width: var(--ds-size-16);
 
   title + circle {
     display: none;

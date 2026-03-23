@@ -4,7 +4,7 @@ import {
   FastFieldWithRef,
   FieldsetDivider,
   TitleWithHelpTextAndTag,
-} from "@catalog-frontend/ui-v2";
+} from "@catalog-frontend/ui";
 import { localization } from "@catalog-frontend/utils";
 import { Fieldset, Textfield } from "@digdir/designsystemet-react";
 import { FieldArray, useFormikContext } from "formik";

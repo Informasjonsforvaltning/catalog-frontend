@@ -1,6 +1,6 @@
 "use client";
 import { ReferenceDataCode } from "@catalog-frontend/types";
-import { CheckboxGroupFilter } from "@catalog-frontend/ui-v2";
+import { CheckboxGroupFilter } from "@catalog-frontend/ui";
 import { getTranslateText, localization } from "@catalog-frontend/utils";
 import { Card, Details } from "@digdir/designsystemet-react";
 

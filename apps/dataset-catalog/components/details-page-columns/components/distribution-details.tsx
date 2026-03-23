@@ -23,7 +23,7 @@ import {
   useSearchDataServiceByUri,
   useSearchFileTypeByUri,
   useSearchMediaTypeByUri,
-} from "@catalog-frontend/ui-v2";
+} from "@catalog-frontend/ui";
 import { isEmpty } from "lodash";
 
 type Props = {

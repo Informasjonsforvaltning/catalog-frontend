@@ -34,7 +34,7 @@ import {
   NotificationCarousel,
   Snackbar,
   SnackbarSeverity,
-} from "@catalog-frontend/ui-v2";
+} from "@catalog-frontend/ui";
 import { conceptSchema } from "./validation-schema";
 import { TermSection } from "./components/term-section";
 import { DefinitionSection } from "./components/definition-section";

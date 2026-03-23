@@ -15,7 +15,7 @@ import {
   SearchHitsLayout,
   ServiceStatusTagProps,
   Tag,
-} from "@catalog-frontend/ui-v2";
+} from "@catalog-frontend/ui";
 import styles from "./service-page.module.css";
 import FilterChips from "../../../../components/filter-chips";
 import { PlusCircleIcon } from "@navikt/aksel-icons";

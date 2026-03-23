@@ -7,16 +7,16 @@ import classes from "./spinner.module.css";
 
 export interface SpinnerProps {
   title?: string;
-  size?: "xxsmall" | "xsmall" | "small" | "medium" | "large" | "xlarge";
+  size?: "2xs" | "xs" | "sm" | "md" | "lg" | "xl";
 }
 
 const Spinner: FC<SpinnerProps> = ({
   title = localization.loading,
-  size = "xlarge",
+  size = "xl",
 }) => {
   return (
     <div className={classes.spinner}>
-      <SpinnerBase title={title} size={size} />
+      <SpinnerBase aria-label={title} data-size={size} />
     </div>
   );
 };

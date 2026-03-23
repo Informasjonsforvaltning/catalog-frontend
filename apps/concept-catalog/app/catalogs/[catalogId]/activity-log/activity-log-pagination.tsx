@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Pagination } from "@catalog-frontend/ui-v2";
+import { Pagination } from "@catalog-frontend/ui";
 import styles from "./activity-log-page.module.css";
 
 type Props = {

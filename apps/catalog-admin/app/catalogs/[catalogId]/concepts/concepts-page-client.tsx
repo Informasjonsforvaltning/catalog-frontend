@@ -1,6 +1,6 @@
 "use client";
 
-import { NavigationCard } from "@catalog-frontend/ui-v2";
+import { NavigationCard } from "@catalog-frontend/ui";
 import React from "react";
 import { localization } from "@catalog-frontend/utils";
 import {

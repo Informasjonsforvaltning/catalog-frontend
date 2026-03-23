@@ -2,7 +2,7 @@ import {
   Breadcrumbs,
   BreadcrumbType,
   DesignBanner,
-} from "@catalog-frontend/ui-v2";
+} from "@catalog-frontend/ui";
 import {
   getCurrencies,
   getDistributionStatuses,

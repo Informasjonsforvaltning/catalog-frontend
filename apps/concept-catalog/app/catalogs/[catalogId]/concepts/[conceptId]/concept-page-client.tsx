@@ -25,7 +25,7 @@ import {
   HelpMarkdown,
   ConfirmModal,
   MarkdownComponent,
-} from "@catalog-frontend/ui-v2";
+} from "@catalog-frontend/ui";
 import {
   localization,
   getTranslateText as translate,

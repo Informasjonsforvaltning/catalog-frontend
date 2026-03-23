@@ -5,7 +5,7 @@ import {
   Breadcrumbs,
   BreadcrumbType,
   DesignBanner,
-} from "@catalog-frontend/ui-v2";
+} from "@catalog-frontend/ui";
 import { ActivityLogPageClient } from "./activity-log-page-client";
 import { ConceptActivityLogContent } from "./concept-activity-log-content";
 import { CommentActivityLogContent } from "./comment-activity-log-content";

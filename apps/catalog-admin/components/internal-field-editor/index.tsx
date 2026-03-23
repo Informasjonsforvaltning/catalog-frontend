@@ -8,7 +8,7 @@ import {
   CheckboxGroupFilter,
   HelpMarkdown,
   Select,
-} from "@catalog-frontend/ui-v2";
+} from "@catalog-frontend/ui";
 import { Textfield, Paragraph, Label } from "@digdir/designsystemet-react";
 import {
   CodeList,

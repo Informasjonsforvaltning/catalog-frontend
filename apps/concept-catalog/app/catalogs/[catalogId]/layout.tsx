@@ -1,4 +1,4 @@
-import { TermsOfUseModal } from "@catalog-frontend/ui-v2";
+import { TermsOfUseModal } from "@catalog-frontend/ui";
 import { CatalogLayout } from "@concept-catalog/components/catalog-layout";
 import { FeatureFlagsProvider } from "@concept-catalog/context/feature-flags";
 

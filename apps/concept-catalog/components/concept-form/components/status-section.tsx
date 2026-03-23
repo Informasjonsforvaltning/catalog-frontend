@@ -9,7 +9,7 @@ import {
   useRadioGroup,
 } from "@digdir/designsystemet-react";
 import { Concept, ReferenceDataCode } from "@catalog-frontend/types";
-import { TitleWithHelpTextAndTag } from "@catalog-frontend/ui-v2";
+import { TitleWithHelpTextAndTag } from "@catalog-frontend/ui";
 import {
   capitalizeFirstLetter,
   getTranslateText,

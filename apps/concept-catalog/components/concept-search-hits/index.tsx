@@ -9,7 +9,7 @@ import {
   validUUID,
 } from "@catalog-frontend/utils";
 import cn from "classnames";
-import { ConceptStatusTagProps, SearchHit, Tag } from "@catalog-frontend/ui-v2";
+import { ConceptStatusTagProps, SearchHit, Tag } from "@catalog-frontend/ui";
 import Link from "next/link";
 import styles from "./concept-search-hits.module.css";
 import { Chip } from "@digdir/designsystemet-react";

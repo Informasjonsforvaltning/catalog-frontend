@@ -1,6 +1,6 @@
 "use client";
 import { localization } from "@catalog-frontend/utils";
-import { Button, DeleteButton } from "@catalog-frontend/ui-v2";
+import { Button, DeleteButton } from "@catalog-frontend/ui";
 import { deletePublicService } from "../../app/actions/public-services/actions";
 import { deleteService } from "../../app/actions/services/actions";
 

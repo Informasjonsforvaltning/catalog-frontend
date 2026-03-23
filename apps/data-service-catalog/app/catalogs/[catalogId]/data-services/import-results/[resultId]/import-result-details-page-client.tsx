@@ -3,7 +3,7 @@
 import { ImportResult } from "@catalog-frontend/types";
 import { localization } from "@catalog-frontend/utils";
 import { deleteImportResult } from "../../../../../actions/actions";
-import { ConfirmModal, ImportResultDetails } from "@catalog-frontend/ui-v2";
+import { ConfirmModal, ImportResultDetails } from "@catalog-frontend/ui";
 import { useState } from "react";
 
 interface Props {

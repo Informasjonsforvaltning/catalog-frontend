@@ -15,6 +15,9 @@ interface Props {
   referenceDataEnv: string;
 }
 
+// Zero-width space to prevent auto-selection when input matches label exactly
+const INVISIBLE_CHARACTER = "\u200B";
+
 export const SpatialCombobox = ({ referenceDataEnv }: Props) => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const debouncedSearchTerm = useDebounce(searchTerm);
@@ -78,6 +81,7 @@ export const SpatialCombobox = ({ referenceDataEnv }: Props) => {
           value={item.uri}
           description={getDescription(item)}
         >
+          {INVISIBLE_CHARACTER}
           {item.label ? getTranslateText(item.label) : item.uri}
         </Combobox.Option>
       ))}

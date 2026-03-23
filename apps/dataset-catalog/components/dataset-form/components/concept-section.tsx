@@ -5,7 +5,7 @@ import {
   ConceptCombobox,
   FormikLanguageFieldset,
   TitleWithHelpTextAndTag,
-} from "@catalog-frontend/ui-v2";
+} from "@catalog-frontend/ui";
 
 interface Props {
   searchEnv: string; // Environment variable to search service

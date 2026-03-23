@@ -6,7 +6,7 @@ import { Field } from "formik";
 import { Textfield } from "@digdir/designsystemet-react";
 import { TrashIcon } from "@navikt/aksel-icons";
 import { localization } from "@catalog-frontend/utils";
-import { Button } from "@catalog-frontend/ui-v2";
+import { Button } from "@catalog-frontend/ui";
 
 interface Props {
   sourceTitleFieldName: string;

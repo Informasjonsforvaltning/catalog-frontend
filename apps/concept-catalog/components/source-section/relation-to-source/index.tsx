@@ -1,7 +1,7 @@
 "use client";
 
 import { FC, ReactNode } from "react";
-import { Select } from "@catalog-frontend/ui-v2";
+import { Select } from "@catalog-frontend/ui";
 import { localization } from "@catalog-frontend/utils";
 import { Field } from "formik";
 import styles from "./relation-to-source.module.css";

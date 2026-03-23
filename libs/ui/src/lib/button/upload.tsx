@@ -14,23 +14,24 @@ const UploadButton: FC<UploadButtonProps> = ({
   allowedMimeTypes,
   onUpload,
   ...props
-}: any) => {
+}) => {
   const ref = useRef<HTMLInputElement>(null);
   const buttonId = useId();
 
   return (
     <>
       <Button
-        {...props}
         id={buttonId}
         aria-controls={ref.current?.id}
         aria-haspopup="true"
+        data-size="sm"
         onClick={() => {
           if (ref.current) {
             ref.current.value = "";
             ref.current.click();
           }
         }}
+        {...props}
       >
         {children}
       </Button>
