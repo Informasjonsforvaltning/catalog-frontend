@@ -1642,12 +1642,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@digdir/designsystemet-css@npm:1.11.1":
-  version: 1.11.1
-  resolution: "@digdir/designsystemet-css@npm:1.11.1"
+"@digdir/designsystemet-css@npm:1.13.0":
+  version: 1.13.0
+  resolution: "@digdir/designsystemet-css@npm:1.13.0"
   dependencies:
-    "@digdir/designsystemet-types": "npm:^1.11.1"
-  checksum: 10/3ce8c01682e6d036c93ec9629b4d5daeff40059271a8750bd1edb1154e1da6d5e820a9d12d3ddfa420d4fc402662a82125b9fa8b7edbf6fd478ec25a80a5c783
+    "@digdir/designsystemet-types": "npm:^1.13.0"
+  checksum: 10/592e506acab514ceb4dc015560c4584bc6fc64ceb8a3befbe6f06f84b40f9e772502800a741c0f075b54c2d97e8d1273db7c5bf28bdc154787e0e11c1278dc5a
   languageName: node
   linkType: hard
 
@@ -1672,7 +1672,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@digdir/designsystemet-types@npm:^1.11.1":
+"@digdir/designsystemet-types@npm:^1.11.1, @digdir/designsystemet-types@npm:^1.13.0":
   version: 1.13.0
   resolution: "@digdir/designsystemet-types@npm:1.13.0"
   checksum: 10/b49ff2761fe8dd3edfaa4b96bf8f297974c57ef04cebf3892f32fc1c1959906d3237f5726676c44845630397a82f7450f8bd29d2b5081427f0cc6485e4b58908
@@ -8329,7 +8329,7 @@ __metadata:
     "@axe-core/playwright": "npm:^4.11.1"
     "@babel/core": "npm:^7.29.0"
     "@babel/preset-react": "npm:^7.28.5"
-    "@digdir/designsystemet-css": "npm:1.11.1"
+    "@digdir/designsystemet-css": "npm:1.13.0"
     "@digdir/designsystemet-react": "npm:1.11.1"
     "@eslint/eslintrc": "npm:^3.3.5"
     "@eslint/js": "npm:^9.39.2"
