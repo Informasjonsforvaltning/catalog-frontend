@@ -12,7 +12,7 @@ export const LanguageIndicator: FC<Props> = ({ language }) => {
     <div className={styles.container}>
       <span
         className={styles.label}
-        title={localization.language.language || ""}
+        title={localization.language[language] || ""}
       >
         {language}
       </span>

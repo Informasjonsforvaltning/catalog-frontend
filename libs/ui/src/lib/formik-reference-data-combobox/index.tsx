@@ -2,7 +2,7 @@
 import { Combobox } from "@digdir/designsystemet-react";
 import { getTranslateText, localization } from "@catalog-frontend/utils";
 import { ReferenceDataCode } from "@catalog-frontend/types";
-import { ComboboxProps } from "@digdir/designsystemet-react/dist/types/components/form/Combobox/Combobox";
+import { ComboboxProps } from "@digdir/designsystemet-react/dist/types/components/Combobox/Combobox";
 import { Ref } from "react";
 
 interface Props extends ComboboxProps {

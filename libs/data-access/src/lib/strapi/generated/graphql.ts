@@ -1,10 +1,9 @@
-import type { GraphQLClient } from "graphql-request";
-import type { RequestInit } from "graphql-request/dist/types.dom";
 import {
   useQuery,
   useInfiniteQuery,
   type UseQueryOptions,
   type UseInfiniteQueryOptions,
+  type InfiniteData,
 } from "@tanstack/react-query";
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -27,18 +26,29 @@ export type Incremental<T> =
       [P in keyof T]?: P extends " $fragmentName" | "__typename" ? T[P] : never;
     };
 
-function fetcher<TData, TVariables extends { [key: string]: any }>(
-  client: GraphQLClient,
+function fetcher<TData, TVariables>(
+  endpoint: string,
+  requestInit: RequestInit,
   query: string,
   variables?: TVariables,
-  requestHeaders?: RequestInit["headers"],
 ) {
-  return async (): Promise<TData> =>
-    client.request({
-      document: query,
-      variables,
-      requestHeaders,
+  return async (): Promise<TData> => {
+    const res = await fetch(endpoint, {
+      method: "POST",
+      ...requestInit,
+      body: JSON.stringify({ query, variables }),
     });
+
+    const json = await res.json();
+
+    if (json.errors) {
+      const { message } = json.errors[0];
+
+      throw new Error(message);
+    }
+
+    return json.data;
+  };
 }
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -1533,23 +1543,32 @@ export const useGetServiceMessagesQuery = <
   TData = GetServiceMessagesQuery,
   TError = unknown,
 >(
-  client: GraphQLClient,
+  dataSource: { endpoint: string; fetchParams?: RequestInit },
   variables?: GetServiceMessagesQueryVariables,
-  options?: UseQueryOptions<GetServiceMessagesQuery, TError, TData>,
-  headers?: RequestInit["headers"],
+  options?: Omit<
+    UseQueryOptions<GetServiceMessagesQuery, TError, TData>,
+    "queryKey"
+  > & {
+    queryKey?: UseQueryOptions<
+      GetServiceMessagesQuery,
+      TError,
+      TData
+    >["queryKey"];
+  },
 ) => {
-  return useQuery<GetServiceMessagesQuery, TError, TData>(
-    variables === undefined
-      ? ["GetServiceMessages"]
-      : ["GetServiceMessages", variables],
-    fetcher<GetServiceMessagesQuery, GetServiceMessagesQueryVariables>(
-      client,
+  return useQuery<GetServiceMessagesQuery, TError, TData>({
+    queryKey:
+      variables === undefined
+        ? ["GetServiceMessages"]
+        : ["GetServiceMessages", variables],
+    queryFn: fetcher<GetServiceMessagesQuery, GetServiceMessagesQueryVariables>(
+      dataSource.endpoint,
+      dataSource.fetchParams || {},
       GetServiceMessagesDocument,
       variables,
-      headers,
     ),
-    options,
-  );
+    ...options,
+  });
 };
 
 useGetServiceMessagesQuery.getKey = (
@@ -1560,26 +1579,40 @@ useGetServiceMessagesQuery.getKey = (
     : ["GetServiceMessages", variables];
 
 export const useInfiniteGetServiceMessagesQuery = <
-  TData = GetServiceMessagesQuery,
+  TData = InfiniteData<GetServiceMessagesQuery>,
   TError = unknown,
 >(
-  client: GraphQLClient,
-  variables?: GetServiceMessagesQueryVariables,
-  options?: UseInfiniteQueryOptions<GetServiceMessagesQuery, TError, TData>,
-  headers?: RequestInit["headers"],
+  dataSource: { endpoint: string; fetchParams?: RequestInit },
+  variables: GetServiceMessagesQueryVariables | undefined,
+  options: Omit<
+    UseInfiniteQueryOptions<GetServiceMessagesQuery, TError, TData>,
+    "queryKey"
+  > & {
+    queryKey?: UseInfiniteQueryOptions<
+      GetServiceMessagesQuery,
+      TError,
+      TData
+    >["queryKey"];
+  },
 ) => {
   return useInfiniteQuery<GetServiceMessagesQuery, TError, TData>(
-    variables === undefined
-      ? ["GetServiceMessages.infinite"]
-      : ["GetServiceMessages.infinite", variables],
-    (metaData) =>
-      fetcher<GetServiceMessagesQuery, GetServiceMessagesQueryVariables>(
-        client,
-        GetServiceMessagesDocument,
-        { ...variables, ...(metaData.pageParam ?? {}) },
-        headers,
-      )(),
-    options,
+    (() => {
+      const { queryKey: optionsQueryKey, ...restOptions } = options;
+      return {
+        queryKey:
+          (optionsQueryKey ?? variables === undefined)
+            ? ["GetServiceMessages.infinite"]
+            : ["GetServiceMessages.infinite", variables],
+        queryFn: (metaData) =>
+          fetcher<GetServiceMessagesQuery, GetServiceMessagesQueryVariables>(
+            dataSource.endpoint,
+            dataSource.fetchParams || {},
+            GetServiceMessagesDocument,
+            { ...variables, ...(metaData.pageParam ?? {}) },
+          )(),
+        ...restOptions,
+      };
+    })(),
   );
 };
 
@@ -1591,15 +1624,14 @@ useInfiniteGetServiceMessagesQuery.getKey = (
     : ["GetServiceMessages.infinite", variables];
 
 useGetServiceMessagesQuery.fetcher = (
-  client: GraphQLClient,
+  dataSource: { endpoint: string; fetchParams?: RequestInit },
   variables?: GetServiceMessagesQueryVariables,
-  headers?: RequestInit["headers"],
 ) =>
   fetcher<GetServiceMessagesQuery, GetServiceMessagesQueryVariables>(
-    client,
+    dataSource.endpoint,
+    dataSource.fetchParams || {},
     GetServiceMessagesDocument,
     variables,
-    headers,
   );
 
 export const GetServiceMessageDocument = `
@@ -1626,21 +1658,29 @@ export const useGetServiceMessageQuery = <
   TData = GetServiceMessageQuery,
   TError = unknown,
 >(
-  client: GraphQLClient,
+  dataSource: { endpoint: string; fetchParams?: RequestInit },
   variables: GetServiceMessageQueryVariables,
-  options?: UseQueryOptions<GetServiceMessageQuery, TError, TData>,
-  headers?: RequestInit["headers"],
+  options?: Omit<
+    UseQueryOptions<GetServiceMessageQuery, TError, TData>,
+    "queryKey"
+  > & {
+    queryKey?: UseQueryOptions<
+      GetServiceMessageQuery,
+      TError,
+      TData
+    >["queryKey"];
+  },
 ) => {
-  return useQuery<GetServiceMessageQuery, TError, TData>(
-    ["GetServiceMessage", variables],
-    fetcher<GetServiceMessageQuery, GetServiceMessageQueryVariables>(
-      client,
+  return useQuery<GetServiceMessageQuery, TError, TData>({
+    queryKey: ["GetServiceMessage", variables],
+    queryFn: fetcher<GetServiceMessageQuery, GetServiceMessageQueryVariables>(
+      dataSource.endpoint,
+      dataSource.fetchParams || {},
       GetServiceMessageDocument,
       variables,
-      headers,
     ),
-    options,
-  );
+    ...options,
+  });
 };
 
 useGetServiceMessageQuery.getKey = (
@@ -1648,24 +1688,37 @@ useGetServiceMessageQuery.getKey = (
 ) => ["GetServiceMessage", variables];
 
 export const useInfiniteGetServiceMessageQuery = <
-  TData = GetServiceMessageQuery,
+  TData = InfiniteData<GetServiceMessageQuery>,
   TError = unknown,
 >(
-  client: GraphQLClient,
+  dataSource: { endpoint: string; fetchParams?: RequestInit },
   variables: GetServiceMessageQueryVariables,
-  options?: UseInfiniteQueryOptions<GetServiceMessageQuery, TError, TData>,
-  headers?: RequestInit["headers"],
+  options: Omit<
+    UseInfiniteQueryOptions<GetServiceMessageQuery, TError, TData>,
+    "queryKey"
+  > & {
+    queryKey?: UseInfiniteQueryOptions<
+      GetServiceMessageQuery,
+      TError,
+      TData
+    >["queryKey"];
+  },
 ) => {
   return useInfiniteQuery<GetServiceMessageQuery, TError, TData>(
-    ["GetServiceMessage.infinite", variables],
-    (metaData) =>
-      fetcher<GetServiceMessageQuery, GetServiceMessageQueryVariables>(
-        client,
-        GetServiceMessageDocument,
-        { ...variables, ...(metaData.pageParam ?? {}) },
-        headers,
-      )(),
-    options,
+    (() => {
+      const { queryKey: optionsQueryKey, ...restOptions } = options;
+      return {
+        queryKey: optionsQueryKey ?? ["GetServiceMessage.infinite", variables],
+        queryFn: (metaData) =>
+          fetcher<GetServiceMessageQuery, GetServiceMessageQueryVariables>(
+            dataSource.endpoint,
+            dataSource.fetchParams || {},
+            GetServiceMessageDocument,
+            { ...variables, ...(metaData.pageParam ?? {}) },
+          )(),
+        ...restOptions,
+      };
+    })(),
   );
 };
 
@@ -1674,13 +1727,12 @@ useInfiniteGetServiceMessageQuery.getKey = (
 ) => ["GetServiceMessage.infinite", variables];
 
 useGetServiceMessageQuery.fetcher = (
-  client: GraphQLClient,
+  dataSource: { endpoint: string; fetchParams?: RequestInit },
   variables: GetServiceMessageQueryVariables,
-  headers?: RequestInit["headers"],
 ) =>
   fetcher<GetServiceMessageQuery, GetServiceMessageQueryVariables>(
-    client,
+    dataSource.endpoint,
+    dataSource.fetchParams || {},
     GetServiceMessageDocument,
     variables,
-    headers,
   );
