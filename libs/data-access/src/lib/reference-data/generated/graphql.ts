@@ -1,10 +1,9 @@
-import type { GraphQLClient } from "graphql-request";
-import type { RequestInit } from "graphql-request/dist/types.dom";
 import {
   useQuery,
   useInfiniteQuery,
   type UseQueryOptions,
   type UseInfiniteQueryOptions,
+  type InfiniteData,
 } from "@tanstack/react-query";
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -27,18 +26,29 @@ export type Incremental<T> =
       [P in keyof T]?: P extends " $fragmentName" | "__typename" ? T[P] : never;
     };
 
-function fetcher<TData, TVariables extends { [key: string]: any }>(
-  client: GraphQLClient,
+function fetcher<TData, TVariables>(
+  endpoint: string,
+  requestInit: RequestInit,
   query: string,
   variables?: TVariables,
-  requestHeaders?: RequestInit["headers"],
 ) {
-  return async (): Promise<TData> =>
-    client.request({
-      document: query,
-      variables,
-      requestHeaders,
+  return async (): Promise<TData> => {
+    const res = await fetch(endpoint, {
+      method: "POST",
+      ...requestInit,
+      body: JSON.stringify({ query, variables }),
     });
+
+    const json = await res.json();
+
+    if (json.errors) {
+      const { message } = json.errors[0];
+
+      throw new Error(message);
+    }
+
+    return json.data;
+  };
 }
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -196,6 +206,13 @@ export type FylkeOrganisasjon = {
   uri: Scalars["ID"]["output"];
 };
 
+export type HighValueCategory = {
+  __typename?: "HighValueCategory";
+  code?: Maybe<Scalars["String"]["output"]>;
+  label?: Maybe<LocalizedStrings>;
+  uri: Scalars["ID"]["output"];
+};
+
 export type Kommune = {
   __typename?: "Kommune";
   kommunenavn?: Maybe<Scalars["String"]["output"]>;
@@ -210,6 +227,13 @@ export type KommuneOrganisasjon = {
   kommunenummer?: Maybe<Scalars["String"]["output"]>;
   organisasjonsnavn?: Maybe<Scalars["String"]["output"]>;
   organisasjonsnummer?: Maybe<Scalars["String"]["output"]>;
+  uri: Scalars["ID"]["output"];
+};
+
+export type LegalResourceType = {
+  __typename?: "LegalResourceType";
+  code?: Maybe<Scalars["String"]["output"]>;
+  label?: Maybe<LocalizedStrings>;
   uri: Scalars["ID"]["output"];
 };
 
@@ -256,6 +280,27 @@ export type MediaType = {
   uri: Scalars["ID"]["output"];
 };
 
+export type MobilityCondition = {
+  __typename?: "MobilityCondition";
+  code?: Maybe<Scalars["String"]["output"]>;
+  label?: Maybe<LocalizedStrings>;
+  uri: Scalars["ID"]["output"];
+};
+
+export type MobilityDataStandard = {
+  __typename?: "MobilityDataStandard";
+  code?: Maybe<Scalars["String"]["output"]>;
+  label?: Maybe<LocalizedStrings>;
+  uri: Scalars["ID"]["output"];
+};
+
+export type MobilityTheme = {
+  __typename?: "MobilityTheme";
+  code?: Maybe<Scalars["String"]["output"]>;
+  label?: Maybe<LocalizedStrings>;
+  uri: Scalars["ID"]["output"];
+};
+
 export type Nasjon = {
   __typename?: "Nasjon";
   nasjonsnavn?: Maybe<Scalars["String"]["output"]>;
@@ -288,6 +333,13 @@ export type ProvenanceStatement = {
 
 export type PublisherType = {
   __typename?: "PublisherType";
+  code?: Maybe<Scalars["String"]["output"]>;
+  label?: Maybe<LocalizedStrings>;
+  uri: Scalars["ID"]["output"];
+};
+
+export type QualityDimension = {
+  __typename?: "QualityDimension";
   code?: Maybe<Scalars["String"]["output"]>;
   label?: Maybe<LocalizedStrings>;
   uri: Scalars["ID"]["output"];
@@ -330,10 +382,14 @@ export type Query = {
   fylkeOrganisasjonByFylkesnummer?: Maybe<FylkeOrganisasjon>;
   fylkeOrganisasjoner: Array<FylkeOrganisasjon>;
   fylker: Array<Fylke>;
+  highValueCategories: Array<HighValueCategory>;
+  highValueCategoryByCode?: Maybe<HighValueCategory>;
   kommuneByKommunenummer?: Maybe<Kommune>;
   kommuneOrganisasjonByKommunenummer?: Maybe<KommuneOrganisasjon>;
   kommuneOrganisasjoner: Array<KommuneOrganisasjon>;
   kommuner: Array<Kommune>;
+  legalResourceTypeByCode?: Maybe<LegalResourceType>;
+  legalResourceTypes: Array<LegalResourceType>;
   linguisticSystemByCode?: Maybe<LinguisticSystem>;
   linguisticSystems: Array<LinguisticSystem>;
   losThemesAndWords: Array<LosNode>;
@@ -342,6 +398,12 @@ export type Query = {
   mediaTypeByTypeAndSubType?: Maybe<MediaType>;
   mediaTypes: Array<MediaType>;
   mediaTypesByType: Array<MediaType>;
+  mobilityConditionByCode?: Maybe<MobilityCondition>;
+  mobilityConditions: Array<MobilityCondition>;
+  mobilityDataStandardByCode?: Maybe<MobilityDataStandard>;
+  mobilityDataStandards: Array<MobilityDataStandard>;
+  mobilityThemeByCode?: Maybe<MobilityTheme>;
+  mobilityThemes: Array<MobilityTheme>;
   nasjonByNasjonsnummer?: Maybe<Nasjon>;
   nasjoner: Array<Nasjon>;
   openLicenseByCode?: Maybe<OpenLicense>;
@@ -352,6 +414,8 @@ export type Query = {
   provenanceStatements: Array<ProvenanceStatement>;
   publisherTypeByCode?: Maybe<PublisherType>;
   publisherTypes: Array<PublisherType>;
+  qualityDimensionByCode?: Maybe<QualityDimension>;
+  qualityDimensions: Array<QualityDimension>;
   referenceTypeByCode?: Maybe<ReferenceType>;
   referenceTypes: Array<ReferenceType>;
   relationshipWithSourceTypeByCode?: Maybe<RelationshipWithSourceType>;
@@ -438,12 +502,20 @@ export type QueryFylkeOrganisasjonByFylkesnummerArgs = {
   fylkesnummer: Scalars["String"]["input"];
 };
 
+export type QueryHighValueCategoryByCodeArgs = {
+  code: Scalars["String"]["input"];
+};
+
 export type QueryKommuneByKommunenummerArgs = {
   kommunenummer: Scalars["String"]["input"];
 };
 
 export type QueryKommuneOrganisasjonByKommunenummerArgs = {
   kommunenummer: Scalars["String"]["input"];
+};
+
+export type QueryLegalResourceTypeByCodeArgs = {
+  code: Scalars["String"]["input"];
 };
 
 export type QueryLinguisticSystemByCodeArgs = {
@@ -467,6 +539,18 @@ export type QueryMediaTypesByTypeArgs = {
   type: Scalars["String"]["input"];
 };
 
+export type QueryMobilityConditionByCodeArgs = {
+  code: Scalars["String"]["input"];
+};
+
+export type QueryMobilityDataStandardByCodeArgs = {
+  code: Scalars["String"]["input"];
+};
+
+export type QueryMobilityThemeByCodeArgs = {
+  code: Scalars["String"]["input"];
+};
+
 export type QueryNasjonByNasjonsnummerArgs = {
   nasjonsnummer: Scalars["String"]["input"];
 };
@@ -484,6 +568,10 @@ export type QueryProvenanceStatementByCodeArgs = {
 };
 
 export type QueryPublisherTypeByCodeArgs = {
+  code: Scalars["String"]["input"];
+};
+
+export type QueryQualityDimensionByCodeArgs = {
   code: Scalars["String"]["input"];
 };
 
@@ -602,21 +690,22 @@ export const SearchDocument = `
     `;
 
 export const useSearchQuery = <TData = SearchQuery, TError = unknown>(
-  client: GraphQLClient,
+  dataSource: { endpoint: string; fetchParams?: RequestInit },
   variables: SearchQueryVariables,
-  options?: UseQueryOptions<SearchQuery, TError, TData>,
-  headers?: RequestInit["headers"],
+  options?: Omit<UseQueryOptions<SearchQuery, TError, TData>, "queryKey"> & {
+    queryKey?: UseQueryOptions<SearchQuery, TError, TData>["queryKey"];
+  },
 ) => {
-  return useQuery<SearchQuery, TError, TData>(
-    ["Search", variables],
-    fetcher<SearchQuery, SearchQueryVariables>(
-      client,
+  return useQuery<SearchQuery, TError, TData>({
+    queryKey: ["Search", variables],
+    queryFn: fetcher<SearchQuery, SearchQueryVariables>(
+      dataSource.endpoint,
+      dataSource.fetchParams || {},
       SearchDocument,
       variables,
-      headers,
     ),
-    options,
-  );
+    ...options,
+  });
 };
 
 useSearchQuery.getKey = (variables: SearchQueryVariables) => [
@@ -624,22 +713,34 @@ useSearchQuery.getKey = (variables: SearchQueryVariables) => [
   variables,
 ];
 
-export const useInfiniteSearchQuery = <TData = SearchQuery, TError = unknown>(
-  client: GraphQLClient,
+export const useInfiniteSearchQuery = <
+  TData = InfiniteData<SearchQuery>,
+  TError = unknown,
+>(
+  dataSource: { endpoint: string; fetchParams?: RequestInit },
   variables: SearchQueryVariables,
-  options?: UseInfiniteQueryOptions<SearchQuery, TError, TData>,
-  headers?: RequestInit["headers"],
+  options: Omit<
+    UseInfiniteQueryOptions<SearchQuery, TError, TData>,
+    "queryKey"
+  > & {
+    queryKey?: UseInfiniteQueryOptions<SearchQuery, TError, TData>["queryKey"];
+  },
 ) => {
   return useInfiniteQuery<SearchQuery, TError, TData>(
-    ["Search.infinite", variables],
-    (metaData) =>
-      fetcher<SearchQuery, SearchQueryVariables>(
-        client,
-        SearchDocument,
-        { ...variables, ...(metaData.pageParam ?? {}) },
-        headers,
-      )(),
-    options,
+    (() => {
+      const { queryKey: optionsQueryKey, ...restOptions } = options;
+      return {
+        queryKey: optionsQueryKey ?? ["Search.infinite", variables],
+        queryFn: (metaData) =>
+          fetcher<SearchQuery, SearchQueryVariables>(
+            dataSource.endpoint,
+            dataSource.fetchParams || {},
+            SearchDocument,
+            { ...variables, ...(metaData.pageParam ?? {}) },
+          )(),
+        ...restOptions,
+      };
+    })(),
   );
 };
 
@@ -649,15 +750,14 @@ useInfiniteSearchQuery.getKey = (variables: SearchQueryVariables) => [
 ];
 
 useSearchQuery.fetcher = (
-  client: GraphQLClient,
+  dataSource: { endpoint: string; fetchParams?: RequestInit },
   variables: SearchQueryVariables,
-  headers?: RequestInit["headers"],
 ) =>
   fetcher<SearchQuery, SearchQueryVariables>(
-    client,
+    dataSource.endpoint,
+    dataSource.fetchParams || {},
     SearchDocument,
     variables,
-    headers,
   );
 
 export const FindByUrIsRequestDocument = `
@@ -677,21 +777,29 @@ export const useFindByUrIsRequestQuery = <
   TData = FindByUrIsRequestQuery,
   TError = unknown,
 >(
-  client: GraphQLClient,
+  dataSource: { endpoint: string; fetchParams?: RequestInit },
   variables: FindByUrIsRequestQueryVariables,
-  options?: UseQueryOptions<FindByUrIsRequestQuery, TError, TData>,
-  headers?: RequestInit["headers"],
+  options?: Omit<
+    UseQueryOptions<FindByUrIsRequestQuery, TError, TData>,
+    "queryKey"
+  > & {
+    queryKey?: UseQueryOptions<
+      FindByUrIsRequestQuery,
+      TError,
+      TData
+    >["queryKey"];
+  },
 ) => {
-  return useQuery<FindByUrIsRequestQuery, TError, TData>(
-    ["FindByURIsRequest", variables],
-    fetcher<FindByUrIsRequestQuery, FindByUrIsRequestQueryVariables>(
-      client,
+  return useQuery<FindByUrIsRequestQuery, TError, TData>({
+    queryKey: ["FindByURIsRequest", variables],
+    queryFn: fetcher<FindByUrIsRequestQuery, FindByUrIsRequestQueryVariables>(
+      dataSource.endpoint,
+      dataSource.fetchParams || {},
       FindByUrIsRequestDocument,
       variables,
-      headers,
     ),
-    options,
-  );
+    ...options,
+  });
 };
 
 useFindByUrIsRequestQuery.getKey = (
@@ -699,24 +807,37 @@ useFindByUrIsRequestQuery.getKey = (
 ) => ["FindByURIsRequest", variables];
 
 export const useInfiniteFindByUrIsRequestQuery = <
-  TData = FindByUrIsRequestQuery,
+  TData = InfiniteData<FindByUrIsRequestQuery>,
   TError = unknown,
 >(
-  client: GraphQLClient,
+  dataSource: { endpoint: string; fetchParams?: RequestInit },
   variables: FindByUrIsRequestQueryVariables,
-  options?: UseInfiniteQueryOptions<FindByUrIsRequestQuery, TError, TData>,
-  headers?: RequestInit["headers"],
+  options: Omit<
+    UseInfiniteQueryOptions<FindByUrIsRequestQuery, TError, TData>,
+    "queryKey"
+  > & {
+    queryKey?: UseInfiniteQueryOptions<
+      FindByUrIsRequestQuery,
+      TError,
+      TData
+    >["queryKey"];
+  },
 ) => {
   return useInfiniteQuery<FindByUrIsRequestQuery, TError, TData>(
-    ["FindByURIsRequest.infinite", variables],
-    (metaData) =>
-      fetcher<FindByUrIsRequestQuery, FindByUrIsRequestQueryVariables>(
-        client,
-        FindByUrIsRequestDocument,
-        { ...variables, ...(metaData.pageParam ?? {}) },
-        headers,
-      )(),
-    options,
+    (() => {
+      const { queryKey: optionsQueryKey, ...restOptions } = options;
+      return {
+        queryKey: optionsQueryKey ?? ["FindByURIsRequest.infinite", variables],
+        queryFn: (metaData) =>
+          fetcher<FindByUrIsRequestQuery, FindByUrIsRequestQueryVariables>(
+            dataSource.endpoint,
+            dataSource.fetchParams || {},
+            FindByUrIsRequestDocument,
+            { ...variables, ...(metaData.pageParam ?? {}) },
+          )(),
+        ...restOptions,
+      };
+    })(),
   );
 };
 
@@ -725,13 +846,12 @@ useInfiniteFindByUrIsRequestQuery.getKey = (
 ) => ["FindByURIsRequest.infinite", variables];
 
 useFindByUrIsRequestQuery.fetcher = (
-  client: GraphQLClient,
+  dataSource: { endpoint: string; fetchParams?: RequestInit },
   variables: FindByUrIsRequestQueryVariables,
-  headers?: RequestInit["headers"],
 ) =>
   fetcher<FindByUrIsRequestQuery, FindByUrIsRequestQueryVariables>(
-    client,
+    dataSource.endpoint,
+    dataSource.fetchParams || {},
     FindByUrIsRequestDocument,
     variables,
-    headers,
   );

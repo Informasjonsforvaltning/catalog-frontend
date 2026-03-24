@@ -17,7 +17,7 @@ export const validateImageFile = (file: File | null): Promise<boolean> => {
         resolve(true); // Image content is valid
       };
       img.onerror = () => {
-        alert(localization.alert.fileNotValid);
+        alert(localization.alert.notValidFile);
         resolve(false);
       };
       img.src = e.target?.result as string;

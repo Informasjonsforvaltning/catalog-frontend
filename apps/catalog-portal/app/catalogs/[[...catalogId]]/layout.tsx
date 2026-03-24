@@ -3,11 +3,11 @@ import { localization } from "@catalog-frontend/utils";
 
 const PageLayout = async (props: {
   children: React.ReactNode;
-  params: Promise<{ catalogId: string }>;
+  params: Promise<{ catalogId?: string[] }>;
 }) => {
   const params = await props.params;
 
-  const { catalogId } = params;
+  const catalogId = params.catalogId?.[0];
 
   const { children } = props;
 
