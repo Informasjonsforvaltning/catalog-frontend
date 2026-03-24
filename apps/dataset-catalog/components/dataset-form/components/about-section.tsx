@@ -114,18 +114,16 @@ export const AboutSection = ({
               </TitleWithHelpTextAndTag>
             </Fieldset.Legend>
             <Combobox
-              value={values?.frequency ? [values.frequency] : [""]}
+              value={values?.frequency ? [values.frequency] : []}
               portal={false}
               onValueChange={(selectedValues) => {
                 setFieldValue("frequency", selectedValues.toString());
               }}
+              placeholder={`${localization.search.search}...`}
               data-size="md"
               virtual
               error={errors.frequency}
             >
-              <Combobox.Option key="frequency" value="">
-                {localization.none}
-              </Combobox.Option>
               {frequencies &&
                 frequencies.map((frequency, i: number) => (
                   <Combobox.Option
