@@ -31,12 +31,13 @@ export const UserEditor = ({ catalogId, user, type }: UserEditorProps) => {
 
   const adminDispatch = useAdminDispatch();
 
-  const findUserById = (userId: string) =>
+  const findUserById = (userId: string | undefined) =>
     updatedUserList.find((user) => user?.id === userId);
 
   const handleDeleteUser = (user: AssignedUser) => {
+    if (!user.id) return;
     if (window.confirm(`${localization.alert.deleteUser} ${user?.name}`)) {
-      deleteUser.mutate(user?.id);
+      deleteUser.mutate(user.id);
     }
   };
 
@@ -56,16 +57,22 @@ export const UserEditor = ({ catalogId, user, type }: UserEditorProps) => {
   const [updatedUserList, setUpdatedUserList] = useState<AssignedUser[]>([]);
   const [newUser, setNewUser] = useState<AssignedUser>(newUserTemplate);
 
-  const handleUpdateUser = (userId: string) => {
+  const handleUpdateUser = (userId: string | undefined) => {
+    if (!userId) return;
     const updatedUser = updatedUserList.find((user) => user?.id === userId);
-    const dbUser: AssignedUser = getUsers.users.find(
+    const dbUser: AssignedUser | undefined = getUsers.users.find(
       (user: AssignedUser) => user?.id === userId,
     );
-    const diff = dbUser && updatedUser ? compare(dbUser, updatedUser) : null;
+    if (!dbUser || !updatedUser) {
+      alert(localization.alert.noChanges);
+      return;
+    }
 
-    if (diff) {
+    const diff = compare(dbUser, updatedUser);
+
+    if (diff.length > 0) {
       updateUser
-        .mutateAsync({ beforeUpdateUser: dbUser, updatedUser: updatedUser })
+        .mutateAsync({ beforeUpdateUser: dbUser, updatedUser })
         .then(() => {
           alert(localization.alert.success);
         })
@@ -78,11 +85,12 @@ export const UserEditor = ({ catalogId, user, type }: UserEditorProps) => {
   };
 
   const updateUserState = (
-    userId: string,
+    userId: string | undefined,
     newName?: string,
     newEmail?: string,
     newTelephoneNumber?: string,
   ) => {
+    if (!userId) return;
     const updatedUserListIndex = updatedUserList.findIndex(
       (user) => user?.id === userId,
     );
@@ -126,7 +134,7 @@ export const UserEditor = ({ catalogId, user, type }: UserEditorProps) => {
         <Textfield
           error={
             textRegex.test(
-              (findUserById(user?.id) || user)?.name || newUser.name,
+              (findUserById(user?.id) || user)?.name ?? newUser.name ?? "",
             )
               ? null
               : localization.validation.invalidValue
@@ -148,7 +156,7 @@ export const UserEditor = ({ catalogId, user, type }: UserEditorProps) => {
         <Textfield
           error={
             emailRegex.test(
-              (findUserById(user?.id) || user)?.email || newUser.email,
+              (findUserById(user?.id) || user)?.email ?? newUser.email ?? "",
             )
               ? null
               : localization.validation.invalidValue
@@ -185,7 +193,10 @@ export const UserEditor = ({ catalogId, user, type }: UserEditorProps) => {
             {localization.button.cancel}
           </Button>
         ) : (
-          <Button data-color="danger" onClick={() => handleDeleteUser(user)}>
+          <Button
+            data-color="danger"
+            onClick={() => user && handleDeleteUser(user)}
+          >
             {localization.button.delete}
           </Button>
         )}

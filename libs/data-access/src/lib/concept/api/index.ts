@@ -248,7 +248,7 @@ export const getPublishedRelatedConcepts = async (
 ): Promise<RelatedConcept[]> => {
   if (!hasRelatedConcepts(concept)) return [];
 
-  const relatedConceptsUris = [];
+  const relatedConceptsUris: (string | undefined)[] = [];
 
   if (concept.begrepsRelasjon)
     relatedConceptsUris.push(

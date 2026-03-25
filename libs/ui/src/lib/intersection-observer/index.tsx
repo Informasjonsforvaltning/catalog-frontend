@@ -46,7 +46,7 @@ export const useIntersectionObserver = ({
     const observer = new IntersectionObserver(
       (entries) => {
         let activeSectionIntersecting = false;
-        let sectionToActive = null;
+        let sectionToActive: string | null = null;
         entries.forEach((entry) => {
           if (entry.isIntersecting && activeSection === entry.target.id) {
             activeSectionIntersecting = true;

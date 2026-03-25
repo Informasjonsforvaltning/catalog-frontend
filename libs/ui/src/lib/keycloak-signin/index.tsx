@@ -9,14 +9,14 @@ import { useEffect } from "react";
 const KeycloakSignin = () => {
   const pathName = usePathname();
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl");
+  const callbackUrl = searchParams?.get("callbackUrl");
 
   useEffect(() => {
     signIn(
       "keycloak",
       callbackUrl
         ? { callbackUrl }
-        : { callbackUrl: pathName.includes("auth") ? "/" : undefined },
+        : { callbackUrl: pathName?.includes("auth") ? "/" : undefined },
     );
   }, []);
 
