@@ -102,8 +102,8 @@
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
     "@types/react-is": "19.2.0",
-    "@typescript-eslint/eslint-plugin": "^8.57.1",
-    "@typescript-eslint/parser": "8.57.1",
+    "@typescript-eslint/eslint-plugin": "^8.57.2",
+    "@typescript-eslint/parser": "8.57.2",
     "babel-jest": "^30.3.0",
     "eslint": "^9.39.2",
     "eslint-config-next": "16.2.1",
@@ -126,7 +126,7 @@
     "ts-jest": "^29.4.6",
     "ts-node": "10.9.2",
     "typescript": "5.9.3",
-    "typescript-eslint": "^8.57.1"
+    "typescript-eslint": "^8.57.2"
   },
   "resolutions": {
     "lodash": "^4.17.23",
