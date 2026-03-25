@@ -2,7 +2,10 @@ import { deleteService } from "@catalog-frontend/data-access";
 import { withValidSessionForApi } from "@catalog-frontend/utils";
 import { NextRequest } from "next/server";
 
-export const DELETE = async (req: NextRequest, props: { params: any }) => {
+export const DELETE = async (
+  _: NextRequest,
+  props: { params: Promise<{ catalogId: string; serviceId: string }> },
+) => {
   const params = await props.params;
   return withValidSessionForApi(async (session) => {
     const { catalogId, serviceId } = params;

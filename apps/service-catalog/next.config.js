@@ -16,9 +16,6 @@ const nextConfig = {
       },
     },
   },
-  typescript: {
-    ignoreBuildErrors: true,
-  },
 };
 
 module.exports = withNx(nextConfig);
