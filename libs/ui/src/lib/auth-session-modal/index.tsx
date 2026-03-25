@@ -39,7 +39,7 @@ export const AuthSessionModal = ({
   };
 
   const handleLoginClick = () => {
-    if (pathName.includes(signInPath)) {
+    if (pathName?.includes(signInPath)) {
       return (window.location.href = signInPath);
     } else {
       return router.push(`${signInPath}?callbackUrl=${window.location.href}`);

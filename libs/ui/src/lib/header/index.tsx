@@ -93,7 +93,8 @@ const Header: FC<HeaderProps> = ({
     ],
   ];
 
-  const { catalogId } = useParams();
+  const params = useParams();
+  const catalogId = params?.catalogId;
   const { data: session } = useSession();
   const userDisplayName = session?.user?.name;
   const accessToken = (session as any)?.accessToken;

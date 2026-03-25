@@ -28,8 +28,9 @@ interface StateProviderProps {
 const AdminContextProvider = ({ children }: StateProviderProps) => {
   const [state, dispatch] = useReducer(reducer, DefaultAdminState);
 
-  const value = {
-    state,
+  // Immer's produce makes the state deeply readonly, but consumers need mutable AdminState
+  const value: ContextProps = {
+    state: state as AdminState,
     dispatch,
   };
 

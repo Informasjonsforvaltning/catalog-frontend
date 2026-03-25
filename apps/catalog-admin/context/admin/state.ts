@@ -11,7 +11,7 @@ export interface AdminState {
   updatedCodes?: Record<string, Code[]>;
 }
 
-export const DefaultAdminState = {
+export const DefaultAdminState: AdminState = {
   backgroundColor: "#FFFFFF",
   fontColor: "#2D3741",
   logo: null,
@@ -19,5 +19,5 @@ export const DefaultAdminState = {
   showUserEditor: false,
   showInternalFieldEditor: false,
   showCodeListEditor: false,
-  updatedCodes: null,
+  updatedCodes: undefined,
 };

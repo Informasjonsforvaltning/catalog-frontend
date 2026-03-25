@@ -11,7 +11,7 @@ describe("ImageUploader", () => {
     const queryClient = new QueryClient();
     const { baseElement } = render(
       <QueryClientProvider client={queryClient}>
-        <ImageUploader />
+        <ImageUploader catalogId="123456789" />
       </QueryClientProvider>,
     );
     expect(baseElement).toBeTruthy();

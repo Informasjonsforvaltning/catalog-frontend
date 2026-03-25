@@ -28,9 +28,9 @@ export const ColorPicker = ({ catalogId, type }: ColorPicker) => {
 
   useEffect(() => {
     if (type === "background") {
-      setInputColor(backgroundColor);
+      setInputColor(backgroundColor ?? "");
     } else {
-      setInputColor(fontColor);
+      setInputColor(fontColor ?? "");
     }
   }, []);
 
@@ -54,8 +54,8 @@ export const ColorPicker = ({ catalogId, type }: ColorPicker) => {
       dbDesign?.fontColor !== undefined &&
       type === "background"
     ) {
-      setInputColor(dbDesign?.backgroundColor);
-      setIsValidInput(colorRegex.test(dbDesign?.backgroundColor));
+      setInputColor(dbDesign?.backgroundColor ?? "");
+      setIsValidInput(colorRegex.test(dbDesign?.backgroundColor ?? ""));
     }
 
     if (
