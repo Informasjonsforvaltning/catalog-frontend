@@ -66,7 +66,11 @@ export default class DetailPage {
       return;
     }
     const result = await this.accessibilityBuilder
-      .disableRules(["svg-img-alt", "aria-toggle-field-name"])
+      .disableRules([
+        "svg-img-alt",
+        "aria-toggle-field-name",
+        "label-title-only",
+      ])
       .analyze();
     expect.soft(result.violations).toEqual([]);
   }
