@@ -252,11 +252,6 @@ export const ConceptPageClient = ({
           readOnly={isPublished || !hasWritePermission || !isValid}
           checked={isPublished}
           onChange={handleOnChangePublished}
-          aria-label={
-            isPublished
-              ? localization.publicationState.published
-              : localization.publicationState.unpublished
-          }
           label={
             isPublished
               ? localization.publicationState.published

@@ -197,7 +197,10 @@ const attemptToParseCsvFile = (text: string): Promise<ConceptImport[]> => {
 export const useImportRdf = (catalogId: string) => {
   return useMutation({
     mutationKey: ["import-Concepts-RDF"],
-    mutationFn: async () => {
+    mutationFn: async (_props: {
+      fileContent: string;
+      contentType: string;
+    }) => {
       if (!validOrganizationNumber(catalogId)) {
         return Promise.reject("Invalid organization number");
       }

@@ -8,8 +8,8 @@ import { withValidSessionForApi } from "@catalog-frontend/utils";
 import { NextRequest } from "next/server";
 
 export const GET = async (
-  req: NextRequest,
-  props: { params: Promise<{ slug: string }> },
+  _: NextRequest,
+  props: { params: Promise<{ slug: string[] }> },
 ) => {
   const params = await props.params;
   return await withValidSessionForApi(async (session) => {
@@ -46,7 +46,7 @@ export const GET = async (
 
 export const POST = async (
   req: NextRequest,
-  props: { params: Promise<{ slug: string }> },
+  props: { params: Promise<{ slug: string[] }> },
 ) => {
   const params = await props.params;
   return await withValidSessionForApi(async (session) => {
@@ -83,7 +83,7 @@ export const POST = async (
 
 export const PUT = async (
   req: NextRequest,
-  props: { params: Promise<{ slug: string }> },
+  props: { params: Promise<{ slug: string[] }> },
 ) => {
   const params = await props.params;
   return await withValidSessionForApi(async (session) => {
@@ -121,8 +121,8 @@ export const PUT = async (
 };
 
 export const DELETE = async (
-  req: NextRequest,
-  props: { params: Promise<{ slug: string }> },
+  _: NextRequest,
+  props: { params: Promise<{ slug: string[] }> },
 ) => {
   const params = await props.params;
   return await withValidSessionForApi(async (session) => {

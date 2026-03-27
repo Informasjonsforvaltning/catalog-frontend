@@ -4,7 +4,7 @@ import { NextRequest } from "next/server";
 
 export const GET = async (
   req: NextRequest,
-  props: { params: Promise<{ slug: string }> },
+  props: { params: Promise<{ slug: string[] }> },
 ) => {
   const params = await props.params;
   return await withValidSessionForApi(async (session) => {

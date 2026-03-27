@@ -22,7 +22,6 @@ export const RecursiveCheckbox = (props: Props) => {
         onChange={() => onCheck(node.value)}
         value={node.value}
         label={node.label}
-        aria-label={node.label}
       />
 
       {checked && Boolean(node.children?.length) && (
