@@ -257,6 +257,11 @@ export const ConceptPageClient = ({
               ? localization.publicationState.published
               : localization.publicationState.unpublished
           }
+          title={
+            isPublished
+              ? localization.publicationState.published
+              : localization.publicationState.unpublished
+          }
         />
         <div className={classes.greyFont}>
           {isPublished
