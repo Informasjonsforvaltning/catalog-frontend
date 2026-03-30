@@ -35,7 +35,7 @@ import {
   Skeleton,
   Textfield,
 } from "@digdir/designsystemet-react";
-import { FastField, FieldArray, Formik } from "formik";
+import { FastField, FieldArray, Formik, getIn } from "formik";
 import styles from "./distributions.module.scss";
 import { distributionTemplate } from "../../utils/dataset-initial-values";
 import {
@@ -917,7 +917,7 @@ export const DistributionModal = ({
                               }}
                               data-size="sm"
                               virtual
-                              error={errors?.rights?.type}
+                              error={getIn(errors, "rights.type")}
                             >
                               <Combobox.Option key="right.type" value="">
                                 {localization.none}
