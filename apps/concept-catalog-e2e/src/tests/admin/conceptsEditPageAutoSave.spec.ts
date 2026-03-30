@@ -285,6 +285,8 @@ runTestAsAdmin(
   "should auto-save relation modal data and show restore dialog",
   async ({ page, conceptsPage, playwright }) => {
     const concept = await createRandomConcept(playwright);
+    const relationConcept = await createRandomConcept(playwright);
+    const relationTermNb = relationConcept.anbefaltTerm?.navn.nb as string;
     const newTerm = {
       nb: uniqueString("new_term_nb"),
       nn: uniqueString("new_term_nn"),
@@ -309,26 +311,21 @@ runTestAsAdmin(
     // Open relation modal
     await editPage.clickAddRelation();
 
-    // Fill in the relation form
-    await editPage.page
-      .getByRole("radio", { name: "Publisert begrep på data.norge.no" })
-      .click();
+    // Search for the internal concept by its unique term
     await editPage.page
       .getByRole("group", { name: "Relatert begrep" })
       .getByRole("combobox")
       .click();
-    // Wait for search input to be visible
     const searchInput = editPage.page
       .getByRole("group", { name: "Relatert begrep" })
       .getByLabel("Søk begrep");
     await searchInput.waitFor({ state: "visible" });
-    await searchInput.fill("test");
-    // Wait for search results to appear
+    await searchInput.fill(relationTermNb);
     await editPage.page
-      .getByLabel("Test status")
+      .getByLabel(relationTermNb)
       .first()
       .waitFor({ state: "visible" });
-    await editPage.page.getByLabel("Test status").first().click();
+    await editPage.page.getByLabel(relationTermNb).first().click();
     await editPage.page.getByRole("combobox", { name: /Relasjon/ }).click();
     await editPage.page.getByRole("option", { name: "Se også" }).click();
     await editPage.waitForRelationAutoSaveToComplete();
@@ -341,14 +338,13 @@ runTestAsAdmin(
     await editPage.clickRestoreButton();
 
     // Wait for the relations section to load and verify the relation was restored
-    // The relation table fetches concept details asynchronously
     const relationsSection = editPage.page.getByRole("heading", {
       name: "Relasjoner",
     });
     await relationsSection.scrollIntoViewIfNeeded();
 
-    // Verify the relation was added - "Test status" is the concept title
-    await expect(editPage.page.getByText("Test status")).toBeVisible();
+    // Verify the relation was added using the internal concept's term
+    await expect(editPage.page.getByText(relationTermNb)).toBeVisible();
   },
 );
 
