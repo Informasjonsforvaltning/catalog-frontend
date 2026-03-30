@@ -107,7 +107,11 @@ export const AccessRightsDetails = ({ dataset, language }: Props) => {
                             </Link>
                           </Table.Cell>
                           <Table.Cell>
-                            {localization.datasetForm.fieldLabel[item?.type]}
+                            {
+                              localization.datasetForm.fieldLabel[
+                                item?.type as keyof typeof localization.datasetForm.fieldLabel
+                              ]
+                            }
                           </Table.Cell>
                         </Table.Row>
                       ),

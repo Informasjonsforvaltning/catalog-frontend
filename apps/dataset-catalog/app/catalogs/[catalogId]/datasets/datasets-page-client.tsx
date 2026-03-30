@@ -256,7 +256,11 @@ const DatasetsPageClient = ({
                 removeFilter(filter, "status");
               }}
             >
-              {localization.datasetForm.filter[filter]}
+              {
+                localization.datasetForm.filter[
+                  filter as keyof typeof localization.datasetForm.filter
+                ]
+              }
             </Chip.Removable>
           ))}
           {filterPublicationState?.map((filter, index) => (
