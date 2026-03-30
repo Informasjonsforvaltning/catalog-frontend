@@ -126,7 +126,7 @@ const ChangeRequestDetailsPage = withReadProtectedPage(
     const allowEdit =
       hasWritePermission ||
       (changeRequest.proposedBy &&
-        session.user.id === changeRequest.proposedBy.id);
+        session.user?.id === changeRequest.proposedBy.id);
 
     return (
       <>

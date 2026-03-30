@@ -8,7 +8,7 @@ export const getParentPath = (
   if (code.parentID) {
     const parent = codes?.find((match) => match.id === code.parentID);
     if (parent) {
-      path.push(parent.name.nb);
+      path.push(String(parent.name.nb ?? ""));
       getParentPath(parent, codes, path);
     }
   }

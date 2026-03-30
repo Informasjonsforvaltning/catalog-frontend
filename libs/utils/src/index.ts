@@ -1,3 +1,4 @@
+/// <reference path="./types/next-auth.d.ts" />
 export * from "./lib/auth/actions";
 export * from "./lib/auth/auth-options";
 export * from "./lib/auth/helpers";

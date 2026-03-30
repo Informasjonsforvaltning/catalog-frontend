@@ -28,7 +28,7 @@ export const CatalogLayout = ({
 }: CatalogLayoutProps) => {
   const { catalogId } = useParams();
   const { data: design } = useGetCatalogDesign(
-    catalogId?.toString(),
+    catalogId?.toString() ?? "",
     catalogAdminServiceUrl,
   );
 
