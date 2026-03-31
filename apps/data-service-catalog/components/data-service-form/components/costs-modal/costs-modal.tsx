@@ -133,6 +133,7 @@ export const CostsModal = ({
                           helpText={
                             localization.dataServiceForm.helptext.costValue
                           }
+                          tagColor="info"
                         >
                           {localization.dataServiceForm.fieldLabel.costValue}
                         </TitleWithHelpTextAndTag>
@@ -157,6 +158,7 @@ export const CostsModal = ({
                             }
                             data-size="sm"
                             disabled={!isNumber(values?.value)}
+                            hideClearButton
                           >
                             {currencies &&
                               currencies.map((currencyRef, i) => (
@@ -207,6 +209,7 @@ export const CostsModal = ({
                             localization.dataServiceForm.helptext
                               .costDocumentation
                           }
+                          tagColor="info"
                         >
                           {
                             localization.dataServiceForm.fieldLabel
@@ -266,6 +269,7 @@ export const CostsModal = ({
                             localization.dataServiceForm.helptext
                               .costDescription
                           }
+                          tagColor="info"
                         >
                           {
                             localization.dataServiceForm.fieldLabel
