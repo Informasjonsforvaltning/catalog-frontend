@@ -4,7 +4,6 @@
     "outDir": "../../dist/out-tsc",
     "module": "commonjs",
     "types": ["node", "playwright"],
-    "esModuleInterop": true,
     "strict": true
   },
   "include": ["src/**/*.ts"]
