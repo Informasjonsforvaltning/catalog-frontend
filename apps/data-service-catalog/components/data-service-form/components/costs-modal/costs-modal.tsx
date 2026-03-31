@@ -158,6 +158,7 @@ export const CostsModal = ({
                             }
                             data-size="sm"
                             disabled={!isNumber(values?.value)}
+                            hideClearButton
                           >
                             {currencies &&
                               currencies.map((currencyRef, i) => (
