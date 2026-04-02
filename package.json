@@ -121,7 +121,7 @@
     "typescript-eslint": "^8.58.0"
   },
   "resolutions": {
-    "lodash-es": "^4.17.23",
+    "lodash-es": "^4.18.1",
     "mdast-util-to-hast": "^13.2.1",
     "serialize-javascript": "^7.0.5",
     "svgo": "^3.3.3",
