@@ -8387,7 +8387,7 @@ __metadata:
     next-auth: "npm:^4.24.13"
     nuqs: "npm:^2.8.9"
     nx: "npm:22.6.4"
-    playwright-core: "npm:^1.58.2"
+    playwright-core: "npm:^1.59.1"
     playwright-ctrf-json-reporter: "npm:^0.0.29"
     prettier: "npm:3.8.1"
     react: "npm:19.2.4"
@@ -15700,12 +15700,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"playwright-core@npm:1.58.2, playwright-core@npm:^1.58.2":
+"playwright-core@npm:1.58.2":
   version: 1.58.2
   resolution: "playwright-core@npm:1.58.2"
   bin:
     playwright-core: cli.js
   checksum: 10/8a98fcf122167e8703d525db2252de0e3da4ab9110ab6ea9951247e52d846310eb25ea2c805e1b7ccb54b4010c44e5adc3a76aae6da02f34324ccc3e76683bb1
+  languageName: node
+  linkType: hard
+
+"playwright-core@npm:^1.59.1":
+  version: 1.59.1
+  resolution: "playwright-core@npm:1.59.1"
+  bin:
+    playwright-core: cli.js
+  checksum: 10/d27857a6701587c2a9bfa26fed9a5d8c617a392299b99b187f2ddc198d012a1e296449806bc907220debea938152677e8b4d91d304ed00645f762f778de3abec
   languageName: node
   linkType: hard
 
