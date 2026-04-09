@@ -19,6 +19,17 @@ export const formatISO = (
   return d.toLocaleString("no-NO", options);
 };
 
+export const formatDateNoToISO = (value: string): string | undefined => {
+  if (!value) return undefined;
+  const trimmed = value.trim();
+  let date = DateTime.fromFormat(trimmed, "dd.MM.yyyy");
+  if (!date.isValid) {
+    date = DateTime.fromFormat(trimmed, "dd-MM-yyyy");
+  }
+  // allow pasting of iso formats?
+  return date.isValid ? date.toFormat("yyyy-MM-dd") : undefined;
+};
+
 export const dateStringToDate = (dateString: string) => {
   const dateStringTimestamp = Date.parse(dateString);
   const date = new Date(dateStringTimestamp);

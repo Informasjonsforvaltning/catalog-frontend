@@ -7,6 +7,7 @@ export * from "./lib/center-container";
 export * from "./lib/checkbox-group-filter";
 export * from "./lib/concept-combobox";
 export * from "./lib/confirm-modal";
+export * from "./lib/date-picker-with-paste";
 export * from "./lib/details-page-layout";
 export * from "./lib/dialog-actions";
 export * from "./lib/divider-line";
