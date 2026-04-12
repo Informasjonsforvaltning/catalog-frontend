@@ -57,7 +57,7 @@
     "react": "19.2.4",
     "react-arborist": "^3.4.3",
     "react-dom": "19.2.4",
-    "react-is": "19.2.4",
+    "react-is": "19.2.5",
     "react-localization": "^2.0.6",
     "react-markdown": "^10.1.0",
     "react-papaparse": "^4.4.0",
