@@ -38,7 +38,7 @@
     "@digdir/designsystemet-css": "1.11.1",
     "@digdir/designsystemet-react": "1.11.1",
     "@fellesdatakatalog/icons": "^0.8.5",
-    "@navikt/aksel-icons": "^8.5.2",
+    "@navikt/aksel-icons": "^8.9.1",
     "@tanstack/react-query": "^5.95.2",
     "classnames": "^2.5.1",
     "fast-json-patch": "^3.1.1",

@@ -4070,10 +4070,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aksel-icons@npm:^8.2.0, @navikt/aksel-icons@npm:^8.5.2":
+"@navikt/aksel-icons@npm:^8.2.0":
   version: 8.8.0
   resolution: "@navikt/aksel-icons@npm:8.8.0"
   checksum: 10/bd0af050899cf925689704815ad10ade00006a3270a3195a63b5ce964db250baf5bac0b926e60de6923b859b4a9ea7f49a8a8bd96b8a2886ff64bf77ef573740
+  languageName: node
+  linkType: hard
+
+"@navikt/aksel-icons@npm:^8.9.1":
+  version: 8.9.1
+  resolution: "@navikt/aksel-icons@npm:8.9.1"
+  checksum: 10/bb27d79143d76b73244a96f908fc9106e304445850cacb8742163e4e6d08b54772834b26110b734b03a7fc253edd34600cc7726b924f63c7785557668e699c99
   languageName: node
   linkType: hard
 
@@ -8324,7 +8331,7 @@ __metadata:
     "@fellesdatakatalog/icons": "npm:^0.8.5"
     "@graphql-codegen/cli": "npm:^6.2.1"
     "@graphql-codegen/typescript-react-query": "npm:^6.1.2"
-    "@navikt/aksel-icons": "npm:^8.5.2"
+    "@navikt/aksel-icons": "npm:^8.9.1"
     "@nx/devkit": "npm:22.6.5"
     "@nx/eslint": "npm:22.6.5"
     "@nx/eslint-plugin": "npm:22.6.5"
