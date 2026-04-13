@@ -1017,12 +1017,6 @@ export default class DatasetEditPage {
   }
 
   async expectNoRestoreDialog() {
-    // Wait for the form to fully load (autosaver checks localStorage on mount)
-    await this.page
-      .getByRole("group", { name: /Tittel/ })
-      .first()
-      .waitFor({ state: "visible" });
-    // Assert no restore dialog appeared
     await expect(this.page.getByRole("dialog")).not.toBeVisible();
   }
 
