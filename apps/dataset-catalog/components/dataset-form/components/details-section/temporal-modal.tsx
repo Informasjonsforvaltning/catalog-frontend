@@ -5,6 +5,7 @@ import {
   EditButton,
   FormHeading,
   DialogActions,
+  DatePickerPasteWrapper,
 } from "@catalog-frontend/ui";
 import {
   formatDateToDDMMYYYY,
@@ -168,10 +169,33 @@ const FieldModal = ({
           >
             {({ isSubmitting, submitForm, values, dirty, errors }) => {
               useEffect(() => {
+                //if (dirty && modalRef.current?.open) {
                 if (dirty && modalRef.current?.open) {
                   onChange({ ...values });
                 }
               }, [values, dirty]);
+
+              const setStartDate = (
+                event: React.ChangeEvent<HTMLInputElement>, // TODO: can this be typed better? This is the type for the onChange event from the DatePickerPasteWrapper, but it could also be a synthetic event that we create when a date is pasted, which has the same shape as a normal onChange event from an input field, but with the value already formatted to ISO string.
+              ) => {
+                dirty = true;
+                values.startDate = event.target.value;
+                console.log(
+                  "Formik values after setting start date: ",
+                  values.startDate,
+                );
+                //focusNextElement();
+                // TODO: trigger re-render. Is triggered when focus changes, but inconsistent
+              };
+
+              const setEndDate = (
+                event: React.ChangeEvent<HTMLInputElement>, // TODO: can this be typed better? This is the type for the onChange event from the DatePickerPasteWrapper, but it could also be a synthetic event that we create when a date is pasted, which has the same shape as a normal onChange event from an input field, but with the value already formatted to ISO string.
+              ) => {
+                dirty = true;
+                values.endDate = event.target.value;
+                //focusNextElement();
+                console.log("End date: ", values.endDate);
+              };
 
               return (
                 <>
@@ -180,28 +204,30 @@ const FieldModal = ({
                       ? `${localization.edit} `
                       : `${localization.add} `}
                   </Heading>
-
                   <div className={cn(styles.modalContent, styles.calendar)}>
-                    <FastField
-                      as={Textfield}
-                      data-size="sm"
-                      label={localization.from}
-                      type="date"
-                      name="startDate"
-                      error={errors.startDate}
-                    />
+                    <DatePickerPasteWrapper setValue={setStartDate}>
+                      <FastField
+                        as={Textfield}
+                        data-size="sm"
+                        label={localization.from}
+                        type="date"
+                        name="startDate"
+                        error={errors.startDate}
+                      />
+                    </DatePickerPasteWrapper>
 
                     <MinusIcon title="minus-icon" fontSize="1rem" />
-
-                    <FastField
-                      as={Textfield}
-                      data-size="sm"
-                      label={localization.to}
-                      type="date"
-                      name="endDate"
-                      error={errors.endDate}
-                      min={values.startDate}
-                    />
+                    <DatePickerPasteWrapper setValue={setEndDate}>
+                      <FastField
+                        as={Textfield}
+                        data-size="sm"
+                        label={localization.to}
+                        type="date"
+                        name="endDate"
+                        error={errors.endDate}
+                        min={values?.startDate}
+                      />
+                    </DatePickerPasteWrapper>
                   </div>
 
                   <DialogActions>
@@ -236,4 +262,27 @@ const FieldModal = ({
       </Dialog.TriggerContext>
     </>
   );
+};
+
+// experimental: generated method to focus next element in the DOM, used in modal
+const focusNextElement = () => {
+  const FOCUSABLE_SELECTORS = [
+    "a[href]",
+    "button:not([disabled])",
+    "input:not([disabled])",
+    "select:not([disabled])",
+    "textarea:not([disabled])",
+    '[tabindex]:not([tabindex="-1"])',
+    '[contenteditable]:not([contenteditable="false"])',
+  ].join(", ");
+  // Get all focusable elements in the document
+  const elements = Array.from(
+    document.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTORS),
+  ).filter((el) => el.offsetWidth > 0 || el.offsetHeight > 0); // Ensure elements are visible
+
+  const currentIndex = elements.indexOf(document.activeElement as HTMLElement);
+
+  // Move to the next element, or wrap around to the first
+  const nextIndex = (currentIndex + 1) % elements.length;
+  elements[nextIndex]?.focus();
 };
