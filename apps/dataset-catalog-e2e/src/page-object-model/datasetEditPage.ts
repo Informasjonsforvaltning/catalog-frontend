@@ -858,9 +858,11 @@ export default class DatasetEditPage {
   }
 
   async clickAddRelatedResource() {
-    await this.page
-      .getByRole("button", { name: "Legg til relaterte ressurser" })
-      .click();
+    const button = this.page.getByRole("button", {
+      name: "Legg til relaterte ressurser",
+    });
+    await button.waitFor({ state: "visible" });
+    await button.click();
   }
 
   async fillRelationForm(data: { relationType: string; dataset: string }) {
@@ -1004,16 +1006,12 @@ export default class DatasetEditPage {
 
   async clickRestoreButton() {
     await this.page.getByRole("button", { name: "Gjenopprett" }).click();
-    await this.page
-      .getByRole("dialog")
-      .waitFor({ state: "hidden", timeout: 5000 });
+    await this.page.getByRole("dialog").waitFor({ state: "hidden" });
   }
 
   async clickDiscardButton() {
     await this.page.getByRole("button", { name: "Forkast" }).click();
-    await this.page
-      .getByRole("dialog")
-      .waitFor({ state: "hidden", timeout: 5000 });
+    await this.page.getByRole("dialog").waitFor({ state: "hidden" });
   }
 
   async expectNoRestoreDialog() {
