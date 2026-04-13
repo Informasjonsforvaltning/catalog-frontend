@@ -882,6 +882,7 @@ export default class DatasetEditPage {
     await option.waitFor({ state: "visible", timeout: 5000 });
     await option.click();
     await dialog.getByRole("button", { name: "Legg til" }).click();
+    await dialog.waitFor({ state: "hidden", timeout: 5000 });
   }
 
   async fillRelatedResourceForm(data: {
@@ -898,6 +899,7 @@ export default class DatasetEditPage {
     );
     await dialog.getByLabel("Lenke").fill(data.uri);
     await dialog.getByRole("button", { name: "Legg til" }).click();
+    await dialog.waitFor({ state: "hidden", timeout: 5000 });
   }
 
   // Concept section
@@ -1015,9 +1017,13 @@ export default class DatasetEditPage {
   }
 
   async expectNoRestoreDialog() {
+    // Wait for the form to fully load (autosaver checks localStorage on mount)
     await this.page
-      .getByRole("dialog")
-      .waitFor({ state: "hidden", timeout: 5000 });
+      .getByRole("group", { name: /Tittel/ })
+      .first()
+      .waitFor({ state: "visible" });
+    // Assert no restore dialog appeared
+    await expect(this.page.getByRole("dialog")).not.toBeVisible();
   }
 
   async waitForAutoSaveToComplete() {

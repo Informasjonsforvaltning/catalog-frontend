@@ -136,8 +136,8 @@ runTestAsAdmin(
     await detailPage.expectDeleteConfirmationDialog(dataset.title.nb as string);
     await detailPage.confirmDelete();
 
-    // Verify we're back on the datasets page
-    await expect(datasetsPage.page).toHaveURL(
+    // Wait for navigation back to the datasets page
+    await datasetsPage.page.waitForURL(
       `/catalogs/${process.env.E2E_CATALOG_ID}/datasets`,
     );
 

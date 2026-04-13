@@ -82,6 +82,7 @@ export default class DatasetDetailPage {
 
   async confirmDelete() {
     await this.page.getByRole("button", { name: "Slett", exact: true }).click();
+    await this.page.getByRole("dialog").waitFor({ state: "hidden" });
   }
 
   async cancelDelete() {
