@@ -346,17 +346,20 @@ export const conceptSchema = ({
           }
 
           const tomDateTime = parseDateTime(value);
-          if (tomDateTime?.isValid) {
-            if (this.parent.gyldigFom === null) {
-              return true;
-            }
-            const fomDateTime = parseDateTime(this.parent.gyldigFom);
-            if (
-              fomDateTime &&
-              tomDateTime.toJSDate() >= fomDateTime?.toJSDate()
-            ) {
-              return true;
-            }
+          if (!tomDateTime?.isValid) {
+            return this.createError({
+              message: localization.conceptForm.validation.date,
+              path: this.path,
+            });
+          }
+
+          const fomDateTime = parseDateTime(this.parent.gyldigFom);
+          if (!fomDateTime?.isValid) {
+            return true;
+          }
+
+          if (tomDateTime.toJSDate() >= fomDateTime.toJSDate()) {
+            return true;
           }
 
           return this.createError({

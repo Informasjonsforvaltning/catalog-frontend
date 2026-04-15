@@ -622,3 +622,57 @@ runTestAsAdmin(
     ).not.toBeVisible();
   },
 );
+
+runTestAsAdmin(
+  "gyldigTom can be saved without gyldigFom (issue #1812)",
+  async ({ conceptsPage, playwright }) => {
+    const apiRequestContext = await playwright.request.newContext({
+      storageState: adminAuthFile,
+    });
+
+    const id = await createConcept(apiRequestContext, {
+      anbefaltTerm: {
+        navn: { nb: "Test gyldigTom uten gyldigFom", nn: "", en: "" },
+      },
+      definisjon: {
+        tekst: { nb: "Definisjon" },
+        kildebeskrivelse: { forholdTilKilde: "egendefinert", kilde: [] },
+      },
+      merknad: {},
+      tillattTerm: {},
+      frarådetTerm: {},
+      eksempel: {},
+      fagområde: {},
+      fagområdeKoder: [],
+      statusURI:
+        "http://publications.europa.eu/resource/authority/concept-status/DRAFT",
+      assignedUser: "",
+      versjonsnr: { major: 0, minor: 1, patch: 0 },
+      gyldigFom: null,
+      gyldigTom: null,
+    });
+
+    await conceptsPage.editPage.goto(id);
+
+    const saveButton = conceptsPage.page.getByRole("button", { name: "Lagre" });
+    await expect(saveButton).toBeVisible();
+
+    const gyldigFom = conceptsPage.page.getByLabel("Gyldig fra og med");
+    const gyldigTom = conceptsPage.page.getByLabel("Gyldig til og med");
+
+    await expect(gyldigFom).toHaveValue("");
+
+    await gyldigTom.fill("2299-01-01");
+    await gyldigTom.blur();
+
+    await expect(
+      conceptsPage.page.getByText("Dato er ikke gyldig"),
+    ).not.toBeVisible();
+
+    await saveButton.click();
+
+    await expect(
+      conceptsPage.page.getByText("Endringene ble lagret."),
+    ).toBeVisible();
+  },
+);
