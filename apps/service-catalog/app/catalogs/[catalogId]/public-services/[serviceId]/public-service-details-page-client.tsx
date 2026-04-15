@@ -12,6 +12,8 @@ import { DeleteServiceButton } from "../../../../../components/buttons";
 import PublishSwitch from "../../../../../components/publish-switch";
 import BasicServiceFormInfoCardItems from "../../../../../components/basic-form-info-card-items";
 import { useState } from "react";
+import { EnvelopeClosedIcon, LinkIcon, PhoneIcon } from "@navikt/aksel-icons";
+import { Link, Paragraph } from "@digdir/designsystemet-react";
 import styles from "./public-service-details-page.module.css";
 
 interface PublicServiceDetailsPageProps {
@@ -37,6 +39,7 @@ const PublicServiceDetailsPageClient = ({
 }: PublicServiceDetailsPageProps) => {
   const [language, setLanguage] = useState("nb");
   const status = statuses.find((item) => item.uri === service.status);
+  const contactPoint = service.contactPoints?.[0];
 
   const handleLanguageChange = (value: string) => {
     setLanguage(value);
@@ -89,6 +92,40 @@ const PublicServiceDetailsPageClient = ({
                 ? localization.publicationState.publishedInFDK
                 : localization.publicationState.unpublished}
             </p>
+          </InfoCard.Item>
+
+          <InfoCard.Item
+            title={localization.serviceCatalog.contactPoint}
+            headingColor="light"
+          >
+            <div className={styles.contactPoints}>
+              <Paragraph data-size="sm">
+                {getTranslateText(contactPoint?.category, language) ||
+                  localization.noName}
+              </Paragraph>
+
+              {contactPoint?.email && (
+                <Paragraph className={styles.contactPoint} data-size="sm">
+                  <EnvelopeClosedIcon />
+                  {contactPoint.email}
+                </Paragraph>
+              )}
+              {contactPoint?.telephone && (
+                <Paragraph className={styles.contactPoint} data-size="sm">
+                  <PhoneIcon />
+                  {contactPoint.telephone}
+                </Paragraph>
+              )}
+
+              {contactPoint?.contactPage && (
+                <Paragraph className={styles.contactPoint} data-size="sm">
+                  <LinkIcon />
+                  <Link href={contactPoint.contactPage}>
+                    {contactPoint.contactPage}
+                  </Link>
+                </Paragraph>
+              )}
+            </div>
           </InfoCard.Item>
         </InfoCard>
       </DetailsPageLayout.Right>
