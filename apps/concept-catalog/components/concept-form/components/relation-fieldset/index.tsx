@@ -123,17 +123,10 @@ export const RelationFieldset = ({
       enabled: Boolean(search),
     });
 
-  const relationTypeOptions = relationTypes
-    .map((item) => ({
-      label: localization.conceptForm.fieldLabel.relationTypes[item],
-      value: item,
-    }))
-    .filter((item) => {
-      if (values.relasjon === RelationTypeEnum.ASSOSIATIV) {
-        return item.value !== RelationTypeEnum.ASSOSIATIV;
-      }
-      return true;
-    });
+  const relationTypeOptions = relationTypes.map((item) => ({
+    label: localization.conceptForm.fieldLabel.relationTypes[item],
+    value: item,
+  }));
 
   const relationSubtypeOptions = relationSubtypes
     .filter((subtype) => {
