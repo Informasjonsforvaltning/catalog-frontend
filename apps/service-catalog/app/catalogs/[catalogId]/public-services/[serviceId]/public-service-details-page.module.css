@@ -7,3 +7,15 @@
   gap: 1rem;
   margin: 0em 0 1em 0;
 }
+
+.contactPoints {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-size-2);
+}
+
+.contactPoint {
+  display: flex;
+  gap: var(--ds-size-2);
+  align-items: center;
+}
