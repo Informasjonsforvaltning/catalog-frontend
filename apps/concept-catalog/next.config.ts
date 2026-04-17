@@ -1,16 +1,15 @@
-//@ts-check
-const path = require("path");
-const { withNx } = require("@nx/next/plugins/with-nx");
+import { join } from "node:path";
+import { withNx } from "@nx/next/plugins/with-nx";
+import type { NextConfig } from "next";
 
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+const nextConfig: NextConfig = {
   experimental: {
     serverActions: {
       bodySizeLimit: "10mb",
     },
   },
   turbopack: {
-    root: path.join(__dirname, "../.."),
+    root: join(__dirname, "../.."),
     rules: {
       "*.svg": {
         loaders: ["@svgr/webpack"],
@@ -34,4 +33,4 @@ const nextConfig = {
   },
 };
 
-module.exports = withNx(nextConfig);
+export default withNx(nextConfig);
