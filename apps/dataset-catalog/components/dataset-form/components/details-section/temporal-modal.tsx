@@ -1,6 +1,7 @@
 import { Dataset, DateRange } from "@catalog-frontend/types";
 import {
   AddButton,
+  DateInput,
   DeleteButton,
   EditButton,
   FormHeading,
@@ -11,13 +12,7 @@ import {
   localization,
   trimObjectWhitespace,
 } from "@catalog-frontend/utils";
-import {
-  Button,
-  Dialog,
-  Heading,
-  Table,
-  Textfield,
-} from "@digdir/designsystemet-react";
+import { Button, Dialog, Heading, Table } from "@digdir/designsystemet-react";
 import { FastField, FieldArray, Formik, useFormikContext } from "formik";
 import styles from "../../dataset-form.module.css";
 import { ReactNode, useEffect, useRef, useState } from "react";
@@ -183,10 +178,9 @@ const FieldModal = ({
 
                   <div className={cn(styles.modalContent, styles.calendar)}>
                     <FastField
-                      as={Textfield}
+                      as={DateInput}
                       data-size="sm"
                       label={localization.from}
-                      type="date"
                       name="startDate"
                       error={errors.startDate}
                     />
@@ -194,10 +188,9 @@ const FieldModal = ({
                     <MinusIcon title="minus-icon" fontSize="1rem" />
 
                     <FastField
-                      as={Textfield}
+                      as={DateInput}
                       data-size="sm"
                       label={localization.to}
-                      type="date"
                       name="endDate"
                       error={errors.endDate}
                       min={values.startDate}

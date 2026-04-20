@@ -4,9 +4,10 @@ import { forwardRef } from "react";
 import { FastField, FastFieldAttributes, FastFieldProps } from "formik";
 import { Textfield } from "@digdir/designsystemet-react";
 import { TextareaWithPrefix } from "../textarea-with-prefix";
+import { DateInput } from "../date-input";
 
 type FastFieldWithRefProps = {
-  as?: typeof Textfield | typeof TextareaWithPrefix;
+  as?: typeof Textfield | typeof TextareaWithPrefix | typeof DateInput;
   prefix?: string;
 } & FastFieldAttributes<any>;
 

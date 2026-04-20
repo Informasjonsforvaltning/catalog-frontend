@@ -2,6 +2,7 @@
 
 import {
   AddButton,
+  DateInput,
   FormikLanguageFieldset,
   TitleWithHelpTextAndTag,
   TextareaWithPrefix,
@@ -135,10 +136,9 @@ const FIELD_CONFIG = [
         </Fieldset.Legend>
         <FastFieldWithRef
           className={styles.calendar}
-          as={Textfield}
+          as={DateInput}
           ref={props.ref}
           name="modified"
-          type="date"
           data-size="sm"
         />
       </Fieldset>

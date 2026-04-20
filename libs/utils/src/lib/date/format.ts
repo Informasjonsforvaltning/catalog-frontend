@@ -73,3 +73,19 @@ export const formatDateToDDMMYYYY = (isoDate: string | undefined) => {
   const date = DateTime.fromISO(isoDate);
   return date.isValid ? date.toFormat("dd.MM.yyyy") : null;
 };
+
+// Native <input type="date"> requires ISO (yyyy-MM-dd) as its underlying value;
+export const parseNorwegianDateToISO = (value: string): string | null => {
+  if (!value) {
+    return null;
+  }
+
+  const trimmed = value.trim();
+  let date = DateTime.fromFormat(trimmed, "dd.MM.yyyy");
+
+  if (!date.isValid) {
+    date = DateTime.fromFormat(trimmed, "d.M.yyyy");
+  }
+
+  return date.isValid ? date.toFormat("yyyy-MM-dd") : null;
+};

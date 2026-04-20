@@ -1,4 +1,5 @@
 import {
+  DateInput,
   FieldsetDivider,
   FormikLanguageFieldset,
   TitleWithHelpTextAndTag,
@@ -142,9 +143,8 @@ export const AboutSection = ({
       <FieldsetDivider />
       <FastField
         style={{ width: "fit-content" }}
-        as={Textfield}
+        as={DateInput}
         data-size="sm"
-        type="date"
         name="issued"
         label={
           <TitleWithHelpTextAndTag
