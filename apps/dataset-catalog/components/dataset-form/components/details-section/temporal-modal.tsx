@@ -7,24 +7,20 @@ import {
   DialogActions,
 } from "@catalog-frontend/ui";
 import {
-  formatDateToDDMMYYYY,
+  formatFlexibleDate,
   localization,
+  toCanonicalFlexibleISO,
   trimObjectWhitespace,
 } from "@catalog-frontend/utils";
-import {
-  Button,
-  Dialog,
-  Heading,
-  Table,
-  Textfield,
-} from "@digdir/designsystemet-react";
-import { FastField, FieldArray, Formik, useFormikContext } from "formik";
+import { Button, Dialog, Heading, Table } from "@digdir/designsystemet-react";
+import { FieldArray, Formik, useFormikContext } from "formik";
 import styles from "../../dataset-form.module.css";
-import { ReactNode, useEffect, useRef, useState } from "react";
+import { ReactNode, useRef, useState } from "react";
 import { get, isEmpty } from "lodash";
 import { dateSchema } from "../../utils/validation-schema";
 import cn from "classnames";
 import { MinusIcon } from "@navikt/aksel-icons";
+import { DateFieldWithPicker } from "./date-field-with-picker";
 
 interface Props {
   label?: string | ReactNode;
@@ -35,7 +31,6 @@ interface ModalProps {
   type: "new" | "edit";
   onSuccess: (values: DateRange) => void;
   onCancel: () => void;
-  onChange: (values: DateRange) => void;
   template: DateRange;
 }
 
@@ -71,13 +66,11 @@ export const TemporalModal = ({ label }: Props) => {
                     <Table.Row key={`temporal-tableRow-${index}`}>
                       <Table.Cell>
                         {item?.startDate
-                          ? formatDateToDDMMYYYY(item.startDate)
+                          ? formatFlexibleDate(item.startDate)
                           : "-"}
                       </Table.Cell>
                       <Table.Cell>
-                        {item?.endDate
-                          ? formatDateToDDMMYYYY(item.endDate)
-                          : "-"}
+                        {item?.endDate ? formatFlexibleDate(item.endDate) : "-"}
                       </Table.Cell>
                       <Table.Cell>
                         <span className={styles.set}>
@@ -86,12 +79,13 @@ export const TemporalModal = ({ label }: Props) => {
                             type="edit"
                             onSuccess={(updatedItem: DateRange) => {
                               arrayHelpers.replace(index, updatedItem);
-                              setSnapshot([...(values.temporal ?? [])]);
+                              setSnapshot((prev) => {
+                                const next = [...prev];
+                                next[index] = updatedItem;
+                                return next;
+                              });
                             }}
                             onCancel={() => setFieldValue("temporal", snapshot)}
-                            onChange={(updatedItem: DateRange) =>
-                              arrayHelpers.replace(index, updatedItem)
-                            }
                           />
                           <DeleteButton
                             onClick={() => {
@@ -112,15 +106,15 @@ export const TemporalModal = ({ label }: Props) => {
               <FieldModal
                 template={{ startDate: "", endDate: "" }}
                 type="new"
-                onSuccess={() => setSnapshot([...(values.temporal ?? [])])}
-                onCancel={() => setFieldValue("temporal", snapshot)}
-                onChange={(updatedItem: DateRange) => {
+                onSuccess={(newItem: DateRange) => {
                   if (snapshot.length === (values.temporal?.length ?? 0)) {
-                    arrayHelpers.push(updatedItem);
+                    arrayHelpers.push(newItem);
                   } else {
-                    arrayHelpers.replace(snapshot.length, updatedItem);
+                    arrayHelpers.replace(snapshot.length, newItem);
                   }
+                  setSnapshot((prev) => [...prev, newItem]);
                 }}
+                onCancel={() => setFieldValue("temporal", snapshot)}
               />
             </div>
           </div>
@@ -130,15 +124,29 @@ export const TemporalModal = ({ label }: Props) => {
   );
 };
 
-const FieldModal = ({
-  template,
-  type,
-  onSuccess,
-  onCancel,
-  onChange,
-}: ModalProps) => {
-  const [submitted, setSubmitted] = useState(false);
+const canonicalIsoRegex = /^\d{4}(-\d{2}(-\d{2})?)?$/;
+const dateHint = "åååå / mm.åååå / dd.mm.åååå";
+
+const toDisplayForm = (value: string | undefined): string => {
+  if (!value) return "";
+  if (canonicalIsoRegex.test(value)) {
+    return formatFlexibleDate(value) ?? value;
+  }
+  return value;
+};
+
+const normalizeToCanonical = (value: string | undefined): string => {
+  if (!value) return "";
+  return toCanonicalFlexibleISO(value) ?? value;
+};
+
+const FieldModal = ({ template, type, onSuccess, onCancel }: ModalProps) => {
   const modalRef = useRef<HTMLDialogElement>(null);
+
+  const displayTemplate: DateRange = {
+    startDate: toDisplayForm(template.startDate),
+    endDate: toDisplayForm(template.endDate),
+  };
 
   return (
     <>
@@ -152,27 +160,24 @@ const FieldModal = ({
         </Dialog.Trigger>
         <Dialog ref={modalRef}>
           <Formik
-            initialValues={template}
+            initialValues={displayTemplate}
             enableReinitialize={true}
-            validateOnChange={submitted}
-            validateOnBlur={submitted}
+            validateOnChange={false}
+            validateOnBlur={false}
             validationSchema={dateSchema}
             onSubmit={(formValues, { setSubmitting, resetForm }) => {
               const trimmedValues = trimObjectWhitespace(formValues);
-              onSuccess(trimmedValues);
+              const normalized: DateRange = {
+                startDate: normalizeToCanonical(trimmedValues.startDate),
+                endDate: normalizeToCanonical(trimmedValues.endDate),
+              };
+              onSuccess(normalized);
               setSubmitting(false);
-              setSubmitted(true);
               resetForm();
               modalRef.current?.close();
             }}
           >
             {({ isSubmitting, submitForm, values, dirty, errors }) => {
-              useEffect(() => {
-                if (dirty && modalRef.current?.open) {
-                  onChange({ ...values });
-                }
-              }, [values, dirty]);
-
               return (
                 <>
                   <Heading data-size="xs">
@@ -182,25 +187,20 @@ const FieldModal = ({
                   </Heading>
 
                   <div className={cn(styles.modalContent, styles.calendar)}>
-                    <FastField
-                      as={Textfield}
-                      data-size="sm"
-                      label={localization.from}
-                      type="date"
+                    <DateFieldWithPicker
                       name="startDate"
+                      label={localization.from}
+                      description={dateHint}
                       error={errors.startDate}
                     />
 
                     <MinusIcon title="minus-icon" fontSize="1rem" />
 
-                    <FastField
-                      as={Textfield}
-                      data-size="sm"
-                      label={localization.to}
-                      type="date"
+                    <DateFieldWithPicker
                       name="endDate"
+                      label={localization.to}
+                      description={dateHint}
                       error={errors.endDate}
-                      min={values.startDate}
                     />
                   </div>
 

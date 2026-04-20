@@ -82,9 +82,58 @@
   display: flex;
   flex-direction: row;
   gap: 1rem;
+  align-items: flex-start;
   & > svg {
-    padding-top: 2.5rem;
+    padding-top: 4.5rem;
   }
+}
+
+.dateFieldWithPicker {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.dateFieldWithPicker
+  :global(
+    .ds-field-affixes:has(.ds-input[aria-invalid="true"]) .ds-field-affix
+  ) {
+  border-color: var(--dsc-input-accent-color--invalid);
+}
+
+.dateIconButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: var(--ds-border-radius-sm);
+  color: var(--ds-color-neutral-text-default);
+  cursor: pointer;
+}
+
+.dateIconButton:hover {
+  background: var(--ds-color-neutral-surface-hover);
+}
+
+.dateIconButton:focus-visible {
+  outline: 2px solid var(--ds-color-focus-inner);
+  outline-offset: 2px;
+}
+
+.hiddenDateInput {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .errorBorder {

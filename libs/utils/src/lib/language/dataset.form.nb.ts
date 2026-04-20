@@ -228,9 +228,13 @@ Dersom man velger en åpen lisens, vil datasettet bli merket med "Åpne data".`,
     distribution: "Distribusjon er påkrevd.",
     spatial: "Minst ett dekningsområde må velges.",
     frequency: "Oppdateringsfrekvens må velges.",
+    temporalDateFormat:
+      "Ugyldig datoformat. Bruk åååå, mm.åååå eller dd.mm.åååå.",
+    temporalDateOrder: "Sluttdato må være etter startdato.",
   },
   button: {
     addDate: "Legg til tidsperiode",
+    openDatePicker: "Åpne datovelger",
     addInformationModel: "Legg til informasjonsmodell",
     addStandard: "Legg til standard",
     addDistribution: "Legg til distribusjon",

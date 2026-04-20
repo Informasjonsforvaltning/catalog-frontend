@@ -314,6 +314,70 @@ runTestAsAdmin(
 );
 
 runTestAsAdmin(
+  "should accept temporal values with year and year-month precision",
+  async ({ datasetsPage, playwright }) => {
+    const dataset = await createRandomDataset(playwright);
+    const detailPage: DatasetDetailPage = datasetsPage.detailPage;
+    const editPage: DatasetEditPage = datasetsPage.editPage;
+
+    await detailPage.goto(process.env.E2E_CATALOG_ID as string, dataset.id);
+    await detailPage.clickEditButton();
+
+    await editPage.addPeriod("2023", "06.2024");
+    await editPage.addPeriod("15.06.2024", "2025");
+
+    await editPage.clickSaveButton();
+
+    await detailPage.goto(process.env.E2E_CATALOG_ID as string, dataset.id);
+    await detailPage.expectPeriod("2023", "06.2024");
+    await detailPage.expectPeriod("15.06.2024", "2025");
+  },
+);
+
+runTestAsAdmin(
+  "should reject invalid temporal input",
+  async ({ datasetsPage, playwright, page }) => {
+    const dataset = await createRandomDataset(playwright);
+    const detailPage: DatasetDetailPage = datasetsPage.detailPage;
+
+    await detailPage.goto(process.env.E2E_CATALOG_ID as string, dataset.id);
+    await detailPage.clickEditButton();
+
+    await page.getByRole("button", { name: "Legg til tidsperiode" }).click();
+    const dialog = page.getByRole("dialog");
+    await dialog.getByLabel("Fra").fill("2024-");
+    await dialog.getByLabel("Til").fill("2023");
+
+    const addButton = dialog.getByRole("button", { name: "Legg til" });
+    await addButton.click();
+
+    await expect(
+      dialog.getByText(
+        "Ugyldig datoformat. Bruk åååå, mm.åååå eller dd.mm.åååå.",
+      ),
+    ).toBeVisible();
+  },
+);
+
+runTestAsAdmin(
+  "should expose a date picker button inside each temporal input",
+  async ({ datasetsPage, playwright, page }) => {
+    const dataset = await createRandomDataset(playwright);
+    const detailPage: DatasetDetailPage = datasetsPage.detailPage;
+
+    await detailPage.goto(process.env.E2E_CATALOG_ID as string, dataset.id);
+    await detailPage.clickEditButton();
+
+    await page.getByRole("button", { name: "Legg til tidsperiode" }).click();
+    const dialog = page.getByRole("dialog");
+
+    await expect(
+      dialog.getByRole("button", { name: "Åpne datovelger" }),
+    ).toHaveCount(2);
+  },
+);
+
+runTestAsAdmin(
   "should edit dataset relations section",
   async ({ datasetsPage, playwright }) => {
     const dataset = await createRandomDataset(playwright);

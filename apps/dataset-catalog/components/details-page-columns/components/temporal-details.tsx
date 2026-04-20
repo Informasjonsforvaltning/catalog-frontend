@@ -1,5 +1,5 @@
 import { DateRange } from "@catalog-frontend/types";
-import { formatDate, localization } from "@catalog-frontend/utils";
+import { formatFlexibleDate, localization } from "@catalog-frontend/utils";
 import { Table } from "@digdir/designsystemet-react";
 import styles from "../details-columns.module.css";
 
@@ -22,23 +22,16 @@ export const TemporalDetails = ({ temporal }: Props) => {
           <Table.Body>
             {temporal
               .filter((item) => item?.startDate || item?.endDate)
-              .map((item, index) => {
-                const startDate = item?.startDate
-                  ? new Date(item.startDate)
-                  : null;
-                const endDate = item?.endDate ? new Date(item.endDate) : null;
-
-                return (
-                  <Table.Row key={`tableRow-temporal-${index}`}>
-                    <Table.Cell>
-                      {startDate ? formatDate(startDate) : "-"}
-                    </Table.Cell>
-                    <Table.Cell>
-                      {endDate ? formatDate(endDate) : "-"}
-                    </Table.Cell>
-                  </Table.Row>
-                );
-              })}
+              .map((item, index) => (
+                <Table.Row key={`tableRow-temporal-${index}`}>
+                  <Table.Cell>
+                    {formatFlexibleDate(item?.startDate) ?? "-"}
+                  </Table.Cell>
+                  <Table.Cell>
+                    {formatFlexibleDate(item?.endDate) ?? "-"}
+                  </Table.Cell>
+                </Table.Row>
+              ))}
           </Table.Body>
         </Table>
       ) : undefined}
