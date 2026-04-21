@@ -12,6 +12,7 @@ interface DateFieldWithPickerProps {
   label: string;
   helpText?: ReactNode;
   error?: ReactNode;
+  autoFocus?: boolean;
 }
 
 export const DateFieldWithPicker = ({
@@ -19,6 +20,7 @@ export const DateFieldWithPicker = ({
   label,
   helpText,
   error,
+  autoFocus,
 }: DateFieldWithPickerProps) => {
   const { setFieldValue } = useFormikContext<DateRange>();
   const hiddenRef = useRef<HTMLInputElement>(null);
@@ -67,6 +69,7 @@ export const DateFieldWithPicker = ({
         name={name}
         placeholder={localization.datasetForm.placeholder.temporalDate}
         autoComplete="off"
+        autoFocus={autoFocus}
         error={error}
         onBeforeInput={handleBeforeInput}
         suffix={

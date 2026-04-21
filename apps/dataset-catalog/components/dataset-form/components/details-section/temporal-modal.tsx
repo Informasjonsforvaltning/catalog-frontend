@@ -200,6 +200,7 @@ const FieldModal = ({ template, type, onSuccess, onCancel }: ModalProps) => {
                     <DateFieldWithPicker
                       name="startDate"
                       label={localization.from}
+                      autoFocus
                       helpText={
                         <HelpMarkdown
                           aria-label={localization.helpWithCompleting}
