@@ -14,7 +14,7 @@ import {
   trimObjectWhitespace,
 } from "@catalog-frontend/utils";
 import { Button, Dialog, Heading, Table } from "@digdir/designsystemet-react";
-import { FieldArray, Formik, useFormikContext } from "formik";
+import { FieldArray, Formik, FormikProps, useFormikContext } from "formik";
 import styles from "../../dataset-form.module.css";
 import { ReactNode, useRef, useState } from "react";
 import { get, isEmpty } from "lodash";
@@ -146,6 +146,7 @@ const normalizeToCanonical = (value: string | undefined): string => {
 
 const FieldModal = ({ template, type, onSuccess, onCancel }: ModalProps) => {
   const modalRef = useRef<HTMLDialogElement>(null);
+  const formikRef = useRef<FormikProps<DateRange>>(null);
 
   const displayTemplate: DateRange = {
     startDate: toDisplayForm(template.startDate),
@@ -162,8 +163,9 @@ const FieldModal = ({ template, type, onSuccess, onCancel }: ModalProps) => {
             <AddButton>{localization.datasetForm.button.addDate}</AddButton>
           )}
         </Dialog.Trigger>
-        <Dialog ref={modalRef}>
+        <Dialog ref={modalRef} onClose={() => formikRef.current?.resetForm()}>
           <Formik
+            innerRef={formikRef}
             initialValues={displayTemplate}
             enableReinitialize={true}
             validateOnChange={false}
