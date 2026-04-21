@@ -194,6 +194,9 @@ Dersom man velger en åpen lisens, vil datasettet bli merket med "Åpne data".`,
     distributionRights: "Rettigheter for bruk",
     mobilityDataStandard: "Mobility-standard",
   },
+  placeholder: {
+    temporalDate: "åååå/mm.åååå/dd.mm.åååå",
+  },
   alert: {
     confirmDelete: "Er du sikker på at du vil slette datasettbeskrivelsen?",
     formError: "Du har feil i skjemaet. Rett opp i disse før du kan lagre.",

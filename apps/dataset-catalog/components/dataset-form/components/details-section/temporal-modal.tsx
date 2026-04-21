@@ -163,7 +163,11 @@ const FieldModal = ({ template, type, onSuccess, onCancel }: ModalProps) => {
             <AddButton>{localization.datasetForm.button.addDate}</AddButton>
           )}
         </Dialog.Trigger>
-        <Dialog ref={modalRef} onClose={() => formikRef.current?.resetForm()}>
+        <Dialog
+          ref={modalRef}
+          className={styles.temporalDialog}
+          onClose={() => formikRef.current?.resetForm()}
+        >
           <Formik
             innerRef={formikRef}
             initialValues={displayTemplate}

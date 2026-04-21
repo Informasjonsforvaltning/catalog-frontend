@@ -65,6 +65,7 @@ export const DateFieldWithPicker = ({
         aria-label={label}
         type="text"
         name={name}
+        placeholder={localization.datasetForm.placeholder.temporalDate}
         autoComplete="off"
         error={error}
         onBeforeInput={handleBeforeInput}
