@@ -360,6 +360,25 @@ runTestAsAdmin(
 );
 
 runTestAsAdmin(
+  "should restrict temporal date input to digits, '.' and '/'",
+  async ({ datasetsPage, playwright, page }) => {
+    const dataset = await createRandomDataset(playwright);
+    const detailPage: DatasetDetailPage = datasetsPage.detailPage;
+
+    await detailPage.goto(process.env.E2E_CATALOG_ID as string, dataset.id);
+    await detailPage.clickEditButton();
+
+    await page.getByRole("button", { name: "Legg til tidsperiode" }).click();
+    const dialog = page.getByRole("dialog");
+    const fromField = dialog.getByLabel("Fra");
+
+    await fromField.pressSequentially("a1-2 3.4/5b");
+
+    await expect(fromField).toHaveValue("123.4/5");
+  },
+);
+
+runTestAsAdmin(
   "should expose a date picker button inside each temporal input",
   async ({ datasetsPage, playwright, page }) => {
     const dataset = await createRandomDataset(playwright);

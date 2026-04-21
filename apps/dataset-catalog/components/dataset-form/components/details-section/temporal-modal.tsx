@@ -5,6 +5,7 @@ import {
   EditButton,
   FormHeading,
   DialogActions,
+  HelpMarkdown,
 } from "@catalog-frontend/ui";
 import {
   formatFlexibleDate,
@@ -125,13 +126,16 @@ export const TemporalModal = ({ label }: Props) => {
 };
 
 const canonicalIsoRegex = /^\d{4}(-\d{2}(-\d{2})?)?$/;
-const dateHint = "åååå / mm.åååå / dd.mm.åååå";
 
 const toDisplayForm = (value: string | undefined): string => {
-  if (!value) return "";
+  if (!value) {
+    return "";
+  }
+
   if (canonicalIsoRegex.test(value)) {
     return formatFlexibleDate(value) ?? value;
   }
+
   return value;
 };
 
@@ -189,8 +193,20 @@ const FieldModal = ({ template, type, onSuccess, onCancel }: ModalProps) => {
                   <div className={cn(styles.modalContent, styles.calendar)}>
                     <DateFieldWithPicker
                       name="startDate"
-                      label={localization.from}
-                      description={dateHint}
+                      label={
+                        <span className={styles.labelWithHelp}>
+                          {localization.from}
+                          <HelpMarkdown
+                            aria-label={localization.helpWithCompleting}
+                            placement="top-end"
+                          >
+                            {
+                              localization.datasetForm.helptext
+                                .temporalDateFormat
+                            }
+                          </HelpMarkdown>
+                        </span>
+                      }
                       error={errors.startDate}
                     />
 
@@ -198,8 +214,20 @@ const FieldModal = ({ template, type, onSuccess, onCancel }: ModalProps) => {
 
                     <DateFieldWithPicker
                       name="endDate"
-                      label={localization.to}
-                      description={dateHint}
+                      label={
+                        <span className={styles.labelWithHelp}>
+                          {localization.to}
+                          <HelpMarkdown
+                            aria-label={localization.helpWithCompleting}
+                            placement="top-end"
+                          >
+                            {
+                              localization.datasetForm.helptext
+                                .temporalDateFormat
+                            }
+                          </HelpMarkdown>
+                        </span>
+                      }
                       error={errors.endDate}
                     />
                   </div>

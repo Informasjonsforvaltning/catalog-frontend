@@ -53,6 +53,8 @@ Dersom man velger en åpen lisens, vil datasettet bli merket med "Åpne data".`,
     spatial: "Geografiske områder datasettet dekker.",
     temporal:
       "Tidsperiode(r) datasettet dekker. En tidsperiode kan være pågående.",
+    temporalDateFormat:
+      "Oppgi dato som **åååå** (år), **mm.åååå** (måned og år), eller **dd.mm.åååå** (dag, måned og år).",
     lastUpdated: "Dato for siste oppdatering av innholdet i datasettet.",
     landingPage:
       "Lenke til en nettside som gir tilgang til datasettet, dets distribusjoner og/eller tilleggsinformasjon.",

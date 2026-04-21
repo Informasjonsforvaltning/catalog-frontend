@@ -3,20 +3,19 @@ import { formatFlexibleDate, localization } from "@catalog-frontend/utils";
 import { Textfield } from "@digdir/designsystemet-react";
 import { CalendarIcon } from "@navikt/aksel-icons";
 import { FastField, useFormikContext } from "formik";
-import { ChangeEvent, ReactNode, useRef } from "react";
+import { ChangeEvent, FormEvent, ReactNode, useRef } from "react";
 import styles from "../../dataset-form.module.css";
+import { isAllowedDateChars } from "./date-field-with-picker.utils";
 
 interface DateFieldWithPickerProps {
   name: keyof DateRange;
-  label: string;
-  description: string;
+  label: ReactNode;
   error?: ReactNode;
 }
 
 export const DateFieldWithPicker = ({
   name,
   label,
-  description,
   error,
 }: DateFieldWithPickerProps) => {
   const { setFieldValue } = useFormikContext<DateRange>();
@@ -38,17 +37,25 @@ export const DateFieldWithPicker = ({
     e.target.value = "";
   };
 
+  const handleBeforeInput = (e: FormEvent<HTMLInputElement>) => {
+    // beforeinput always dispatches a native InputEvent; cast at the DOM boundary.
+    const data = (e.nativeEvent as InputEvent).data;
+    if (!isAllowedDateChars(data)) {
+      e.preventDefault();
+    }
+  };
+
   return (
     <div className={styles.dateFieldWithPicker}>
       <FastField
         as={Textfield}
         data-size="sm"
         label={label}
-        description={description}
         type="text"
         name={name}
         autoComplete="off"
         error={error}
+        onBeforeInput={handleBeforeInput}
         suffix={
           <button
             type="button"

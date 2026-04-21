@@ -28,6 +28,12 @@
   display: flex;
 }
 
+.labelWithHelp {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .hiddenField {
   padding-bottom: 1rem;
   padding-top: 0.5rem;
@@ -84,7 +90,7 @@
   gap: 1rem;
   align-items: flex-start;
   & > svg {
-    padding-top: 4.5rem;
+    padding-top: 3rem;
   }
 }
 
