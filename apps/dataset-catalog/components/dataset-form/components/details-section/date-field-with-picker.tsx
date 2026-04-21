@@ -9,13 +9,15 @@ import { isAllowedDateChars } from "./date-field-with-picker.utils";
 
 interface DateFieldWithPickerProps {
   name: keyof DateRange;
-  label: ReactNode;
+  label: string;
+  helpText?: ReactNode;
   error?: ReactNode;
 }
 
 export const DateFieldWithPicker = ({
   name,
   label,
+  helpText,
   error,
 }: DateFieldWithPickerProps) => {
   const { setFieldValue } = useFormikContext<DateRange>();
@@ -50,7 +52,17 @@ export const DateFieldWithPicker = ({
       <FastField
         as={Textfield}
         data-size="sm"
-        label={label}
+        label={
+          helpText ? (
+            <span className={styles.labelWithHelp}>
+              {label}
+              {helpText}
+            </span>
+          ) : (
+            label
+          )
+        }
+        aria-label={label}
         type="text"
         name={name}
         autoComplete="off"

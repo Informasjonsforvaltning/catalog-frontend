@@ -295,7 +295,7 @@ runTestAsAdmin(
     await editPage.checkLanguage("Nynorsk");
     await editPage.checkLanguage("Engelsk");
     await editPage.selectCoverageArea("Norge");
-    await editPage.addPeriod("2020-01-01", "2020-12-01");
+    await editPage.addPeriod("01.01.2020", "01.12.2020");
 
     // Save changes
     await editPage.clickSaveButton();
@@ -345,8 +345,8 @@ runTestAsAdmin(
 
     await page.getByRole("button", { name: "Legg til tidsperiode" }).click();
     const dialog = page.getByRole("dialog");
-    await dialog.getByLabel("Fra").fill("2024-");
-    await dialog.getByLabel("Til").fill("2023");
+    await dialog.getByLabel("Fra", { exact: true }).fill("32.01.2024");
+    await dialog.getByLabel("Til", { exact: true }).fill("2023");
 
     const addButton = dialog.getByRole("button", { name: "Legg til" });
     await addButton.click();
@@ -370,7 +370,7 @@ runTestAsAdmin(
 
     await page.getByRole("button", { name: "Legg til tidsperiode" }).click();
     const dialog = page.getByRole("dialog");
-    const fromField = dialog.getByLabel("Fra");
+    const fromField = dialog.getByLabel("Fra", { exact: true });
 
     await fromField.pressSequentially("a1-2 3.4/5b");
 
@@ -390,8 +390,14 @@ runTestAsAdmin(
     await page.getByRole("button", { name: "Legg til tidsperiode" }).click();
     const dialog = page.getByRole("dialog");
 
+    // includeHidden: Digdir's Textfield wraps suffix in `<FieldAffix aria-hidden>`,
+    // hiding the datepicker button from the ARIA tree. The button is still visible
+    // and focusable for sighted/keyboard users.
     await expect(
-      dialog.getByRole("button", { name: "Åpne datovelger" }),
+      dialog.getByRole("button", {
+        name: "Åpne datovelger",
+        includeHidden: true,
+      }),
     ).toHaveCount(2);
   },
 );

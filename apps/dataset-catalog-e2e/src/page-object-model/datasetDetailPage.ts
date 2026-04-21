@@ -186,8 +186,12 @@ export default class DatasetDetailPage {
   }
 
   async expectPeriod(from: string, to: string) {
-    await expect(this.page.getByText(from)).toBeVisible();
-    await expect(this.page.getByText(to)).toBeVisible();
+    await expect(
+      this.page.getByRole("cell", { name: from, exact: true }),
+    ).toBeVisible();
+    await expect(
+      this.page.getByRole("cell", { name: to, exact: true }),
+    ).toBeVisible();
   }
 
   async expectDatasetType(type: string) {

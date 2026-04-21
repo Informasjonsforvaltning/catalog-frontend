@@ -193,19 +193,14 @@ const FieldModal = ({ template, type, onSuccess, onCancel }: ModalProps) => {
                   <div className={cn(styles.modalContent, styles.calendar)}>
                     <DateFieldWithPicker
                       name="startDate"
-                      label={
-                        <span className={styles.labelWithHelp}>
-                          {localization.from}
-                          <HelpMarkdown
-                            aria-label={localization.helpWithCompleting}
-                            placement="top-end"
-                          >
-                            {
-                              localization.datasetForm.helptext
-                                .temporalDateFormat
-                            }
-                          </HelpMarkdown>
-                        </span>
+                      label={localization.from}
+                      helpText={
+                        <HelpMarkdown
+                          aria-label={localization.helpWithCompleting}
+                          placement="top-end"
+                        >
+                          {localization.datasetForm.helptext.temporalDateFormat}
+                        </HelpMarkdown>
                       }
                       error={errors.startDate}
                     />
@@ -214,19 +209,14 @@ const FieldModal = ({ template, type, onSuccess, onCancel }: ModalProps) => {
 
                     <DateFieldWithPicker
                       name="endDate"
-                      label={
-                        <span className={styles.labelWithHelp}>
-                          {localization.to}
-                          <HelpMarkdown
-                            aria-label={localization.helpWithCompleting}
-                            placement="top-end"
-                          >
-                            {
-                              localization.datasetForm.helptext
-                                .temporalDateFormat
-                            }
-                          </HelpMarkdown>
-                        </span>
+                      label={localization.to}
+                      helpText={
+                        <HelpMarkdown
+                          aria-label={localization.helpWithCompleting}
+                          placement="top-end"
+                        >
+                          {localization.datasetForm.helptext.temporalDateFormat}
+                        </HelpMarkdown>
                       }
                       error={errors.endDate}
                     />
