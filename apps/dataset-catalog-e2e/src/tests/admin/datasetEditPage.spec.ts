@@ -403,6 +403,45 @@ runTestAsAdmin(
 );
 
 runTestAsAdmin(
+  "should trim whitespace from pasted temporal dates",
+  async ({ datasetsPage, playwright, page }) => {
+    const dataset = await createRandomDataset(playwright);
+    const detailPage: DatasetDetailPage = datasetsPage.detailPage;
+    const editPage: DatasetEditPage = datasetsPage.editPage;
+
+    await detailPage.goto(process.env.E2E_CATALOG_ID as string, dataset.id);
+    await detailPage.clickEditButton();
+
+    await page.getByRole("button", { name: "Legg til tidsperiode" }).click();
+    const dialog = page.getByRole("dialog");
+    const fromField = dialog.getByLabel("Fra", { exact: true });
+    const toField = dialog.getByLabel("Til", { exact: true });
+
+    const pasteInto = async (
+      locator: ReturnType<typeof page.locator>,
+      text: string,
+    ) => {
+      await locator.focus();
+      const dataTransfer = await page.evaluateHandle((value: string) => {
+        const dt = new DataTransfer();
+        dt.setData("text/plain", value);
+        return dt;
+      }, text);
+      await locator.dispatchEvent("paste", { dataTransfer });
+    };
+
+    await pasteInto(fromField, "2026 ");
+    await pasteInto(toField, " 15.06.2026");
+
+    await dialog.getByRole("button", { name: "Legg til" }).click();
+
+    await editPage.clickSaveButton();
+    await detailPage.goto(process.env.E2E_CATALOG_ID as string, dataset.id);
+    await detailPage.expectPeriod("2026", "15.06.2026");
+  },
+);
+
+runTestAsAdmin(
   "should edit dataset relations section",
   async ({ datasetsPage, playwright }) => {
     const dataset = await createRandomDataset(playwright);
