@@ -802,10 +802,10 @@ export default class DatasetEditPage {
       .getByRole("button", { name: "Legg til tidsperiode" })
       .click();
     const dialog = this.page.getByRole("dialog");
-    const fromDateField = dialog.getByLabel("Fra");
+    const fromDateField = dialog.getByLabel("Fra", { exact: true });
     await expect(fromDateField).toBeVisible();
     await fromDateField.fill(from as string);
-    const toDateField = dialog.getByLabel("Til");
+    const toDateField = dialog.getByLabel("Til", { exact: true });
     await expect(toDateField).toBeVisible();
     await toDateField.fill(to as string);
     await dialog.getByRole("button", { name: "Legg til" }).click();

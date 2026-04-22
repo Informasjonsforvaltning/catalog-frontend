@@ -295,7 +295,7 @@ runTestAsAdmin(
     await editPage.checkLanguage("Nynorsk");
     await editPage.checkLanguage("Engelsk");
     await editPage.selectCoverageArea("Norge");
-    await editPage.addPeriod("2020-01-01", "2020-12-01");
+    await editPage.addPeriod("01.01.2020", "01.12.2020");
 
     // Save changes
     await editPage.clickSaveButton();
@@ -310,6 +310,95 @@ runTestAsAdmin(
     ]);
     await detailPage.expectCoverageArea("Norge");
     await detailPage.expectPeriod("01.01.2020", "01.12.2020");
+  },
+);
+
+runTestAsAdmin(
+  "should accept temporal values with year and year-month precision",
+  async ({ datasetsPage, playwright }) => {
+    const dataset = await createRandomDataset(playwright);
+    const detailPage: DatasetDetailPage = datasetsPage.detailPage;
+    const editPage: DatasetEditPage = datasetsPage.editPage;
+
+    await detailPage.goto(process.env.E2E_CATALOG_ID as string, dataset.id);
+    await detailPage.clickEditButton();
+
+    await editPage.addPeriod("2023", "06.2024");
+    await editPage.addPeriod("15.06.2024", "2025");
+
+    await editPage.clickSaveButton();
+
+    await detailPage.goto(process.env.E2E_CATALOG_ID as string, dataset.id);
+    await detailPage.expectPeriod("2023", "06.2024");
+    await detailPage.expectPeriod("15.06.2024", "2025");
+  },
+);
+
+runTestAsAdmin(
+  "should reject invalid temporal input",
+  async ({ datasetsPage, playwright, page }) => {
+    const dataset = await createRandomDataset(playwright);
+    const detailPage: DatasetDetailPage = datasetsPage.detailPage;
+
+    await detailPage.goto(process.env.E2E_CATALOG_ID as string, dataset.id);
+    await detailPage.clickEditButton();
+
+    await page.getByRole("button", { name: "Legg til tidsperiode" }).click();
+    const dialog = page.getByRole("dialog");
+    await dialog.getByLabel("Fra", { exact: true }).fill("32.01.2024");
+    await dialog.getByLabel("Til", { exact: true }).fill("2023");
+
+    const addButton = dialog.getByRole("button", { name: "Legg til" });
+    await addButton.click();
+
+    await expect(
+      dialog.getByText(
+        "Ugyldig datoformat. Bruk åååå, mm.åååå eller dd.mm.åååå.",
+      ),
+    ).toBeVisible();
+  },
+);
+
+runTestAsAdmin(
+  "should restrict temporal date input to digits, '.' and '/'",
+  async ({ datasetsPage, playwright, page }) => {
+    const dataset = await createRandomDataset(playwright);
+    const detailPage: DatasetDetailPage = datasetsPage.detailPage;
+
+    await detailPage.goto(process.env.E2E_CATALOG_ID as string, dataset.id);
+    await detailPage.clickEditButton();
+
+    await page.getByRole("button", { name: "Legg til tidsperiode" }).click();
+    const dialog = page.getByRole("dialog");
+    const fromField = dialog.getByLabel("Fra", { exact: true });
+
+    await fromField.pressSequentially("a1-2 3.4/5b");
+
+    await expect(fromField).toHaveValue("123.4/5");
+  },
+);
+
+runTestAsAdmin(
+  "should expose a date picker button inside each temporal input",
+  async ({ datasetsPage, playwright, page }) => {
+    const dataset = await createRandomDataset(playwright);
+    const detailPage: DatasetDetailPage = datasetsPage.detailPage;
+
+    await detailPage.goto(process.env.E2E_CATALOG_ID as string, dataset.id);
+    await detailPage.clickEditButton();
+
+    await page.getByRole("button", { name: "Legg til tidsperiode" }).click();
+    const dialog = page.getByRole("dialog");
+
+    // includeHidden: Digdir's Textfield wraps suffix in `<FieldAffix aria-hidden>`,
+    // hiding the datepicker button from the ARIA tree. The button is still visible
+    // and focusable for sighted/keyboard users.
+    await expect(
+      dialog.getByRole("button", {
+        name: "Åpne datovelger",
+        includeHidden: true,
+      }),
+    ).toHaveCount(2);
   },
 );
 

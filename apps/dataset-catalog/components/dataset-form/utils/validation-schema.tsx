@@ -1,7 +1,8 @@
 import {
+  FlexiblePrecision,
   httpsRegex,
   localization,
-  parseDateTime,
+  parseFlexibleDate,
   telephoneNumberRegex,
 } from "@catalog-frontend/utils";
 import * as Yup from "yup";
@@ -187,6 +188,11 @@ export const referenceSchema = Yup.object().shape({
   source: Yup.string().required(localization.datasetForm.validation.relation),
 });
 
+const precisionToUnit = (
+  precision: FlexiblePrecision,
+): "year" | "month" | "day" =>
+  precision === "yearMonth" ? "month" : precision === "year" ? "year" : "day";
+
 export const dateSchema = Yup.object().shape({
   startDate: Yup.mixed()
     .nullable()
@@ -196,13 +202,12 @@ export const dateSchema = Yup.object().shape({
           return true;
         }
 
-        const startDateTime = parseDateTime(value);
-        if (startDateTime?.isValid) {
+        if (parseFlexibleDate(value as string)) {
           return true;
         }
 
         return this.createError({
-          message: localization.conceptForm.validation.date,
+          message: localization.datasetForm.validation.temporalDateFormat,
           path: this.path,
         });
       },
@@ -211,23 +216,34 @@ export const dateSchema = Yup.object().shape({
     .nullable()
     .test({
       test(value) {
-        if (!value && this.parent.startDate) {
+        if (!value) {
           return true;
         }
 
-        const endDateTime = parseDateTime(value);
-        if (endDateTime?.isValid) {
-          const startDateTime = parseDateTime(this.parent.startDate);
-          if (!startDateTime?.isValid) {
-            return true;
-          }
-          if (endDateTime.toJSDate() >= startDateTime?.toJSDate()) {
-            return true;
-          }
+        const end = parseFlexibleDate(value as string);
+        if (!end) {
+          return this.createError({
+            message: localization.datasetForm.validation.temporalDateFormat,
+            path: this.path,
+          });
+        }
+
+        const start = parseFlexibleDate(this.parent.startDate);
+        if (!start) {
+          return true;
+        }
+
+        const endBoundary = end.dateTime.endOf(precisionToUnit(end.precision));
+        const startBoundary = start.dateTime.startOf(
+          precisionToUnit(start.precision),
+        );
+
+        if (endBoundary >= startBoundary) {
+          return true;
         }
 
         return this.createError({
-          message: localization.conceptForm.validation.date,
+          message: localization.datasetForm.validation.temporalDateOrder,
           path: this.path,
         });
       },

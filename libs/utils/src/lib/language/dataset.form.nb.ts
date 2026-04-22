@@ -53,6 +53,8 @@ Dersom man velger en åpen lisens, vil datasettet bli merket med "Åpne data".`,
     spatial: "Geografiske områder datasettet dekker.",
     temporal:
       "Tidsperiode(r) datasettet dekker. En tidsperiode kan være pågående.",
+    temporalDateFormat:
+      "Oppgi dato som **åååå** (år), **mm.åååå** (måned og år), eller **dd.mm.åååå** (dag, måned og år).",
     lastUpdated: "Dato for siste oppdatering av innholdet i datasettet.",
     landingPage:
       "Lenke til en nettside som gir tilgang til datasettet, dets distribusjoner og/eller tilleggsinformasjon.",
@@ -192,6 +194,9 @@ Dersom man velger en åpen lisens, vil datasettet bli merket med "Åpne data".`,
     distributionRights: "Rettigheter for bruk",
     mobilityDataStandard: "Mobility-standard",
   },
+  placeholder: {
+    temporalDate: "åååå/mm.åååå/dd.mm.åååå",
+  },
   alert: {
     confirmDelete: "Er du sikker på at du vil slette datasettbeskrivelsen?",
     formError: "Du har feil i skjemaet. Rett opp i disse før du kan lagre.",
@@ -228,9 +233,13 @@ Dersom man velger en åpen lisens, vil datasettet bli merket med "Åpne data".`,
     distribution: "Distribusjon er påkrevd.",
     spatial: "Minst ett dekningsområde må velges.",
     frequency: "Oppdateringsfrekvens må velges.",
+    temporalDateFormat:
+      "Ugyldig datoformat. Bruk åååå, mm.åååå eller dd.mm.åååå.",
+    temporalDateOrder: "Sluttdato må være etter startdato.",
   },
   button: {
     addDate: "Legg til tidsperiode",
+    openDatePicker: "Åpne datovelger",
     addInformationModel: "Legg til informasjonsmodell",
     addStandard: "Legg til standard",
     addDistribution: "Legg til distribusjon",
