@@ -405,18 +405,51 @@ export const ConceptPageClient = ({
     setLanguage(lang);
   };
 
+  const compareVersions = (a: Concept, b: Concept): number => {
+    const va = a?.versjonsnr;
+    const vb = b?.versjonsnr;
+    if (!va && !vb) return 0;
+    if (!va) return -1;
+    if (!vb) return 1;
+    return (
+      (va.major ?? 0) - (vb.major ?? 0) ||
+      (va.minor ?? 0) - (vb.minor ?? 0) ||
+      (va.patch ?? 0) - (vb.patch ?? 0)
+    );
+  };
+
+  const pickLatest = (candidates: Concept[]): Concept | undefined =>
+    candidates.reduce<Concept | undefined>(
+      (latest, current) =>
+        !latest || compareVersions(current, latest) > 0 ? current : latest,
+      undefined,
+    );
+
+  const safeRevisions = revisions ?? [];
+  const latestRevision = pickLatest(safeRevisions);
+  const latestNonArchivedRevision = pickLatest(
+    safeRevisions.filter((r) => !r.isArchived),
+  );
+
   const handleEditConcept = () => {
-    const revision = revisions?.find((revision) => !revision.isArchived);
-    const id = revision ? revision.id : concept?.id;
+    const id = latestRevision?.id ?? concept?.id;
     if (validOrganizationNumber(catalogId) && validUUID(id)) {
       router.push(`/catalogs/${catalogId}/concepts/${id}/edit`);
     }
   };
 
+  const handleEditArchivedConcept = () => {
+    if (validOrganizationNumber(catalogId) && validUUID(concept?.id)) {
+      router.push(
+        `/catalogs/${catalogId}/concepts/${concept?.id}/edit-archived`,
+      );
+    }
+  };
+
   const handleDeleteConcept = () => {
-    const revision = revisions?.find((revision) => !revision.isArchived);
-    if (revision) {
-      deleteConcept.mutate(revision.id as string);
+    const target = latestNonArchivedRevision?.id ?? concept?.id;
+    if (target && validUUID(target)) {
+      deleteConcept.mutate(target);
     }
   };
 
@@ -940,7 +973,11 @@ export const ConceptPageClient = ({
                 <Button onClick={handleEditConcept}>
                   {localization.button.edit}
                 </Button>
-                {!concept?.isArchived && (
+                {concept?.isArchived ? (
+                  <Button onClick={handleEditArchivedConcept}>
+                    {localization.concept.editArchived}
+                  </Button>
+                ) : (
                   <Button
                     data-color="danger"
                     variant="secondary"

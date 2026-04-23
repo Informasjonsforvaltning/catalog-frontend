@@ -3,12 +3,12 @@ import { renderConceptEditPage } from "@concept-catalog/components/concept-form/
 
 export default withWriteProtectedPage(
   ({ catalogId, conceptId }) =>
-    `/catalogs/${catalogId}/concepts/${conceptId}/edit`,
+    `/catalogs/${catalogId}/concepts/${conceptId}/edit-archived`,
   async ({ catalogId, conceptId, session }) =>
     renderConceptEditPage({
       catalogId,
       conceptId: `${conceptId}`,
       session,
-      mode: "full",
+      mode: "archived",
     }),
 );
