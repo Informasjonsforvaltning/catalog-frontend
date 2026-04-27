@@ -1,6 +1,7 @@
 import { Breadcrumbs, BreadcrumbType, PageBanner } from "@catalog-frontend/ui";
 import {
   getAdmsStatuses,
+  getLanguages,
   getLosThemes,
   getOrganization,
 } from "@catalog-frontend/data-access";
@@ -12,9 +13,13 @@ export default async function NewServicePage(props: {
 }) {
   const { catalogId } = await props.params;
 
-  const [organization, statusesResponse, losThemesResponse] = await Promise.all(
-    [getOrganization(catalogId), getAdmsStatuses(), getLosThemes()],
-  );
+  const [organization, statusesResponse, losThemesResponse, languageResponse] =
+    await Promise.all([
+      getOrganization(catalogId),
+      getAdmsStatuses(),
+      getLosThemes(),
+      getLanguages(),
+    ]);
 
   const breadcrumbList: BreadcrumbType[] = [
     {
@@ -38,6 +43,7 @@ export default async function NewServicePage(props: {
         subtitle={getTranslateText(organization?.prefLabel)}
       />
       <NewPage
+        languages={languageResponse.linguisticSystems}
         losThemes={losThemesResponse.losNodes}
         referenceDataEnv={process.env.FDK_BASE_URI || ""}
         searchEnv={process.env.FDK_SEARCH_SERVICE_BASE_URI || ""}

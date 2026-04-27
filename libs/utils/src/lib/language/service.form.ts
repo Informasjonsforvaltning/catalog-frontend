@@ -10,6 +10,7 @@ export const serviceFormNb = {
     dctType: "Hovedformål",
     description: "Beskrivelse",
     email: "E-post",
+    evidence: "Dokumentasjon",
     homepage: "Hjemmeside",
     ignoreRequired: "Ignorer påkrevde felt",
     produces: "Produserer",
@@ -27,6 +28,8 @@ export const serviceFormNb = {
       "Tjenestens hovedformål. Dette kan velges blant EU's kontrollerte vokabular [main activity](https://op.europa.eu/en/web/eu-vocabularies/concept-scheme/-/resource?uri=http://publications.europa.eu/resource/authority/main-activity).",
     description:
       "Beskrivelsen skal være kortfattet og formålet med tjenesten bør fremgå.",
+    evidence:
+      "Egenskapen brukes til å referere til dokumentasjon som er relevant for tjenesten.",
     homepage:
       "Lenke til en nettside som gir tilgang til tjenesten og/eller tilleggsinformasjon.",
     ignoreRequired:
@@ -48,6 +51,10 @@ export const serviceFormNb = {
       subtitle:
         "Kontaktpunkt som kan brukes vedr. spørsmål og kommentarer om tjenesten.",
       title: "Kontaktpunkt",
+    },
+    evidence: {
+      subtitle: "Referanser til dokumentasjon som er relevant for tjenesten.",
+      title: "Dokumentasjon",
     },
     produces: {
       subtitle:

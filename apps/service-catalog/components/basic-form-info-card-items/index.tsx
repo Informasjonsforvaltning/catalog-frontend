@@ -87,6 +87,28 @@ export const BasicServiceFormInfoCardItems = (props: Props) => {
         </div>
       </InfoCard.Item>
 
+      <InfoCard.Item title={`${localization.serviceCatalog.evidence}:`}>
+        {!service.evidence?.length && (
+          <Paragraph data-size="sm" className={styles.content}>
+            {localization.none}
+          </Paragraph>
+        )}
+
+        <div className={styles.flexList}>
+          {service.evidence?.map((item) => (
+            <Card key={item.identifier} data-color="neutral">
+              <Heading data-size="2xs" level={4}>
+                {getTranslateText(item.title, language) || localization.noName}
+              </Heading>
+
+              <Paragraph>
+                {getTranslateText(item.description, language)}
+              </Paragraph>
+            </Card>
+          ))}
+        </div>
+      </InfoCard.Item>
+
       {service.homepage && (
         <InfoCard.Item title={`${localization.homepage}:`}>
           {service.homepage}

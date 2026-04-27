@@ -50,9 +50,12 @@ import { FastField, Field, Form, Formik, FormikProps } from "formik";
 import { serviceTemplate } from "./service-template";
 import { useEffect, useRef, useState } from "react";
 import { ProducesField } from "./components/produces-field";
+import { EvidenceField } from "./components/evidence-field";
 import {
+  confirmedEvidenceSchema,
   confirmedProducesSchema,
   confirmedServiceSchema,
+  draftEvidenceSchema,
   draftProducesSchema,
   draftServiceSchema,
 } from "./validation-schema";
@@ -62,6 +65,7 @@ interface ServiceFormProps {
   afterSubmit?: () => void;
   autoSaveStorage: DataStorage<StorageData>;
   initialValues: ServiceToBeCreated;
+  languages: ReferenceDataCode[];
   losThemes: LosTheme[];
   mainActivities?: ReferenceDataCode[];
   onCancel?: () => void;
@@ -102,6 +106,7 @@ export const ServiceForm = (props: ServiceFormProps) => {
     afterSubmit,
     autoSaveStorage,
     initialValues,
+    languages,
     losThemes,
     mainActivities,
     onCancel,
@@ -227,6 +232,12 @@ export const ServiceForm = (props: ServiceFormProps) => {
             identifier: index,
           }));
 
+          // set evidence identifiers
+          values.evidence?.map((evidence, index) => ({
+            ...evidence,
+            identifier: index,
+          }));
+
           const trimmedValues = trimObjectWhitespace(values);
 
           if (isEqual(trimmedValues, initialValues)) {
@@ -325,6 +336,7 @@ export const ServiceForm = (props: ServiceFormProps) => {
               "homepage",
               "status",
               "produces",
+              "evidence",
               "contactPoints",
               "spatial",
               "subject",
@@ -577,6 +589,35 @@ export const ServiceForm = (props: ServiceFormProps) => {
                           ignoreRequired
                             ? draftProducesSchema
                             : confirmedProducesSchema
+                        }
+                      />
+                    </div>
+                  </FormLayout.Section>
+
+                  <FormLayout.Section
+                    id="evidence-section"
+                    title={localization.serviceForm.section.evidence.title}
+                    subtitle={
+                      localization.serviceForm.section.evidence.subtitle
+                    }
+                    required
+                    error={hasError(["evidence"])}
+                    changed={dirtyFields.includes("evidence")}
+                  >
+                    <div className={styles.fieldSet}>
+                      <TitleWithHelpTextAndTag
+                        helpText={localization.serviceForm.helptext.evidence}
+                        tagTitle={localization.tag.required}
+                      >
+                        {localization.serviceForm.fieldLabel.evidence}
+                      </TitleWithHelpTextAndTag>
+                      <EvidenceField
+                        errors={errors.evidence}
+                        languages={languages}
+                        validationSchema={
+                          ignoreRequired
+                            ? draftEvidenceSchema
+                            : confirmedEvidenceSchema
                         }
                       />
                     </div>

@@ -16,6 +16,7 @@ import { serviceTemplate } from "@service-catalog/components/service-form/servic
 import { createPublicService } from "@service-catalog/app/actions/public-services/actions";
 
 type NewPageProps = {
+  languages: ReferenceDataCode[];
   losThemes: LosTheme[];
   mainActivities: ReferenceDataCode[];
   referenceDataEnv: string;
@@ -24,8 +25,14 @@ type NewPageProps = {
 };
 
 export const NewPage = (props: NewPageProps) => {
-  const { losThemes, mainActivities, referenceDataEnv, searchEnv, statuses } =
-    props;
+  const {
+    languages,
+    losThemes,
+    mainActivities,
+    referenceDataEnv,
+    searchEnv,
+    statuses,
+  } = props;
   const router = useRouter();
   const { catalogId } = useParams<{ catalogId: string }>();
   const serviceIdRef = useRef<string | undefined>(undefined); // Ref to store the service id
@@ -84,6 +91,7 @@ export const NewPage = (props: NewPageProps) => {
       <ServiceForm
         afterSubmit={handleAfterSubmit}
         autoSaveStorage={dataStorage}
+        languages={languages}
         losThemes={losThemes}
         mainActivities={mainActivities}
         onCancel={handleCancel}

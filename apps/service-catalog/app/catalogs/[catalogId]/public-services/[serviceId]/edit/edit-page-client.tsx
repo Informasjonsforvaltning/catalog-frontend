@@ -24,6 +24,7 @@ import {
 import { useEffect, useState } from "react";
 
 type EditPageProps = {
+  languages: ReferenceDataCode[];
   losThemes: LosTheme[];
   mainActivities: ReferenceDataCode[];
   referenceDataEnv: string;
@@ -34,6 +35,7 @@ type EditPageProps = {
 
 export const EditPage = (props: EditPageProps) => {
   const {
+    languages,
     losThemes,
     mainActivities,
     referenceDataEnv,
@@ -110,6 +112,7 @@ export const EditPage = (props: EditPageProps) => {
       </ButtonBar>
       <ServiceForm
         autoSaveStorage={dataStorage}
+        languages={languages}
         losThemes={losThemes}
         mainActivities={mainActivities}
         onCancel={handleCancel}

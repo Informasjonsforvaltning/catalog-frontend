@@ -33,6 +33,93 @@ export const draftProducesSchema = Yup.object().shape({
   }),
 });
 
+export const draftEvidenceSchema = Yup.object().shape({
+  title: Yup.object().shape({
+    nb: Yup.string()
+      .min(3, localization.serviceForm.validation.title)
+      .label(
+        `${localization.serviceForm.fieldLabel.title} (${localization.language.nb})`,
+      )
+      .notRequired(),
+    nn: Yup.string()
+      .min(3, localization.serviceForm.validation.title)
+      .label(
+        `${localization.serviceForm.fieldLabel.title} (${localization.language.nn})`,
+      )
+      .notRequired(),
+    en: Yup.string()
+      .min(3, localization.serviceForm.validation.title)
+      .label(
+        `${localization.serviceForm.fieldLabel.title} (${localization.language.en})`,
+      )
+      .notRequired(),
+  }),
+  description: Yup.object().shape({
+    nb: Yup.string(),
+    nn: Yup.string(),
+    en: Yup.string(),
+  }),
+});
+
+export const confirmedEvidenceSchema = Yup.object().shape({
+  title: Yup.object()
+    .shape({
+      nb: Yup.string()
+        .min(3, localization.serviceForm.validation.title)
+        .label(
+          `${localization.serviceForm.fieldLabel.title} (${localization.language.nb})`,
+        )
+        .notRequired(),
+      nn: Yup.string()
+        .min(3, localization.serviceForm.validation.title)
+        .label(
+          `${localization.serviceForm.fieldLabel.title} (${localization.language.nn})`,
+        )
+        .notRequired(),
+      en: Yup.string()
+        .min(3, localization.serviceForm.validation.title)
+        .label(
+          `${localization.serviceForm.fieldLabel.title} (${localization.language.en})`,
+        )
+        .notRequired(),
+    })
+    .test(
+      "title-test",
+      localization.validation.oneLanguageRequired,
+      (title) => {
+        return Boolean(title.nb || title.nn || title.en);
+      },
+    ),
+  description: Yup.object()
+    .shape({
+      nb: Yup.string()
+        .min(3, localization.serviceForm.validation.description)
+        .label(
+          `${localization.serviceForm.fieldLabel.description} (${localization.language.nb})`,
+        )
+        .notRequired(),
+      nn: Yup.string()
+        .min(3, localization.serviceForm.validation.description)
+        .label(
+          `${localization.serviceForm.fieldLabel.description} (${localization.language.nn})`,
+        )
+        .notRequired(),
+      en: Yup.string()
+        .min(3, localization.serviceForm.validation.description)
+        .label(
+          `${localization.serviceForm.fieldLabel.description} (${localization.language.en})`,
+        )
+        .notRequired(),
+    })
+    .test(
+      "description-test",
+      localization.validation.oneLanguageRequired,
+      (description) => {
+        return Boolean(description.nb || description.nn || description.en);
+      },
+    ),
+});
+
 export const confirmedProducesSchema = Yup.object().shape({
   title: Yup.object()
     .shape({
@@ -137,6 +224,7 @@ export const draftServiceSchema = Yup.object().shape({
   dctType: Yup.array().of(Yup.string().notRequired()),
   losTheme: Yup.array().of(Yup.string().notRequired()),
   produces: Yup.array().of(draftProducesSchema),
+  evidence: Yup.array().of(draftEvidenceSchema),
   contactPoints: Yup.array().of(
     Yup.object().shape({
       category: Yup.object().shape({
@@ -199,6 +287,10 @@ export const confirmedServiceSchema = Yup.object().shape({
   losTheme: Yup.array().of(Yup.string().notRequired()),
   produces: Yup.array()
     .of(confirmedProducesSchema)
+    .min(1, localization.validation.minOneField)
+    .required(localization.validation.minOneField),
+  evidence: Yup.array()
+    .of(confirmedEvidenceSchema)
     .min(1, localization.validation.minOneField)
     .required(localization.validation.minOneField),
   contactPoints: Yup.array()

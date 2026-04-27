@@ -1,5 +1,6 @@
 import {
   ContactPoint,
+  Evidence,
   Output,
   Service,
   ServiceToBeCreated,
@@ -21,6 +22,23 @@ export const producesTemplate = (produce: Output): Output => {
   };
 };
 
+export const evidenceTemplate = (evidence: Evidence): Evidence => {
+  return {
+    identifier: evidence.identifier ?? 0,
+    title: {
+      nb: evidence.title?.nb,
+      nn: evidence.title?.nn,
+      en: evidence.title?.en,
+    },
+    description: {
+      nb: evidence.description?.nb,
+      nn: evidence.description?.nn,
+      en: evidence.description?.en,
+    },
+    language: evidence.language ?? [],
+  };
+};
+
 const emptyContactpoint: ContactPoint[] = [
   {
     category: { nb: undefined, nn: undefined, en: undefined },
@@ -35,6 +53,15 @@ export const emptyProduces: Output[] = [
     identifier: "0",
     title: { nb: undefined, nn: undefined, en: undefined },
     description: { nb: undefined, nn: undefined, en: undefined },
+  },
+];
+
+export const emptyEvidence: Evidence[] = [
+  {
+    identifier: "0",
+    title: { nb: undefined, nn: undefined, en: undefined },
+    description: { nb: undefined, nn: undefined, en: undefined },
+    language: [],
   },
 ];
 
@@ -61,6 +88,11 @@ export const serviceTemplate = (
     service.produces
       .map((produce) => producesTemplate(produce))
       .filter((cp) => cp !== null);
+  const evidence =
+    service?.evidence &&
+    service.evidence
+      .map((item) => evidenceTemplate(item))
+      .filter((cp) => cp !== null);
   const contactPoints = service?.contactPoints
     ? service.contactPoints
         .map((cp) => contactPointTemplate(cp))
@@ -75,6 +107,7 @@ export const serviceTemplate = (
       nn: service?.description?.nn,
       en: service?.description?.en,
     },
+    evidence,
     homepage: service?.homepage,
     losTheme: service?.losTheme || [],
     produces,

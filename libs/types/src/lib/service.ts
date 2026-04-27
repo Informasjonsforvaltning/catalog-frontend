@@ -10,6 +10,7 @@ export interface ServiceToBeCreated {
   contactPoints?: ContactPoint[];
   dctType?: string[];
   description?: LocalizedStrings;
+  evidence?: Evidence[];
   homepage?: string;
   losTheme?: string[];
   produces?: Output[];
@@ -20,6 +21,13 @@ export interface ServiceToBeCreated {
 }
 
 export interface Output {
+  identifier: string;
+  title?: LocalizedStrings;
+  description?: LocalizedStrings;
+  language?: string[];
+}
+
+export interface Evidence {
   identifier: string;
   title?: LocalizedStrings;
   description?: LocalizedStrings;

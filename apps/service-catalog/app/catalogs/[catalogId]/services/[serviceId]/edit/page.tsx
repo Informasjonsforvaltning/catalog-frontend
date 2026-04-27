@@ -1,5 +1,6 @@
 import {
   getAdmsStatuses,
+  getLanguages,
   getLosThemes,
   getOrganization,
 } from "@catalog-frontend/data-access";
@@ -14,13 +15,19 @@ export default async function EditServicePage({
   params: Promise<{ catalogId: string; serviceId: string }>;
 }) {
   const { catalogId, serviceId } = await params;
-  const [service, organization, statusesResponse, losThemesResponse] =
-    await Promise.all([
-      getServiceById(catalogId, serviceId),
-      getOrganization(catalogId),
-      getAdmsStatuses(),
-      getLosThemes(),
-    ]);
+  const [
+    service,
+    organization,
+    statusesResponse,
+    losThemesResponse,
+    languageResponse,
+  ] = await Promise.all([
+    getServiceById(catalogId, serviceId),
+    getOrganization(catalogId),
+    getAdmsStatuses(),
+    getLosThemes(),
+    getLanguages(),
+  ]);
 
   const breadcrumbList: BreadcrumbType[] = [
     {
@@ -48,6 +55,7 @@ export default async function EditServicePage({
         subtitle={getTranslateText(organization?.prefLabel)}
       />
       <EditPage
+        languages={languageResponse.linguisticSystems}
         losThemes={losThemesResponse.losNodes}
         referenceDataEnv={process.env.FDK_BASE_URI || ""}
         searchEnv={process.env.FDK_SEARCH_SERVICE_BASE_URI || ""}
