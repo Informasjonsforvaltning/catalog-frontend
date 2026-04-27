@@ -1,5 +1,6 @@
 import {
   getAdmsStatuses,
+  getLosThemes,
   getMainActivities,
   getOrganization,
 } from "@catalog-frontend/data-access";
@@ -41,11 +42,13 @@ export default async function PublicServiceDetailsPage({
     session.accessToken,
     catalogId,
   );
-  const [organization, statusesResponse, mainActivities] = await Promise.all([
-    getOrganization(catalogId),
-    getAdmsStatuses(),
-    getMainActivities(),
-  ]);
+  const [organization, statusesResponse, mainActivities, losThemesResponse] =
+    await Promise.all([
+      getOrganization(catalogId),
+      getAdmsStatuses(),
+      getMainActivities(),
+      getLosThemes(),
+    ]);
 
   const breadcrumbList: BreadcrumbType[] = [
     {
@@ -71,6 +74,7 @@ export default async function PublicServiceDetailsPage({
       <PublicServiceDetailsPageClient
         catalogId={catalogId}
         hasWritePermission={hasWritePermission}
+        losThemes={losThemesResponse.losNodes}
         mainActivities={mainActivities.mainActivities}
         referenceDataEnv={process.env.FDK_BASE_URI ?? ""}
         searchEnv={process.env.FDK_SEARCH_SERVICE_BASE_URI ?? ""}

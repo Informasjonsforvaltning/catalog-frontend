@@ -135,6 +135,7 @@ export const draftServiceSchema = Yup.object().shape({
   spatial: Yup.array().of(Yup.string().notRequired()),
   subject: Yup.array().of(Yup.string().notRequired()),
   dctType: Yup.array().of(Yup.string().notRequired()),
+  losTheme: Yup.array().of(Yup.string().notRequired()),
   produces: Yup.array().of(draftProducesSchema),
   contactPoints: Yup.array().of(
     Yup.object().shape({
@@ -195,6 +196,7 @@ export const confirmedServiceSchema = Yup.object().shape({
   spatial: Yup.array().of(Yup.string().notRequired()),
   subject: Yup.array().of(Yup.string().notRequired()),
   dctType: Yup.array().of(Yup.string().notRequired()),
+  losTheme: Yup.array().of(Yup.string().notRequired()),
   produces: Yup.array()
     .of(confirmedProducesSchema)
     .min(1, localization.validation.minOneField)
@@ -249,8 +251,8 @@ export const confirmedServiceSchema = Yup.object().shape({
         const contactPoint = contactPoints[0];
         return Boolean(
           contactPoint.email ||
-            contactPoint.telephone ||
-            contactPoint.contactPage,
+          contactPoint.telephone ||
+          contactPoint.contactPage,
         );
       },
     ),

@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  LosTheme,
   ReferenceDataCode,
   Service,
   StorageData,
@@ -15,13 +16,14 @@ import { createService } from "@service-catalog/app/actions/services/actions";
 import { serviceTemplate } from "@service-catalog/components/service-form/service-template";
 
 type NewPageProps = {
+  losThemes: LosTheme[];
   referenceDataEnv: string;
   searchEnv: string;
   statuses: ReferenceDataCode[];
 };
 
 export const NewPage = (props: NewPageProps) => {
-  const { referenceDataEnv, searchEnv, statuses } = props;
+  const { losThemes, referenceDataEnv, searchEnv, statuses } = props;
   const router = useRouter();
   const { catalogId } = useParams<{ catalogId: string }>();
   const serviceIdRef = useRef<string | undefined>(undefined); // Ref to store the service id
@@ -80,6 +82,7 @@ export const NewPage = (props: NewPageProps) => {
       <ServiceForm
         afterSubmit={handleAfterSubmit}
         autoSaveStorage={dataStorage}
+        losThemes={losThemes}
         onCancel={handleCancel}
         onSubmit={handleCreate}
         initialValues={serviceTemplate(undefined)}

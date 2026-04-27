@@ -1,11 +1,16 @@
 import { isEmpty } from "lodash";
-import { ReferenceDataCode, Service } from "@catalog-frontend/types";
+import {
+  LosTheme,
+  ReferenceDataCode,
+  Service,
+} from "@catalog-frontend/types";
 import {
   Card,
   Heading,
   Link,
   Paragraph,
   Table,
+  Tag,
 } from "@digdir/designsystemet-react";
 import {
   InfoCard,
@@ -13,11 +18,16 @@ import {
   useSearchAdministrativeUnitsByUri,
   useSearchConceptsByUri,
 } from "@catalog-frontend/ui";
-import { getTranslateText, localization } from "@catalog-frontend/utils";
+import {
+  capitalizeFirstLetter,
+  getTranslateText,
+  localization,
+} from "@catalog-frontend/utils";
 import styles from "./basic-form-info-card-items.module.css";
 
 type Props = {
   language: string;
+  losThemes?: LosTheme[];
   mainActivities?: ReferenceDataCode[];
   referenceDataEnv: string;
   searchEnv: string;
@@ -25,8 +35,18 @@ type Props = {
 };
 
 export const BasicServiceFormInfoCardItems = (props: Props) => {
-  const { language, mainActivities, referenceDataEnv, searchEnv, service } =
-    props;
+  const {
+    language,
+    losThemes,
+    mainActivities,
+    referenceDataEnv,
+    searchEnv,
+    service,
+  } = props;
+
+  const losThemesByUri = new Map(
+    losThemes?.map((theme) => [theme.uri, theme]),
+  );
 
   const { data: spatial } = useSearchAdministrativeUnitsByUri(
     service.spatial,
@@ -117,6 +137,24 @@ export const BasicServiceFormInfoCardItems = (props: Props) => {
       {!isEmpty(service.dctType) && (
         <InfoCard.Item title={localization.serviceForm.fieldLabel.dctType}>
           <ReferenceDataTags values={service.dctType} data={mainActivities} />
+        </InfoCard.Item>
+      )}
+
+      {!isEmpty(service.losTheme) && (
+        <InfoCard.Item title={localization.datasetForm.fieldLabel.losTheme}>
+          <ul className={styles.tagList}>
+            {service.losTheme?.map((uri) => {
+              const match = losThemesByUri.get(uri);
+              const displayText = capitalizeFirstLetter(
+                getTranslateText(match?.name, language) || uri,
+              );
+              return (
+                <Tag data-size="sm" data-color="info" key={uri}>
+                  {displayText}
+                </Tag>
+              );
+            })}
+          </ul>
         </InfoCard.Item>
       )}
     </InfoCard>

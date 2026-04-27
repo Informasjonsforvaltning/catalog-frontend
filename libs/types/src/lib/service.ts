@@ -11,6 +11,7 @@ export interface ServiceToBeCreated {
   dctType?: string[];
   description?: LocalizedStrings;
   homepage?: string;
+  losTheme?: string[];
   produces?: Output[];
   spatial?: string[];
   status?: string;

@@ -22,3 +22,9 @@
   flex-direction: column;
   gap: var(--ds-size-2);
 }
+
+.tagList {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}

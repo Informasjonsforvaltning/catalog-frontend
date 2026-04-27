@@ -36,6 +36,8 @@ import {
   formatISO,
 } from "@catalog-frontend/utils";
 import {
+  LosTheme,
+  Option,
   ReferenceDataCode,
   Service,
   ServiceToBeCreated,
@@ -60,6 +62,7 @@ interface ServiceFormProps {
   afterSubmit?: () => void;
   autoSaveStorage: DataStorage<StorageData>;
   initialValues: ServiceToBeCreated;
+  losThemes: LosTheme[];
   mainActivities?: ReferenceDataCode[];
   onCancel?: () => void;
   onSubmit?: (values: Service) => Promise<Service | undefined>;
@@ -99,6 +102,7 @@ export const ServiceForm = (props: ServiceFormProps) => {
     afterSubmit,
     autoSaveStorage,
     initialValues,
+    losThemes,
     mainActivities,
     onCancel,
     onSubmit,
@@ -108,6 +112,10 @@ export const ServiceForm = (props: ServiceFormProps) => {
     statuses,
     type,
   } = props;
+
+  const containsFilter = (inputValue: string, option: Option): boolean => {
+    return option.label.toLowerCase().includes(inputValue.toLowerCase());
+  };
   const searchParams = useSearchParams();
   const formikRef = useRef<FormikProps<ServiceToBeCreated>>(null);
   const { catalogId, serviceId } = useParams<{
@@ -321,6 +329,7 @@ export const ServiceForm = (props: ServiceFormProps) => {
               "spatial",
               "subject",
               "dctType",
+              "losTheme",
             ].forEach((name) => {
               if (isDirty(name)) {
                 dirtyFields.push(name);
@@ -355,6 +364,7 @@ export const ServiceForm = (props: ServiceFormProps) => {
                         "spatial",
                         "subject",
                         "dctType",
+                        "losTheme",
                       ].includes(field),
                     )}
                     error={hasError([
@@ -365,6 +375,7 @@ export const ServiceForm = (props: ServiceFormProps) => {
                       "spatial",
                       "subject",
                       "dctType",
+                      "losTheme",
                     ])}
                   >
                     <div>
@@ -501,6 +512,45 @@ export const ServiceForm = (props: ServiceFormProps) => {
                           </Fieldset>
                         </>
                       )}
+                      <FieldsetDivider />
+                      <FastField
+                        id="losTheme-combobox"
+                        as={Combobox}
+                        value={values.losTheme}
+                        multiple
+                        hideClearButton
+                        label={
+                          <TitleWithHelpTextAndTag
+                            helpText={
+                              localization.datasetForm.helptext.losTheme
+                            }
+                          >
+                            {localization.datasetForm.fieldLabel.losTheme}
+                          </TitleWithHelpTextAndTag>
+                        }
+                        filter={containsFilter}
+                        placeholder={`${localization.search.search}...`}
+                        onValueChange={(selected: string[]) =>
+                          setFieldValue("losTheme", selected)
+                        }
+                        data-size="sm"
+                      >
+                        <Combobox.Empty>
+                          {localization.search.noHits}
+                        </Combobox.Empty>
+                        {losThemes
+                          ?.slice()
+                          .sort((a, b) =>
+                            (get(a.name, "nb")?.toString() ?? "").localeCompare(
+                              get(b.name, "nb")?.toString() ?? "",
+                            ),
+                          )
+                          .map((theme) => (
+                            <Combobox.Option key={theme.uri} value={theme.uri}>
+                              {getTranslateText(theme.name)}
+                            </Combobox.Option>
+                          ))}
+                      </FastField>
                     </div>
                   </FormLayout.Section>
 

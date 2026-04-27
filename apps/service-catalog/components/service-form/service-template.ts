@@ -76,6 +76,7 @@ export const serviceTemplate = (
       en: service?.description?.en,
     },
     homepage: service?.homepage,
+    losTheme: service?.losTheme || [],
     produces,
     spatial: service?.spatial || [],
     status: service?.status,
