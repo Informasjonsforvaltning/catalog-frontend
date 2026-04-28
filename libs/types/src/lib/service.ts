@@ -32,6 +32,7 @@ export interface Evidence {
   title?: LocalizedStrings;
   description?: LocalizedStrings;
   language?: string[];
+  relatedDocumentation?: string[];
 }
 
 export interface ContactPoint {

@@ -59,6 +59,13 @@ export const draftEvidenceSchema = Yup.object().shape({
     nn: Yup.string(),
     en: Yup.string(),
   }),
+  relatedDocumentation: Yup.array()
+    .of(
+      Yup.string()
+        .matches(httpsRegex, localization.validation.invalidProtocol)
+        .url(localization.validation.invalidUrl),
+    )
+    .notRequired(),
 });
 
 export const confirmedEvidenceSchema = Yup.object().shape({
@@ -118,6 +125,13 @@ export const confirmedEvidenceSchema = Yup.object().shape({
         return Boolean(description.nb || description.nn || description.en);
       },
     ),
+  relatedDocumentation: Yup.array()
+    .of(
+      Yup.string()
+        .matches(httpsRegex, localization.validation.invalidProtocol)
+        .url(localization.validation.invalidUrl),
+    )
+    .notRequired(),
 });
 
 export const confirmedProducesSchema = Yup.object().shape({

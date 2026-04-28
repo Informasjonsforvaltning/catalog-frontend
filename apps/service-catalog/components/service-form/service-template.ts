@@ -36,6 +36,7 @@ export const evidenceTemplate = (evidence: Evidence): Evidence => {
       en: evidence.description?.en,
     },
     language: evidence.language ?? [],
+    relatedDocumentation: evidence.relatedDocumentation ?? [],
   };
 };
 
@@ -62,6 +63,7 @@ export const emptyEvidence: Evidence[] = [
     title: { nb: undefined, nn: undefined, en: undefined },
     description: { nb: undefined, nn: undefined, en: undefined },
     language: [],
+    relatedDocumentation: [],
   },
 ];
 

@@ -31,7 +31,13 @@ import {
   Dialog,
   useCheckboxGroup,
 } from "@digdir/designsystemet-react";
-import { FieldArray, Formik, useFormikContext } from "formik";
+import {
+  Field,
+  FieldArray,
+  Formik,
+  FormikErrors,
+  useFormikContext,
+} from "formik";
 import styles from "../service-form.module.css";
 import { useEffect, useRef, useState } from "react";
 import { trim, isEmpty, pickBy, identity, sortBy } from "lodash";
@@ -198,6 +204,7 @@ export const EvidenceField = (props: Props) => {
               description: {},
               language: [],
               identifier: "",
+              relatedDocumentation: [],
             }}
             type="new"
             onSuccess={() => setSnapshot([...(values.evidence ?? [])])}
@@ -263,12 +270,16 @@ const FieldModal = (props: ModalProps) => {
             modalRef.current?.close();
           }}
         >
-          {({ isSubmitting, submitForm, values, dirty, resetForm }) => {
+          {({ isSubmitting, submitForm, values, dirty, resetForm, errors }) => {
             useEffect(() => {
               if (dirty) {
                 onChange({ ...values });
               }
             }, [values, dirty]);
+
+            const relatedDocumentationErrors = (
+              errors as FormikErrors<Evidence>
+            ).relatedDocumentation;
 
             return (
               <>
@@ -292,6 +303,63 @@ const FieldModal = (props: ModalProps) => {
 
                   <FieldsetDivider />
                   <LanguageFieldset languages={languages} />
+
+                  <FieldsetDivider />
+                  <FieldArray name="relatedDocumentation">
+                    {(arrayHelpers) => (
+                      <Fieldset data-size="sm">
+                        <Fieldset.Legend>
+                          <TitleWithHelpTextAndTag
+                            helpText={
+                              localization.serviceForm.helptext
+                                .relatedDocumentation
+                            }
+                          >
+                            {
+                              localization.serviceForm.fieldLabel
+                                .relatedDocumentation
+                            }
+                          </TitleWithHelpTextAndTag>
+                        </Fieldset.Legend>
+                        {(values.relatedDocumentation ?? []).map((_, index) => {
+                          const fieldError = Array.isArray(
+                            relatedDocumentationErrors,
+                          )
+                            ? relatedDocumentationErrors[index]
+                            : undefined;
+                          return (
+                            <div
+                              key={`relatedDocumentation-${index}`}
+                              className={cn(styles.flex, styles.gap2)}
+                            >
+                              <Field
+                                as={Textfield}
+                                data-size="sm"
+                                name={`relatedDocumentation[${index}]`}
+                                aria-label={`${localization.serviceForm.fieldLabel.relatedDocumentation} ${index + 1}`}
+                                error={
+                                  typeof fieldError === "string"
+                                    ? fieldError
+                                    : undefined
+                                }
+                              />
+                              <DeleteButton
+                                type="button"
+                                onClick={() => arrayHelpers.remove(index)}
+                              />
+                            </div>
+                          );
+                        })}
+                        <AddButton
+                          type="button"
+                          onClick={() => arrayHelpers.push("")}
+                        >
+                          {localization.add}{" "}
+                          {localization.serviceForm.fieldLabel.relatedDocumentation.toLowerCase()}
+                        </AddButton>
+                      </Fieldset>
+                    )}
+                  </FieldArray>
                 </div>
                 <DialogActions>
                   <Button

@@ -14,6 +14,7 @@ export const serviceFormNb = {
     homepage: "Hjemmeside",
     ignoreRequired: "Ignorer påkrevde felt",
     produces: "Produserer",
+    relatedDocumentation: "Relatert dokumentasjon",
     spatial: "Dekningsområde",
     status: "Status",
     subject: "Begrep",
@@ -36,6 +37,8 @@ export const serviceFormNb = {
       "I utgangspunktet er det krav om at alle påkrevde felt må fylles ut for å få lagret. Når avhukingsboksen er aktiv, må bare tittel være fylt ut.",
     produces:
       "Egenskapen brukes til å referere til en eller flere instanser av tjenesteresultat som beskriver resultat av tjenesten.",
+    relatedDocumentation:
+      "Lenker til relatert dokumentasjon. Hver lenke må være en gyldig URI.",
     spatial: "Geografiske områder som tjenesten dekker.",
     status: "Velg tjenestens nåværende status.",
     subject:
