@@ -11,9 +11,10 @@ export const serviceFormNb = {
     description: "Beskrivelse",
     dataset: "Datasett",
     email: "E-post",
-    evidence: "Dokumentasjon",
+    evidence: "Dokumentasjonskrav",
     homepage: "Hjemmeside",
     ignoreRequired: "Ignorer påkrevde felt",
+    losTheme: "Temaområde",
     produces: "Produserer",
     relatedDocumentation: "Relatert dokumentasjon",
     spatial: "Dekningsområde",
@@ -32,11 +33,13 @@ export const serviceFormNb = {
       "Beskrivelsen skal være kortfattet og formålet med tjenesten bør fremgå.",
     dataset: "Velg datasett som dokumentasjonen gjelder for.",
     evidence:
-      "Egenskapen brukes til å referere til dokumentasjon som er relevant for tjenesten.",
+      "Brukes til å spesifisere type dokumentasjon som er påkrevd av tjenesten.",
     homepage:
       "Lenke til en nettside som gir tilgang til tjenesten og/eller tilleggsinformasjon.",
     ignoreRequired:
       "I utgangspunktet er det krav om at alle påkrevde felt må fylles ut for å få lagret. Når avhukingsboksen er aktiv, må bare tittel være fylt ut.",
+    losTheme:
+      "Primært temaområde som dekkes av tjenesten. Listen er fra [LOS](https://psi.norge.no/los/struktur.html), et felles vokabular som er temainndelt for å kategorisere og beskrive offentlige tjenester og ressurser i Norge. Velg det eller de mest presise temaene som er dekkende.",
     produces:
       "Egenskapen brukes til å referere til en eller flere instanser av tjenesteresultat som beskriver resultat av tjenesten.",
     relatedDocumentation:
@@ -58,8 +61,8 @@ export const serviceFormNb = {
       title: "Kontaktpunkt",
     },
     evidence: {
-      subtitle: "Referanser til dokumentasjon som er relevant for tjenesten.",
-      title: "Dokumentasjon",
+      subtitle: "Referanser til dokumentasjon som er påkrevd av tjenesten.",
+      title: "Dokumentasjonskrav",
     },
     produces: {
       subtitle:

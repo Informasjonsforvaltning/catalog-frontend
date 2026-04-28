@@ -534,10 +534,10 @@ export const ServiceForm = (props: ServiceFormProps) => {
                         label={
                           <TitleWithHelpTextAndTag
                             helpText={
-                              localization.datasetForm.helptext.losTheme
+                              localization.serviceForm.helptext.losTheme
                             }
                           >
-                            {localization.datasetForm.fieldLabel.losTheme}
+                            {localization.serviceForm.fieldLabel.losTheme}
                           </TitleWithHelpTextAndTag>
                         }
                         filter={containsFilter}

@@ -204,7 +204,7 @@ export const BasicServiceFormInfoCardItems = (props: Props) => {
       )}
 
       {!isEmpty(service.losTheme) && (
-        <InfoCard.Item title={localization.datasetForm.fieldLabel.losTheme}>
+        <InfoCard.Item title={localization.serviceForm.fieldLabel.losTheme}>
           <ul className={styles.tagList}>
             {service.losTheme?.map((uri) => {
               const match = losThemesByUri.get(uri);

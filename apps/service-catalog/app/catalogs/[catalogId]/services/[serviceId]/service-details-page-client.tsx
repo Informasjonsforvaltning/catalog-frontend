@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  LosTheme,
-  ReferenceDataCode,
-  Service,
-} from "@catalog-frontend/types";
+import { LosTheme, ReferenceDataCode, Service } from "@catalog-frontend/types";
 import {
   DetailsPageLayout,
   InfoCard,
