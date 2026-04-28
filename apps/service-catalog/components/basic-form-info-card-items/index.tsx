@@ -1,9 +1,5 @@
 import { isEmpty } from "lodash";
-import {
-  LosTheme,
-  ReferenceDataCode,
-  Service,
-} from "@catalog-frontend/types";
+import { LosTheme, ReferenceDataCode, Service } from "@catalog-frontend/types";
 import {
   Card,
   Heading,
@@ -17,6 +13,7 @@ import {
   ReferenceDataTags,
   useSearchAdministrativeUnitsByUri,
   useSearchConceptsByUri,
+  useSearchDatasetsByUri,
 } from "@catalog-frontend/ui";
 import {
   capitalizeFirstLetter,
@@ -44,9 +41,7 @@ export const BasicServiceFormInfoCardItems = (props: Props) => {
     service,
   } = props;
 
-  const losThemesByUri = new Map(
-    losThemes?.map((theme) => [theme.uri, theme]),
-  );
+  const losThemesByUri = new Map(losThemes?.map((theme) => [theme.uri, theme]));
 
   const { data: spatial } = useSearchAdministrativeUnitsByUri(
     service.spatial,
@@ -56,6 +51,13 @@ export const BasicServiceFormInfoCardItems = (props: Props) => {
   const { data: concepts } = useSearchConceptsByUri(
     searchEnv,
     service?.subject ?? [],
+  );
+  const evidenceDatasetUris = [
+    ...new Set((service.evidence ?? []).flatMap((item) => item.dataset ?? [])),
+  ];
+  const { data: datasets } = useSearchDatasetsByUri(
+    searchEnv,
+    evidenceDatasetUris,
   );
 
   return (
@@ -104,6 +106,45 @@ export const BasicServiceFormInfoCardItems = (props: Props) => {
               <Paragraph>
                 {getTranslateText(item.description, language)}
               </Paragraph>
+
+              {!isEmpty(item.relatedDocumentation) && (
+                <>
+                  <Heading data-size="2xs" level={5}>
+                    {localization.serviceForm.fieldLabel.relatedDocumentation}
+                  </Heading>
+                  <div className={styles.flexList}>
+                    {item.relatedDocumentation?.map((uri) => (
+                      <Link key={uri} href={uri}>
+                        {uri}
+                      </Link>
+                    ))}
+                  </div>
+                </>
+              )}
+
+              {!isEmpty(item.dataset) && (
+                <>
+                  <Heading data-size="2xs" level={5}>
+                    {localization.serviceForm.fieldLabel.dataset}
+                  </Heading>
+                  <div className={styles.flexList}>
+                    {item.dataset?.map((uri) => {
+                      const datasetMatch = datasets?.find(
+                        (dataset) => dataset.uri === uri,
+                      );
+                      const displayValue =
+                        capitalizeFirstLetter(
+                          getTranslateText(datasetMatch?.title, language),
+                        ) || uri;
+                      return (
+                        <Paragraph key={uri} data-size="sm">
+                          {displayValue}
+                        </Paragraph>
+                      );
+                    })}
+                  </div>
+                </>
+              )}
             </Card>
           ))}
         </div>
