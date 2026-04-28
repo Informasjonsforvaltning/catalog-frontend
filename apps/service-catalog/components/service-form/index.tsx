@@ -614,6 +614,7 @@ export const ServiceForm = (props: ServiceFormProps) => {
                       <EvidenceField
                         errors={errors.evidence}
                         languages={languages}
+                        searchEnv={searchEnv}
                         validationSchema={
                           ignoreRequired
                             ? draftEvidenceSchema

@@ -37,6 +37,7 @@ export const evidenceTemplate = (evidence: Evidence): Evidence => {
     },
     language: evidence.language ?? [],
     relatedDocumentation: evidence.relatedDocumentation ?? [],
+    dataset: evidence.dataset ?? [],
   };
 };
 
@@ -64,6 +65,7 @@ export const emptyEvidence: Evidence[] = [
     description: { nb: undefined, nn: undefined, en: undefined },
     language: [],
     relatedDocumentation: [],
+    dataset: [],
   },
 ];
 

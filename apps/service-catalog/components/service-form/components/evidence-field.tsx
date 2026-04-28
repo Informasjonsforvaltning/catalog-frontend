@@ -12,9 +12,13 @@ import {
   FieldsetDivider,
   FormikLanguageFieldset,
   TitleWithHelpTextAndTag,
+  useDebounce,
+  useSearchDatasetsByUri,
+  useSearchDatasetSuggestions,
 } from "@catalog-frontend/ui";
 import cn from "classnames";
 import {
+  capitalizeFirstLetter,
   getTranslateText,
   localization,
   trimObjectWhitespace,
@@ -23,6 +27,7 @@ import {
   Button,
   Card,
   Checkbox,
+  Combobox,
   Fieldset,
   Heading,
   Paragraph,
@@ -51,11 +56,13 @@ interface Props {
     | string
     | Array<{ title: LocalizedStrings; description: LocalizedStrings }>;
   languages: ReferenceDataCode[];
+  searchEnv: string;
   validationSchema: typeof confirmedEvidenceSchema | typeof draftEvidenceSchema;
 }
 
 interface ModalProps {
   languages: ReferenceDataCode[];
+  searchEnv: string;
   validationSchema: typeof confirmedEvidenceSchema | typeof draftEvidenceSchema;
   onCancel: () => void;
   onChange: (values: Evidence) => void;
@@ -121,6 +128,103 @@ const LanguageFieldset = ({
   );
 };
 
+const DatasetFieldset = ({ searchEnv }: { searchEnv: string }) => {
+  const { values, setFieldValue } = useFormikContext<Evidence>();
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const debouncedSearchTerm = useDebounce(searchTerm);
+  const { data: datasetSuggestions, isLoading: searching } =
+    useSearchDatasetSuggestions(searchEnv, debouncedSearchTerm);
+  const { data: selectedDatasets, isLoading } = useSearchDatasetsByUri(
+    searchEnv,
+    values.dataset ?? [],
+  );
+
+  const comboboxOptions = [
+    ...new Map(
+      [
+        ...(selectedDatasets ?? []),
+        ...(datasetSuggestions ?? []),
+        ...(values.dataset ?? []).map((uri) => {
+          const foundItem =
+            selectedDatasets?.find(
+              (item: { uri: string }) => item.uri === uri,
+            ) ||
+            datasetSuggestions?.find(
+              (item: { uri: string }) => item.uri === uri,
+            );
+
+          return {
+            uri,
+            title: foundItem?.title ?? null,
+            description: foundItem?.description ?? null,
+            organization: foundItem?.organization ?? null,
+          };
+        }),
+      ].map((option) => [option.uri, option]),
+    ).values(),
+  ];
+
+  if (isLoading) {
+    return null;
+  }
+
+  return (
+    <Fieldset>
+      <Fieldset.Legend>
+        <TitleWithHelpTextAndTag
+          helpText={localization.serviceForm.helptext.dataset}
+          tagTitle={localization.tag.recommended}
+          tagColor="info"
+        >
+          {localization.serviceForm.fieldLabel.dataset}
+        </TitleWithHelpTextAndTag>
+      </Fieldset.Legend>
+      <Combobox
+        data-size="sm"
+        portal={false}
+        onValueChange={(selectedValues: string[]) =>
+          setFieldValue("dataset", selectedValues)
+        }
+        onChange={(input: React.ChangeEvent<HTMLInputElement>) =>
+          setSearchTerm(input.target.value)
+        }
+        loading={searching}
+        multiple
+        hideClearButton
+        value={values.dataset ?? []}
+        placeholder={`${localization.search.search}...`}
+        filter={() => true}
+      >
+        <Combobox.Empty>{`${localization.search.noHits}...`}</Combobox.Empty>
+        {comboboxOptions.map((suggestion) => (
+          <Combobox.Option
+            value={suggestion.uri}
+            key={suggestion.uri}
+            displayValue={
+              suggestion.title
+                ? capitalizeFirstLetter(getTranslateText(suggestion.title))
+                : suggestion.uri
+            }
+          >
+            <div className={styles.comboboxOption}>
+              <div>
+                {capitalizeFirstLetter(getTranslateText(suggestion.title)) ??
+                  suggestion.uri}
+              </div>
+              <div>
+                {capitalizeFirstLetter(
+                  getTranslateText(suggestion.description),
+                )}
+              </div>
+              <div>{getTranslateText(suggestion.organization?.prefLabel)}</div>
+            </div>
+          </Combobox.Option>
+        ))}
+      </Combobox>
+    </Fieldset>
+  );
+};
+
 const hasNoFieldValues = (values: Evidence) => {
   if (!values) return true;
   return (
@@ -129,7 +233,7 @@ const hasNoFieldValues = (values: Evidence) => {
 };
 
 export const EvidenceField = (props: Props) => {
-  const { errors, languages, validationSchema } = props;
+  const { errors, languages, searchEnv, validationSchema } = props;
   const { values, setFieldValue } = useFormikContext<Service>();
   const [snapshot, setSnapshot] = useState<Evidence[]>(values.evidence ?? []);
 
@@ -158,6 +262,7 @@ export const EvidenceField = (props: Props) => {
                 <div className={styles.buttons}>
                   <FieldModal
                     languages={languages}
+                    searchEnv={searchEnv}
                     validationSchema={validationSchema}
                     template={item}
                     type="edit"
@@ -198,6 +303,7 @@ export const EvidenceField = (props: Props) => {
 
           <FieldModal
             languages={languages}
+            searchEnv={searchEnv}
             validationSchema={validationSchema}
             template={{
               title: {},
@@ -205,6 +311,7 @@ export const EvidenceField = (props: Props) => {
               language: [],
               identifier: "",
               relatedDocumentation: [],
+              dataset: [],
             }}
             type="new"
             onSuccess={() => setSnapshot([...(values.evidence ?? [])])}
@@ -232,6 +339,7 @@ export const EvidenceField = (props: Props) => {
 const FieldModal = (props: ModalProps) => {
   const {
     languages,
+    searchEnv,
     template,
     type,
     onSuccess,
@@ -303,6 +411,9 @@ const FieldModal = (props: ModalProps) => {
 
                   <FieldsetDivider />
                   <LanguageFieldset languages={languages} />
+
+                  <FieldsetDivider />
+                  <DatasetFieldset searchEnv={searchEnv} />
 
                   <FieldsetDivider />
                   <FieldArray name="relatedDocumentation">

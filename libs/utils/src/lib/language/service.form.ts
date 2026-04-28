@@ -9,6 +9,7 @@ export const serviceFormNb = {
     contactPoint: "Kontaktinformasjon",
     dctType: "Hovedformål",
     description: "Beskrivelse",
+    dataset: "Datasett",
     email: "E-post",
     evidence: "Dokumentasjon",
     homepage: "Hjemmeside",
@@ -29,6 +30,7 @@ export const serviceFormNb = {
       "Tjenestens hovedformål. Dette kan velges blant EU's kontrollerte vokabular [main activity](https://op.europa.eu/en/web/eu-vocabularies/concept-scheme/-/resource?uri=http://publications.europa.eu/resource/authority/main-activity).",
     description:
       "Beskrivelsen skal være kortfattet og formålet med tjenesten bør fremgå.",
+    dataset: "Velg datasett som dokumentasjonen gjelder for.",
     evidence:
       "Egenskapen brukes til å referere til dokumentasjon som er relevant for tjenesten.",
     homepage:

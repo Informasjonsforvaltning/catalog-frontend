@@ -33,6 +33,7 @@ export interface Evidence {
   description?: LocalizedStrings;
   language?: string[];
   relatedDocumentation?: string[];
+  dataset?: string[];
 }
 
 export interface ContactPoint {

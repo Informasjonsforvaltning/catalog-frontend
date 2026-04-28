@@ -66,6 +66,7 @@ export const draftEvidenceSchema = Yup.object().shape({
         .url(localization.validation.invalidUrl),
     )
     .notRequired(),
+  dataset: Yup.array().of(Yup.string()).notRequired(),
 });
 
 export const confirmedEvidenceSchema = Yup.object().shape({
@@ -132,6 +133,7 @@ export const confirmedEvidenceSchema = Yup.object().shape({
         .url(localization.validation.invalidUrl),
     )
     .notRequired(),
+  dataset: Yup.array().of(Yup.string()).notRequired(),
 });
 
 export const confirmedProducesSchema = Yup.object().shape({
