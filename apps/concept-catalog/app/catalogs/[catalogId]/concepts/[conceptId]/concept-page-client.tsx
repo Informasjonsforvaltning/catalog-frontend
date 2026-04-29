@@ -8,6 +8,7 @@ import { ChatIcon, EnvelopeClosedIcon, PhoneIcon } from "@navikt/aksel-icons";
 import {
   Chip,
   Details,
+  Dropdown,
   Link,
   Switch,
   Tabs,
@@ -970,21 +971,42 @@ export const ConceptPageClient = ({
           <div className={classes.actionButtons}>
             {hasWritePermission && (
               <>
-                <Button onClick={handleEditConcept}>
-                  {localization.button.edit}
-                </Button>
                 {concept?.isArchived ? (
-                  <Button onClick={handleEditArchivedConcept}>
-                    {localization.concept.editArchived}
-                  </Button>
+                  <Dropdown.TriggerContext>
+                    <Dropdown.Trigger>
+                      {localization.button.edit}
+                    </Dropdown.Trigger>
+                    <Dropdown placement="bottom-end">
+                      <Dropdown.Heading>
+                        {localization.concept.archivedVersion}
+                      </Dropdown.Heading>
+                      <Dropdown.List>
+                        <Dropdown.Item>
+                          <Dropdown.Button onClick={handleEditConcept}>
+                            {localization.concept.editNewVersion}
+                          </Dropdown.Button>
+                        </Dropdown.Item>
+                        <Dropdown.Item>
+                          <Dropdown.Button onClick={handleEditArchivedConcept}>
+                            {localization.concept.editThisVersion}
+                          </Dropdown.Button>
+                        </Dropdown.Item>
+                      </Dropdown.List>
+                    </Dropdown>
+                  </Dropdown.TriggerContext>
                 ) : (
-                  <Button
-                    data-color="danger"
-                    variant="secondary"
-                    onClick={() => setShowConfirmDelete(true)}
-                  >
-                    {localization.button.delete}
-                  </Button>
+                  <>
+                    <Button onClick={handleEditConcept}>
+                      {localization.button.edit}
+                    </Button>
+                    <Button
+                      data-color="danger"
+                      variant="secondary"
+                      onClick={() => setShowConfirmDelete(true)}
+                    >
+                      {localization.button.delete}
+                    </Button>
+                  </>
                 )}
               </>
             )}
