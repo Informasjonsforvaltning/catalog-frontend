@@ -8,7 +8,7 @@ import {
 
 export const producesTemplate = (produce: Output): Output => {
   return {
-    identifier: produce.identifier ?? 0,
+    identifier: produce.identifier ?? "0",
     title: {
       nb: produce.title?.nb,
       nn: produce.title?.nn,
@@ -24,7 +24,7 @@ export const producesTemplate = (produce: Output): Output => {
 
 export const evidenceTemplate = (evidence: Evidence): Evidence => {
   return {
-    identifier: evidence.identifier ?? 0,
+    identifier: evidence.identifier ?? "0",
     title: {
       nb: evidence.title?.nb,
       nn: evidence.title?.nn,

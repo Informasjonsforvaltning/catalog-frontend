@@ -226,19 +226,22 @@ export const ServiceForm = (props: ServiceFormProps) => {
         validateOnChange={validateOnChange}
         validateOnBlur={validateOnChange}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
-          // set produces identifiers
-          values.produces?.map((produce, index) => ({
-            ...produce,
-            identifier: index,
-          }));
+          const valuesWithUpdatedIdentifiers: typeof values = {
+            ...values,
+            // Ensure identifiers are stable and match the list index
+            produces: values.produces?.map((produce, index) => ({
+              ...produce,
+              identifier: String(index),
+            })),
+            evidence: values.evidence?.map((evidence, index) => ({
+              ...evidence,
+              identifier: String(index),
+            })),
+          };
 
-          // set evidence identifiers
-          values.evidence?.map((evidence, index) => ({
-            ...evidence,
-            identifier: index,
-          }));
-
-          const trimmedValues = trimObjectWhitespace(values);
+          const trimmedValues = trimObjectWhitespace(
+            valuesWithUpdatedIdentifiers,
+          );
 
           if (isEqual(trimmedValues, initialValues)) {
             resetForm();
