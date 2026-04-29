@@ -4,6 +4,12 @@
   gap: 0.8rem;
 }
 
+.comboboxOption {
+  display: grid;
+  grid-template-columns: 22% 50% 22%;
+  gap: 2.5%;
+}
+
 .modalContent {
   margin-top: var(--ds-size-8);
   margin-bottom: var(--ds-size-8);

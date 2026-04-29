@@ -596,6 +596,7 @@ ___Merk:__ Maksimal filstørrelse for opplastning er {0} MB. CSV/JSON-filer kan 
     contactPoint: "Kontaktpunkt",
     editPublicService: "Rediger offentlig tjeneste",
     editService: "Rediger tjeneste",
+    evidence: "Dokumentasjonskrav",
     infoAboutService: "Informasjon om tjenesten",
     produces: "Produserer",
     searchHitsTitle: "Listevisning",

@@ -1,5 +1,6 @@
 import {
   ContactPoint,
+  Evidence,
   Output,
   Service,
   ServiceToBeCreated,
@@ -7,7 +8,7 @@ import {
 
 export const producesTemplate = (produce: Output): Output => {
   return {
-    identifier: produce.identifier ?? 0,
+    identifier: produce.identifier ?? "0",
     title: {
       nb: produce.title?.nb,
       nn: produce.title?.nn,
@@ -18,6 +19,25 @@ export const producesTemplate = (produce: Output): Output => {
       nn: produce.description?.nn,
       en: produce.description?.en,
     },
+  };
+};
+
+export const evidenceTemplate = (evidence: Evidence): Evidence => {
+  return {
+    identifier: evidence.identifier ?? "0",
+    title: {
+      nb: evidence.title?.nb,
+      nn: evidence.title?.nn,
+      en: evidence.title?.en,
+    },
+    description: {
+      nb: evidence.description?.nb,
+      nn: evidence.description?.nn,
+      en: evidence.description?.en,
+    },
+    language: evidence.language ?? [],
+    relatedDocumentation: evidence.relatedDocumentation ?? [],
+    dataset: evidence.dataset ?? [],
   };
 };
 
@@ -35,6 +55,17 @@ export const emptyProduces: Output[] = [
     identifier: "0",
     title: { nb: undefined, nn: undefined, en: undefined },
     description: { nb: undefined, nn: undefined, en: undefined },
+  },
+];
+
+export const emptyEvidence: Evidence[] = [
+  {
+    identifier: "0",
+    title: { nb: undefined, nn: undefined, en: undefined },
+    description: { nb: undefined, nn: undefined, en: undefined },
+    language: [],
+    relatedDocumentation: [],
+    dataset: [],
   },
 ];
 
@@ -61,6 +92,11 @@ export const serviceTemplate = (
     service.produces
       .map((produce) => producesTemplate(produce))
       .filter((cp) => cp !== null);
+  const evidence =
+    service?.evidence &&
+    service.evidence
+      .map((item) => evidenceTemplate(item))
+      .filter((cp) => cp !== null);
   const contactPoints = service?.contactPoints
     ? service.contactPoints
         .map((cp) => contactPointTemplate(cp))
@@ -75,7 +111,9 @@ export const serviceTemplate = (
       nn: service?.description?.nn,
       en: service?.description?.en,
     },
+    evidence,
     homepage: service?.homepage,
+    losTheme: service?.losTheme || [],
     produces,
     spatial: service?.spatial || [],
     status: service?.status,

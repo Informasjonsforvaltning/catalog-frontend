@@ -124,11 +124,13 @@ export async function updateService(
     title: updatedService.title,
     description: updatedService.description,
     produces: updatedService.produces,
+    evidence: updatedService.evidence,
     contactPoints: updatedService.contactPoints,
     homepage: updatedService.homepage,
     status: updatedService.status,
     spatial: updatedService.spatial,
     subject: updatedService.subject,
+    losTheme: updatedService.losTheme,
   };
 
   const diff = compare(oldService, updatedServiceMerged);

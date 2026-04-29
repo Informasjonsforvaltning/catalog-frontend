@@ -1,6 +1,6 @@
 "use client";
 
-import { ReferenceDataCode, Service } from "@catalog-frontend/types";
+import { LosTheme, ReferenceDataCode, Service } from "@catalog-frontend/types";
 import {
   DetailsPageLayout,
   InfoCard,
@@ -20,6 +20,8 @@ import styles from "./service-details-page.module.css";
 interface ServiceDetailsPageProps {
   catalogId: string;
   hasWritePermission: boolean;
+  languages: ReferenceDataCode[];
+  losThemes: LosTheme[];
   referenceDataEnv: string;
   searchEnv: string;
   service: Service;
@@ -30,6 +32,8 @@ interface ServiceDetailsPageProps {
 const ServiceDetailsPageClient = ({
   catalogId,
   hasWritePermission,
+  languages,
+  losThemes,
   referenceDataEnv,
   searchEnv,
   service,
@@ -62,6 +66,8 @@ const ServiceDetailsPageClient = ({
       <DetailsPageLayout.Left>
         <BasicServiceFormInfoCardItems
           language={language}
+          languages={languages}
+          losThemes={losThemes}
           referenceDataEnv={referenceDataEnv}
           searchEnv={searchEnv}
           service={service}

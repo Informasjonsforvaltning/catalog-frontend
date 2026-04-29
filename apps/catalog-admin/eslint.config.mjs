@@ -10,6 +10,10 @@ export default defineConfig([
   createCommonTsConfig(__dirname),
 
   {
+    ignores: [".next", ".next/**/*", "**/.next/**/*", "node_modules/**/*"],
+  },
+
+  {
     files: ["*.ts", "*.tsx", "*.js", "*.jsx"],
     rules: {
       "@nx/enforce-module-boundaries": [

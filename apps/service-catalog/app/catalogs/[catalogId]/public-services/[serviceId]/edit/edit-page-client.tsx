@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  LosTheme,
   ReferenceDataCode,
   Service,
   StorageData,
@@ -23,6 +24,8 @@ import {
 import { useEffect, useState } from "react";
 
 type EditPageProps = {
+  languages: ReferenceDataCode[];
+  losThemes: LosTheme[];
   mainActivities: ReferenceDataCode[];
   referenceDataEnv: string;
   searchEnv: string;
@@ -31,8 +34,15 @@ type EditPageProps = {
 };
 
 export const EditPage = (props: EditPageProps) => {
-  const { mainActivities, referenceDataEnv, searchEnv, service, statuses } =
-    props;
+  const {
+    languages,
+    losThemes,
+    mainActivities,
+    referenceDataEnv,
+    searchEnv,
+    service,
+    statuses,
+  } = props;
   const router = useRouter();
   const { catalogId, serviceId } = useParams<{
     catalogId: string;
@@ -102,6 +112,8 @@ export const EditPage = (props: EditPageProps) => {
       </ButtonBar>
       <ServiceForm
         autoSaveStorage={dataStorage}
+        languages={languages}
+        losThemes={losThemes}
         mainActivities={mainActivities}
         onCancel={handleCancel}
         onSubmit={handleUpdate}

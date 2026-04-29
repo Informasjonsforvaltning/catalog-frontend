@@ -36,6 +36,8 @@ import {
   formatISO,
 } from "@catalog-frontend/utils";
 import {
+  LosTheme,
+  Option,
   ReferenceDataCode,
   Service,
   ServiceToBeCreated,
@@ -48,9 +50,12 @@ import { FastField, Field, Form, Formik, FormikProps } from "formik";
 import { serviceTemplate } from "./service-template";
 import { useEffect, useRef, useState } from "react";
 import { ProducesField } from "./components/produces-field";
+import { EvidenceField } from "./components/evidence-field";
 import {
+  confirmedEvidenceSchema,
   confirmedProducesSchema,
   confirmedServiceSchema,
+  draftEvidenceSchema,
   draftProducesSchema,
   draftServiceSchema,
 } from "./validation-schema";
@@ -60,6 +65,8 @@ interface ServiceFormProps {
   afterSubmit?: () => void;
   autoSaveStorage: DataStorage<StorageData>;
   initialValues: ServiceToBeCreated;
+  languages: ReferenceDataCode[];
+  losThemes: LosTheme[];
   mainActivities?: ReferenceDataCode[];
   onCancel?: () => void;
   onSubmit?: (values: Service) => Promise<Service | undefined>;
@@ -99,6 +106,8 @@ export const ServiceForm = (props: ServiceFormProps) => {
     afterSubmit,
     autoSaveStorage,
     initialValues,
+    languages,
+    losThemes,
     mainActivities,
     onCancel,
     onSubmit,
@@ -108,6 +117,10 @@ export const ServiceForm = (props: ServiceFormProps) => {
     statuses,
     type,
   } = props;
+
+  const containsFilter = (inputValue: string, option: Option): boolean => {
+    return option.label.toLowerCase().includes(inputValue.toLowerCase());
+  };
   const searchParams = useSearchParams();
   const formikRef = useRef<FormikProps<ServiceToBeCreated>>(null);
   const { catalogId, serviceId } = useParams<{
@@ -213,13 +226,22 @@ export const ServiceForm = (props: ServiceFormProps) => {
         validateOnChange={validateOnChange}
         validateOnBlur={validateOnChange}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
-          // set produces identifiers
-          values.produces?.map((produce, index) => ({
-            ...produce,
-            identifier: index,
-          }));
+          const valuesWithUpdatedIdentifiers: typeof values = {
+            ...values,
+            // Ensure identifiers are stable and match the list index
+            produces: values.produces?.map((produce, index) => ({
+              ...produce,
+              identifier: String(index),
+            })),
+            evidence: values.evidence?.map((evidence, index) => ({
+              ...evidence,
+              identifier: String(index),
+            })),
+          };
 
-          const trimmedValues = trimObjectWhitespace(values);
+          const trimmedValues = trimObjectWhitespace(
+            valuesWithUpdatedIdentifiers,
+          );
 
           if (isEqual(trimmedValues, initialValues)) {
             resetForm();
@@ -317,10 +339,12 @@ export const ServiceForm = (props: ServiceFormProps) => {
               "homepage",
               "status",
               "produces",
+              "evidence",
               "contactPoints",
               "spatial",
               "subject",
               "dctType",
+              "losTheme",
             ].forEach((name) => {
               if (isDirty(name)) {
                 dirtyFields.push(name);
@@ -355,6 +379,7 @@ export const ServiceForm = (props: ServiceFormProps) => {
                         "spatial",
                         "subject",
                         "dctType",
+                        "losTheme",
                       ].includes(field),
                     )}
                     error={hasError([
@@ -365,6 +390,7 @@ export const ServiceForm = (props: ServiceFormProps) => {
                       "spatial",
                       "subject",
                       "dctType",
+                      "losTheme",
                     ])}
                   >
                     <div>
@@ -501,6 +527,45 @@ export const ServiceForm = (props: ServiceFormProps) => {
                           </Fieldset>
                         </>
                       )}
+                      <FieldsetDivider />
+                      <FastField
+                        id="losTheme-combobox"
+                        as={Combobox}
+                        value={values.losTheme}
+                        multiple
+                        hideClearButton
+                        label={
+                          <TitleWithHelpTextAndTag
+                            helpText={
+                              localization.serviceForm.helptext.losTheme
+                            }
+                          >
+                            {localization.serviceForm.fieldLabel.losTheme}
+                          </TitleWithHelpTextAndTag>
+                        }
+                        filter={containsFilter}
+                        placeholder={`${localization.search.search}...`}
+                        onValueChange={(selected: string[]) =>
+                          setFieldValue("losTheme", selected)
+                        }
+                        data-size="sm"
+                      >
+                        <Combobox.Empty>
+                          {localization.search.noHits}
+                        </Combobox.Empty>
+                        {losThemes
+                          ?.slice()
+                          .sort((a, b) =>
+                            (get(a.name, "nb")?.toString() ?? "").localeCompare(
+                              get(b.name, "nb")?.toString() ?? "",
+                            ),
+                          )
+                          .map((theme) => (
+                            <Combobox.Option key={theme.uri} value={theme.uri}>
+                              {getTranslateText(theme.name)}
+                            </Combobox.Option>
+                          ))}
+                      </FastField>
                     </div>
                   </FormLayout.Section>
 
@@ -527,6 +592,36 @@ export const ServiceForm = (props: ServiceFormProps) => {
                           ignoreRequired
                             ? draftProducesSchema
                             : confirmedProducesSchema
+                        }
+                      />
+                    </div>
+                  </FormLayout.Section>
+
+                  <FormLayout.Section
+                    id="evidence-section"
+                    title={localization.serviceForm.section.evidence.title}
+                    subtitle={
+                      localization.serviceForm.section.evidence.subtitle
+                    }
+                    required
+                    error={hasError(["evidence"])}
+                    changed={dirtyFields.includes("evidence")}
+                  >
+                    <div className={styles.fieldSet}>
+                      <TitleWithHelpTextAndTag
+                        helpText={localization.serviceForm.helptext.evidence}
+                        tagTitle={localization.tag.required}
+                      >
+                        {localization.serviceForm.fieldLabel.evidence}
+                      </TitleWithHelpTextAndTag>
+                      <EvidenceField
+                        errors={errors.evidence}
+                        languages={languages}
+                        searchEnv={searchEnv}
+                        validationSchema={
+                          ignoreRequired
+                            ? draftEvidenceSchema
+                            : confirmedEvidenceSchema
                         }
                       />
                     </div>
