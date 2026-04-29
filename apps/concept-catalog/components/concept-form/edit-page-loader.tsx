@@ -105,8 +105,8 @@ export async function renderConceptEditPage({
   const editBreadcrumbLabel =
     mode === "archived" ? localization.concept.editArchived : localization.edit;
 
-  const breadcrumbList = catalogId
-    ? ([
+  const breadcrumbList: BreadcrumbType[] = catalogId
+    ? [
         {
           href: `/catalogs/${catalogId}`,
           text: localization.catalogType.concept,
@@ -119,7 +119,7 @@ export async function renderConceptEditPage({
           href: `/catalogs/${catalogId}/concepts/${concept.id}/${editPathSegment}`,
           text: editBreadcrumbLabel,
         },
-      ] as BreadcrumbType[])
+      ]
     : [];
 
   return (
