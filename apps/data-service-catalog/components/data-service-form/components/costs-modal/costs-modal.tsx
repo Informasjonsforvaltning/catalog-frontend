@@ -150,12 +150,10 @@ export const CostsModal = ({
                           <Combobox
                             value={[values?.currency ?? DEFAULT_CURRENCY]}
                             portal={false}
-                            onValueChange={(selectedValues) =>
-                              setFieldValue(
-                                "currency",
-                                selectedValues.toString(),
-                              )
-                            }
+                            onValueChange={(selectedValues) => {
+                              if (selectedValues.length === 0) return;
+                              setFieldValue("currency", selectedValues[0]);
+                            }}
                             data-size="sm"
                             disabled={!isNumber(values?.value)}
                             hideClearButton
