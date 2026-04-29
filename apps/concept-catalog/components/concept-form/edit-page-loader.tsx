@@ -38,6 +38,31 @@ type LoaderArgs = {
 const getTitle = (text: string | string[]) =>
   text ? text : localization.concept.noName;
 
+const getBreadcrumbList = ({
+  catalogId,
+  concept,
+  editPathSegment,
+  editBreadcrumbLabel,
+}: {
+  catalogId: string;
+  concept: Concept;
+  editPathSegment: string;
+  editBreadcrumbLabel: string;
+}): BreadcrumbType[] => [
+  {
+    href: `/catalogs/${catalogId}`,
+    text: localization.catalogType.concept,
+  },
+  {
+    href: `/catalogs/${catalogId}/concepts/${concept.id}`,
+    text: getTitle(getTranslateText(concept.anbefaltTerm?.navn)) as string,
+  },
+  {
+    href: `/catalogs/${catalogId}/concepts/${concept.id}/${editPathSegment}`,
+    text: editBreadcrumbLabel,
+  },
+];
+
 export async function renderConceptEditPage({
   catalogId,
   conceptId,
@@ -105,22 +130,12 @@ export async function renderConceptEditPage({
   const editBreadcrumbLabel =
     mode === "archived" ? localization.concept.editArchived : localization.edit;
 
-  const breadcrumbList: BreadcrumbType[] = catalogId
-    ? [
-        {
-          href: `/catalogs/${catalogId}`,
-          text: localization.catalogType.concept,
-        },
-        {
-          href: `/catalogs/${catalogId}/concepts/${concept.id}`,
-          text: getTitle(getTranslateText(concept.anbefaltTerm?.navn)),
-        },
-        {
-          href: `/catalogs/${catalogId}/concepts/${concept.id}/${editPathSegment}`,
-          text: editBreadcrumbLabel,
-        },
-      ]
-    : [];
+  const breadcrumbList = getBreadcrumbList({
+    catalogId,
+    concept,
+    editPathSegment,
+    editBreadcrumbLabel,
+  });
 
   return (
     <>
