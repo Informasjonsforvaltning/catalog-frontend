@@ -236,6 +236,13 @@ export const EvidenceField = (props: Props) => {
   const { errors, languages, searchEnv, validationSchema } = props;
   const { values, setFieldValue } = useFormikContext<Service>();
   const [snapshot, setSnapshot] = useState<Evidence[]>(values.evidence ?? []);
+  const evidenceDatasetUris = [
+    ...new Set((values.evidence ?? []).flatMap((item) => item.dataset ?? [])),
+  ];
+  const { data: evidenceDatasets } = useSearchDatasetsByUri(
+    searchEnv,
+    evidenceDatasetUris,
+  );
 
   return (
     <FieldArray
@@ -298,6 +305,57 @@ export const EvidenceField = (props: Props) => {
                   </ValidationMessage>
                 )}
               </div>
+              {!isEmpty(item.language) && (
+                <div>
+                  <Heading data-size="2xs" level={3}>
+                    {localization.datasetForm.fieldLabel.language}
+                  </Heading>
+                  <Paragraph data-size="sm">
+                    {item.language
+                      ?.map((lang) => {
+                        const matchedLang = languages.find(
+                          (languageItem) => languageItem.uri === lang,
+                        );
+                        return matchedLang
+                          ? getTranslateText(matchedLang.label)
+                          : null;
+                      })
+                      .filter(Boolean)
+                      .join(", ")}
+                  </Paragraph>
+                </div>
+              )}
+              {!isEmpty(item.dataset) && (
+                <div>
+                  <Heading data-size="2xs" level={3}>
+                    {localization.serviceForm.fieldLabel.dataset}
+                  </Heading>
+                  <Paragraph data-size="sm">
+                    {item.dataset
+                      ?.map((uri) => {
+                        const matchedDataset = evidenceDatasets?.find(
+                          (dataset) => dataset.uri === uri,
+                        );
+                        return matchedDataset?.title
+                          ? capitalizeFirstLetter(
+                              getTranslateText(matchedDataset.title),
+                            )
+                          : uri;
+                      })
+                      .join(", ")}
+                  </Paragraph>
+                </div>
+              )}
+              {!isEmpty(item.relatedDocumentation) && (
+                <div>
+                  <Heading data-size="2xs" level={3}>
+                    {localization.serviceForm.fieldLabel.relatedDocumentation}
+                  </Heading>
+                  <Paragraph data-size="sm">
+                    {item.relatedDocumentation?.join(", ")}
+                  </Paragraph>
+                </div>
+              )}
             </Card>
           ))}
 

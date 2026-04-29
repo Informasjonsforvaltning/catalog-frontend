@@ -19,6 +19,7 @@ import styles from "./public-service-details-page.module.css";
 interface PublicServiceDetailsPageProps {
   catalogId: string;
   hasWritePermission: boolean;
+  languages: ReferenceDataCode[];
   losThemes: LosTheme[];
   mainActivities: ReferenceDataCode[];
   referenceDataEnv: string;
@@ -31,6 +32,7 @@ interface PublicServiceDetailsPageProps {
 const PublicServiceDetailsPageClient = ({
   catalogId,
   hasWritePermission,
+  languages,
   losThemes,
   mainActivities,
   referenceDataEnv,
@@ -65,6 +67,7 @@ const PublicServiceDetailsPageClient = ({
       <DetailsPageLayout.Left>
         <BasicServiceFormInfoCardItems
           language={language}
+          languages={languages}
           losThemes={losThemes}
           mainActivities={mainActivities}
           searchEnv={searchEnv}

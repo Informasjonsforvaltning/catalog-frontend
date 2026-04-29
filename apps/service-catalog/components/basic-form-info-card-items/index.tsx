@@ -24,6 +24,7 @@ import styles from "./basic-form-info-card-items.module.css";
 
 type Props = {
   language: string;
+  languages?: ReferenceDataCode[];
   losThemes?: LosTheme[];
   mainActivities?: ReferenceDataCode[];
   referenceDataEnv: string;
@@ -34,6 +35,7 @@ type Props = {
 export const BasicServiceFormInfoCardItems = (props: Props) => {
   const {
     language,
+    languages,
     losThemes,
     mainActivities,
     referenceDataEnv,
@@ -112,13 +114,9 @@ export const BasicServiceFormInfoCardItems = (props: Props) => {
                   <Heading data-size="2xs" level={5}>
                     {localization.serviceForm.fieldLabel.relatedDocumentation}
                   </Heading>
-                  <div className={styles.flexList}>
-                    {item.relatedDocumentation?.map((uri) => (
-                      <Link key={uri} href={uri}>
-                        {uri}
-                      </Link>
-                    ))}
-                  </div>
+                  <Paragraph data-size="sm">
+                    {item.relatedDocumentation?.join(", ")}
+                  </Paragraph>
                 </>
               )}
 
@@ -127,22 +125,39 @@ export const BasicServiceFormInfoCardItems = (props: Props) => {
                   <Heading data-size="2xs" level={5}>
                     {localization.serviceForm.fieldLabel.dataset}
                   </Heading>
-                  <div className={styles.flexList}>
-                    {item.dataset?.map((uri) => {
-                      const datasetMatch = datasets?.find(
-                        (dataset) => dataset.uri === uri,
-                      );
-                      const displayValue =
-                        capitalizeFirstLetter(
-                          getTranslateText(datasetMatch?.title, language),
-                        ) || uri;
-                      return (
-                        <Paragraph key={uri} data-size="sm">
-                          {displayValue}
-                        </Paragraph>
-                      );
-                    })}
-                  </div>
+                  <Paragraph data-size="sm">
+                    {item.dataset
+                      ?.map((uri) => {
+                        const datasetMatch = datasets?.find(
+                          (dataset) => dataset.uri === uri,
+                        );
+                        return (
+                          getTranslateText(datasetMatch?.title, language) || uri
+                        );
+                      })
+                      .join(", ")}
+                  </Paragraph>
+                </>
+              )}
+
+              {!isEmpty(item.language) && (
+                <>
+                  <Heading data-size="2xs" level={5}>
+                    {localization.datasetForm.fieldLabel.language}
+                  </Heading>
+                  <Paragraph data-size="sm">
+                    {item.language
+                      ?.map((lang) => {
+                        const matchedLang = languages?.find(
+                          (languageItem) => languageItem?.uri === lang,
+                        );
+                        return matchedLang
+                          ? getTranslateText(matchedLang.label, language)
+                          : null;
+                      })
+                      .filter(Boolean)
+                      .join(", ")}
+                  </Paragraph>
                 </>
               )}
             </Card>
