@@ -8,6 +8,7 @@ import { ChatIcon, EnvelopeClosedIcon, PhoneIcon } from "@navikt/aksel-icons";
 import {
   Chip,
   Details,
+  Dropdown,
   Link,
   Switch,
   Tabs,
@@ -193,6 +194,7 @@ export const ConceptPageClient = ({
 }: ConceptPageClientProps) => {
   const [language, setLanguage] = useState("nb");
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
+  const [isArchived, setIsArchived] = useState(concept?.isArchived);
   const [isPublished, setIsPublished] = useState(concept?.erPublisert);
   const [publishedDate, setPublishedDate] = useState(
     concept?.publiseringsTidspunkt,
@@ -215,6 +217,7 @@ export const ConceptPageClient = ({
       if (window.confirm(localization.publicationState.confirmPublish)) {
         publishConcept.mutate(concept?.id as string, {
           onSuccess(data) {
+            setIsArchived(data.isArchived);
             setIsPublished(data.erPublisert);
             setPublishedDate(data.publiseringsTidspunkt);
           },
@@ -970,21 +973,39 @@ export const ConceptPageClient = ({
           <div className={classes.actionButtons}>
             {hasWritePermission && (
               <>
-                <Button onClick={handleEditConcept}>
-                  {localization.button.edit}
-                </Button>
-                {concept?.isArchived ? (
-                  <Button onClick={handleEditArchivedConcept}>
-                    {localization.concept.editArchived}
-                  </Button>
+                {isArchived ? (
+                  <Dropdown.TriggerContext>
+                    <Dropdown.Trigger>
+                      {localization.button.edit}
+                    </Dropdown.Trigger>
+                    <Dropdown placement="bottom-end">
+                      <Dropdown.List>
+                        <Dropdown.Item>
+                          <Dropdown.Button onClick={handleEditConcept}>
+                            {localization.concept.editAllFields}
+                          </Dropdown.Button>
+                        </Dropdown.Item>
+                        <Dropdown.Item>
+                          <Dropdown.Button onClick={handleEditArchivedConcept}>
+                            {localization.concept.editInternalFields}
+                          </Dropdown.Button>
+                        </Dropdown.Item>
+                      </Dropdown.List>
+                    </Dropdown>
+                  </Dropdown.TriggerContext>
                 ) : (
-                  <Button
-                    data-color="danger"
-                    variant="secondary"
-                    onClick={() => setShowConfirmDelete(true)}
-                  >
-                    {localization.button.delete}
-                  </Button>
+                  <>
+                    <Button onClick={handleEditConcept}>
+                      {localization.button.edit}
+                    </Button>
+                    <Button
+                      data-color="danger"
+                      variant="secondary"
+                      onClick={() => setShowConfirmDelete(true)}
+                    >
+                      {localization.button.delete}
+                    </Button>
+                  </>
                 )}
               </>
             )}

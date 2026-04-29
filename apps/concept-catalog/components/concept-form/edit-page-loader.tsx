@@ -127,8 +127,7 @@ export async function renderConceptEditPage({
   ];
 
   const editPathSegment = mode === "archived" ? "edit-archived" : "edit";
-  const editBreadcrumbLabel =
-    mode === "archived" ? localization.concept.editArchived : localization.edit;
+  const editBreadcrumbLabel = localization.edit;
 
   const breadcrumbList = getBreadcrumbList({
     catalogId,
