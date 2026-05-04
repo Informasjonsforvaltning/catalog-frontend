@@ -36,21 +36,21 @@ export const draftProducesSchema = Yup.object().shape({
 export const draftEvidenceSchema = Yup.object().shape({
   title: Yup.object().shape({
     nb: Yup.string()
-      .min(3, localization.serviceForm.validation.title)
+      .min(3, localization.serviceForm.validation.name)
       .label(
-        `${localization.serviceForm.fieldLabel.title} (${localization.language.nb})`,
+        `${localization.serviceForm.fieldLabel.name} (${localization.language.nb})`,
       )
       .notRequired(),
     nn: Yup.string()
-      .min(3, localization.serviceForm.validation.title)
+      .min(3, localization.serviceForm.validation.name)
       .label(
-        `${localization.serviceForm.fieldLabel.title} (${localization.language.nn})`,
+        `${localization.serviceForm.fieldLabel.name} (${localization.language.nn})`,
       )
       .notRequired(),
     en: Yup.string()
-      .min(3, localization.serviceForm.validation.title)
+      .min(3, localization.serviceForm.validation.name)
       .label(
-        `${localization.serviceForm.fieldLabel.title} (${localization.language.en})`,
+        `${localization.serviceForm.fieldLabel.name} (${localization.language.en})`,
       )
       .notRequired(),
   }),
@@ -73,21 +73,21 @@ export const confirmedEvidenceSchema = Yup.object().shape({
   title: Yup.object()
     .shape({
       nb: Yup.string()
-        .min(3, localization.serviceForm.validation.title)
+        .min(3, localization.serviceForm.validation.name)
         .label(
-          `${localization.serviceForm.fieldLabel.title} (${localization.language.nb})`,
+          `${localization.serviceForm.fieldLabel.name} (${localization.language.nb})`,
         )
         .notRequired(),
       nn: Yup.string()
-        .min(3, localization.serviceForm.validation.title)
+        .min(3, localization.serviceForm.validation.name)
         .label(
-          `${localization.serviceForm.fieldLabel.title} (${localization.language.nn})`,
+          `${localization.serviceForm.fieldLabel.name} (${localization.language.nn})`,
         )
         .notRequired(),
       en: Yup.string()
-        .min(3, localization.serviceForm.validation.title)
+        .min(3, localization.serviceForm.validation.name)
         .label(
-          `${localization.serviceForm.fieldLabel.title} (${localization.language.en})`,
+          `${localization.serviceForm.fieldLabel.name} (${localization.language.en})`,
         )
         .notRequired(),
     })

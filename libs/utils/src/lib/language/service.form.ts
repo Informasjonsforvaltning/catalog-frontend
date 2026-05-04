@@ -14,7 +14,9 @@ export const serviceFormNb = {
     evidence: "Dokumentasjonskrav",
     homepage: "Hjemmeside",
     ignoreRequired: "Ignorer påkrevde felt",
+    language: "Språk",
     losTheme: "Temaområde",
+    name: "Navn",
     produces: "Produserer",
     relatedDocumentation: "Relatert dokumentasjon",
     spatial: "Dekningsområde",
@@ -31,19 +33,20 @@ export const serviceFormNb = {
       "Tjenestens hovedformål. Dette kan velges blant EU's kontrollerte vokabular [main activity](https://op.europa.eu/en/web/eu-vocabularies/concept-scheme/-/resource?uri=http://publications.europa.eu/resource/authority/main-activity).",
     description:
       "Beskrivelsen skal være kortfattet og formålet med tjenesten bør fremgå.",
-    dataset: "Velg datasett som dokumentasjonen gjelder for.",
+    dataset: "Velg datasett som beskriver dokumentasjonen som kreves.",
     evidence:
       "Brukes til å spesifisere type dokumentasjon som er påkrevd av tjenesten.",
     homepage:
       "Lenke til en nettside som gir tilgang til tjenesten og/eller tilleggsinformasjon.",
     ignoreRequired:
       "I utgangspunktet er det krav om at alle påkrevde felt må fylles ut for å få lagret. Når avhukingsboksen er aktiv, må bare tittel være fylt ut.",
+    language: "Velg tillatte språk for dokumentasjonen.",
     losTheme:
       "Primært temaområde som dekkes av tjenesten. Listen er fra [LOS](https://psi.norge.no/los/struktur.html), et felles vokabular som er temainndelt for å kategorisere og beskrive offentlige tjenester og ressurser i Norge. Velg det eller de mest presise temaene som er dekkende.",
     produces:
       "Egenskapen brukes til å referere til en eller flere instanser av tjenesteresultat som beskriver resultat av tjenesten.",
     relatedDocumentation:
-      "Lenker til relatert dokumentasjon. Hver lenke må være en gyldig URI.",
+      "Lenker til mer informasjon om dokumentasjonen, for eksempel maler eller veiledning. Hver lenke må være en gyldig URL.",
     spatial: "Geografiske områder som tjenesten dekker.",
     status: "Velg tjenestens nåværende status.",
     subject:
@@ -73,6 +76,7 @@ export const serviceFormNb = {
   validation: {
     contactPoints: "Minst en verdi må fylles ut for kontaktpunktet.",
     description: "Beskrivelsen må være minst 5 karakterer lang.",
+    name: "Navnet må være minst 3 karakterer lang.",
     title: "Tittelen må være minst 3 karakterer lang.",
   },
 };

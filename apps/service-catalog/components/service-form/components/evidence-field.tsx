@@ -101,9 +101,9 @@ const LanguageFieldset = ({
         <TitleWithHelpTextAndTag
           tagColor="info"
           tagTitle={localization.tag.recommended}
-          helpText={localization.datasetForm.helptext.language}
+          helpText={localization.serviceForm.helptext.language}
         >
-          {localization.datasetForm.fieldLabel.language}
+          {localization.serviceForm.fieldLabel.language}
         </TitleWithHelpTextAndTag>
       </Fieldset.Legend>
       {langNOR &&
@@ -254,7 +254,7 @@ export const EvidenceField = (props: Props) => {
               <div className={styles.heading}>
                 <div>
                   <Heading data-size="2xs" level={3}>
-                    {localization.serviceForm.fieldLabel.title}
+                    {localization.serviceForm.fieldLabel.name}
                   </Heading>
                   <Paragraph data-size="sm">
                     {getTranslateText(item.title)}
@@ -308,7 +308,7 @@ export const EvidenceField = (props: Props) => {
               {!isEmpty(item.language) && (
                 <div>
                   <Heading data-size="2xs" level={3}>
-                    {localization.datasetForm.fieldLabel.language}
+                    {localization.serviceForm.fieldLabel.language}
                   </Heading>
                   <Paragraph data-size="sm">
                     {item.language
@@ -457,7 +457,7 @@ const FieldModal = (props: ModalProps) => {
                   <FormikLanguageFieldset
                     as={Textfield}
                     name="title"
-                    legend={localization.serviceForm.fieldLabel.title}
+                    legend={localization.serviceForm.fieldLabel.name}
                   />
 
                   <FieldsetDivider />
