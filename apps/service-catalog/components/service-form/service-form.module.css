@@ -53,6 +53,15 @@
   gap: var(--ds-size-2);
 }
 
+.relatedDocumentationRow {
+  width: 100%;
+}
+
+.relatedDocumentationInput {
+  flex: 1;
+  width: 100%;
+}
+
 .noWrap {
   flex-wrap: nowrap;
 }

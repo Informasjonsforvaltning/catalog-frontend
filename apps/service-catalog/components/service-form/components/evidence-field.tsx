@@ -11,6 +11,7 @@ import {
   EditButton,
   FieldsetDivider,
   FormikLanguageFieldset,
+  TextareaWithPrefix,
   TitleWithHelpTextAndTag,
   useDebounce,
   useSearchDatasetsByUri,
@@ -36,13 +37,7 @@ import {
   Dialog,
   useCheckboxGroup,
 } from "@digdir/designsystemet-react";
-import {
-  Field,
-  FieldArray,
-  Formik,
-  FormikErrors,
-  useFormikContext,
-} from "formik";
+import { FastField, FieldArray, Formik, getIn, useFormikContext } from "formik";
 import styles from "../service-form.module.css";
 import { useEffect, useRef, useState } from "react";
 import { trim, isEmpty, pickBy, identity, sortBy } from "lodash";
@@ -173,8 +168,6 @@ const DatasetFieldset = ({ searchEnv }: { searchEnv: string }) => {
       <Fieldset.Legend>
         <TitleWithHelpTextAndTag
           helpText={localization.serviceForm.helptext.dataset}
-          tagTitle={localization.tag.recommended}
-          tagColor="info"
         >
           {localization.serviceForm.fieldLabel.dataset}
         </TitleWithHelpTextAndTag>
@@ -443,10 +436,6 @@ const FieldModal = (props: ModalProps) => {
               }
             }, [values, dirty]);
 
-            const relatedDocumentationErrors = (
-              errors as FormikErrors<Evidence>
-            ).relatedDocumentation;
-
             return (
               <>
                 <Heading>
@@ -457,14 +446,26 @@ const FieldModal = (props: ModalProps) => {
                   <FormikLanguageFieldset
                     as={Textfield}
                     name="title"
-                    legend={localization.serviceForm.fieldLabel.name}
+                    legend={
+                      <TitleWithHelpTextAndTag
+                        tagTitle={localization.tag.required}
+                      >
+                        {localization.serviceForm.fieldLabel.name}
+                      </TitleWithHelpTextAndTag>
+                    }
                   />
 
                   <FieldsetDivider />
                   <FormikLanguageFieldset
-                    as={Textfield}
+                    as={TextareaWithPrefix}
                     name="description"
-                    legend={localization.serviceForm.fieldLabel.description}
+                    legend={
+                      <TitleWithHelpTextAndTag
+                        tagTitle={localization.tag.required}
+                      >
+                        {localization.serviceForm.fieldLabel.description}
+                      </TitleWithHelpTextAndTag>
+                    }
                   />
 
                   <FieldsetDivider />
@@ -490,21 +491,26 @@ const FieldModal = (props: ModalProps) => {
                             }
                           </TitleWithHelpTextAndTag>
                         </Fieldset.Legend>
-                        {(values.relatedDocumentation ?? []).map((_, index) => {
-                          const fieldError = Array.isArray(
-                            relatedDocumentationErrors,
-                          )
-                            ? relatedDocumentationErrors[index]
-                            : undefined;
+                        {(
+                          arrayHelpers.form.values.relatedDocumentation ?? []
+                        ).map((_: string, index: number) => {
+                          const fieldName = `relatedDocumentation[${index}]`;
+                          const fieldError = getIn(errors, fieldName);
+
                           return (
                             <div
                               key={`relatedDocumentation-${index}`}
-                              className={cn(styles.flex, styles.gap2)}
+                              className={cn(
+                                styles.flex,
+                                styles.gap2,
+                                styles.relatedDocumentationRow,
+                              )}
                             >
-                              <Field
+                              <FastField
                                 as={Textfield}
                                 data-size="sm"
-                                name={`relatedDocumentation[${index}]`}
+                                name={fieldName}
+                                className={styles.relatedDocumentationInput}
                                 aria-label={`${localization.serviceForm.fieldLabel.relatedDocumentation} ${index + 1}`}
                                 error={
                                   typeof fieldError === "string"
@@ -521,7 +527,9 @@ const FieldModal = (props: ModalProps) => {
                         })}
                         <AddButton
                           type="button"
-                          onClick={() => arrayHelpers.push("")}
+                          onClick={() => {
+                            arrayHelpers.push("");
+                          }}
                         >
                           {localization.add}{" "}
                           {localization.serviceForm.fieldLabel.relatedDocumentation.toLowerCase()}

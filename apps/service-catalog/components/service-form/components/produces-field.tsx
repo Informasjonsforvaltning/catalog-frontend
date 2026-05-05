@@ -6,6 +6,7 @@ import {
   EditButton,
   FieldsetDivider,
   FormikLanguageFieldset,
+  TextareaWithPrefix,
 } from "@catalog-frontend/ui";
 import cn from "classnames";
 import {
@@ -203,7 +204,7 @@ const FieldModal = (props: ModalProps) => {
 
                   <FieldsetDivider />
                   <FormikLanguageFieldset
-                    as={Textfield}
+                    as={TextareaWithPrefix}
                     name="description"
                     legend={localization.serviceForm.fieldLabel.description}
                   />
