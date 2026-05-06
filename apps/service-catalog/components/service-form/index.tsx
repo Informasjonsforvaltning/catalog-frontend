@@ -52,12 +52,10 @@ import { useEffect, useRef, useState } from "react";
 import { ProducesField } from "./components/produces-field";
 import { EvidenceField } from "./components/evidence-field";
 import {
-  confirmedEvidenceSchema,
-  confirmedProducesSchema,
   confirmedServiceSchema,
-  draftEvidenceSchema,
-  draftProducesSchema,
   draftServiceSchema,
+  evidenceSchema,
+  producesSchema,
 } from "./validation-schema";
 import { get, isEmpty, isEqual } from "lodash";
 
@@ -506,7 +504,6 @@ export const ServiceForm = (props: ServiceFormProps) => {
                               </TitleWithHelpTextAndTag>
                             </Fieldset.Legend>
                             <Combobox
-                              error={Boolean(errors.dctType)}
                               multiple
                               onValueChange={(value) =>
                                 setFieldValue("dctType", value)
@@ -588,11 +585,7 @@ export const ServiceForm = (props: ServiceFormProps) => {
                       </TitleWithHelpTextAndTag>
                       <ProducesField
                         errors={errors.produces}
-                        validationSchema={
-                          ignoreRequired
-                            ? draftProducesSchema
-                            : confirmedProducesSchema
-                        }
+                        validationSchema={producesSchema}
                       />
                     </div>
                   </FormLayout.Section>
@@ -618,11 +611,7 @@ export const ServiceForm = (props: ServiceFormProps) => {
                         errors={errors.evidence}
                         languages={languages}
                         searchEnv={searchEnv}
-                        validationSchema={
-                          ignoreRequired
-                            ? draftEvidenceSchema
-                            : confirmedEvidenceSchema
-                        }
+                        validationSchema={evidenceSchema}
                       />
                     </div>
                   </FormLayout.Section>

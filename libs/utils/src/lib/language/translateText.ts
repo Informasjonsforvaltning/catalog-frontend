@@ -3,13 +3,17 @@ import { LocalizedStrings } from "@catalog-frontend/types";
 import { getString } from "../text/text";
 
 export const getTranslateText = (
-  textObj: LocalizedStrings | null | undefined,
+  textObj: LocalizedStrings | string | null | undefined,
   language?: string,
 ): string => {
   const selectedLanguage = language || localization.getLanguage();
 
   if (!textObj) {
     return "";
+  }
+
+  if (typeof textObj === "string") {
+    return textObj;
   }
 
   const value =

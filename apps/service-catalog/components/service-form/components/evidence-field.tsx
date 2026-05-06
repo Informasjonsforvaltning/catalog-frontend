@@ -41,10 +41,7 @@ import { FastField, FieldArray, Formik, getIn, useFormikContext } from "formik";
 import styles from "../service-form.module.css";
 import { useEffect, useRef, useState } from "react";
 import { trim, isEmpty, pickBy, identity, sortBy } from "lodash";
-import {
-  confirmedEvidenceSchema,
-  draftEvidenceSchema,
-} from "../validation-schema";
+import { evidenceSchema } from "../validation-schema";
 
 interface Props {
   errors?:
@@ -52,13 +49,13 @@ interface Props {
     | Array<{ title: LocalizedStrings; description: LocalizedStrings }>;
   languages: ReferenceDataCode[];
   searchEnv: string;
-  validationSchema: typeof confirmedEvidenceSchema | typeof draftEvidenceSchema;
+  validationSchema: typeof evidenceSchema;
 }
 
 interface ModalProps {
   languages: ReferenceDataCode[];
   searchEnv: string;
-  validationSchema: typeof confirmedEvidenceSchema | typeof draftEvidenceSchema;
+  validationSchema: typeof evidenceSchema;
   onCancel: () => void;
   onChange: (values: Evidence) => void;
   onSuccess: (values: Evidence) => void;

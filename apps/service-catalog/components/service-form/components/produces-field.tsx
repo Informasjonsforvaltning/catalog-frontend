@@ -27,20 +27,17 @@ import { FieldArray, Formik, useFormikContext } from "formik";
 import styles from "../service-form.module.css";
 import { useEffect, useRef, useState } from "react";
 import { trim, isEmpty, pickBy, identity } from "lodash";
-import {
-  confirmedProducesSchema,
-  draftProducesSchema,
-} from "../validation-schema";
+import { producesSchema } from "../validation-schema";
 
 interface Props {
   errors?:
     | string
     | Array<{ title: LocalizedStrings; description: LocalizedStrings }>;
-  validationSchema: typeof confirmedProducesSchema | typeof draftProducesSchema;
+  validationSchema: typeof producesSchema;
 }
 
 interface ModalProps {
-  validationSchema: typeof confirmedProducesSchema | typeof draftProducesSchema;
+  validationSchema: typeof producesSchema;
   onCancel: () => void;
   onChange: (values: Output) => void;
   onSuccess: (values: Output) => void;
