@@ -668,7 +668,7 @@ const ConceptForm = ({
                       error={hasError(["interneFelt"])}
                     >
                       <InternalSection
-                        codeLists={codeListsResult.codeLists}
+                        codeLists={codeListsResult?.codeLists ?? []}
                         internalFields={fieldsResult.internal}
                         userList={usersResult.users}
                         changed={markDirty ? dirtyFields : []}
