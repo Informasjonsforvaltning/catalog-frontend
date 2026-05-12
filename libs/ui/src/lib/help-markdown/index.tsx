@@ -48,6 +48,7 @@ export const HelpMarkdown = forwardRef<HTMLButtonElement, HelpTextProps>(
           className={classNames(styles.helpMarkdown, styles[severity])}
           ref={ref}
           variant="tertiary"
+          data-size="md"
           {...rest}
         />
         <Popover data-size="sm" placement={placement} data-color={severity}>
