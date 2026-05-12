@@ -8,6 +8,7 @@ import { ChatIcon, EnvelopeClosedIcon, PhoneIcon } from "@navikt/aksel-icons";
 import {
   Chip,
   Details,
+  Dropdown,
   Link,
   Switch,
   Tabs,
@@ -193,6 +194,7 @@ export const ConceptPageClient = ({
 }: ConceptPageClientProps) => {
   const [language, setLanguage] = useState("nb");
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
+  const [isArchived, setIsArchived] = useState(concept?.isArchived);
   const [isPublished, setIsPublished] = useState(concept?.erPublisert);
   const [publishedDate, setPublishedDate] = useState(
     concept?.publiseringsTidspunkt,
@@ -215,6 +217,7 @@ export const ConceptPageClient = ({
       if (window.confirm(localization.publicationState.confirmPublish)) {
         publishConcept.mutate(concept?.id as string, {
           onSuccess(data) {
+            setIsArchived(data.isArchived);
             setIsPublished(data.erPublisert);
             setPublishedDate(data.publiseringsTidspunkt);
           },
@@ -405,18 +408,51 @@ export const ConceptPageClient = ({
     setLanguage(lang);
   };
 
+  const compareVersions = (a: Concept, b: Concept): number => {
+    const va = a?.versjonsnr;
+    const vb = b?.versjonsnr;
+    if (!va && !vb) return 0;
+    if (!va) return -1;
+    if (!vb) return 1;
+    return (
+      (va.major ?? 0) - (vb.major ?? 0) ||
+      (va.minor ?? 0) - (vb.minor ?? 0) ||
+      (va.patch ?? 0) - (vb.patch ?? 0)
+    );
+  };
+
+  const pickLatest = (candidates: Concept[]): Concept | undefined =>
+    candidates.reduce<Concept | undefined>(
+      (latest, current) =>
+        !latest || compareVersions(current, latest) > 0 ? current : latest,
+      undefined,
+    );
+
+  const safeRevisions = revisions ?? [];
+  const latestRevision = pickLatest(safeRevisions);
+  const latestNonArchivedRevision = pickLatest(
+    safeRevisions.filter((r) => !r.isArchived),
+  );
+
   const handleEditConcept = () => {
-    const revision = revisions?.find((revision) => !revision.isArchived);
-    const id = revision ? revision.id : concept?.id;
+    const id = latestRevision?.id ?? concept?.id;
     if (validOrganizationNumber(catalogId) && validUUID(id)) {
       router.push(`/catalogs/${catalogId}/concepts/${id}/edit`);
     }
   };
 
+  const handleEditArchivedConcept = () => {
+    if (validOrganizationNumber(catalogId) && validUUID(concept?.id)) {
+      router.push(
+        `/catalogs/${catalogId}/concepts/${concept?.id}/edit-archived`,
+      );
+    }
+  };
+
   const handleDeleteConcept = () => {
-    const revision = revisions?.find((revision) => !revision.isArchived);
-    if (revision) {
-      deleteConcept.mutate(revision.id as string);
+    const target = latestNonArchivedRevision?.id ?? concept?.id;
+    if (target && validUUID(target)) {
+      deleteConcept.mutate(target);
     }
   };
 
@@ -937,17 +973,39 @@ export const ConceptPageClient = ({
           <div className={classes.actionButtons}>
             {hasWritePermission && (
               <>
-                <Button onClick={handleEditConcept}>
-                  {localization.button.edit}
-                </Button>
-                {!concept?.isArchived && (
-                  <Button
-                    data-color="danger"
-                    variant="secondary"
-                    onClick={() => setShowConfirmDelete(true)}
-                  >
-                    {localization.button.delete}
-                  </Button>
+                {isArchived ? (
+                  <Dropdown.TriggerContext>
+                    <Dropdown.Trigger>
+                      {localization.button.edit}
+                    </Dropdown.Trigger>
+                    <Dropdown placement="bottom-end">
+                      <Dropdown.List>
+                        <Dropdown.Item>
+                          <Dropdown.Button onClick={handleEditConcept}>
+                            {localization.concept.editAllFields}
+                          </Dropdown.Button>
+                        </Dropdown.Item>
+                        <Dropdown.Item>
+                          <Dropdown.Button onClick={handleEditArchivedConcept}>
+                            {localization.concept.editInternalFields}
+                          </Dropdown.Button>
+                        </Dropdown.Item>
+                      </Dropdown.List>
+                    </Dropdown>
+                  </Dropdown.TriggerContext>
+                ) : (
+                  <>
+                    <Button onClick={handleEditConcept}>
+                      {localization.button.edit}
+                    </Button>
+                    <Button
+                      data-color="danger"
+                      variant="secondary"
+                      onClick={() => setShowConfirmDelete(true)}
+                    >
+                      {localization.button.delete}
+                    </Button>
+                  </>
                 )}
               </>
             )}
