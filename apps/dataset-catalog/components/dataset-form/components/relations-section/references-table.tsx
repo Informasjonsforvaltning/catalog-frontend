@@ -346,6 +346,7 @@ const FieldModal = ({
                             ? [values.referenceType]
                             : []
                         }
+                        inputValue={values.referenceType ? undefined : ""}
                         placeholder={`${localization.datasetForm.fieldLabel.choseRelation}...`}
                         portal={false}
                         data-size="sm"
@@ -389,6 +390,7 @@ const FieldModal = ({
                             ? [values.source]
                             : []
                         }
+                        inputValue={values.source ? undefined : ""}
                         placeholder={`${localization.search.search}...`}
                         portal={false}
                         data-size="sm"
