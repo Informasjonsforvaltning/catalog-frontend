@@ -3,6 +3,7 @@ export * from "./lib/change-request";
 export * from "./lib/code-list";
 export * from "./lib/comment";
 export * from "./lib/concept";
+export * from "./lib/cost";
 export * from "./lib/data-service";
 export * from "./lib/dataset";
 export * from "./lib/design";

@@ -32,11 +32,6 @@ export const dataServiceFormNb = {
       "Brukes til å angi hvor lenge det er planlagt å holde datatjenesten tilgjengelig, verdien velges fra EU's kontrollerte vokabular _Planned availability_.",
     costs:
       "Brukes til å oppgi prisinfomasjonen og utrekningsgrunnlaget for ett eller flere gebyr for bruk av APIet.",
-    costDescription: "Brukes til å oppgi en tekstlig beskrivelse av gebyret.",
-    costDocumentation:
-      "Brukes til å referere til en side eller et dokument som beskriver prismodell/beregningsgrunnlag. I tillegg til å dokumentere beregningsgrunnlaget, kan denne egenskapen brukes i tilfeller der det ikke bare er ett beløp, men en komplisert prismodell avhengig av f.eks. mengde data, hyppighet av oppslag/nedlasting osv. Selv om hverken beløp eller dokumentasjon er obligatorisk, SKAL minst én av dem brukes.",
-    costValue:
-      "Brukes til å oppgi gebyrbeløpet. Selv om hverken beløp eller dokumentasjon er obligatorisk, SKAL minst én av dem brukes. Valutaverdien velges fra EUs kontrollerte vokabular _Valuta_.",
     publish:
       "Publiser API-beskrivelsen til Data.norge.no. For å publisere må du fylle ut alle påkrevde felt i skjemaet, en beskrivelse kan ikke slettes så lenge den er publisert.",
   },
@@ -64,7 +59,6 @@ export const dataServiceFormNb = {
   },
   fieldLabel: {
     description: "Beskrivelse av API-et",
-    costDescription: "Beskrivelse av gebyret",
     title: "Tittel",
     endpoint: "EndepunktsURL",
     endpointDescriptions: "Endepunktsbeskrivelse",
@@ -78,17 +72,12 @@ export const dataServiceFormNb = {
     keywords: "Emneord",
     version: "Versjon",
     availability: "Tilgjengelighet",
-    costs: "Gebyr",
-    costDocumentation: "Dokumentasjon",
-    costValue: "Beløp",
     dataServiceID: "API-ID",
     contactName: "Navn",
     contactFields: "Kontaktinformasjon",
     ignoreRequired: "Ignorer påkrevde felt",
   },
   validation: {
-    costValueRequiredWhenMissingDoc:
-      "Beløp er påkrevd når ingen dokumentasjon er oppgitt.",
     versionMaxLength: "Versjon kan ikke være lengre enn 50 tegn.",
   },
   alert: {

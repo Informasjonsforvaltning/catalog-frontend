@@ -1,3 +1,4 @@
+import { Cost } from "./cost";
 import { LocalizedStrings } from "./localization";
 
 export interface DataService extends DataServiceToBeCreated {
@@ -24,7 +25,7 @@ export interface DataServiceToBeCreated {
   servesDataset?: string[];
   contactPoint?: DataServiceContactPoint;
   availability?: string;
-  costs?: DataServiceCost[];
+  costs?: Cost[];
 }
 
 type DataServiceContactPoint = {
@@ -32,13 +33,6 @@ type DataServiceContactPoint = {
   email?: string;
   phone?: string;
   url?: string;
-};
-
-export type DataServiceCost = {
-  value?: number;
-  description?: LocalizedStrings;
-  documentation?: string[];
-  currency?: string;
 };
 
 export type DataServicesPageSettings = {

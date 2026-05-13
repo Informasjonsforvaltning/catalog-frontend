@@ -24,37 +24,6 @@
   padding-bottom: 0.5rem;
 }
 
-.costContent {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-
-  & > div {
-    display: flex;
-    align-items: center;
-    flex-direction: row;
-
-    &:first-child {
-      gap: 0.5rem;
-    }
-  }
-}
-
-.costFooter {
-  display: flex;
-  flex-direction: column;
-
-  & div:last-child {
-    display: flex;
-    gap: 0.5rem;
-  }
-
-  & > * {
-    background-color: inherit;
-  }
-}
-
 .flex {
   display: flex;
   align-items: center;
