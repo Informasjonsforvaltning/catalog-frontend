@@ -1,9 +1,12 @@
 import { DataService, ReferenceDataCode } from "@catalog-frontend/types";
-import { FieldsetDivider, TitleWithHelpTextAndTag } from "@catalog-frontend/ui";
+import {
+  CostsTable,
+  FieldsetDivider,
+  TitleWithHelpTextAndTag,
+} from "@catalog-frontend/ui";
 import { accessRights, localization } from "@catalog-frontend/utils";
 import { Fieldset } from "@digdir/designsystemet-react";
 import { useFormikContext } from "formik";
-import { CostsTable } from "./costs-table";
 import { ReferenceDataRadioGroup } from "@data-service-catalog/components/data-service-form/components/reference-data-radio-group";
 
 type Props = {
@@ -56,7 +59,10 @@ export const AccessSection = ({ openLicenses, currencies }: Props) => {
 
       <FieldsetDivider />
 
-      <CostsTable currencies={currencies} />
+      <CostsTable
+        currencies={currencies}
+        helpText={localization.dataServiceForm.helptext.costs}
+      />
     </div>
   );
 };

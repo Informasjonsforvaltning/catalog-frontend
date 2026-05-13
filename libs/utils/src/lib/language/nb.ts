@@ -655,6 +655,28 @@ ___Merk:__ Maksimal filstørrelse for opplastning er {0} MB. CSV/JSON-filer kan 
     none: "Ingen tilgangsrettighet valgt",
   },
 
+  cost: {
+    helptext: {
+      costs:
+        "Prisinformasjon og utregningsgrunnlag for ett eller flere gebyrer.",
+      costDescription: "Brukes til å oppgi en tekstlig beskrivelse av gebyret.",
+      costDocumentation:
+        "Brukes til å referere til en side eller et dokument som beskriver prismodell/beregningsgrunnlag. I tillegg til å dokumentere beregningsgrunnlaget, kan denne egenskapen brukes i tilfeller der det ikke bare er ett beløp, men en komplisert prismodell avhengig av f.eks. mengde data, hyppighet av oppslag/nedlasting osv. Selv om hverken beløp eller dokumentasjon er obligatorisk, SKAL minst én av dem brukes.",
+      costValue:
+        "Brukes til å oppgi gebyrbeløpet. Selv om hverken beløp eller dokumentasjon er obligatorisk, SKAL minst én av dem brukes. Valutaverdien velges fra EUs kontrollerte vokabular _Valuta_.",
+    },
+    fieldLabel: {
+      costs: "Gebyr",
+      costDescription: "Beskrivelse av gebyret",
+      costDocumentation: "Dokumentasjon",
+      costValue: "Beløp",
+    },
+    validation: {
+      costValueRequiredWhenMissingDoc:
+        "Beløp er påkrevd når ingen dokumentasjon er oppgitt.",
+    },
+  },
+
   termsOfUse: {
     pageTitle: "Vilkår og betingelser",
     heading: "Bruksvilkår for registrering i Felles datakatalog",

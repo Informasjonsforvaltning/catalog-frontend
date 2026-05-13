@@ -50,6 +50,7 @@ export interface ReferenceData {
   openLicenses: ReferenceDataCode[];
   mobilityRights: ReferenceDataCode[];
   mobilityDataStandards: ReferenceDataCode[];
+  currencies: ReferenceDataCode[];
 }
 
 export interface DataServiceReferenceData {

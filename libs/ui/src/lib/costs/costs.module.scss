@@ -1,0 +1,67 @@
+.fieldContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-size-2);
+}
+
+.costContent {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+  & > div {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+
+    &:first-child {
+      gap: var(--ds-size-2);
+    }
+  }
+}
+
+.costFooter {
+  display: flex;
+  flex-direction: column;
+
+  & div:last-child {
+    display: flex;
+    gap: var(--ds-size-2);
+  }
+
+  & > * {
+    background-color: inherit;
+  }
+}
+
+.list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.modalContent {
+  margin: var(--ds-size-4) 0;
+  padding: var(--ds-size-6);
+  border: 1px solid var(--ds-color-neutral-border-subtle);
+  border-radius: var(--ds-border-radius-md);
+  gap: 1rem;
+}
+
+.valueCurrencyFieldset {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.documentationRow {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--ds-size-2);
+  padding-bottom: var(--ds-size-2);
+}
+
+.documentationField {
+  flex: 1;
+}
