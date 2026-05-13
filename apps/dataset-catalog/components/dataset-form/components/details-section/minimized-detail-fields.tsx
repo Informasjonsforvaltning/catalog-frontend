@@ -2,6 +2,8 @@
 
 import {
   AddButton,
+  CostsModal,
+  CostsTable,
   FormikLanguageFieldset,
   TitleWithHelpTextAndTag,
   TextareaWithPrefix,
@@ -29,6 +31,7 @@ type Props = {
   datasetTypes: ReferenceDataCode[];
   provenanceStatements: ReferenceDataCode[];
   frequencies: ReferenceDataCode[];
+  currencies?: ReferenceDataCode[];
   isMobility?: boolean;
 };
 
@@ -248,6 +251,31 @@ const FIELD_CONFIG = [
     addValue: [],
   },
   {
+    name: "costs",
+    getValue: (values: Dataset) => values?.costs,
+    render: (props: any) =>
+      isEmpty(props.values?.costs) ? (
+        <CostsModal
+          template={{ description: {} }}
+          type="new"
+          currencies={props.currencies}
+          onSuccess={(formValues) =>
+            props.setFieldValue("costs[0]", formValues)
+          }
+        />
+      ) : (
+        <>
+          <CostsTable
+            currencies={props.currencies}
+            helpText={localization.datasetForm.helptext.costs}
+          />
+          {props.showDivider && <FieldsetDivider />}
+        </>
+      ),
+    hasDeleteButton: false,
+    hideToggleButton: true,
+  },
+  {
     name: "landingPage",
     getValue: (values: Dataset) => values?.landingPage,
     render: (props: any) => (
@@ -337,6 +365,7 @@ export const MinimizedDetailFields = ({
   datasetTypes,
   provenanceStatements,
   frequencies,
+  currencies,
   isMobility,
 }: Props) => {
   const { setFieldValue, errors, values } = useFormikContext<Dataset>();
@@ -423,6 +452,7 @@ export const MinimizedDetailFields = ({
           datasetTypeOptions,
           provenanceOptions,
           frequencyOptions,
+          currencies,
         })}
       </div>
     ) : (
@@ -444,6 +474,7 @@ export const MinimizedDetailFields = ({
           datasetTypeOptions,
           provenanceOptions,
           frequencyOptions,
+          currencies,
         })}
       </ToggleFieldButton>
     );

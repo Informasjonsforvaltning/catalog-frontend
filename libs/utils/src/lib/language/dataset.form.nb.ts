@@ -108,6 +108,8 @@ Dersom man velger en åpen lisens, vil datasettet bli merket med "Åpne data".`,
     applicationProfileDcat:
       "DCAT-AP-NO er en standard for å beskrive alle typer datasett.",
     datasetApplicationProfile: "Standarder for datasettbeskrivelser,",
+    costs:
+      "Prisinformasjon og utregningsgrunnlag for ett eller flere gebyrer knyttet til bruk av datasettet.",
   },
   heading: {
     about: "Om datasettet",

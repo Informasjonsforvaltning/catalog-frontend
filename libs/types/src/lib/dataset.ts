@@ -1,3 +1,4 @@
+import { Cost } from "./cost";
 import { LocalizedStrings } from "./localization";
 
 export interface Dataset extends DatasetToBeCreated {
@@ -48,6 +49,7 @@ export type DatasetToBeCreated = {
   inSeries?: string;
   distribution?: Distribution[];
   contactPoints: DatasetContactPoint[];
+  costs?: Cost[];
 };
 
 export type UriWithLabel = {
