@@ -12,6 +12,7 @@ import {
   Button,
   ConceptCombobox,
   ConfirmModal,
+  CostsTable,
   FieldsetDivider,
   FormikAutoSaver,
   FormikLanguageFieldset,
@@ -62,6 +63,7 @@ import { get, isEmpty, isEqual } from "lodash";
 interface ServiceFormProps {
   afterSubmit?: () => void;
   autoSaveStorage: DataStorage<StorageData>;
+  currencies?: ReferenceDataCode[];
   initialValues: ServiceToBeCreated;
   languages: ReferenceDataCode[];
   losThemes: LosTheme[];
@@ -103,6 +105,7 @@ export const ServiceForm = (props: ServiceFormProps) => {
   const {
     afterSubmit,
     autoSaveStorage,
+    currencies,
     initialValues,
     languages,
     losThemes,
@@ -339,6 +342,7 @@ export const ServiceForm = (props: ServiceFormProps) => {
               "produces",
               "evidence",
               "contactPoints",
+              "costs",
               "spatial",
               "subject",
               "dctType",
@@ -614,6 +618,19 @@ export const ServiceForm = (props: ServiceFormProps) => {
                         validationSchema={evidenceSchema}
                       />
                     </div>
+                  </FormLayout.Section>
+
+                  <FormLayout.Section
+                    id="costs-section"
+                    title={localization.serviceForm.section.costs.title}
+                    subtitle={localization.serviceForm.section.costs.subtitle}
+                    changed={dirtyFields.includes("costs")}
+                    error={hasError(["costs"])}
+                  >
+                    <CostsTable
+                      currencies={currencies}
+                      helpText={localization.serviceForm.helptext.costs}
+                    />
                   </FormLayout.Section>
 
                   <FormLayout.Section

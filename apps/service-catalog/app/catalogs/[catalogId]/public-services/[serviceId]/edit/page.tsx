@@ -1,5 +1,6 @@
 import {
   getAdmsStatuses,
+  getCurrencies,
   getLanguages,
   getLosThemes,
   getMainActivities,
@@ -23,6 +24,7 @@ export default async function EditServicePage({
     mainActivities,
     losThemesResponse,
     languageResponse,
+    currenciesResponse,
   ] = await Promise.all([
     getPublicServiceById(catalogId, serviceId),
     getOrganization(catalogId),
@@ -30,6 +32,7 @@ export default async function EditServicePage({
     getMainActivities(),
     getLosThemes(),
     getLanguages(),
+    getCurrencies(),
   ]);
 
   const breadcrumbList = [
@@ -58,6 +61,7 @@ export default async function EditServicePage({
         subtitle={getTranslateText(organization?.prefLabel)}
       />
       <EditPage
+        currencies={currenciesResponse.currencies}
         languages={languageResponse.linguisticSystems}
         losThemes={losThemesResponse.losNodes}
         mainActivities={mainActivities.mainActivities}

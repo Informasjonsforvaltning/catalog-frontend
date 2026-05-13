@@ -3,6 +3,7 @@ import {
   localization,
   telephoneNumberRegex,
 } from "@catalog-frontend/utils";
+import { costValidationSchema } from "@catalog-frontend/ui";
 import * as Yup from "yup";
 
 export const evidenceSchema = Yup.object().shape({
@@ -178,6 +179,7 @@ export const draftServiceSchema = Yup.object().shape({
   losTheme: Yup.array().of(Yup.string().notRequired()),
   produces: Yup.array().of(producesSchema),
   evidence: Yup.array().of(evidenceSchema),
+  costs: Yup.array().of(costValidationSchema()),
   contactPoints: Yup.array().of(
     Yup.object().shape({
       category: Yup.object().shape({
@@ -246,6 +248,7 @@ export const confirmedServiceSchema = Yup.object().shape({
     .of(evidenceSchema)
     .min(1, localization.validation.minOneField)
     .required(localization.validation.minOneField),
+  costs: Yup.array().of(costValidationSchema()),
   contactPoints: Yup.array()
     .of(
       Yup.object().shape({

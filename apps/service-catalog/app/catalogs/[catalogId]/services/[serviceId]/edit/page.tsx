@@ -1,5 +1,6 @@
 import {
   getAdmsStatuses,
+  getCurrencies,
   getLanguages,
   getLosThemes,
   getOrganization,
@@ -21,12 +22,14 @@ export default async function EditServicePage({
     statusesResponse,
     losThemesResponse,
     languageResponse,
+    currenciesResponse,
   ] = await Promise.all([
     getServiceById(catalogId, serviceId),
     getOrganization(catalogId),
     getAdmsStatuses(),
     getLosThemes(),
     getLanguages(),
+    getCurrencies(),
   ]);
 
   const breadcrumbList: BreadcrumbType[] = [
@@ -55,6 +58,7 @@ export default async function EditServicePage({
         subtitle={getTranslateText(organization?.prefLabel)}
       />
       <EditPage
+        currencies={currenciesResponse.currencies}
         languages={languageResponse.linguisticSystems}
         losThemes={losThemesResponse.losNodes}
         referenceDataEnv={process.env.FDK_BASE_URI || ""}
