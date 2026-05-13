@@ -1,6 +1,7 @@
 import { Breadcrumbs, PageBanner } from "@catalog-frontend/ui";
 import {
   getAdmsStatuses,
+  getCurrencies,
   getLanguages,
   getLosThemes,
   getMainActivities,
@@ -21,12 +22,14 @@ export default async function NewPublicServicePage({
     mainActivitiesResponse,
     losThemesResponse,
     languageResponse,
+    currenciesResponse,
   ] = await Promise.all([
     getOrganization(catalogId),
     getAdmsStatuses(),
     getMainActivities(),
     getLosThemes(),
     getLanguages(),
+    getCurrencies(),
   ]);
 
   const breadcrumbList = [
@@ -51,6 +54,7 @@ export default async function NewPublicServicePage({
         subtitle={getTranslateText(organization?.prefLabel)}
       />
       <NewPage
+        currencies={currenciesResponse.currencies}
         languages={languageResponse.linguisticSystems}
         losThemes={losThemesResponse.losNodes}
         mainActivities={mainActivitiesResponse.mainActivities}

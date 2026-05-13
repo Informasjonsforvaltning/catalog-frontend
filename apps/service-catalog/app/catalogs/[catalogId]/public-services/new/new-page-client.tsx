@@ -16,6 +16,7 @@ import { serviceTemplate } from "@service-catalog/components/service-form/servic
 import { createPublicService } from "@service-catalog/app/actions/public-services/actions";
 
 type NewPageProps = {
+  currencies?: ReferenceDataCode[];
   languages: ReferenceDataCode[];
   losThemes: LosTheme[];
   mainActivities: ReferenceDataCode[];
@@ -26,6 +27,7 @@ type NewPageProps = {
 
 export const NewPage = (props: NewPageProps) => {
   const {
+    currencies,
     languages,
     losThemes,
     mainActivities,
@@ -91,6 +93,7 @@ export const NewPage = (props: NewPageProps) => {
       <ServiceForm
         afterSubmit={handleAfterSubmit}
         autoSaveStorage={dataStorage}
+        currencies={currencies}
         languages={languages}
         losThemes={losThemes}
         mainActivities={mainActivities}

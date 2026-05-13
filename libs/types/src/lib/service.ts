@@ -1,3 +1,4 @@
+import { Cost } from "./cost";
 import { LocalizedStrings } from "./localization";
 
 export interface Service extends ServiceToBeCreated {
@@ -8,6 +9,7 @@ export interface Service extends ServiceToBeCreated {
 
 export interface ServiceToBeCreated {
   contactPoints?: ContactPoint[];
+  costs?: Cost[];
   dctType?: string[];
   description?: LocalizedStrings;
   evidence?: Evidence[];

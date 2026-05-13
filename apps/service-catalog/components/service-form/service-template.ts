@@ -105,6 +105,7 @@ export const serviceTemplate = (
 
   return {
     contactPoints,
+    costs: service?.costs ?? [],
     dctType: service?.dctType || [],
     description: {
       nb: service?.description?.nb,

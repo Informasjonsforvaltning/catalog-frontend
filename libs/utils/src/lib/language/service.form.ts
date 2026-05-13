@@ -27,6 +27,8 @@ export const serviceFormNb = {
   },
   helptext: {
     category: "Brukes til å oppgi navnet til kontaktpunktet.",
+    costs:
+      "Prisinformasjon og utregningsgrunnlag for ett eller flere gebyrer knyttet til bruk av tjenesten.",
     contactPoint:
       "Informasjon om en organisasjon eller enhet som kan kontaktes for spørsmål eller kommentarer om tjenesten. Minst ett av feltene må fylles ut for å oppfylle kravet til kontaktpunkt.",
     dctType:
@@ -62,6 +64,11 @@ export const serviceFormNb = {
       subtitle:
         "Kontaktpunkt som kan brukes vedr. spørsmål og kommentarer om tjenesten.",
       title: "Kontaktpunkt",
+    },
+    costs: {
+      subtitle:
+        "Eventuelle gebyrer som påløper for å få tilgang til eller bruke tjenesten.",
+      title: "Gebyr",
     },
     evidence: {
       subtitle: "Referanser til dokumentasjon som er påkrevd av tjenesten.",

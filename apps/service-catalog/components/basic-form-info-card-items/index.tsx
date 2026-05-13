@@ -9,6 +9,7 @@ import {
   Tag,
 } from "@digdir/designsystemet-react";
 import {
+  CostList,
   InfoCard,
   ReferenceDataTags,
   useSearchAdministrativeUnitsByUri,
@@ -233,6 +234,12 @@ export const BasicServiceFormInfoCardItems = (props: Props) => {
               );
             })}
           </ul>
+        </InfoCard.Item>
+      )}
+
+      {!isEmpty(service.costs) && (
+        <InfoCard.Item title={localization.cost.fieldLabel.costs}>
+          <CostList costs={service.costs} language={language} />
         </InfoCard.Item>
       )}
     </InfoCard>
