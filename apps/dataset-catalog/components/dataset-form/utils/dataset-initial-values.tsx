@@ -58,6 +58,7 @@ export const datasetTemplate = (dataset: Dataset): Dataset => {
     relatedResources: dataset?.relatedResources,
     distribution: dataset?.distribution ?? [],
     contactPoints: dataset.contactPoints ?? [],
+    costs: dataset?.costs ?? [],
   };
 };
 
@@ -101,6 +102,7 @@ export const datasetToBeCreatedTemplate = (
     relatedResources: undefined,
     distribution: undefined,
     contactPoints: [],
+    costs: [],
   };
 };
 

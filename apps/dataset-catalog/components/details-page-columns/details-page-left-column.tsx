@@ -1,4 +1,5 @@
 import {
+  CostList,
   InfoCard,
   ReferenceDataTags,
   useSearchAdministrativeUnitsByUri,
@@ -593,6 +594,12 @@ export const LeftColumn = ({
             values={dataset?.informationModelsFromOtherSources}
             language={language}
           />
+        </InfoCard.Item>
+      )}
+
+      {!isEmpty(dataset?.costs) && (
+        <InfoCard.Item title={localization.cost.fieldLabel.costs}>
+          <CostList costs={dataset.costs} language={language} />
         </InfoCard.Item>
       )}
     </InfoCard>

@@ -455,7 +455,7 @@ export const DatasetForm = ({
                     id="details-section"
                     title={localization.datasetForm.heading.details}
                     subtitle={localization.datasetForm.subtitle.details}
-                    error={hasError(["landingPage", "conformsTo"])}
+                    error={hasError(["landingPage", "conformsTo", "costs"])}
                   >
                     <DetailsSection
                       referenceDataEnv={referenceDataEnv}

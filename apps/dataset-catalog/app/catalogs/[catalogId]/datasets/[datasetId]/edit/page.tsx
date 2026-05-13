@@ -9,6 +9,7 @@ import {
   validUUID,
 } from "@catalog-frontend/utils";
 import {
+  getCurrencies,
   getDatasetTypes,
   getDataThemes,
   getFrequencies,
@@ -51,6 +52,7 @@ const EditDatasetPage = withWriteProtectedPage(
       mobilityDataStandardResponse,
       mobilityRightsResponse,
       distributionStatusResponse,
+      currenciesResponse,
     ] = await Promise.all([
       getLosThemes(),
       getDataThemes(),
@@ -63,6 +65,7 @@ const EditDatasetPage = withWriteProtectedPage(
       getMobilityDataStandards(),
       getMobilityRights(),
       getDistributionStatuses(),
+      getCurrencies(),
     ]);
 
     const referenceData = {
@@ -77,6 +80,7 @@ const EditDatasetPage = withWriteProtectedPage(
       mobilityDataStandards: mobilityDataStandardResponse.mobilityDataStandards,
       mobilityRights: mobilityRightsResponse.mobilityConditions,
       distributionStatuses: distributionStatusResponse.distributionStatuses,
+      currencies: currenciesResponse.currencies,
     };
 
     const breadcrumbList: BreadcrumbType[] = [

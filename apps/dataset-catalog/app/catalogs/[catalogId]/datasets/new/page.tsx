@@ -5,6 +5,7 @@ import {
 } from "@catalog-frontend/ui";
 import { localization } from "@catalog-frontend/utils";
 import {
+  getCurrencies,
   getDatasetTypes,
   getDataThemes,
   getFrequencies,
@@ -34,6 +35,7 @@ const NewDatasetPage = withWriteProtectedPage(
       frequenciesResponse,
       languageResponse,
       licenseResponse,
+      currenciesResponse,
     ] = await Promise.all([
       getLosThemes(),
       getDataThemes(),
@@ -42,6 +44,7 @@ const NewDatasetPage = withWriteProtectedPage(
       getFrequencies(),
       getLanguages(),
       getOpenLicenses(),
+      getCurrencies(),
     ]);
 
     const referenceData = {
@@ -52,6 +55,7 @@ const NewDatasetPage = withWriteProtectedPage(
       frequencies: frequenciesResponse.frequencies,
       languages: languageResponse.linguisticSystems,
       openLicenses: licenseResponse.openLicenses,
+      currencies: currenciesResponse.currencies,
     };
 
     const breadcrumbList = [

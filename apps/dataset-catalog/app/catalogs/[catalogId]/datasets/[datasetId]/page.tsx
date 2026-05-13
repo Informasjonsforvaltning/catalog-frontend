@@ -12,6 +12,7 @@ import {
 } from "@catalog-frontend/utils";
 import {
   getAllDatasetSeries,
+  getCurrencies,
   getDatasetTypes,
   getDataThemes,
   getDistributionStatuses,
@@ -67,6 +68,7 @@ const DatasetDetailPage = withReadProtectedPage(
       mobilityDataStandardResponse,
       mobilityRightsResponse,
       distributionStatusResponse,
+      currenciesResponse,
     ] = await Promise.all([
       getLosThemes(),
       getDataThemes(),
@@ -79,6 +81,7 @@ const DatasetDetailPage = withReadProtectedPage(
       getMobilityDataStandards(),
       getMobilityRights(),
       getDistributionStatuses(),
+      getCurrencies(),
     ]);
 
     const referenceData = {
@@ -93,6 +96,7 @@ const DatasetDetailPage = withReadProtectedPage(
       mobilityDataStandards: mobilityDataStandardResponse.mobilityDataStandards,
       mobilityRights: mobilityRightsResponse.mobilityConditions,
       distributionStatuses: distributionStatusResponse.distributionStatuses,
+      currencies: currenciesResponse.currencies,
     };
 
     const datasetSeries = await getAllDatasetSeries(

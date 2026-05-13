@@ -5,6 +5,7 @@ import {
 } from "@catalog-frontend/ui";
 import { localization } from "@catalog-frontend/utils";
 import {
+  getCurrencies,
   getDatasetTypes,
   getMobilityThemes,
   getFrequencies,
@@ -41,6 +42,7 @@ const NewTransportDatasetPage = withWriteProtectedPage(
       mobilityDataStandardResponse,
       mobilityRightsResponse,
       distributionStatusResponse,
+      currenciesResponse,
     ] = await Promise.all([
       getLosThemes(),
       getDataThemes(),
@@ -53,6 +55,7 @@ const NewTransportDatasetPage = withWriteProtectedPage(
       getMobilityDataStandards(),
       getMobilityRights(),
       getDistributionStatuses(),
+      getCurrencies(),
     ]);
     const referenceData = {
       losThemes: losThemesResponse.losNodes,
@@ -66,6 +69,7 @@ const NewTransportDatasetPage = withWriteProtectedPage(
       mobilityDataStandards: mobilityDataStandardResponse.mobilityDataStandards,
       mobilityRights: mobilityRightsResponse.mobilityConditions,
       distributionStatuses: distributionStatusResponse.distributionStatuses,
+      currencies: currenciesResponse.currencies,
     };
 
     const breadcrumbList: BreadcrumbType[] = [

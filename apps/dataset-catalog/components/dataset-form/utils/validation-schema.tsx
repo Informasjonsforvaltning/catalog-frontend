@@ -5,6 +5,7 @@ import {
   parseFlexibleDate,
   telephoneNumberRegex,
 } from "@catalog-frontend/utils";
+import { costValidationSchema } from "@catalog-frontend/ui";
 import * as Yup from "yup";
 
 export const uriWithLabelSchema = Yup.object().shape({
@@ -283,6 +284,7 @@ export const draftDatasetSchema = Yup.object().shape({
       },
     ),
   contactPoints: contactPointDraftValidationSchema,
+  costs: Yup.array().of(costValidationSchema()),
 });
 
 export const confirmedDatasetSchema = draftDatasetSchema.shape({
@@ -370,6 +372,7 @@ export const confirmedDatasetSchema = draftDatasetSchema.shape({
   references: Yup.array().of(referenceSchema),
   relations: Yup.array().of(uriWithLabelSchema),
   contactPoints: contactPointConfirmValidationSchema,
+  costs: Yup.array().of(costValidationSchema()),
 });
 
 export const confirmedMobilityDatasetSchema = draftDatasetSchema.shape({
@@ -461,4 +464,5 @@ export const confirmedMobilityDatasetSchema = draftDatasetSchema.shape({
   references: Yup.array().of(referenceSchema),
   relations: Yup.array().of(uriWithLabelSchema),
   contactPoints: contactPointConfirmValidationSchema,
+  costs: Yup.array().of(costValidationSchema()),
 });
