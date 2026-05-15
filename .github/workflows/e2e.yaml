@@ -27,7 +27,7 @@ jobs:
           ]
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
           # We need to fetch all branches and commits so that Nx affected has a base to compare against.
           fetch-depth: 0
@@ -39,13 +39,13 @@ jobs:
           git submodule foreach --recursive git checkout origin/main
 
       - name: Set SHAs
-        uses: nrwl/nx-set-shas@v4
+        uses: nrwl/nx-set-shas@afb73a62d26e41464e9254689e1fd6122ee683c1 # v5.0.1
 
       - name: Enable corepack
         run: corepack enable
 
       - name: Use Node.js 22.14.0
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
         with:
           node-version: 22.14.0
           cache: "yarn"
@@ -56,7 +56,7 @@ jobs:
           yarn install --no-immutable
 
       - name: Caching Nx
-        uses: actions/cache@v5
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
         with:
           path: node_modules/.cache
           key: cache-nx-${{ hashFiles('yarn.lock') }}
