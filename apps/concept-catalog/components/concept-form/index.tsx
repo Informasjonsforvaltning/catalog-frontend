@@ -72,6 +72,7 @@ type Props = {
   onSubmit?: (values: Concept) => Promise<Concept | undefined>;
   onRestore?: (data: StorageData) => boolean;
   readOnly?: boolean;
+  restrictToInternalFields?: boolean;
   showSnackbarSuccessOnInit?: boolean;
   usersResult: UsersResult;
 };
@@ -93,9 +94,11 @@ const ConceptForm = ({
   onSubmit,
   onRestore,
   readOnly,
+  restrictToInternalFields,
   showSnackbarSuccessOnInit,
   usersResult,
 }: Props) => {
+  const nonInternalReadOnly = Boolean(readOnly || restrictToInternalFields);
   const searchParams = useSearchParams();
   const formikRef = useRef<FormikProps<Concept>>(null);
 
@@ -494,7 +497,7 @@ const ConceptForm = ({
                               )
                             : []
                         }
-                        readOnly={readOnly}
+                        readOnly={nonInternalReadOnly}
                       />
                     </FormLayout.Section>
                     <FormLayout.Section
@@ -534,7 +537,7 @@ const ConceptForm = ({
                               )
                             : []
                         }
-                        readOnly={readOnly}
+                        readOnly={nonInternalReadOnly}
                       />
                     </FormLayout.Section>
                     <FormLayout.Section
@@ -549,7 +552,7 @@ const ConceptForm = ({
                     >
                       <RemarkSection
                         changed={markDirty ? dirtyFields : []}
-                        readOnly={readOnly}
+                        readOnly={nonInternalReadOnly}
                       />
                     </FormLayout.Section>
                     <FormLayout.Section
@@ -569,7 +572,7 @@ const ConceptForm = ({
                       <SubjectSection
                         codes={subjectCodeList?.codes}
                         changed={markDirty ? dirtyFields : []}
-                        readOnly={readOnly}
+                        readOnly={nonInternalReadOnly}
                       />
                     </FormLayout.Section>
                     <FormLayout.Section
@@ -588,7 +591,7 @@ const ConceptForm = ({
                     >
                       <ExampleSection
                         changed={markDirty ? dirtyFields : []}
-                        readOnly={readOnly}
+                        readOnly={nonInternalReadOnly}
                       />
                     </FormLayout.Section>
                     <FormLayout.Section
@@ -607,7 +610,7 @@ const ConceptForm = ({
                     >
                       <ValueRangeSection
                         changed={markDirty ? dirtyFields : []}
-                        readOnly={readOnly}
+                        readOnly={nonInternalReadOnly}
                       />
                     </FormLayout.Section>
                     <FormLayout.Section
@@ -643,7 +646,7 @@ const ConceptForm = ({
                         autoSaveStorage={autoSaveStorage}
                         catalogId={catalogId}
                         changed={markDirty ? dirtyFields : []}
-                        readOnly={readOnly}
+                        readOnly={nonInternalReadOnly}
                       />
                     </FormLayout.Section>
                     <FormLayout.Section
@@ -694,7 +697,7 @@ const ConceptForm = ({
                       <StatusSection
                         conceptStatuses={conceptStatuses}
                         changed={markDirty ? dirtyFields : []}
-                        readOnly={readOnly}
+                        readOnly={nonInternalReadOnly}
                       />
                     </FormLayout.Section>
                     <FormLayout.Section
@@ -713,7 +716,7 @@ const ConceptForm = ({
                     >
                       <VersionSection
                         changed={markDirty ? dirtyFields : []}
-                        readOnly={readOnly}
+                        readOnly={nonInternalReadOnly}
                       />
                     </FormLayout.Section>
                     <FormLayout.Section
@@ -730,7 +733,7 @@ const ConceptForm = ({
                     >
                       <PeriodSection
                         changed={markDirty ? dirtyFields : []}
-                        readOnly={readOnly}
+                        readOnly={nonInternalReadOnly}
                       />
                     </FormLayout.Section>
                     <FormLayout.Section
@@ -754,7 +757,7 @@ const ConceptForm = ({
                     >
                       <ContactSection
                         changed={markDirty ? dirtyFields : []}
-                        readOnly={readOnly}
+                        readOnly={nonInternalReadOnly}
                       />
                     </FormLayout.Section>
                   </FormLayout>

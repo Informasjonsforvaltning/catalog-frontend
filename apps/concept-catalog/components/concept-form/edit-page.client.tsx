@@ -1,13 +1,52 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { ArrowLeftIcon } from "@navikt/aksel-icons";
 import { LocalDataStorage, localization } from "@catalog-frontend/utils";
-import type { Concept, StorageData } from "@catalog-frontend/types";
+import type {
+  CodeListsResult,
+  Concept,
+  FieldsResult,
+  ReferenceDataCode,
+  StorageData,
+  UsersResult,
+} from "@catalog-frontend/types";
 import { Button, ButtonBar, ConfirmModal } from "@catalog-frontend/ui";
 import ConceptForm from "@concept-catalog/components/concept-form";
-import { updateConcept } from "@concept-catalog/app/actions/concept/actions";
+import {
+  updateArchivedConcept,
+  updateConcept,
+} from "@concept-catalog/app/actions/concept/actions";
+
+export type EditMode = "full" | "archived";
+
+export type EditPageProps = {
+  catalogId: string;
+  concept: Concept;
+  conceptStatuses: ReferenceDataCode[];
+  codeListsResult: CodeListsResult;
+  fieldsResult: FieldsResult;
+  usersResult: UsersResult;
+  hasChangeRequests: boolean;
+  mode: EditMode;
+};
+
+const AUTOSAVE_KEYS: Record<
+  EditMode,
+  { primary: string; definition: string; relation: string }
+> = {
+  full: {
+    primary: "conceptForm",
+    definition: "conceptFormDefinition",
+    relation: "conceptFormRelation",
+  },
+  archived: {
+    primary: "conceptArchivedForm",
+    definition: "conceptArchivedFormDefinition",
+    relation: "conceptArchivedFormRelation",
+  },
+};
 
 export const EditPage = ({
   catalogId,
@@ -17,22 +56,33 @@ export const EditPage = ({
   fieldsResult,
   usersResult,
   hasChangeRequests,
-}) => {
+  mode,
+}: EditPageProps) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const [autoSave, setAutoSave] = useState(hasChangeRequests ? false : true);
+  const [autoSave, setAutoSave] = useState(!hasChangeRequests);
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
 
+  const keys = AUTOSAVE_KEYS[mode];
+  const editPathSegment = mode === "archived" ? "edit-archived" : "edit";
+
   const dataStorage = new LocalDataStorage<StorageData>({
-    key: "conceptForm",
+    key: keys.primary,
     secondaryKeys: {
-      definition: "conceptFormDefinition",
-      relation: "conceptFormRelation",
+      definition: keys.definition,
+      relation: keys.relation,
     },
   });
 
   const handleUpdate = async (values: Concept) => {
+    if (mode === "archived") {
+      return await updateArchivedConcept(
+        concept,
+        values,
+        fieldsResult.internal,
+      );
+    }
     return await updateConcept(concept, values, fieldsResult.internal);
   };
 
@@ -53,7 +103,6 @@ export const EditPage = ({
     if (searchParams.get("created") === "true") {
       setShowSnackbar(true);
 
-      // Remove the param and update the URL shallowly
       const newParams = new URLSearchParams(searchParams.toString());
       newParams.delete("created");
 
@@ -75,7 +124,7 @@ export const EditPage = ({
         return false;
       }
       window.location.replace(
-        `/catalogs/${catalogId}/concepts/${data.id}/edit?restore=1`,
+        `/catalogs/${catalogId}/concepts/${data.id}/${editPathSegment}?restore=1`,
       );
       return false;
     }
@@ -113,7 +162,7 @@ export const EditPage = ({
       </ButtonBar>
       <ConceptForm
         autoSave={autoSave}
-        autoSaveId={concept.id}
+        autoSaveId={concept.id ?? undefined}
         autoSaveStorage={dataStorage}
         catalogId={catalogId}
         initialConcept={concept}
@@ -124,6 +173,7 @@ export const EditPage = ({
         onSubmit={handleUpdate}
         onCancel={handleCancel}
         onRestore={handleRestore}
+        restrictToInternalFields={mode === "archived"}
         showSnackbarSuccessOnInit={showSnackbar}
       />
     </>

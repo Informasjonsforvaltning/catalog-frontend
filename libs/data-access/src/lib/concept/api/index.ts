@@ -123,6 +123,25 @@ export const patchConcept = (
   );
 };
 
+export const createConceptRevision = (
+  conceptId: string,
+  patchOperations: Operation[],
+  accessToken: string,
+) => {
+  validateUUID(conceptId, "createConceptRevision");
+  const encodedConceptId = validateAndEncodeUrlSafe(
+    conceptId,
+    "concept ID",
+    "createConceptRevision",
+  );
+  return conceptCatalogApiCall(
+    "POST",
+    `/begreper/${encodedConceptId}/revision`,
+    patchOperations,
+    accessToken,
+  );
+};
+
 export const deleteConcept = (conceptId: string, accessToken: string) => {
   validateUUID(conceptId, "deleteConcept");
   const encodedConceptId = validateAndEncodeUrlSafe(

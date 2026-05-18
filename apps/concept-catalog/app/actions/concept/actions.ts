@@ -4,6 +4,7 @@ import {
   deleteConcept as deleteConceptApi,
   createConcept as createConceptApi,
   patchConcept as patchConceptApi,
+  createConceptRevision,
   getConcept,
   removeImportResultConcept as removeImportResult,
   cancelConceptImport,
@@ -16,9 +17,13 @@ import {
   redirectToSignIn,
   removeEmptyValues,
 } from "@catalog-frontend/utils";
+import { Operation } from "fast-json-patch";
 import _ from "lodash";
 import { updateTag } from "next/cache";
-import { conceptJsonPatchOperations } from "@concept-catalog/utils/json-patch";
+import {
+  archivedConceptJsonPatchOperations,
+  conceptJsonPatchOperations,
+} from "@concept-catalog/utils/json-patch";
 
 const clearValues = (object: Concept, path: string): void => {
   const fields = path.split(".");
@@ -144,16 +149,11 @@ export async function deleteConcept(conceptId: string): Promise<void> {
   }
 }
 
-export async function updateConcept(
-  initialConcept: Concept,
+function sanitizeConceptValues(
   values: Concept,
   internalFields: InternalField[],
-): Promise<Concept> {
-  if (!initialConcept.id) {
-    throw new Error("Concept id cannot be null");
-  }
-
-  let conceptId: string | undefined = initialConcept.id;
+): Concept {
+  const cleaned = _.cloneDeep(values);
 
   [
     "definisjon.kildebeskrivelse.kilde[].uri",
@@ -166,45 +166,57 @@ export async function updateConcept(
     "interneFelt.*.value",
     "omfang.*",
   ].forEach((field) => {
-    clearValues(values, field);
+    clearValues(cleaned, field);
   });
 
   internalFields.forEach((field) => {
     if (
       field.type === "boolean" &&
-      values.interneFelt?.[field.id]?.value === undefined
+      cleaned.interneFelt?.[field.id]?.value === undefined
     ) {
-      // Ensure interneFelt is defined before assignment
-      values.interneFelt = values.interneFelt || {};
-      values.interneFelt[field.id] = { value: "false" };
+      cleaned.interneFelt = cleaned.interneFelt || {};
+      cleaned.interneFelt[field.id] = { value: "false" };
     }
   });
 
-  const diff = conceptJsonPatchOperations(initialConcept, values);
+  return cleaned;
+}
+
+async function applyConceptChanges(
+  initialConcept: Concept,
+  diff: Operation[],
+  mode: "patch" | "revision",
+): Promise<Concept | undefined> {
+  if (!initialConcept.id) {
+    throw new Error("Concept id cannot be null");
+  }
 
   if (diff.length === 0) {
     return initialConcept;
   }
 
-  let success = false;
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
   }
 
+  const initialId = initialConcept.id;
+  let success = false;
+  let resolvedConceptId: string | undefined = initialId;
+
   try {
-    const response = await patchConceptApi(
-      initialConcept.id,
-      diff,
-      session.accessToken,
-    );
+    const response =
+      mode === "revision"
+        ? await createConceptRevision(initialId, diff, session.accessToken)
+        : await patchConceptApi(initialId, diff, session.accessToken);
     if (response.status !== 200 && response.status !== 201) {
       throw new Error(`${response.status} ${response.statusText}`);
     }
 
     success = true;
     if (response.status === 201) {
-      conceptId = response.headers.get("location")?.split("/").pop();
+      resolvedConceptId =
+        response.headers.get("location")?.split("/").pop() ?? initialId;
     }
   } catch (error) {
     console.error(`${localization.alert.fail} ${error}`);
@@ -216,9 +228,52 @@ export async function updateConcept(
     updateTag("concepts");
   }
 
-  return await getConcept(`${conceptId}`, session.accessToken).then(
+  return await getConcept(`${resolvedConceptId}`, session.accessToken).then(
     (response) => (response.ok ? response.json() : undefined),
   );
+}
+
+/**
+ * Update a concept from the standard edit form.
+ *
+ * When editing an archived concept, a new revision is created server-side
+ * (POST /revision). Otherwise a normal PATCH is performed against the concept.
+ */
+export async function updateConcept(
+  initialConcept: Concept,
+  values: Concept,
+  internalFields: InternalField[],
+): Promise<Concept | undefined> {
+  const diff = conceptJsonPatchOperations(
+    initialConcept,
+    sanitizeConceptValues(values, internalFields),
+  );
+  return applyConceptChanges(
+    initialConcept,
+    diff,
+    initialConcept.isArchived ? "revision" : "patch",
+  );
+}
+
+/**
+ * Update an archived concept from the restricted edit form. Only fields that
+ * the backend allows to be mutated on an archived concept are diffed; all
+ * other field changes are silently ignored. Throws if the concept isn't
+ * actually archived.
+ */
+export async function updateArchivedConcept(
+  initialConcept: Concept,
+  values: Concept,
+  internalFields: InternalField[],
+): Promise<Concept | undefined> {
+  if (!initialConcept.isArchived) {
+    throw new Error("Concept is not archived");
+  }
+  const diff = archivedConceptJsonPatchOperations(
+    initialConcept,
+    sanitizeConceptValues(values, internalFields),
+  );
+  return applyConceptChanges(initialConcept, diff, "patch");
 }
 
 export async function deleteImportResult(

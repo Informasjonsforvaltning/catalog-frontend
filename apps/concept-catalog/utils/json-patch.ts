@@ -1,5 +1,5 @@
 import type { Concept } from "@catalog-frontend/types";
-import { omit } from "lodash";
+import { omit, pick } from "lodash";
 import { compare } from "fast-json-patch";
 import { Operation } from "fast-json-patch";
 
@@ -30,6 +30,29 @@ export const conceptJsonPatchOperations = (
         ...updated,
       },
       conceptMetaDataFieldsToOmit,
+    ),
+  );
+};
+
+const archivedConceptFieldsToKeep: (keyof Concept)[] = [
+  "interneFelt",
+  "assignedUser",
+  "merkelapp",
+  "abbreviatedLabel",
+];
+
+export const archivedConceptJsonPatchOperations = (
+  original: Concept,
+  updated: Concept,
+): Operation[] => {
+  return compare(
+    pick(original, archivedConceptFieldsToKeep),
+    pick(
+      {
+        ...original,
+        ...updated,
+      },
+      archivedConceptFieldsToKeep,
     ),
   );
 };

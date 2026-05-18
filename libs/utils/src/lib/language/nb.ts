@@ -405,6 +405,8 @@ rettigheter, eller at det har oppstått en feil ved henting av tilganger. Vennli
     contactInformation: "Kontaktinformasjon for eksterne",
     definition: "Definisjon",
     deleteConcept: "Slett begrep",
+    editInternalFields: "Rediger interne felter",
+    editAllFields: "Rediger alle felter",
     divisionCriterion: "Inndelingskriterium",
     example: "Eksempel",
     formFieldLabel: "{fieldType} på {lang}",
