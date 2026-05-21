@@ -623,6 +623,8 @@ export type RoleType = {
 export enum SearchAlternative {
   AdministrativeEnheter = "ADMINISTRATIVE_ENHETER",
   EuFileTypes = "EU_FILE_TYPES",
+  EuLocations = "EU_LOCATIONS",
+  GeoNames = "GEONAMES",
   IanaMediaTypes = "IANA_MEDIA_TYPES",
 }
 
@@ -631,6 +633,7 @@ export type SearchHit = {
   code?: Maybe<Scalars["String"]["output"]>;
   label?: Maybe<LocalizedStrings>;
   type?: Maybe<Scalars["String"]["output"]>;
+  subType?: Maybe<Scalars["String"]["output"]>;
   uri: Scalars["ID"]["output"];
 };
 

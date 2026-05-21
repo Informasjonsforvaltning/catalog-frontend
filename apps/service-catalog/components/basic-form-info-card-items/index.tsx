@@ -12,7 +12,7 @@ import {
   CostList,
   InfoCard,
   ReferenceDataTags,
-  useSearchAdministrativeUnitsByUri,
+  useSearchLocationsByUri,
   useSearchConceptsByUri,
   useSearchDatasetsByUri,
 } from "@catalog-frontend/ui";
@@ -46,7 +46,7 @@ export const BasicServiceFormInfoCardItems = (props: Props) => {
 
   const losThemesByUri = new Map(losThemes?.map((theme) => [theme.uri, theme]));
 
-  const { data: spatial } = useSearchAdministrativeUnitsByUri(
+  const { data: spatial } = useSearchLocationsByUri(
     service.spatial,
     referenceDataEnv,
   );

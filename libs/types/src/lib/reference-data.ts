@@ -5,6 +5,8 @@ export interface ReferenceDataCode {
   uri: string;
   code?: string;
   label?: Record<string, string>;
+  type?: string;
+  subType?: string;
 }
 
 export interface ConceptStatuses {

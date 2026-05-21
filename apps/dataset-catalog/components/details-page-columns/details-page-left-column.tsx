@@ -2,7 +2,7 @@ import {
   CostList,
   InfoCard,
   ReferenceDataTags,
-  useSearchAdministrativeUnitsByUri,
+  useSearchLocationsByUri,
   useSearchConceptsByUri,
   useSearchDatasetsByUri,
   useSearchInformationModelsByUri,
@@ -58,7 +58,7 @@ export const LeftColumn = ({
   language,
 }: Props) => {
   const keywordLanguages: ISOLanguage[] = ["nb", "nn", "en"];
-  const { data: spatial } = useSearchAdministrativeUnitsByUri(
+  const { data: spatial } = useSearchLocationsByUri(
     dataset?.spatial,
     referenceDataEnv,
   );
