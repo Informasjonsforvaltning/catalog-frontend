@@ -156,6 +156,7 @@ export const nb = {
 
   spatial: {
     municipality: "Kommune",
+    continent: "Kontinent",
     country: "Nasjon",
     county: "Fylke",
   },

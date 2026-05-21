@@ -2,8 +2,8 @@
 
 import {
   useDebounce,
-  useSearchAdministrativeUnits,
-  useSearchAdministrativeUnitsByUri,
+  useSearchGeoNamesAndEULocations,
+  useSearchLocationsByUri,
 } from "@catalog-frontend/ui";
 import { localization, getTranslateText } from "@catalog-frontend/utils";
 import { Combobox } from "@digdir/designsystemet-react";
@@ -22,9 +22,9 @@ export const SpatialCombobox = ({ referenceDataEnv }: Props) => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const debouncedSearchTerm = useDebounce(searchTerm);
   const { data: searchHits, isLoading: isSearching } =
-    useSearchAdministrativeUnits(debouncedSearchTerm, referenceDataEnv);
+    useSearchGeoNamesAndEULocations(debouncedSearchTerm, referenceDataEnv);
   const { values, errors, setFieldValue } = useFormikContext<Dataset>();
-  const { data: selectedValues } = useSearchAdministrativeUnitsByUri(
+  const { data: selectedValues } = useSearchLocationsByUri(
     values?.spatial,
     referenceDataEnv,
   );
@@ -90,15 +90,12 @@ export const SpatialCombobox = ({ referenceDataEnv }: Props) => {
 };
 
 const getDescription = (item: ReferenceDataCode | undefined) =>
-  item
-    ? item.uri.includes("geonorge")
-      ? getLocationType(item.uri)
-      : item.code
-    : "";
+  item ? (item.subType ? getLocationType(item.subType) : item.code) : "";
 
-const getLocationType = (uri: string): string => {
-  if (uri.includes("kommune")) return localization.spatial.municipality;
-  if (uri.includes("fylke")) return localization.spatial.county;
-  if (uri.includes("nasjon")) return localization.spatial.country;
-  return "";
+const getLocationType = (subType: string): string => {
+  if (subType.includes("KOMMUNE")) return localization.spatial.municipality;
+  if (subType.includes("FYLKE")) return localization.spatial.county;
+  if (subType.includes("COUNTRY")) return localization.spatial.country;
+  if (subType.includes("CONTINENT")) return localization.spatial.continent;
+  return subType;
 };

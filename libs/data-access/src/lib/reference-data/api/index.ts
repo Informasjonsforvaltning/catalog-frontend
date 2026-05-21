@@ -211,6 +211,7 @@ export const searchReferenceData = async (
             no
           }
           type
+          subType
         }
       }
     `,
@@ -255,6 +256,7 @@ export const searchReferenceDataByUri = async (
             no
           }
           type
+          subType
         }
       }
     `,

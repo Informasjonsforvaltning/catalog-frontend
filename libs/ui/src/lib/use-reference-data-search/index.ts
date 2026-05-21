@@ -1,22 +1,25 @@
 import {
+  ReferenceDataGraphql,
   searchReferenceData,
   searchReferenceDataByUri,
-  ReferenceDataGraphql,
 } from "@catalog-frontend/data-access";
 import { ReferenceDataCode } from "@catalog-frontend/types";
 import { useQuery } from "@tanstack/react-query";
 
-export const useSearchAdministrativeUnits = (
+export const useSearchGeoNamesAndEULocations = (
   searchQuery: string,
   envVariable: string,
 ) => {
   return useQuery({
-    queryKey: ["ADMINISTRATIVE_ENHETER", searchQuery],
+    queryKey: ["LOCATIONS", searchQuery],
     queryFn: async () => {
       const data: ReferenceDataCode[] = await searchReferenceData(
         searchQuery,
         envVariable,
-        [ReferenceDataGraphql.SearchAlternative.AdministrativeEnheter],
+        [
+          ReferenceDataGraphql.SearchAlternative.GeoNames,
+          ReferenceDataGraphql.SearchAlternative.EuLocations,
+        ],
       );
       return data;
     },
@@ -24,12 +27,12 @@ export const useSearchAdministrativeUnits = (
   });
 };
 
-export const useSearchAdministrativeUnitsByUri = (
+export const useSearchLocationsByUri = (
   uriList: string[] | undefined,
   envVariable: string,
 ) => {
   return useQuery({
-    queryKey: ["ADMINISTRATIVE_ENHETER", uriList],
+    queryKey: ["LOCATIONS", uriList],
     queryFn: async () => {
       if (!uriList || uriList.length === 0) {
         return [];
@@ -38,7 +41,11 @@ export const useSearchAdministrativeUnitsByUri = (
       const data: ReferenceDataCode[] = await searchReferenceDataByUri(
         uriList,
         envVariable,
-        [ReferenceDataGraphql.SearchAlternative.AdministrativeEnheter],
+        [
+          ReferenceDataGraphql.SearchAlternative.AdministrativeEnheter,
+          ReferenceDataGraphql.SearchAlternative.GeoNames,
+          ReferenceDataGraphql.SearchAlternative.EuLocations,
+        ],
       );
       return data;
     },
