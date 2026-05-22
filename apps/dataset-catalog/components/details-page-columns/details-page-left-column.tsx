@@ -404,12 +404,20 @@ export const LeftColumn = ({
                       return (
                         <Table.Row key={`references-${index}`}>
                           <Table.Cell>
-                            {getTranslateText(
-                              relations.find(
-                                (rel) => rel.code === ref?.referenceType,
-                              )?.label,
-                              language,
-                            ) ?? ref?.referenceType}
+                            {relations.find(
+                              (rel) =>
+                                rel.uri === ref?.referenceType ||
+                                rel.code === ref?.referenceType,
+                            )?.label
+                              ? getTranslateText(
+                                  relations.find(
+                                    (rel) =>
+                                      rel.uri === ref?.referenceType ||
+                                      rel.code === ref?.referenceType,
+                                  )?.label,
+                                  language,
+                                )
+                              : ref?.referenceType}
                           </Table.Cell>
                           <Table.Cell>
                             {

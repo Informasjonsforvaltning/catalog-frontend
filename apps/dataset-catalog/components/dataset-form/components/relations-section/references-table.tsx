@@ -135,10 +135,19 @@ export const ReferenceTable = ({
                 values?.references.map((ref: Reference, index) => (
                   <Table.Row key={`references-${index}`}>
                     <Table.Cell>
-                      {getTranslateText(
-                        relations.find((rel) => rel.code === ref?.referenceType)
-                          ?.label,
-                      ) ?? ref?.referenceType}
+                      {relations.find(
+                        (rel) =>
+                          rel.uri === ref?.referenceType ||
+                          rel.code === ref?.referenceType,
+                      )?.label
+                        ? getTranslateText(
+                            relations.find(
+                              (rel) =>
+                                rel.uri === ref?.referenceType ||
+                                rel.code === ref?.referenceType,
+                            )?.label,
+                          )
+                        : ref?.referenceType}
                     </Table.Cell>
                     <Table.Cell>
                       {getTranslateText(
@@ -321,6 +330,14 @@ const FieldModal = ({
                 }
               }, [values, dirty]);
 
+              const resolvedReferenceTypeUri = values.referenceType
+                ? (relations.find(
+                    (r) =>
+                      r.uri === values.referenceType ||
+                      r.code === values.referenceType,
+                  )?.uri ?? values.referenceType)
+                : undefined;
+
               return (
                 <>
                   <Heading data-size="xs">
@@ -341,12 +358,14 @@ const FieldModal = ({
                           setFieldValue("referenceType", value.toString())
                         }
                         value={
-                          values.referenceType &&
-                          relations.some((r) => r.code === values.referenceType)
-                            ? [values.referenceType]
+                          resolvedReferenceTypeUri &&
+                          relations.some(
+                            (r) => r.uri === resolvedReferenceTypeUri,
+                          )
+                            ? [resolvedReferenceTypeUri]
                             : []
                         }
-                        inputValue={values.referenceType ? undefined : ""}
+                        inputValue={resolvedReferenceTypeUri ? undefined : ""}
                         placeholder={`${localization.datasetForm.fieldLabel.choseRelation}...`}
                         portal={false}
                         data-size="sm"
@@ -358,8 +377,8 @@ const FieldModal = ({
                         </Combobox.Empty>
                         {relations.map((relation) => (
                           <Combobox.Option
-                            key={relation?.code}
-                            value={relation?.code}
+                            key={relation?.uri}
+                            value={relation?.uri}
                             description={`${relation?.uriAsPrefix} (${relation?.uri})`}
                           >
                             {getTranslateText(relation?.label)}
