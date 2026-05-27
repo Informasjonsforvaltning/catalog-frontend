@@ -135,16 +135,11 @@ export const ReferenceTable = ({
                 values?.references.map((ref: Reference, index) => (
                   <Table.Row key={`references-${index}`}>
                     <Table.Cell>
-                      {relations.find(
-                        (rel) =>
-                          rel.uri === ref?.referenceType ||
-                          rel.code === ref?.referenceType,
-                      )?.label
+                      {relations.find((rel) => rel.uri === ref?.referenceType)
+                        ?.label
                         ? getTranslateText(
                             relations.find(
-                              (rel) =>
-                                rel.uri === ref?.referenceType ||
-                                rel.code === ref?.referenceType,
+                              (rel) => rel.uri === ref?.referenceType,
                             )?.label,
                           )
                         : ref?.referenceType}
@@ -331,11 +326,8 @@ const FieldModal = ({
               }, [values, dirty]);
 
               const resolvedReferenceTypeUri = values.referenceType
-                ? (relations.find(
-                    (r) =>
-                      r.uri === values.referenceType ||
-                      r.code === values.referenceType,
-                  )?.uri ?? values.referenceType)
+                ? (relations.find((r) => r.uri === values.referenceType)?.uri ??
+                  values.referenceType)
                 : undefined;
 
               return (
