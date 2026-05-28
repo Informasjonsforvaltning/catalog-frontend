@@ -130,7 +130,15 @@
     "@ardatan/relay-compiler/immutable": "3.8.3",
     "postcss": "^8.5.10",
     "yaml": "^2.8.3",
-    "follow-redirects": "^1.15.12"
+    "follow-redirects": "^1.15.12",
+    "tmp": "^0.2.6",
+    "qs": "^6.15.2",
+    "ws": "^8.20.1",
+    "webpack-dev-server": "^5.2.4",
+    "brace-expansion@^1.1.7": "^1.1.13",
+    "brace-expansion@^2.0.1": "^2.0.3",
+    "brace-expansion@^2.0.2": "^2.0.3",
+    "brace-expansion@^5.0.5": "^5.0.6"
   },
   "packageManager": "yarn@4.9.2"
 }
