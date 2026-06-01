@@ -133,6 +133,7 @@ export async function updatePublicService(
     spatial: updatedService.spatial,
     subject: updatedService.subject,
     losTheme: updatedService.losTheme,
+    costs: updatedService.costs,
   };
 
   const diff = compare(oldPublicService, updatedPublicServiceMerged);

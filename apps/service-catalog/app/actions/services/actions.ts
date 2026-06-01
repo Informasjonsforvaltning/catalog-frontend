@@ -131,6 +131,7 @@ export async function updateService(
     spatial: updatedService.spatial,
     subject: updatedService.subject,
     losTheme: updatedService.losTheme,
+    costs: updatedService.costs,
   };
 
   const diff = compare(oldService, updatedServiceMerged);
