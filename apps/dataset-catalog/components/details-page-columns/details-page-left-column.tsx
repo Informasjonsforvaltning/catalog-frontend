@@ -6,6 +6,7 @@ import {
   useSearchConceptsByUri,
   useSearchDatasetsByUri,
   useSearchInformationModelsByUri,
+  useSearchLanguageByUri,
 } from "@catalog-frontend/ui";
 import {
   localization,
@@ -85,6 +86,11 @@ export const LeftColumn = ({
   const { data: informationModels } = useSearchInformationModelsByUri(
     searchEnv,
     dataset?.informationModelsFromFDK ?? [],
+  );
+
+  const { data: languages } = useSearchLanguageByUri(
+    dataset?.language,
+    referenceDataEnv,
   );
 
   const hasValues = (values: any | any[] | undefined | null): boolean => {
@@ -238,11 +244,14 @@ export const LeftColumn = ({
           {dataset?.language &&
             dataset.language
               .map((lang) => {
-                const matchedLang = referenceData?.languages?.find(
-                  (item) => item?.uri === lang,
+                const matchedLang = languages?.find(
+                  (languageItem) => languageItem?.uri === lang,
                 );
                 return matchedLang
-                  ? getTranslateText(matchedLang.label, language)
+                  ? capitalizeFirstLetter(
+                      getTranslateText(matchedLang.label, language),
+                      false,
+                    )
                   : null;
               })
               .filter(Boolean)

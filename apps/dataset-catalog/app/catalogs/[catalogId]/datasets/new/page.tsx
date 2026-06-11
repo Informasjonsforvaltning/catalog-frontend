@@ -9,7 +9,6 @@ import {
   getDatasetTypes,
   getDataThemes,
   getFrequencies,
-  getLanguages,
   getLosThemes,
   getOpenLicenses,
   getProvenanceStatements,
@@ -33,7 +32,6 @@ const NewDatasetPage = withWriteProtectedPage(
       datasetTypesResponse,
       provenanceStatementsResponse,
       frequenciesResponse,
-      languageResponse,
       licenseResponse,
       currenciesResponse,
     ] = await Promise.all([
@@ -42,7 +40,6 @@ const NewDatasetPage = withWriteProtectedPage(
       getDatasetTypes(),
       getProvenanceStatements(),
       getFrequencies(),
-      getLanguages(),
       getOpenLicenses(),
       getCurrencies(),
     ]);
@@ -53,7 +50,6 @@ const NewDatasetPage = withWriteProtectedPage(
       datasetTypes: datasetTypesResponse.datasetTypes,
       provenanceStatements: provenanceStatementsResponse.provenanceStatements,
       frequencies: frequenciesResponse.frequencies,
-      languages: languageResponse.linguisticSystems,
       openLicenses: licenseResponse.openLicenses,
       currencies: currenciesResponse.currencies,
     };
