@@ -172,12 +172,12 @@ export default class DetailPage {
     console.log("[DETAIL PAGE] Action buttons checked.");
   }
 
-  async expectLanguageCombobox() {
-    console.log("[DETAIL PAGE] Checking language combobox...");
-    const languageCombobox = this.page.getByRole("combobox");
-    await expect(languageCombobox).toBeVisible();
-    await expect(languageCombobox).toHaveValue("nb");
-    console.log("[DETAIL PAGE] Language combobox checked.");
+  async expectLanguageSuggestion() {
+    console.log("[DETAIL PAGE] Checking language suggestion...");
+    const languageSuggestion = this.page.getByRole("combobox");
+    await expect(languageSuggestion).toBeVisible();
+    await expect(languageSuggestion).toHaveValue("nb");
+    console.log("[DETAIL PAGE] Language suggestion checked.");
   }
 
   async expectLeftColumnContent(
@@ -579,7 +579,7 @@ export default class DetailPage {
     );
     await this.expectHeading(concept);
     await this.expectActionButtons();
-    await this.expectLanguageCombobox();
+    await this.expectLanguageSuggestion();
     await this.expectLeftColumnContent(concept, apiRequestContext);
     await this.expectRightColumnContent(concept, apiRequestContext);
     await this.expectCommentsTab();

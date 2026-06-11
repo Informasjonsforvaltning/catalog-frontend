@@ -34,6 +34,7 @@ export * from "./lib/key-value-list";
 export * from "./lib/key-value-list-item";
 export * from "./lib/keycloak-signin";
 export * from "./lib/layout";
+export * from "./lib/language-suggestion";
 export * from "./lib/language-indicator";
 export * from "./lib/link";
 export * from "./lib/list";

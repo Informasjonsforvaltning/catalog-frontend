@@ -17,7 +17,6 @@ import { createPublicService } from "@service-catalog/app/actions/public-service
 
 type NewPageProps = {
   currencies?: ReferenceDataCode[];
-  languages: ReferenceDataCode[];
   losThemes: LosTheme[];
   mainActivities: ReferenceDataCode[];
   referenceDataEnv: string;
@@ -28,7 +27,6 @@ type NewPageProps = {
 export const NewPage = (props: NewPageProps) => {
   const {
     currencies,
-    languages,
     losThemes,
     mainActivities,
     referenceDataEnv,
@@ -94,7 +92,6 @@ export const NewPage = (props: NewPageProps) => {
         afterSubmit={handleAfterSubmit}
         autoSaveStorage={dataStorage}
         currencies={currencies}
-        languages={languages}
         losThemes={losThemes}
         mainActivities={mainActivities}
         onCancel={handleCancel}

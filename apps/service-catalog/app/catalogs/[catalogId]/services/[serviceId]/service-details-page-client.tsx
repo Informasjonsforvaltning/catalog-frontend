@@ -20,7 +20,6 @@ import styles from "./service-details-page.module.css";
 interface ServiceDetailsPageProps {
   catalogId: string;
   hasWritePermission: boolean;
-  languages: ReferenceDataCode[];
   losThemes: LosTheme[];
   referenceDataEnv: string;
   searchEnv: string;
@@ -32,7 +31,6 @@ interface ServiceDetailsPageProps {
 const ServiceDetailsPageClient = ({
   catalogId,
   hasWritePermission,
-  languages,
   losThemes,
   referenceDataEnv,
   searchEnv,
@@ -66,7 +64,6 @@ const ServiceDetailsPageClient = ({
       <DetailsPageLayout.Left>
         <BasicServiceFormInfoCardItems
           language={language}
-          languages={languages}
           losThemes={losThemes}
           referenceDataEnv={referenceDataEnv}
           searchEnv={searchEnv}

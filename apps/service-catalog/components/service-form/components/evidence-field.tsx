@@ -1,9 +1,4 @@
-import {
-  Evidence,
-  LocalizedStrings,
-  ReferenceDataCode,
-  Service,
-} from "@catalog-frontend/types";
+import { Evidence, LocalizedStrings, Service } from "@catalog-frontend/types";
 import {
   AddButton,
   DeleteButton,
@@ -11,11 +6,13 @@ import {
   EditButton,
   FieldsetDivider,
   FormikLanguageFieldset,
+  LanguageSuggestion,
   TextareaWithPrefix,
   TitleWithHelpTextAndTag,
   useDebounce,
   useSearchDatasetsByUri,
   useSearchDatasetSuggestions,
+  useSearchLanguageByUri,
 } from "@catalog-frontend/ui";
 import cn from "classnames";
 import {
@@ -27,7 +24,6 @@ import {
 import {
   Button,
   Card,
-  Checkbox,
   Combobox,
   Fieldset,
   Heading,
@@ -35,25 +31,24 @@ import {
   Textfield,
   ValidationMessage,
   Dialog,
-  useCheckboxGroup,
 } from "@digdir/designsystemet-react";
 import { FastField, FieldArray, Formik, getIn, useFormikContext } from "formik";
 import styles from "../service-form.module.css";
 import { useEffect, useRef, useState } from "react";
-import { trim, isEmpty, pickBy, identity, sortBy } from "lodash";
+import { trim, isEmpty, pickBy, identity } from "lodash";
 import { evidenceSchema } from "../validation-schema";
 
 interface Props {
   errors?:
     | string
     | Array<{ title: LocalizedStrings; description: LocalizedStrings }>;
-  languages: ReferenceDataCode[];
+  referenceDataEnv: string;
   searchEnv: string;
   validationSchema: typeof evidenceSchema;
 }
 
 interface ModalProps {
-  languages: ReferenceDataCode[];
+  referenceDataEnv: string;
   searchEnv: string;
   validationSchema: typeof evidenceSchema;
   onCancel: () => void;
@@ -63,62 +58,24 @@ interface ModalProps {
   type: "new" | "edit";
 }
 
-const LANGUAGE_ORDER = [
-  "http://publications.europa.eu/resource/authority/language/NOB",
-  "http://publications.europa.eu/resource/authority/language/NNO",
-  "http://publications.europa.eu/resource/authority/language/ENG",
-  "http://publications.europa.eu/resource/authority/language/SMI",
-];
-
 const LanguageFieldset = ({
-  languages,
+  referenceDataEnv,
 }: {
-  languages: ReferenceDataCode[];
-}) => {
-  const { values, setFieldValue } = useFormikContext<Evidence>();
-  const langNOR = languages.find((lang) => lang.code === "NOR");
-
-  const { getCheckboxProps } = useCheckboxGroup({
-    value: values.language ?? [],
-    onChange: (newValues) => setFieldValue("language", newValues),
-  });
-
-  const sortedLanguages = sortBy(languages, (item) =>
-    LANGUAGE_ORDER.indexOf(item.uri),
-  );
-
-  return (
-    <Fieldset data-size="sm">
-      <Fieldset.Legend>
-        <TitleWithHelpTextAndTag
-          tagColor="info"
-          tagTitle={localization.tag.recommended}
-          helpText={localization.serviceForm.helptext.language}
-        >
-          {localization.serviceForm.fieldLabel.language}
-        </TitleWithHelpTextAndTag>
-      </Fieldset.Legend>
-      {langNOR &&
-        values.language &&
-        values.language.some((lang) => lang.includes("NOR")) && (
-          <Checkbox
-            key={langNOR.uri}
-            {...getCheckboxProps(langNOR.uri)}
-            label={getTranslateText(langNOR.label)}
-          />
-        )}
-      {sortedLanguages
-        .filter((lang) => lang.code !== "NOR")
-        .map((lang) => (
-          <Checkbox
-            key={lang.uri}
-            {...getCheckboxProps(lang.uri)}
-            label={getTranslateText(lang.label)}
-          />
-        ))}
-    </Fieldset>
-  );
-};
+  referenceDataEnv: string;
+}) => (
+  <Fieldset data-size="sm">
+    <Fieldset.Legend>
+      <TitleWithHelpTextAndTag
+        tagColor="info"
+        tagTitle={localization.tag.recommended}
+        helpText={localization.serviceForm.helptext.language}
+      >
+        {localization.serviceForm.fieldLabel.language}
+      </TitleWithHelpTextAndTag>
+    </Fieldset.Legend>
+    <LanguageSuggestion referenceDataEnv={referenceDataEnv} />
+  </Fieldset>
+);
 
 const DatasetFieldset = ({ searchEnv }: { searchEnv: string }) => {
   const { values, setFieldValue } = useFormikContext<Evidence>();
@@ -223,15 +180,22 @@ const hasNoFieldValues = (values: Evidence) => {
 };
 
 export const EvidenceField = (props: Props) => {
-  const { errors, languages, searchEnv, validationSchema } = props;
+  const { errors, referenceDataEnv, searchEnv, validationSchema } = props;
   const { values, setFieldValue } = useFormikContext<Service>();
   const [snapshot, setSnapshot] = useState<Evidence[]>(values.evidence ?? []);
   const evidenceDatasetUris = [
     ...new Set((values.evidence ?? []).flatMap((item) => item.dataset ?? [])),
   ];
+  const evidenceLanguageUris = [
+    ...new Set((values.evidence ?? []).flatMap((item) => item.language ?? [])),
+  ];
   const { data: evidenceDatasets } = useSearchDatasetsByUri(
     searchEnv,
     evidenceDatasetUris,
+  );
+  const { data: evidenceLanguages } = useSearchLanguageByUri(
+    evidenceLanguageUris,
+    referenceDataEnv,
   );
 
   return (
@@ -258,7 +222,7 @@ export const EvidenceField = (props: Props) => {
 
                 <div className={styles.buttons}>
                   <FieldModal
-                    languages={languages}
+                    referenceDataEnv={referenceDataEnv}
                     searchEnv={searchEnv}
                     validationSchema={validationSchema}
                     template={item}
@@ -303,11 +267,14 @@ export const EvidenceField = (props: Props) => {
                   <Paragraph data-size="sm">
                     {item.language
                       ?.map((lang) => {
-                        const matchedLang = languages.find(
+                        const matchedLang = evidenceLanguages?.find(
                           (languageItem) => languageItem.uri === lang,
                         );
                         return matchedLang
-                          ? getTranslateText(matchedLang.label)
+                          ? capitalizeFirstLetter(
+                              getTranslateText(matchedLang.label),
+                              false,
+                            )
                           : null;
                       })
                       .filter(Boolean)
@@ -350,7 +317,7 @@ export const EvidenceField = (props: Props) => {
           ))}
 
           <FieldModal
-            languages={languages}
+            referenceDataEnv={referenceDataEnv}
             searchEnv={searchEnv}
             validationSchema={validationSchema}
             template={{
@@ -386,7 +353,7 @@ export const EvidenceField = (props: Props) => {
 
 const FieldModal = (props: ModalProps) => {
   const {
-    languages,
+    referenceDataEnv,
     searchEnv,
     template,
     type,
@@ -466,7 +433,7 @@ const FieldModal = (props: ModalProps) => {
                   />
 
                   <FieldsetDivider />
-                  <LanguageFieldset languages={languages} />
+                  <LanguageFieldset referenceDataEnv={referenceDataEnv} />
 
                   <FieldsetDivider />
                   <DatasetFieldset searchEnv={searchEnv} />

@@ -65,7 +65,6 @@ interface ServiceFormProps {
   autoSaveStorage: DataStorage<StorageData>;
   currencies?: ReferenceDataCode[];
   initialValues: ServiceToBeCreated;
-  languages: ReferenceDataCode[];
   losThemes: LosTheme[];
   mainActivities?: ReferenceDataCode[];
   onCancel?: () => void;
@@ -107,7 +106,6 @@ export const ServiceForm = (props: ServiceFormProps) => {
     autoSaveStorage,
     currencies,
     initialValues,
-    languages,
     losThemes,
     mainActivities,
     onCancel,
@@ -613,7 +611,7 @@ export const ServiceForm = (props: ServiceFormProps) => {
                       </TitleWithHelpTextAndTag>
                       <EvidenceField
                         errors={errors.evidence}
-                        languages={languages}
+                        referenceDataEnv={referenceDataEnv}
                         searchEnv={searchEnv}
                         validationSchema={evidenceSchema}
                       />
