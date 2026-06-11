@@ -623,6 +623,7 @@ export type RoleType = {
 export enum SearchAlternative {
   AdministrativeEnheter = "ADMINISTRATIVE_ENHETER",
   EuFileTypes = "EU_FILE_TYPES",
+  EuLanguages = "EU_LANGUAGES",
   EuLocations = "EU_LOCATIONS",
   GeoNames = "GEONAMES",
   IanaMediaTypes = "IANA_MEDIA_TYPES",

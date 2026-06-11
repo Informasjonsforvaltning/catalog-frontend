@@ -126,3 +126,40 @@ export const useSearchFileTypeByUri = (
     enabled: Array.isArray(uriList) && uriList.length > 0,
   });
 };
+
+export const useSearchLanguage = (searchQuery: string, envVariable: string) => {
+  return useQuery({
+    queryKey: ["LANGUAGES", searchQuery],
+    queryFn: async () => {
+      const data: ReferenceDataCode[] = await searchReferenceData(
+        searchQuery,
+        envVariable,
+        [ReferenceDataGraphql.SearchAlternative.EuLanguages],
+      );
+      return data;
+    },
+    enabled: !!searchQuery,
+  });
+};
+
+export const useSearchLanguageByUri = (
+  uriList: string[] | undefined,
+  envVariable: string,
+) => {
+  return useQuery({
+    queryKey: ["LANGUAGES", uriList],
+    queryFn: async () => {
+      if (!uriList || uriList.length === 0) {
+        return [];
+      }
+
+      const data: ReferenceDataCode[] = await searchReferenceDataByUri(
+        uriList,
+        envVariable,
+        [ReferenceDataGraphql.SearchAlternative.EuLanguages],
+      );
+      return data;
+    },
+    enabled: Array.isArray(uriList) && uriList.length > 0,
+  });
+};

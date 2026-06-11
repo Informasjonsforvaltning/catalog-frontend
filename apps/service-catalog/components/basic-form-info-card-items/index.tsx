@@ -15,6 +15,7 @@ import {
   useSearchLocationsByUri,
   useSearchConceptsByUri,
   useSearchDatasetsByUri,
+  useSearchLanguageByUri,
 } from "@catalog-frontend/ui";
 import {
   capitalizeFirstLetter,
@@ -25,7 +26,6 @@ import styles from "./basic-form-info-card-items.module.css";
 
 type Props = {
   language: string;
-  languages?: ReferenceDataCode[];
   losThemes?: LosTheme[];
   mainActivities?: ReferenceDataCode[];
   referenceDataEnv: string;
@@ -36,7 +36,6 @@ type Props = {
 export const BasicServiceFormInfoCardItems = (props: Props) => {
   const {
     language,
-    languages,
     losThemes,
     mainActivities,
     referenceDataEnv,
@@ -58,9 +57,16 @@ export const BasicServiceFormInfoCardItems = (props: Props) => {
   const evidenceDatasetUris = [
     ...new Set((service.evidence ?? []).flatMap((item) => item.dataset ?? [])),
   ];
+  const evidenceLanguageUris = [
+    ...new Set((service.evidence ?? []).flatMap((item) => item.language ?? [])),
+  ];
   const { data: datasets } = useSearchDatasetsByUri(
     searchEnv,
     evidenceDatasetUris,
+  );
+  const { data: evidenceLanguages } = useSearchLanguageByUri(
+    evidenceLanguageUris,
+    referenceDataEnv,
   );
 
   return (
@@ -149,11 +155,14 @@ export const BasicServiceFormInfoCardItems = (props: Props) => {
                   <Paragraph data-size="sm">
                     {item.language
                       ?.map((lang) => {
-                        const matchedLang = languages?.find(
+                        const matchedLang = evidenceLanguages?.find(
                           (languageItem) => languageItem?.uri === lang,
                         );
                         return matchedLang
-                          ? getTranslateText(matchedLang.label, language)
+                          ? capitalizeFirstLetter(
+                              getTranslateText(matchedLang.label, language),
+                              false,
+                            )
                           : null;
                       })
                       .filter(Boolean)

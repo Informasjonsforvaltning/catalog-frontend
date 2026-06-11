@@ -1,6 +1,5 @@
 import {
   getAdmsStatuses,
-  getLanguages,
   getLosThemes,
   getMainActivities,
   getOrganization,
@@ -43,19 +42,13 @@ export default async function PublicServiceDetailsPage({
     session.accessToken,
     catalogId,
   );
-  const [
-    organization,
-    statusesResponse,
-    mainActivities,
-    losThemesResponse,
-    languagesResponse,
-  ] = await Promise.all([
-    getOrganization(catalogId),
-    getAdmsStatuses(),
-    getMainActivities(),
-    getLosThemes(),
-    getLanguages(),
-  ]);
+  const [organization, statusesResponse, mainActivities, losThemesResponse] =
+    await Promise.all([
+      getOrganization(catalogId),
+      getAdmsStatuses(),
+      getMainActivities(),
+      getLosThemes(),
+    ]);
 
   const breadcrumbList: BreadcrumbType[] = [
     {
@@ -81,7 +74,6 @@ export default async function PublicServiceDetailsPage({
       <PublicServiceDetailsPageClient
         catalogId={catalogId}
         hasWritePermission={hasWritePermission}
-        languages={languagesResponse.linguisticSystems}
         losThemes={losThemesResponse.losNodes}
         mainActivities={mainActivities.mainActivities}
         referenceDataEnv={process.env.FDK_BASE_URI ?? ""}

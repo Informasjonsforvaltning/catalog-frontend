@@ -1,7 +1,6 @@
 import {
   getAdmsStatuses,
   getCurrencies,
-  getLanguages,
   getLosThemes,
   getOrganization,
 } from "@catalog-frontend/data-access";
@@ -21,14 +20,12 @@ export default async function EditServicePage({
     organization,
     statusesResponse,
     losThemesResponse,
-    languageResponse,
     currenciesResponse,
   ] = await Promise.all([
     getServiceById(catalogId, serviceId),
     getOrganization(catalogId),
     getAdmsStatuses(),
     getLosThemes(),
-    getLanguages(),
     getCurrencies(),
   ]);
 
@@ -59,7 +56,6 @@ export default async function EditServicePage({
       />
       <EditPage
         currencies={currenciesResponse.currencies}
-        languages={languageResponse.linguisticSystems}
         losThemes={losThemesResponse.losNodes}
         referenceDataEnv={process.env.FDK_BASE_URI || ""}
         searchEnv={process.env.FDK_SEARCH_SERVICE_BASE_URI || ""}

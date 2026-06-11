@@ -2,7 +2,6 @@ import { Breadcrumbs, BreadcrumbType, PageBanner } from "@catalog-frontend/ui";
 import {
   getAdmsStatuses,
   getCurrencies,
-  getLanguages,
   getLosThemes,
   getOrganization,
 } from "@catalog-frontend/data-access";
@@ -18,13 +17,11 @@ export default async function NewServicePage(props: {
     organization,
     statusesResponse,
     losThemesResponse,
-    languageResponse,
     currenciesResponse,
   ] = await Promise.all([
     getOrganization(catalogId),
     getAdmsStatuses(),
     getLosThemes(),
-    getLanguages(),
     getCurrencies(),
   ]);
 
@@ -51,7 +48,6 @@ export default async function NewServicePage(props: {
       />
       <NewPage
         currencies={currenciesResponse.currencies}
-        languages={languageResponse.linguisticSystems}
         losThemes={losThemesResponse.losNodes}
         referenceDataEnv={process.env.FDK_BASE_URI || ""}
         searchEnv={process.env.FDK_SEARCH_SERVICE_BASE_URI || ""}

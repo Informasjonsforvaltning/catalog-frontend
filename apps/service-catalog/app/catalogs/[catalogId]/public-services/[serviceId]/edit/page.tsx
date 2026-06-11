@@ -1,7 +1,6 @@
 import {
   getAdmsStatuses,
   getCurrencies,
-  getLanguages,
   getLosThemes,
   getMainActivities,
   getOrganization,
@@ -23,7 +22,6 @@ export default async function EditServicePage({
     statusesResponse,
     mainActivities,
     losThemesResponse,
-    languageResponse,
     currenciesResponse,
   ] = await Promise.all([
     getPublicServiceById(catalogId, serviceId),
@@ -31,7 +29,6 @@ export default async function EditServicePage({
     getAdmsStatuses(),
     getMainActivities(),
     getLosThemes(),
-    getLanguages(),
     getCurrencies(),
   ]);
 
@@ -62,7 +59,6 @@ export default async function EditServicePage({
       />
       <EditPage
         currencies={currenciesResponse.currencies}
-        languages={languageResponse.linguisticSystems}
         losThemes={losThemesResponse.losNodes}
         mainActivities={mainActivities.mainActivities}
         referenceDataEnv={process.env.FDK_BASE_URI || ""}
