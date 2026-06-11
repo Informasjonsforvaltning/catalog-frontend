@@ -304,8 +304,8 @@ runTestAsAdmin(
     await detailPage.goto(process.env.E2E_CATALOG_ID as string, dataset.id);
     await detailPage.expectLandingPage("https://example.com/landing-page");
     await detailPage.expectLanguages([
-      "Norsk Bokmål",
-      "Norsk Nynorsk",
+      "Norsk (bokmål)",
+      "Norsk (nynorsk)",
       "Engelsk",
     ]);
     await detailPage.expectCoverageArea("Norge");

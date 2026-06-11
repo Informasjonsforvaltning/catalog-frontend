@@ -776,10 +776,18 @@ export default class DatasetEditPage {
   }
 
   async checkLanguage(language: string) {
-    await this.page
-      .getByRole("group", { name: "Språk" })
-      .getByLabel(language)
-      .check();
+    const languageGroup = this.page.getByRole("group", { name: "Språk" });
+    const searchInput = languageGroup.getByPlaceholder("Søk");
+    await searchInput.click();
+    await searchInput.fill("");
+    await searchInput.pressSequentially(language, { delay: 50 });
+    const languageOption = languageGroup.getByRole("option", {
+      name: new RegExp(language, "i"),
+    });
+    await languageOption.waitFor({ state: "visible", timeout: 10000 });
+    await languageOption.click();
+    await this.page.waitForTimeout(100);
+    await searchInput.press("Escape");
   }
 
   async selectCoverageArea(value: string) {

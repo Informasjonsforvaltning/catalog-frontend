@@ -178,7 +178,13 @@ export default class DatasetDetailPage {
   }
 
   async expectLanguages(languages: string[]) {
-    await expect(this.page.getByText(languages.join(", "))).toBeVisible();
+    const languageSection = this.page.locator('[class*="__item"]').filter({
+      has: this.page.getByRole("heading", { name: "Språk", exact: true }),
+    });
+
+    for (const language of languages) {
+      await expect(languageSection).toContainText(language, { timeout: 30000 });
+    }
   }
 
   async expectCoverageArea(area: string) {

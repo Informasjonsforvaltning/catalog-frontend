@@ -15,18 +15,12 @@ export const DetailsSection = ({
   referenceData,
   isMobility,
 }: Props) => {
-  const {
-    datasetTypes,
-    provenanceStatements,
-    languages,
-    frequencies,
-    currencies,
-  } = referenceData;
+  const { datasetTypes, provenanceStatements, frequencies, currencies } =
+    referenceData;
   return (
     <div>
       <RecommendedDetailFields
         referenceDataEnv={referenceDataEnv}
-        languages={languages}
         isMobility={isMobility}
       />
       <MinimizedDetailFields

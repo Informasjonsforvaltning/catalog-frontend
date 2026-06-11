@@ -48,7 +48,6 @@ export interface ReferenceData {
   provenanceStatements: ReferenceDataCode[];
   datasetTypes: ReferenceDataCode[];
   frequencies: ReferenceDataCode[];
-  languages: ReferenceDataCode[];
   openLicenses: ReferenceDataCode[];
   mobilityRights: ReferenceDataCode[];
   mobilityDataStandards: ReferenceDataCode[];

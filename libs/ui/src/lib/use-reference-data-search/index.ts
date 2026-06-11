@@ -129,7 +129,7 @@ export const useSearchFileTypeByUri = (
 
 export const useSearchLanguage = (searchQuery: string, envVariable: string) => {
   return useQuery({
-    queryKey: ["LANGUAGES", searchQuery],
+    queryKey: ["LANGUAGES", "searchQuery", searchQuery],
     queryFn: async () => {
       const data: ReferenceDataCode[] = await searchReferenceData(
         searchQuery,
@@ -147,7 +147,7 @@ export const useSearchLanguageByUri = (
   envVariable: string,
 ) => {
   return useQuery({
-    queryKey: ["LANGUAGES", uriList],
+    queryKey: ["LANGUAGES", "uriList", uriList],
     queryFn: async () => {
       if (!uriList || uriList.length === 0) {
         return [];

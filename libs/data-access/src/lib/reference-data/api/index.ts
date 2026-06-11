@@ -282,17 +282,3 @@ export const searchReferenceDataByUri = async (
 
   return data;
 };
-
-export const getLanguages = async (): Promise<{
-  linguisticSystems: ReferenceDataCode[];
-}> => {
-  const resource = `${process.env.FDK_BASE_URI}/reference-data/linguistic-systems`;
-  const options = {
-    headers: {
-      "Content-Type": "application/json",
-    },
-    method: "GET",
-  };
-  const response = await fetch(resource, options);
-  return response.json();
-};

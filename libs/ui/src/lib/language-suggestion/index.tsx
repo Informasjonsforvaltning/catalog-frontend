@@ -53,12 +53,6 @@ const getTranslatedLabel = (item: ReferenceDataCode) =>
     ? capitalizeFirstLetter(getTranslateText(item.label), false)
     : (item.uri ?? "");
 
-const getOptionLabel = (item: ReferenceDataCode) => {
-  const label = getTranslatedLabel(item);
-
-  return item.code ? `${label} (${item.code})` : label;
-};
-
 const compareLanguages = (a: ReferenceDataCode, b: ReferenceDataCode) => {
   const indexA = a.code ? languageCodeSortIndex.get(a.code) : undefined;
   const indexB = b.code ? languageCodeSortIndex.get(b.code) : undefined;
@@ -162,7 +156,7 @@ export const LanguageSuggestion = ({ referenceDataEnv }: Props) => {
           {!isSearching &&
             languageOptions.map((item) => (
               <Suggestion.Option key={item.uri} value={item.uri ?? ""}>
-                {getOptionLabel(item)}
+                {getTranslatedLabel(item)}
               </Suggestion.Option>
             ))}
         </Suggestion.List>
