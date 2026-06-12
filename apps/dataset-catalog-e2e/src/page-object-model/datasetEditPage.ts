@@ -933,21 +933,28 @@ export default class DatasetEditPage {
   }
 
   // Information Model section
-  async selectInformationModel(model: string) {
-    await this.page
-      .getByRole("group", { name: "Informasjonsmodell fra Data.norge.no" })
-      .getByRole("combobox")
-      .click();
-    await this.page
-      .getByRole("group", { name: "Informasjonsmodell fra Data.norge.no" })
-      .getByPlaceholder("Søk")
-      .fill(model);
-    await this.page.getByRole("option", { name: model }).click();
+  async selectInformationModelFromFdk(
+    searchTerm: string,
+    optionName: string | RegExp,
+  ) {
+    const informationModelGroup = this.page.getByRole("group", {
+      name: "Informasjonsmodell fra Data.norge.no",
+    });
+    await informationModelGroup.waitFor({ state: "visible", timeout: 15000 });
+    const searchInput = informationModelGroup.getByPlaceholder("Søk");
+    await searchInput.click();
+    await searchInput.fill("");
+    await searchInput.pressSequentially(searchTerm, { delay: 50 });
+    const option = informationModelGroup.getByRole("option", {
+      name: optionName,
+    });
+    await option.waitFor({ state: "visible", timeout: 10000 });
+    await option.click();
     await this.page.waitForTimeout(100);
-    await this.page.keyboard.press("Escape");
+    await searchInput.press("Escape");
   }
 
-  async clickAddInformationModel() {
+  async clickAddInformationModelFromOtherSources() {
     await this.page
       .getByRole("button", {
         name: "Legg til informasjonsmodell fra andre kilder",
@@ -955,26 +962,13 @@ export default class DatasetEditPage {
       .click();
   }
 
-  async addInformationModelSource(data: {
-    prefLabel: LocalizedStrings;
-    uri: string;
-    open: string[];
-    clear: boolean;
-  }) {
-    // Wait for dialog to be visible
-    const dialog = this.page.getByRole("dialog");
-    await dialog.waitFor({ state: "visible" });
-
-    // Try the original locator with more specific waiting
-    await this.fillLanguageField(
-      data.prefLabel,
-      "Tittel",
-      data.open,
-      data.clear,
-      dialog,
-    );
-    await dialog.getByLabel("Lenke").fill(data.uri);
-    await dialog.getByRole("button", { name: "Legg til" }).click();
+  async addInformationModelFromOtherSources(
+    value: UriWithLabel,
+    open: string[],
+    clear: boolean,
+  ) {
+    await this.clickAddInformationModelFromOtherSources();
+    await this.fillUrlWithLabelModal("", value, open, clear);
   }
 
   // Contact Point section

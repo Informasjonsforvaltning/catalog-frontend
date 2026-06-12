@@ -484,39 +484,44 @@ runTestAsAdmin(
     const detailPage: DatasetDetailPage = datasetsPage.detailPage;
     const editPage: DatasetEditPage = datasetsPage.editPage;
 
+    const otherSourceTitle = {
+      nb: uniqueString("im_title_nb"),
+      nn: uniqueString("im_title_nn"),
+      en: uniqueString("im_title_en"),
+    };
+    const otherSourceUri = "https://example.com/information-model";
+
     await detailPage.goto(process.env.E2E_CATALOG_ID as string, dataset.id);
     await detailPage.clickEditButton();
 
-    const modelTitle = {
-      nb: uniqueString("model_title_nb"),
-      nn: uniqueString("model_title_nn"),
-      en: uniqueString("model_title_en"),
-    };
-
-    // Add information model
-    await editPage.selectInformationModel(
-      "Felles informasjonsmodell for Person og Enhet",
+    await editPage.selectInformationModelFromFdk(
+      "ModellDCAT",
+      /Informasjonsmodell for ModellDCAT-AP-NO/i,
     );
-    await editPage.clickAddInformationModel();
-    await editPage.addInformationModelSource({
-      prefLabel: modelTitle,
-      uri: "https://example.com/information-model",
-      open: ["Bokmål", "Nynorsk", "Engelsk"],
-      clear: false,
-    });
+    await editPage.selectInformationModelFromFdk(
+      "Liland",
+      /Liland.*lotterigevinster/i,
+    );
+    await editPage.addInformationModelFromOtherSources(
+      {
+        uri: otherSourceUri,
+        prefLabel: otherSourceTitle,
+      },
+      ["Bokmål", "Nynorsk", "Engelsk"],
+      false,
+    );
 
-    // Save changes
     await editPage.clickSaveButton();
 
-    // Verify changes
     await detailPage.goto(process.env.E2E_CATALOG_ID as string, dataset.id);
     await detailPage.expectInformationModelTitle(
-      "Felles informasjonsmodell for Person og Enhet",
+      "Informasjonsmodell for ModellDCAT-AP-NO",
     );
-    await detailPage.expectInformationModelTitle(modelTitle.nb as string);
-    await detailPage.expectInformationModelUri(
-      "https://example.com/information-model",
+    await detailPage.expectInformationModelTitle(
+      "Liland's store modell for lotterigevinster",
     );
+    await detailPage.expectRelatedResourceTitle(otherSourceTitle.nb as string);
+    await detailPage.expectRelatedResourceUri(otherSourceUri);
   },
 );
 
