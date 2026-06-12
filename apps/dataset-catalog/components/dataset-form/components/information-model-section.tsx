@@ -1,5 +1,5 @@
 "use client";
-import { Dataset } from "@catalog-frontend/types";
+import { Dataset, Search } from "@catalog-frontend/types";
 import {
   TitleWithHelpTextAndTag,
   useDebounce,
@@ -11,15 +11,28 @@ import {
   getTranslateText,
   localization,
 } from "@catalog-frontend/utils";
-import { Combobox, Fieldset } from "@digdir/designsystemet-react";
+import {
+  EXPERIMENTAL_Suggestion as Suggestion,
+  Fieldset,
+} from "@digdir/designsystemet-react";
 import { useFormikContext } from "formik";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import styles from "../dataset-form.module.css";
 import { UriWithLabelFieldsetTable } from "./uri-with-label-field-set-table";
 
 interface Props {
   searchEnv: string;
 }
+
+interface InformationModelOption {
+  uri: string;
+  title?: Search.Suggestion["title"] | null;
+  description?: Search.Suggestion["description"] | null;
+  organization?: Search.Suggestion["organization"] | null;
+}
+
+const getOptionLabel = (option: InformationModelOption) =>
+  capitalizeFirstLetter(getTranslateText(option.title)) || option.uri;
 
 export const InformationModelSection = ({ searchEnv }: Props) => {
   const { setFieldValue, errors, values } = useFormikContext<Dataset>();
@@ -33,27 +46,53 @@ export const InformationModelSection = ({ searchEnv }: Props) => {
       values.informationModelsFromFDK || [],
     );
 
-  const comboboxOptions = [
-    // Combine selectedInformationModels and informationModelSuggestions, and adding uri's for values not found in selectedInformationModels
-    ...new Map(
-      [
-        ...(selectedInformationModels ?? []),
-        ...(informationModelSuggestions ?? []),
-        ...(values.informationModelsFromFDK ?? []).map((uri) => {
-          const foundItem =
-            selectedInformationModels?.find((item) => item.uri === uri) ||
-            informationModelSuggestions?.find((item) => item.uri === uri);
+  const informationModelOptions: InformationModelOption[] = useMemo(
+    () => [
+      // Combine selectedInformationModels and informationModelSuggestions, and adding uri's for values not found in selectedInformationModels
+      ...new Map(
+        [
+          ...(selectedInformationModels ?? []),
+          ...(informationModelSuggestions ?? []),
+          ...(values.informationModelsFromFDK ?? []).map((uri) => {
+            const foundItem =
+              selectedInformationModels?.find((item) => item.uri === uri) ||
+              informationModelSuggestions?.find((item) => item.uri === uri);
 
-          return {
-            uri,
-            title: foundItem?.title ?? null,
-            description: foundItem?.description ?? null,
-            organization: foundItem?.organization ?? null,
-          };
-        }),
-      ].map((option) => [option.uri, option]),
-    ).values(),
-  ];
+            return {
+              uri,
+              title: foundItem?.title ?? null,
+              description: foundItem?.description ?? null,
+              organization: foundItem?.organization ?? null,
+            };
+          }),
+        ].map((option) => [option.uri, option] as const),
+      ).values(),
+    ],
+    [
+      selectedInformationModels,
+      informationModelSuggestions,
+      values.informationModelsFromFDK,
+    ],
+  );
+
+  const selectedInformationModelItems = useMemo(
+    () =>
+      (values.informationModelsFromFDK ?? []).map((uri) => {
+        const option = informationModelOptions.find((item) => item.uri === uri);
+
+        return {
+          value: uri,
+          label: option ? getOptionLabel(option) : uri,
+        };
+      }),
+    [informationModelOptions, values.informationModelsFromFDK],
+  );
+
+  const emptyMessage = searching
+    ? `${localization.loading}...`
+    : debouncedSearchTerm
+      ? localization.search.noHits
+      : `${localization.search.typeToSearch}...`;
 
   return (
     <>
@@ -68,51 +107,47 @@ export const InformationModelSection = ({ searchEnv }: Props) => {
               {localization.datasetForm.fieldLabel.informationModelsFromFDK}
             </TitleWithHelpTextAndTag>
           </Fieldset.Legend>
-          <Combobox
+          <Suggestion
             data-size="sm"
-            onValueChange={(selectedValues: string[]) =>
-              setFieldValue("informationModelsFromFDK", selectedValues)
-            }
-            onChange={(input: React.ChangeEvent<HTMLInputElement>) =>
-              setSearchTerm(input.target.value)
-            }
-            loading={searching}
-            multiple
-            hideClearButton
-            value={values.informationModelsFromFDK}
-            placeholder={`${localization.search.search}...`}
             filter={() => true} // Deactivate filter, handled by backend
-            virtual
+            multiple
+            onSelectedChange={(selectedItems) =>
+              setFieldValue(
+                "informationModelsFromFDK",
+                selectedItems.map((item) => item.value),
+              )
+            }
+            selected={selectedInformationModelItems}
           >
-            <Combobox.Empty>{`${localization.search.noHits}...`}</Combobox.Empty>
-            {comboboxOptions &&
-              comboboxOptions.map((suggestion) => (
-                <Combobox.Option
-                  value={suggestion.uri}
-                  key={suggestion.uri}
-                  displayValue={
-                    capitalizeFirstLetter(getTranslateText(suggestion.title)) ||
-                    suggestion.uri
-                  }
-                >
-                  <div className={styles.comboboxOption}>
-                    <div>
-                      {capitalizeFirstLetter(
-                        getTranslateText(suggestion.title),
-                      ) || suggestion.uri}
+            <Suggestion.Input
+              aria-busy={searching}
+              onInput={(event) => setSearchTerm(event.currentTarget.value)}
+              placeholder={`${localization.search.search}...`}
+            />
+            <Suggestion.List>
+              <Suggestion.Empty>{emptyMessage}</Suggestion.Empty>
+              {!searching &&
+                informationModelOptions.map((suggestion) => (
+                  <Suggestion.Option
+                    value={suggestion.uri}
+                    key={suggestion.uri}
+                    label={getOptionLabel(suggestion)}
+                  >
+                    <div className={styles.comboboxOption}>
+                      <div>{getOptionLabel(suggestion)}</div>
+                      <div>
+                        {capitalizeFirstLetter(
+                          getTranslateText(suggestion.description),
+                        )}
+                      </div>
+                      <div>
+                        {getTranslateText(suggestion.organization?.prefLabel)}
+                      </div>
                     </div>
-                    <div>
-                      {capitalizeFirstLetter(
-                        getTranslateText(suggestion.description),
-                      )}
-                    </div>
-                    <div>
-                      {getTranslateText(suggestion.organization?.prefLabel)}
-                    </div>
-                  </div>
-                </Combobox.Option>
-              ))}
-          </Combobox>
+                  </Suggestion.Option>
+                ))}
+            </Suggestion.List>
+          </Suggestion>
         </Fieldset>
       )}
 
