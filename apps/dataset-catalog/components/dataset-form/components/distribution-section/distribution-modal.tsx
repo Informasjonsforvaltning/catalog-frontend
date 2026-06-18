@@ -3,6 +3,7 @@
 import React, { ReactNode, useEffect, useRef, useState } from "react";
 import {
   Distribution,
+  Option,
   ReferenceDataCode,
   Search,
 } from "@catalog-frontend/types";
@@ -45,6 +46,26 @@ import {
 import { ToggleFieldButton } from "@dataset-catalog/components/dataset-form/components/toggle-field-button";
 import { get, isArray, isEmpty, isNil, isObject } from "lodash";
 import FieldsetWithDelete from "@dataset-catalog/components/fieldset-with-delete";
+
+const PRIORITY_LICENCE_CODES = ["CC0", "CC_BY_4_0"];
+
+const containsFilter = (inputValue: string, option: Option): boolean =>
+  option.label.toLowerCase().includes(inputValue.toLowerCase());
+
+const sortLicences = (licences: ReferenceDataCode[]): ReferenceDataCode[] =>
+  [...licences].sort((a, b) => {
+    const a_priority = PRIORITY_LICENCE_CODES.indexOf(a.code ?? "");
+    const b_priority = PRIORITY_LICENCE_CODES.indexOf(b.code ?? "");
+    if (a_priority !== -1 || b_priority !== -1) {
+      return (
+        (a_priority === -1 ? Infinity : a_priority) -
+        (b_priority === -1 ? Infinity : b_priority)
+      );
+    }
+    return getTranslateText(a.label)
+      .toString()
+      .localeCompare(getTranslateText(b.label).toString());
+  });
 
 type Props = {
   trigger: ReactNode;
@@ -1004,24 +1025,35 @@ export const DistributionModal = ({
                           </TitleWithHelpTextAndTag>
                         </Fieldset.Legend>
                         <Combobox
-                          value={values?.license ? [values?.license] : [""]}
+                          value={values?.license ? [values.license] : []}
                           portal={false}
                           onValueChange={(selectedValues) => {
                             setFieldValue("license", selectedValues.toString());
                           }}
-                          virtual
+                          filter={containsFilter}
+                          placeholder={`${localization.search.search}...`}
                         >
-                          <Combobox.Option key="license-none" value="">
-                            {localization.none}
-                          </Combobox.Option>
-                          {openLicenses?.map((license, i) => (
-                            <Combobox.Option
-                              key={`license-${license.uri}-${i}`}
-                              value={license.uri}
-                            >
-                              {getTranslateText(license.label)}
-                            </Combobox.Option>
-                          ))}
+                          <Combobox.Empty>
+                            {localization.search.noHits}
+                          </Combobox.Empty>
+                          {values?.license &&
+                            !openLicenses?.some(
+                              (l) => l.uri === values.license,
+                            ) && (
+                              <Combobox.Option value={values.license}>
+                                {values.license}
+                              </Combobox.Option>
+                            )}
+                          {sortLicences(openLicenses ?? []).map(
+                            (license, i) => (
+                              <Combobox.Option
+                                key={`license-${license.uri}-${i}`}
+                                value={license.uri}
+                              >
+                                {getTranslateText(license.label)}
+                              </Combobox.Option>
+                            ),
+                          )}
                         </Combobox>
                       </Fieldset>
                       <FieldsetDivider />

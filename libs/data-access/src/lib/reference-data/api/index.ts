@@ -1,5 +1,6 @@
 import {
   DataTheme,
+  Licence,
   LosTheme,
   MobilityTheme,
   ReferenceDataCode,
@@ -133,6 +134,21 @@ export const getOpenLicenses = async (): Promise<{
   };
   const response = await fetch(resource, options);
   return response.json();
+};
+
+export const getLicences = async (): Promise<{
+  licences: Licence[];
+}> => {
+  const resource = `${process.env.FDK_BASE_URI}/reference-data/eu/licences`;
+  const options = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "GET",
+  };
+  const response = await fetch(resource, options);
+  const data: { licences: Licence[] } = await response.json();
+  return { licences: data.licences.filter((licence) => !licence.deprecated) };
 };
 
 export const getProvenanceStatements = async (): Promise<{

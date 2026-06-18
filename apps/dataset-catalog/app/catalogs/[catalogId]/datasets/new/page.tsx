@@ -9,8 +9,8 @@ import {
   getDatasetTypes,
   getDataThemes,
   getFrequencies,
+  getLicences,
   getLosThemes,
-  getOpenLicenses,
   getProvenanceStatements,
 } from "@catalog-frontend/data-access";
 import { datasetToBeCreatedTemplate } from "@dataset-catalog/components/dataset-form/utils/dataset-initial-values";
@@ -40,7 +40,7 @@ const NewDatasetPage = withWriteProtectedPage(
       getDatasetTypes(),
       getProvenanceStatements(),
       getFrequencies(),
-      getOpenLicenses(),
+      getLicences(),
       getCurrencies(),
     ]);
 
@@ -50,7 +50,7 @@ const NewDatasetPage = withWriteProtectedPage(
       datasetTypes: datasetTypesResponse.datasetTypes,
       provenanceStatements: provenanceStatementsResponse.provenanceStatements,
       frequencies: frequenciesResponse.frequencies,
-      openLicenses: licenseResponse.openLicenses,
+      openLicenses: licenseResponse.licences,
       currencies: currenciesResponse.currencies,
     };
 
