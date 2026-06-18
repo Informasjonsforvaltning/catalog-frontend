@@ -353,7 +353,7 @@ runTestAsAdmin(
         en: uniqueString("dist_desc_en"),
       },
       accessUrl: "https://example.com/distribution",
-      license: "Norsk lisens for offentlige data",
+      license: "Norwegian Licence for Open Government Data (NLOD) 2.0",
       format: "CSV",
     };
 
