@@ -122,7 +122,7 @@ export const distributionTemplate = (dist: Distribution | undefined) => {
         accessURL: [""],
         format: [],
         mediaType: [],
-        license: {},
+        license: "",
         conformsTo: [],
         page: [],
         accessServices: [],
