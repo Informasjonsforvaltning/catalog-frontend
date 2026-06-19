@@ -126,6 +126,7 @@ export const DistributionModal = ({
   const modalRef = useRef<HTMLDialogElement>(null);
   const resetFormRef = useRef<(() => void) | null>(null);
 
+  const [searchQueryLicense, setSearchQueryLicense] = useState<string>("");
   const [searchQueryMediaTypes, setSearchQueryMediaTypes] =
     useState<string>("");
   const [searchQueryFileTypes, setSearchQueryFileTypes] = useState<string>("");
@@ -138,6 +139,7 @@ export const DistributionModal = ({
     setSelectedFileTypeUris(initialValues?.format ?? []);
     setSelectedMediaTypeUris(initialValues?.mediaType ?? []);
     setSelectedAccessServiceUris(initialValues?.accessServices ?? []);
+    setSearchQueryLicense("");
     setSearchQueryMediaTypes("");
     setSearchQueryFileTypes("");
     setSearchDataServicesQuery("");
@@ -1032,6 +1034,10 @@ export const DistributionModal = ({
                           }}
                           filter={containsFilter}
                           placeholder={`${localization.search.search}...`}
+                          inputValue={searchQueryLicense}
+                          onChange={(event) =>
+                            setSearchQueryLicense(event.target.value)
+                          }
                         >
                           <Combobox.Empty>
                             {localization.search.noHits}
