@@ -1,13 +1,41 @@
-import { DataService, ReferenceDataCode } from "@catalog-frontend/types";
+import {
+  DataService,
+  Option,
+  ReferenceDataCode,
+} from "@catalog-frontend/types";
 import {
   CostsTable,
   FieldsetDivider,
   TitleWithHelpTextAndTag,
 } from "@catalog-frontend/ui";
-import { accessRights, localization } from "@catalog-frontend/utils";
-import { Fieldset } from "@digdir/designsystemet-react";
+import {
+  accessRights,
+  getTranslateText,
+  localization,
+} from "@catalog-frontend/utils";
+import { Combobox, Fieldset } from "@digdir/designsystemet-react";
 import { useFormikContext } from "formik";
 import { ReferenceDataRadioGroup } from "@data-service-catalog/components/data-service-form/components/reference-data-radio-group";
+
+const PRIORITY_LICENCE_CODES = ["CC0", "CC_BY_4_0"];
+
+const containsFilter = (inputValue: string, option: Option): boolean =>
+  option.label.toLowerCase().includes(inputValue.toLowerCase());
+
+const sortLicences = (licences: ReferenceDataCode[]): ReferenceDataCode[] =>
+  [...licences].sort((a, b) => {
+    const a_priority = PRIORITY_LICENCE_CODES.indexOf(a.code ?? "");
+    const b_priority = PRIORITY_LICENCE_CODES.indexOf(b.code ?? "");
+    if (a_priority !== -1 || b_priority !== -1) {
+      return (
+        (a_priority === -1 ? Infinity : a_priority) -
+        (b_priority === -1 ? Infinity : b_priority)
+      );
+    }
+    return getTranslateText(a.label)
+      .toString()
+      .localeCompare(getTranslateText(b.label).toString());
+  });
 
 type Props = {
   openLicenses?: ReferenceDataCode[];
@@ -27,14 +55,34 @@ export const AccessSection = ({ openLicenses, currencies }: Props) => {
             {localization.dataServiceForm.fieldLabel.license}
           </TitleWithHelpTextAndTag>
         </Fieldset.Legend>
-        <ReferenceDataRadioGroup
-          selected={values?.license}
-          codes={openLicenses ?? []}
-          selectCode={(selected) =>
-            setFieldValue("license", selected.toString())
+        <Combobox
+          value={
+            values?.license && values.license !== "none" ? [values.license] : []
           }
-          noneLabel={localization.dataServiceForm.noLicense}
-        />
+          portal={false}
+          onValueChange={(selectedValues) =>
+            setFieldValue("license", selectedValues.toString())
+          }
+          filter={containsFilter}
+          placeholder={`${localization.search.search}...`}
+        >
+          <Combobox.Empty>{localization.search.noHits}</Combobox.Empty>
+          {values?.license &&
+            values.license !== "none" &&
+            !openLicenses?.some((l) => l.uri === values.license) && (
+              <Combobox.Option value={values.license}>
+                {values.license}
+              </Combobox.Option>
+            )}
+          {sortLicences(openLicenses ?? []).map((license, i) => (
+            <Combobox.Option
+              key={`license-${license.uri}-${i}`}
+              value={license.uri}
+            >
+              {getTranslateText(license.label)}
+            </Combobox.Option>
+          ))}
+        </Combobox>
       </Fieldset>
 
       <FieldsetDivider />
