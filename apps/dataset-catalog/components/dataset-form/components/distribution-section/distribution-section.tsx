@@ -456,6 +456,7 @@ export const DistributionSection = ({
               page: [],
               conformsTo: [],
               accessServices: [],
+              license: "",
               rights: { type: "" },
               mobilityDataStandard: "",
             }}
@@ -654,6 +655,7 @@ export const DistributionSection = ({
               page: [],
               conformsTo: [],
               accessServices: [],
+              license: "",
             }}
           />
         </div>

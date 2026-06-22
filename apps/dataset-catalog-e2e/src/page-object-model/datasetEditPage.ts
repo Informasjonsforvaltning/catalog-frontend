@@ -752,12 +752,9 @@ export default class DatasetEditPage {
       .getByRole("group", { name: "Lisens" })
       .getByRole("combobox")
       .click();
-    const licenseOption = dialog.getByRole("option", {
-      name: data.license,
-      exact: true,
-    });
-    await licenseOption.waitFor({ state: "visible", timeout: 5000 });
-    await licenseOption.click();
+    await dialog
+      .getByRole("option", { name: data.license, exact: true })
+      .click();
     await dialog.getByLabel("Lenke").click();
     await dialog
       .getByRole("group", { name: "Format" })

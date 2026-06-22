@@ -256,7 +256,7 @@ runTestAsAdmin(
       title: distributionTitle,
       description: distributionDescription,
       accessUrl: "https://example.com/access-url",
-      license: "Norsk lisens for offentlige data",
+      license: "Norwegian Licence for Open Government Data (NLOD) 2.0",
       format: "CSV",
     });
 
@@ -273,7 +273,7 @@ runTestAsAdmin(
       "https://example.com/access-url",
     );
     await detailPage.expectDistributionLicense(
-      "Norsk lisens for offentlige data",
+      "Norwegian Licence for Open Government Data (NLOD) 2.0",
     );
     await detailPage.expectDistributionFormat("CSV");
   },

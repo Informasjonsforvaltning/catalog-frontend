@@ -72,7 +72,7 @@ export const DistributionDetailsCard = ({
     isEmpty(distribution?.downloadURL) &&
     !(distribution.mediaType && distribution.mediaType.length) &&
     !(distribution?.accessServices && distribution.accessServices.length > 0) &&
-    distribution?.license &&
+    isEmpty(distribution?.license) &&
     isEmpty(distribution?.conformsTo) &&
     !(distribution?.page && !isEmpty(distribution.page[0]))
   );

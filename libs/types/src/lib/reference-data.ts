@@ -9,6 +9,10 @@ export interface ReferenceDataCode {
   subType?: string;
 }
 
+export interface Licence extends ReferenceDataCode {
+  deprecated?: boolean;
+}
+
 export interface ConceptStatuses {
   conceptStatuses: ReferenceDataCode[];
 }
