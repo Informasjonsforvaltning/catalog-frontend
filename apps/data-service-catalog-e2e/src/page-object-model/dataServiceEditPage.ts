@@ -323,7 +323,8 @@ export default class DataServiceEditPage {
   }
 
   async selectLicense(license: string) {
-    await this.licenseGroup.getByRole("combobox").selectOption(license);
+    await this.licenseGroup.getByRole("combobox").click();
+    await this.page.getByRole("option", { name: license, exact: true }).click();
   }
 
   async selectAccessRights(accessRights: string) {

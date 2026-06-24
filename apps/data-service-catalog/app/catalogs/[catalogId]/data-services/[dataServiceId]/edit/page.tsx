@@ -6,7 +6,7 @@ import {
 import {
   getCurrencies,
   getDistributionStatuses,
-  getOpenLicenses,
+  getLicences,
   getPlannedAvailabilities,
 } from "@catalog-frontend/data-access";
 import {
@@ -46,7 +46,7 @@ const EditDataServicePage = withWriteProtectedPage(
       availabilitiesResponse,
       currenciesResponse,
     ] = await Promise.all([
-      getOpenLicenses(),
+      getLicences(),
       getDistributionStatuses(),
       getPlannedAvailabilities(),
       getCurrencies(),
@@ -54,7 +54,7 @@ const EditDataServicePage = withWriteProtectedPage(
 
     const referenceData = {
       distributionStatuses: statusResponse.distributionStatuses,
-      openLicenses: licenseResponse.openLicenses,
+      openLicenses: licenseResponse.licences,
       plannedAvailabilities: availabilitiesResponse.plannedAvailabilities,
       currencies: currenciesResponse.currencies,
     };
