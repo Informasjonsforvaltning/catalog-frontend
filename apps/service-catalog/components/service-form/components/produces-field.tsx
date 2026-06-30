@@ -179,7 +179,7 @@ export const ProducesField = (props: Props) => {
           <FieldModal
             referenceDataEnv={referenceDataEnv}
             validationSchema={validationSchema}
-            template={{ title: {}, description: {}, identifier: "" }}
+            template={{ title: {}, description: {}, identifier: "", language: [] }}
             type="new"
             onSuccess={() => setSnapshot([...(values.produces ?? [])])}
             onCancel={() => setFieldValue("produces", snapshot)}
