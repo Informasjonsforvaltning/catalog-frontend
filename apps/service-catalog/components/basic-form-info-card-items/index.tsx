@@ -68,6 +68,13 @@ export const BasicServiceFormInfoCardItems = (props: Props) => {
     evidenceLanguageUris,
     referenceDataEnv,
   );
+  const producesLanguageUris = [
+    ...new Set((service.produces ?? []).flatMap((item) => item.language ?? [])),
+  ];
+  const { data: producesLanguages } = useSearchLanguageByUri(
+    producesLanguageUris,
+    referenceDataEnv,
+  );
 
   return (
     <InfoCard>
@@ -93,6 +100,30 @@ export const BasicServiceFormInfoCardItems = (props: Props) => {
               <Paragraph>
                 {getTranslateText(produce.description, language)}
               </Paragraph>
+
+              {!isEmpty(produce.language) && (
+                <>
+                  <Heading data-size="2xs" level={5}>
+                    {localization.datasetForm.fieldLabel.language}
+                  </Heading>
+                  <Paragraph data-size="sm">
+                    {produce.language
+                      ?.map((lang) => {
+                        const matchedLang = producesLanguages?.find(
+                          (languageItem) => languageItem?.uri === lang,
+                        );
+                        return matchedLang
+                          ? capitalizeFirstLetter(
+                              getTranslateText(matchedLang.label, language),
+                              false,
+                            )
+                          : null;
+                      })
+                      .filter(Boolean)
+                      .join(", ")}
+                  </Paragraph>
+                </>
+              )}
             </Card>
           ))}
         </div>

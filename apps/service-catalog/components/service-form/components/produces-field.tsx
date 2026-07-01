@@ -6,10 +6,14 @@ import {
   EditButton,
   FieldsetDivider,
   FormikLanguageFieldset,
+  LanguageSuggestion,
   TextareaWithPrefix,
+  TitleWithHelpTextAndTag,
+  useSearchLanguageByUri,
 } from "@catalog-frontend/ui";
 import cn from "classnames";
 import {
+  capitalizeFirstLetter,
   getTranslateText,
   localization,
   trimObjectWhitespace,
@@ -17,6 +21,7 @@ import {
 import {
   Button,
   Card,
+  Fieldset,
   Heading,
   Paragraph,
   Textfield,
@@ -33,10 +38,12 @@ interface Props {
   errors?:
     | string
     | Array<{ title: LocalizedStrings; description: LocalizedStrings }>;
+  referenceDataEnv: string;
   validationSchema: typeof producesSchema;
 }
 
 interface ModalProps {
+  referenceDataEnv: string;
   validationSchema: typeof producesSchema;
   onCancel: () => void;
   onChange: (values: Output) => void;
@@ -44,6 +51,25 @@ interface ModalProps {
   template: Output;
   type: "new" | "edit";
 }
+
+const LanguageFieldset = ({
+  referenceDataEnv,
+}: {
+  referenceDataEnv: string;
+}) => (
+  <Fieldset data-size="sm">
+    <Fieldset.Legend>
+      <TitleWithHelpTextAndTag
+        tagColor="info"
+        tagTitle={localization.tag.recommended}
+        helpText={localization.serviceForm.helptext.language}
+      >
+        {localization.serviceForm.fieldLabel.language}
+      </TitleWithHelpTextAndTag>
+    </Fieldset.Legend>
+    <LanguageSuggestion referenceDataEnv={referenceDataEnv} />
+  </Fieldset>
+);
 
 const hasNoFieldValues = (values: Output) => {
   if (!values) return true;
@@ -53,9 +79,16 @@ const hasNoFieldValues = (values: Output) => {
 };
 
 export const ProducesField = (props: Props) => {
-  const { errors, validationSchema } = props;
+  const { errors, referenceDataEnv, validationSchema } = props;
   const { values, setFieldValue } = useFormikContext<Service>();
   const [snapshot, setSnapshot] = useState<Output[]>(values.produces ?? []);
+  const producesLanguageUris = [
+    ...new Set((values.produces ?? []).flatMap((item) => item.language ?? [])),
+  ];
+  const { data: producesLanguages } = useSearchLanguageByUri(
+    producesLanguageUris,
+    referenceDataEnv,
+  );
 
   return (
     <FieldArray
@@ -81,6 +114,7 @@ export const ProducesField = (props: Props) => {
 
                 <div className={styles.buttons}>
                   <FieldModal
+                    referenceDataEnv={referenceDataEnv}
                     validationSchema={validationSchema}
                     template={item}
                     type="edit"
@@ -116,12 +150,36 @@ export const ProducesField = (props: Props) => {
                   </ValidationMessage>
                 )}
               </div>
+              {!isEmpty(item.language) && (
+                <div>
+                  <Heading data-size="2xs" level={3}>
+                    {localization.serviceForm.fieldLabel.language}
+                  </Heading>
+                  <Paragraph data-size="sm">
+                    {item.language
+                      ?.map((lang) => {
+                        const matchedLang = producesLanguages?.find(
+                          (languageItem) => languageItem.uri === lang,
+                        );
+                        return matchedLang
+                          ? capitalizeFirstLetter(
+                              getTranslateText(matchedLang.label),
+                              false,
+                            )
+                          : null;
+                      })
+                      .filter(Boolean)
+                      .join(", ")}
+                  </Paragraph>
+                </div>
+              )}
             </Card>
           ))}
 
           <FieldModal
+            referenceDataEnv={referenceDataEnv}
             validationSchema={validationSchema}
-            template={{ title: {}, description: {}, identifier: "" }}
+            template={{ title: {}, description: {}, identifier: "", language: [] }}
             type="new"
             onSuccess={() => setSnapshot([...(values.produces ?? [])])}
             onCancel={() => setFieldValue("produces", snapshot)}
@@ -146,8 +204,15 @@ export const ProducesField = (props: Props) => {
 };
 
 const FieldModal = (props: ModalProps) => {
-  const { template, type, onSuccess, onCancel, onChange, validationSchema } =
-    props;
+  const {
+    referenceDataEnv,
+    template,
+    type,
+    onSuccess,
+    onCancel,
+    onChange,
+    validationSchema,
+  } = props;
   const [submitted, setSubmitted] = useState(false);
   const modalRef = useRef<HTMLDialogElement>(null);
 
@@ -205,6 +270,9 @@ const FieldModal = (props: ModalProps) => {
                     name="description"
                     legend={localization.serviceForm.fieldLabel.description}
                   />
+
+                  <FieldsetDivider />
+                  <LanguageFieldset referenceDataEnv={referenceDataEnv} />
                 </div>
                 <DialogActions>
                   <Button
