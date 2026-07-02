@@ -20,6 +20,7 @@ export const producesTemplate = (produce: Output): Output => {
       en: produce.description?.en,
     },
     language: produce.language ?? [],
+    isPartOf: produce.isPartOf ?? [],
   };
 };
 
@@ -57,6 +58,7 @@ export const emptyProduces: Output[] = [
     title: { nb: undefined, nn: undefined, en: undefined },
     description: { nb: undefined, nn: undefined, en: undefined },
     language: [],
+    isPartOf: [],
   },
 ];
 

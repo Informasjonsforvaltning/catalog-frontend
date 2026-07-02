@@ -588,6 +588,7 @@ export const ServiceForm = (props: ServiceFormProps) => {
                       <ProducesField
                         errors={errors.produces}
                         referenceDataEnv={referenceDataEnv}
+                        searchEnv={searchEnv}
                         validationSchema={producesSchema}
                       />
                     </div>

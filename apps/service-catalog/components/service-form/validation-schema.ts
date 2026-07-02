@@ -131,6 +131,7 @@ export const producesSchema = Yup.object().shape({
         return Boolean(description.nb || description.nn || description.en);
       },
     ),
+  isPartOf: Yup.array().of(Yup.string()).notRequired(),
 });
 
 const titleSchema = Yup.object()
