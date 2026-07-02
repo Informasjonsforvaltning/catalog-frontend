@@ -18,6 +18,7 @@ export const serviceFormNb = {
     losTheme: "Temaområde",
     name: "Navn",
     produces: "Produserer",
+    producesDataset: "Er del av",
     relatedDocumentation: "Relatert dokumentasjon",
     spatial: "Dekningsområde",
     status: "Status",
@@ -47,6 +48,8 @@ export const serviceFormNb = {
       "Primært temaområde som dekkes av tjenesten. Listen er fra [LOS](https://psi.norge.no/los/struktur.html), et felles vokabular som er temainndelt for å kategorisere og beskrive offentlige tjenester og ressurser i Norge. Velg det eller de mest presise temaene som er dekkende.",
     produces:
       "Egenskapen brukes til å referere til en eller flere instanser av tjenesteresultat som beskriver resultat av tjenesten.",
+    producesDataset:
+      "Velg datasett som tjenesteresultatet fysisk eller logisk kan inngå i.",
     relatedDocumentation:
       "Lenker til mer informasjon om dokumentasjonen, for eksempel maler eller veiledning. Hver lenke må være en gyldig URL.",
     spatial: "Geografiske områder som tjenesten dekker.",

@@ -75,6 +75,13 @@ export const BasicServiceFormInfoCardItems = (props: Props) => {
     producesLanguageUris,
     referenceDataEnv,
   );
+  const producesDatasetUris = [
+    ...new Set((service.produces ?? []).flatMap((item) => item.isPartOf ?? [])),
+  ];
+  const { data: producesDatasets } = useSearchDatasetsByUri(
+    searchEnv,
+    producesDatasetUris,
+  );
 
   return (
     <InfoCard>
@@ -120,6 +127,26 @@ export const BasicServiceFormInfoCardItems = (props: Props) => {
                           : null;
                       })
                       .filter(Boolean)
+                      .join(", ")}
+                  </Paragraph>
+                </>
+              )}
+
+              {!isEmpty(produce.isPartOf) && (
+                <>
+                  <Heading data-size="2xs" level={5}>
+                    {localization.serviceForm.fieldLabel.producesDataset}
+                  </Heading>
+                  <Paragraph data-size="sm">
+                    {produce.isPartOf
+                      ?.map((uri) => {
+                        const datasetMatch = producesDatasets?.find(
+                          (dataset) => dataset.uri === uri,
+                        );
+                        return (
+                          getTranslateText(datasetMatch?.title, language) || uri
+                        );
+                      })
                       .join(", ")}
                   </Paragraph>
                 </>

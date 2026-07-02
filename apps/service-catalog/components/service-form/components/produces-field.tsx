@@ -9,6 +9,9 @@ import {
   LanguageSuggestion,
   TextareaWithPrefix,
   TitleWithHelpTextAndTag,
+  useDebounce,
+  useSearchDatasetsByUri,
+  useSearchDatasetSuggestions,
   useSearchLanguageByUri,
 } from "@catalog-frontend/ui";
 import cn from "classnames";
@@ -21,6 +24,7 @@ import {
 import {
   Button,
   Card,
+  Combobox,
   Fieldset,
   Heading,
   Paragraph,
@@ -30,7 +34,7 @@ import {
 } from "@digdir/designsystemet-react";
 import { FieldArray, Formik, useFormikContext } from "formik";
 import styles from "../service-form.module.css";
-import { useEffect, useRef, useState } from "react";
+import { type ChangeEvent, useEffect, useRef, useState } from "react";
 import { trim, isEmpty, pickBy, identity } from "lodash";
 import { producesSchema } from "../validation-schema";
 
@@ -39,11 +43,13 @@ interface Props {
     | string
     | Array<{ title: LocalizedStrings; description: LocalizedStrings }>;
   referenceDataEnv: string;
+  searchEnv: string;
   validationSchema: typeof producesSchema;
 }
 
 interface ModalProps {
   referenceDataEnv: string;
+  searchEnv: string;
   validationSchema: typeof producesSchema;
   onCancel: () => void;
   onChange: (values: Output) => void;
@@ -71,6 +77,101 @@ const LanguageFieldset = ({
   </Fieldset>
 );
 
+const DatasetFieldset = ({ searchEnv }: { searchEnv: string }) => {
+  const { values, setFieldValue } = useFormikContext<Output>();
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const debouncedSearchTerm = useDebounce(searchTerm);
+  const { data: datasetSuggestions, isLoading: searching } =
+    useSearchDatasetSuggestions(searchEnv, debouncedSearchTerm);
+  const { data: selectedDatasets, isLoading } = useSearchDatasetsByUri(
+    searchEnv,
+    values.isPartOf ?? [],
+  );
+
+  const comboboxOptions = [
+    ...new Map(
+      [
+        ...(selectedDatasets ?? []),
+        ...(datasetSuggestions ?? []),
+        ...(values.isPartOf ?? []).map((uri) => {
+          const foundItem =
+            selectedDatasets?.find(
+              (item: { uri: string }) => item.uri === uri,
+            ) ||
+            datasetSuggestions?.find(
+              (item: { uri: string }) => item.uri === uri,
+            );
+
+          return {
+            uri,
+            title: foundItem?.title ?? null,
+            description: foundItem?.description ?? null,
+            organization: foundItem?.organization ?? null,
+          };
+        }),
+      ].map((option) => [option.uri, option]),
+    ).values(),
+  ];
+
+  if (isLoading) {
+    return null;
+  }
+
+  return (
+    <Fieldset data-size="sm">
+      <Fieldset.Legend>
+        <TitleWithHelpTextAndTag
+          helpText={localization.serviceForm.helptext.producesDataset}
+        >
+          {localization.serviceForm.fieldLabel.producesDataset}
+        </TitleWithHelpTextAndTag>
+      </Fieldset.Legend>
+      <Combobox
+        data-size="sm"
+        portal={false}
+        onValueChange={(selectedValues: string[]) =>
+          setFieldValue("isPartOf", selectedValues)
+        }
+        onChange={(input: ChangeEvent<HTMLInputElement>) =>
+          setSearchTerm(input.target.value)
+        }
+        loading={searching}
+        multiple
+        hideClearButton
+        value={values.isPartOf ?? []}
+        placeholder={`${localization.search.search}...`}
+        filter={() => true}
+      >
+        <Combobox.Empty>{`${localization.search.noHits}...`}</Combobox.Empty>
+        {comboboxOptions.map((suggestion) => (
+          <Combobox.Option
+            value={suggestion.uri}
+            key={suggestion.uri}
+            displayValue={
+              suggestion.title
+                ? capitalizeFirstLetter(getTranslateText(suggestion.title))
+                : suggestion.uri
+            }
+          >
+            <div className={styles.comboboxOption}>
+              <div>
+                {capitalizeFirstLetter(getTranslateText(suggestion.title)) ??
+                  suggestion.uri}
+              </div>
+              <div>
+                {capitalizeFirstLetter(
+                  getTranslateText(suggestion.description),
+                )}
+              </div>
+              <div>{getTranslateText(suggestion.organization?.prefLabel)}</div>
+            </div>
+          </Combobox.Option>
+        ))}
+      </Combobox>
+    </Fieldset>
+  );
+};
+
 const hasNoFieldValues = (values: Output) => {
   if (!values) return true;
   return (
@@ -79,7 +180,7 @@ const hasNoFieldValues = (values: Output) => {
 };
 
 export const ProducesField = (props: Props) => {
-  const { errors, referenceDataEnv, validationSchema } = props;
+  const { errors, referenceDataEnv, searchEnv, validationSchema } = props;
   const { values, setFieldValue } = useFormikContext<Service>();
   const [snapshot, setSnapshot] = useState<Output[]>(values.produces ?? []);
   const producesLanguageUris = [
@@ -88,6 +189,13 @@ export const ProducesField = (props: Props) => {
   const { data: producesLanguages } = useSearchLanguageByUri(
     producesLanguageUris,
     referenceDataEnv,
+  );
+  const producesDatasetUris = [
+    ...new Set((values.produces ?? []).flatMap((item) => item.isPartOf ?? [])),
+  ];
+  const { data: producesDatasets } = useSearchDatasetsByUri(
+    searchEnv,
+    producesDatasetUris,
   );
 
   return (
@@ -115,6 +223,7 @@ export const ProducesField = (props: Props) => {
                 <div className={styles.buttons}>
                   <FieldModal
                     referenceDataEnv={referenceDataEnv}
+                    searchEnv={searchEnv}
                     validationSchema={validationSchema}
                     template={item}
                     type="edit"
@@ -173,13 +282,37 @@ export const ProducesField = (props: Props) => {
                   </Paragraph>
                 </div>
               )}
+              {!isEmpty(item.isPartOf) && (
+                <div>
+                  <Heading data-size="2xs" level={3}>
+                    {localization.serviceForm.fieldLabel.producesDataset}
+                  </Heading>
+                  <Paragraph data-size="sm">
+                    {item.isPartOf
+                      ?.map((uri) => {
+                        const datasetMatch = producesDatasets?.find(
+                          (dataset) => dataset.uri === uri,
+                        );
+                        return getTranslateText(datasetMatch?.title) || uri;
+                      })
+                      .join(", ")}
+                  </Paragraph>
+                </div>
+              )}
             </Card>
           ))}
 
           <FieldModal
             referenceDataEnv={referenceDataEnv}
+            searchEnv={searchEnv}
             validationSchema={validationSchema}
-            template={{ title: {}, description: {}, identifier: "", language: [] }}
+            template={{
+              title: {},
+              description: {},
+              identifier: "",
+              language: [],
+              isPartOf: [],
+            }}
             type="new"
             onSuccess={() => setSnapshot([...(values.produces ?? [])])}
             onCancel={() => setFieldValue("produces", snapshot)}
@@ -206,6 +339,7 @@ export const ProducesField = (props: Props) => {
 const FieldModal = (props: ModalProps) => {
   const {
     referenceDataEnv,
+    searchEnv,
     template,
     type,
     onSuccess,
@@ -273,6 +407,9 @@ const FieldModal = (props: ModalProps) => {
 
                   <FieldsetDivider />
                   <LanguageFieldset referenceDataEnv={referenceDataEnv} />
+
+                  <FieldsetDivider />
+                  <DatasetFieldset searchEnv={searchEnv} />
                 </div>
                 <DialogActions>
                   <Button
