@@ -158,9 +158,13 @@ export const BasicServiceFormInfoCardItems = (props: Props) => {
                   <Heading data-size="2xs" level={5}>
                     {localization.serviceForm.fieldLabel.producesType}
                   </Heading>
-                  <Paragraph data-size="sm">
-                    {produce.type?.map(serviceOutputTypeLabel).join(", ")}
-                  </Paragraph>
+                  <ul className={styles.tagList}>
+                    {produce.type?.map((uri) => (
+                      <Tag data-size="sm" data-color="info" key={uri}>
+                        {serviceOutputTypeLabel(uri)}
+                      </Tag>
+                    ))}
+                  </ul>
                 </>
               )}
             </Card>
