@@ -21,6 +21,7 @@ export const producesTemplate = (produce: Output): Output => {
     },
     language: produce.language ?? [],
     isPartOf: produce.isPartOf ?? [],
+    type: produce.type ?? [],
   };
 };
 
@@ -59,6 +60,7 @@ export const emptyProduces: Output[] = [
     description: { nb: undefined, nn: undefined, en: undefined },
     language: [],
     isPartOf: [],
+    type: [],
   },
 ];
 

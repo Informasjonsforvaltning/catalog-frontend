@@ -19,6 +19,7 @@ export const serviceFormNb = {
     name: "Navn",
     produces: "Produserer",
     producesDataset: "Er del av",
+    producesType: "Type",
     relatedDocumentation: "Relatert dokumentasjon",
     spatial: "Dekningsområde",
     status: "Status",
@@ -50,6 +51,8 @@ export const serviceFormNb = {
       "Egenskapen brukes til å referere til en eller flere instanser av tjenesteresultat som beskriver resultat av tjenesten.",
     producesDataset:
       "Velg datasett som tjenesteresultatet fysisk eller logisk kan inngå i.",
+    producesType:
+      "Velg hva slags tjenesteresultat det er, fra vokabularet for tjenesteresultattype.",
     relatedDocumentation:
       "Lenker til mer informasjon om dokumentasjonen, for eksempel maler eller veiledning. Hver lenke må være en gyldig URL.",
     spatial: "Geografiske områder som tjenesten dekker.",

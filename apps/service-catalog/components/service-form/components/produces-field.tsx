@@ -37,6 +37,10 @@ import styles from "../service-form.module.css";
 import { type ChangeEvent, useEffect, useRef, useState } from "react";
 import { trim, isEmpty, pickBy, identity } from "lodash";
 import { producesSchema } from "../validation-schema";
+import {
+  SERVICE_OUTPUT_TYPES,
+  serviceOutputTypeLabel,
+} from "../service-output-types";
 
 interface Props {
   errors?:
@@ -172,6 +176,44 @@ const DatasetFieldset = ({ searchEnv }: { searchEnv: string }) => {
   );
 };
 
+const TypeFieldset = () => {
+  const { values, setFieldValue } = useFormikContext<Output>();
+
+  return (
+    <Fieldset data-size="sm">
+      <Fieldset.Legend>
+        <TitleWithHelpTextAndTag
+          helpText={localization.serviceForm.helptext.producesType}
+        >
+          {localization.serviceForm.fieldLabel.producesType}
+        </TitleWithHelpTextAndTag>
+      </Fieldset.Legend>
+      <Combobox
+        data-size="sm"
+        portal={false}
+        multiple
+        hideClearButton
+        value={values.type ?? []}
+        onValueChange={(selectedValues: string[]) =>
+          setFieldValue("type", selectedValues)
+        }
+        placeholder={`${localization.search.search}...`}
+      >
+        <Combobox.Empty>{`${localization.search.noHits}...`}</Combobox.Empty>
+        {SERVICE_OUTPUT_TYPES.map((option) => (
+          <Combobox.Option
+            key={option.uri}
+            value={option.uri}
+            displayValue={option.label}
+          >
+            {option.label}
+          </Combobox.Option>
+        ))}
+      </Combobox>
+    </Fieldset>
+  );
+};
+
 const hasNoFieldValues = (values: Output) => {
   if (!values) return true;
   return (
@@ -299,6 +341,16 @@ export const ProducesField = (props: Props) => {
                   </Paragraph>
                 </div>
               )}
+              {!isEmpty(item.type) && (
+                <div>
+                  <Heading data-size="2xs" level={3}>
+                    {localization.serviceForm.fieldLabel.producesType}
+                  </Heading>
+                  <Paragraph data-size="sm">
+                    {item.type?.map(serviceOutputTypeLabel).join(", ")}
+                  </Paragraph>
+                </div>
+              )}
             </Card>
           ))}
 
@@ -312,6 +364,7 @@ export const ProducesField = (props: Props) => {
               identifier: "",
               language: [],
               isPartOf: [],
+              type: [],
             }}
             type="new"
             onSuccess={() => setSnapshot([...(values.produces ?? [])])}
@@ -410,6 +463,9 @@ const FieldModal = (props: ModalProps) => {
 
                   <FieldsetDivider />
                   <DatasetFieldset searchEnv={searchEnv} />
+
+                  <FieldsetDivider />
+                  <TypeFieldset />
                 </div>
                 <DialogActions>
                   <Button

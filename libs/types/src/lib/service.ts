@@ -28,6 +28,7 @@ export interface Output {
   description?: LocalizedStrings;
   language?: string[];
   isPartOf?: string[];
+  type?: string[];
 }
 
 export interface Evidence {

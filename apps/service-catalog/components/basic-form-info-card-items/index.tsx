@@ -23,6 +23,7 @@ import {
   localization,
 } from "@catalog-frontend/utils";
 import styles from "./basic-form-info-card-items.module.css";
+import { serviceOutputTypeLabel } from "../service-form/service-output-types";
 
 type Props = {
   language: string;
@@ -148,6 +149,17 @@ export const BasicServiceFormInfoCardItems = (props: Props) => {
                         );
                       })
                       .join(", ")}
+                  </Paragraph>
+                </>
+              )}
+
+              {!isEmpty(produce.type) && (
+                <>
+                  <Heading data-size="2xs" level={5}>
+                    {localization.serviceForm.fieldLabel.producesType}
+                  </Heading>
+                  <Paragraph data-size="sm">
+                    {produce.type?.map(serviceOutputTypeLabel).join(", ")}
                   </Paragraph>
                 </>
               )}
