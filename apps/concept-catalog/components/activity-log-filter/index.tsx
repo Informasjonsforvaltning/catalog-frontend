@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   Card,
@@ -18,20 +19,34 @@ type Props = {
 const ActivityLogFilter = ({ catalogId }: Props) => {
   const router = useRouter();
   const view = useSearchParams().get("view") || "concepts";
-
-  const handleViewChange = (value: string) => {
-    router.push(`/catalogs/${catalogId}/activity-log?view=${value}`);
-  };
+  const isInitialMount = useRef(true);
 
   const options = [
     { label: localization.activityLog.conceptActivity, value: "concepts" },
     { label: localization.activityLog.commentActivity, value: "comments" },
   ];
 
-  const { getRadioProps } = useRadioGroup({
+  const {
+    getRadioProps,
+    setValue,
+    value: groupValue,
+  } = useRadioGroup({
     value: view,
-    onChange: (nextValue) => handleViewChange(nextValue),
   });
+
+  useEffect(() => {
+    setValue(view);
+  }, [view, setValue]);
+
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
+    if (groupValue !== view) {
+      router.push(`/catalogs/${catalogId}/activity-log?view=${groupValue}`);
+    }
+  }, [groupValue, view, catalogId, router]);
 
   return (
     <div className={styles.accordionContainer}>

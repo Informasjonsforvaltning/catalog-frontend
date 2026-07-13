@@ -2,13 +2,9 @@
 
 import { createContext, useContext, ReactNode } from "react";
 
-interface FeatureFlags {
-  activityLogEnabled: boolean;
-}
+interface FeatureFlags {}
 
-const FeatureFlagsContext = createContext<FeatureFlags>({
-  activityLogEnabled: false,
-});
+const FeatureFlagsContext = createContext<FeatureFlags>({});
 
 export const FeatureFlagsProvider = ({
   children,
