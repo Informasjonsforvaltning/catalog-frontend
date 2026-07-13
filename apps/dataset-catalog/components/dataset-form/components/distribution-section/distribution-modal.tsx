@@ -16,7 +16,9 @@ import {
   TitleWithHelpTextAndTag,
   TextareaWithPrefix,
   FastFieldWithRef,
+  useSearchFileTypeByUri,
   useSearchFileTypes,
+  useSearchMediaTypeByUri,
   useSearchMediaTypes,
   useSearchDataServiceSuggestions,
   DialogActions,
@@ -67,6 +69,9 @@ const sortLicences = (licences: ReferenceDataCode[]): ReferenceDataCode[] =>
       .localeCompare(getTranslateText(b.label).toString());
   });
 
+const nonEmptyValues = (values: string[] | null | undefined): string[] =>
+  (values ?? []).filter((value) => !isEmpty(value));
+
 type Props = {
   trigger: ReactNode;
   referenceDataEnv: string;
@@ -76,8 +81,6 @@ type Props = {
   onCancel?: () => void;
   onChange?: (values: Distribution) => void;
   initialValues: Partial<Distribution> | undefined;
-  initialFileTypes: ReferenceDataCode[];
-  initialMediaTypes: ReferenceDataCode[];
   initialAccessServices: Search.SearchObject[];
   type: "new" | "edit";
   distributionType: "distribution" | "sample";
@@ -95,8 +98,6 @@ export const DistributionModal = ({
   onChange,
   trigger,
   initialValues,
-  initialFileTypes,
-  initialMediaTypes,
   initialAccessServices,
   type,
   distributionType,
@@ -108,15 +109,11 @@ export const DistributionModal = ({
     initialValues?.format ?? [],
   );
   const [selectedMediaTypeUris, setSelectedMediaTypeUris] = useState(
-    initialValues?.mediaType ?? [],
+    nonEmptyValues(initialValues?.mediaType),
   );
   const [selectedAccessServiceUris, setSelectedAccessServiceUris] = useState(
     initialValues?.accessServices ?? [],
   );
-  const [selectedAndSearchedFileTypes, setSelectedAndSearchedFileTypes] =
-    useState<ReferenceDataCode[]>([]);
-  const [selectedAndSearchedMediaTypes, setSelectedAndSearchedMediaTypes] =
-    useState<ReferenceDataCode[]>([]);
   const [
     selectedAndSearchedAccessServices,
     setSelectedAndSearchedAccessServices,
@@ -137,7 +134,7 @@ export const DistributionModal = ({
 
   const resetLocalState = () => {
     setSelectedFileTypeUris(initialValues?.format ?? []);
-    setSelectedMediaTypeUris(initialValues?.mediaType ?? []);
+    setSelectedMediaTypeUris(nonEmptyValues(initialValues?.mediaType));
     setSelectedAccessServiceUris(initialValues?.accessServices ?? []);
     setSearchQueryLicense("");
     setSearchQueryMediaTypes("");
@@ -164,42 +161,14 @@ export const DistributionModal = ({
     searchQueryFileTypes,
     referenceDataEnv,
   );
+  const { data: selectedMediaTypes, isLoading: loadingSelectedMediaTypes } =
+    useSearchMediaTypeByUri(selectedMediaTypeUris, referenceDataEnv);
+  const { data: selectedFileTypes, isLoading: loadingSelectedFileTypes } =
+    useSearchFileTypeByUri(selectedFileTypeUris, referenceDataEnv);
   const { data: dataServices } = useSearchDataServiceSuggestions(
     searchEnv,
     searchDataServicesQuery,
   );
-
-  useEffect(() => {
-    setSelectedAndSearchedMediaTypes((prev) => {
-      const allKnown = [...prev, ...initialMediaTypes, ...(mediaTypes ?? [])];
-      const selectedMediaTypes = selectedMediaTypeUris
-        ?.map((uri) => allKnown.find((mediaType) => mediaType.uri === uri))
-        .filter((mediaType) => mediaType !== undefined);
-      return Array.from(
-        new Map(
-          [...prev, ...(selectedMediaTypes ?? []), ...(mediaTypes ?? [])].map(
-            (item) => [item.uri, item],
-          ),
-        ).values(),
-      );
-    });
-  }, [mediaTypes, selectedMediaTypeUris, initialMediaTypes]);
-
-  useEffect(() => {
-    setSelectedAndSearchedFileTypes((prev) => {
-      const allKnown = [...prev, ...initialFileTypes, ...(fileTypes ?? [])];
-      const selectedFileTypes = selectedFileTypeUris
-        ?.map((uri) => allKnown.find((fileType) => fileType.uri === uri))
-        .filter((fileType) => fileType !== undefined);
-      return Array.from(
-        new Map(
-          [...prev, ...(selectedFileTypes ?? []), ...(fileTypes ?? [])].map(
-            (item) => [item.uri, item],
-          ),
-        ).values(),
-      );
-    });
-  }, [fileTypes, selectedFileTypeUris, initialFileTypes]);
 
   useEffect(() => {
     setSelectedAndSearchedAccessServices((prev) => {
@@ -229,9 +198,10 @@ export const DistributionModal = ({
   ) => {
     const trimmedValues: Distribution = trimObjectWhitespace(values);
     if (trimmedValues.mediaType) {
-      trimmedValues.mediaType = trimmedValues.mediaType.filter(
-        (value: string) => !isEmpty(value),
-      );
+      trimmedValues.mediaType = nonEmptyValues(trimmedValues.mediaType);
+      if (isEmpty(trimmedValues.mediaType)) {
+        trimmedValues.mediaType = undefined;
+      }
     }
     if (trimmedValues.accessServices) {
       trimmedValues.accessServices = trimmedValues.accessServices.filter(
@@ -397,45 +367,48 @@ export const DistributionModal = ({
     },
     {
       name: "mediaType",
-      addValue: [""],
+      addValue: [],
       render: ({
         setFieldValue,
         setSelectedMediaTypeUris,
         setSearchQueryMediaTypes,
-        initialValues,
-        selectedAndSearchedMediaTypes,
+        values,
+        selectedMediaTypes,
         mediaTypes,
+        loadingSelectedMediaTypes,
         searchingMediaTypes,
-      }: any) => (
-        <Fieldset data-size="sm">
-          <Fieldset.Legend>
-            <TitleWithHelpTextAndTag
-              helpText={localization.datasetForm.helptext.mediaType}
-            >
-              {localization.datasetForm.fieldLabel.mediaType}
-            </TitleWithHelpTextAndTag>
-          </Fieldset.Legend>
-          {selectedMediaTypeUris?.every((v) =>
-            selectedAndSearchedMediaTypes?.find(
-              (option: ReferenceDataCode | undefined) => option?.uri === v,
-            ),
-          ) ? (
+      }: any) => {
+        const mediaTypeValues = nonEmptyValues(values?.mediaType);
+
+        return (
+          <Fieldset data-size="sm">
+            <Fieldset.Legend>
+              <TitleWithHelpTextAndTag
+                helpText={localization.datasetForm.helptext.mediaType}
+              >
+                {localization.datasetForm.fieldLabel.mediaType}
+              </TitleWithHelpTextAndTag>
+            </Fieldset.Legend>
             <FieldsetWithDelete
-              onDelete={() => setFieldValue("mediaType", null)}
+              onDelete={() => {
+                setFieldValue("mediaType", null);
+                setSelectedMediaTypeUris([]);
+              }}
             >
               <FormikReferenceDataCombobox
                 onChange={(event) =>
                   setSearchQueryMediaTypes(event.target.value)
                 }
                 onValueChange={(selectedValues) => {
-                  setFieldValue("mediaType", selectedValues);
-                  setSelectedMediaTypeUris(selectedValues);
+                  const selectedMediaTypes = nonEmptyValues(selectedValues);
+                  setFieldValue("mediaType", selectedMediaTypes);
+                  setSelectedMediaTypeUris(selectedMediaTypes);
                 }}
-                value={selectedMediaTypeUris}
-                selectedValuesSearchHits={selectedAndSearchedMediaTypes ?? []}
+                value={mediaTypeValues}
+                selectedValuesSearchHits={selectedMediaTypes ?? []}
                 querySearchHits={mediaTypes ?? []}
-                formikValues={initialValues?.mediaType ?? []}
-                loading={searchingMediaTypes}
+                formikValues={mediaTypeValues}
+                loading={loadingSelectedMediaTypes || searchingMediaTypes}
                 portal={false}
                 showCodeAsDescription={true}
                 hideClearButton={false}
@@ -445,11 +418,9 @@ export const DistributionModal = ({
                 size="md"
               />
             </FieldsetWithDelete>
-          ) : (
-            <Skeleton variant="rectangle" height="100px" width="100%" />
-          )}
-        </Fieldset>
-      ),
+          </Fieldset>
+        );
+      },
     },
     {
       name: "page",
@@ -631,6 +602,9 @@ export const DistributionModal = ({
 
             const isExpanded = (fieldConfig: any) => {
               const fieldValues = get(values, fieldConfig.name);
+              if (fieldConfig.name === "mediaType") {
+                return isArray(fieldValues);
+              }
               if (isArray(fieldValues)) return fieldValues.length > 0;
               if (isObject(fieldValues)) return !isEmpty(fieldValues);
               return !isNil(fieldValues);
@@ -647,13 +621,15 @@ export const DistributionModal = ({
                 expanded: isExpanded(fieldConfig),
                 fileTypes,
                 mediaTypes,
-                selectedAndSearchedFileTypes,
-                selectedAndSearchedMediaTypes,
+                selectedFileTypes,
+                selectedMediaTypes,
                 openLicenses,
                 mobilityDataStandards,
                 mobilityRights,
                 ref: (el: HTMLInputElement | HTMLTextAreaElement | null) =>
                   setInputRef(fieldConfig.name, el),
+                loadingSelectedFileTypes,
+                loadingSelectedMediaTypes,
                 searchingFileTypes,
                 searchingMediaTypes,
                 setFieldValue,
@@ -977,43 +953,29 @@ export const DistributionModal = ({
                             {localization.datasetForm.fieldLabel.format}
                           </TitleWithHelpTextAndTag>
                         </Fieldset.Legend>
-                        {!selectedFileTypeUris ||
-                        selectedFileTypeUris?.every((v) =>
-                          selectedAndSearchedFileTypes?.find(
-                            (option: ReferenceDataCode | undefined) =>
-                              option?.uri === v,
-                          ),
-                        ) ? (
-                          <FormikReferenceDataCombobox
-                            onChange={(event) =>
-                              setSearchQueryFileTypes(event.target.value)
-                            }
-                            onValueChange={(selectedValues) => {
-                              setFieldValue("format", selectedValues);
-                              setSelectedFileTypeUris(selectedValues);
-                            }}
-                            value={selectedFileTypeUris}
-                            selectedValuesSearchHits={
-                              selectedAndSearchedFileTypes ?? []
-                            }
-                            querySearchHits={fileTypes ?? []}
-                            formikValues={initialValues?.format ?? []}
-                            loading={searchingFileTypes}
-                            portal={false}
-                            hideClearButton={false}
-                            ref={(el: HTMLInputElement | null) =>
-                              setInputRef("format", el)
-                            }
-                            error={errors.format}
-                            size="md"
-                          />
-                        ) : (
-                          <Skeleton
-                            variant="rectangle"
-                            height="100px"
-                            width="100%"
-                          />
-                        )}
+                        <FormikReferenceDataCombobox
+                          onChange={(event) =>
+                            setSearchQueryFileTypes(event.target.value)
+                          }
+                          onValueChange={(selectedValues) => {
+                            setFieldValue("format", selectedValues);
+                            setSelectedFileTypeUris(selectedValues);
+                          }}
+                          value={values?.format || []}
+                          selectedValuesSearchHits={selectedFileTypes ?? []}
+                          querySearchHits={fileTypes ?? []}
+                          formikValues={values?.format ?? []}
+                          loading={
+                            loadingSelectedFileTypes || searchingFileTypes
+                          }
+                          portal={false}
+                          hideClearButton={false}
+                          ref={(el: HTMLInputElement | null) =>
+                            setInputRef("format", el)
+                          }
+                          error={errors.format}
+                          size="md"
+                        />
                       </Fieldset>
                       <FieldsetDivider />
                       <Fieldset data-size="sm">

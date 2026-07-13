@@ -114,6 +114,12 @@ export const distributionTemplate = (dist: Distribution | undefined) => {
         downloadURL:
           dist?.downloadURL && dist?.downloadURL[0] ? dist?.downloadURL : [],
         conformsTo: !isEmpty(dist.conformsTo) ? dist.conformsTo : [],
+        mediaType: (() => {
+          const mediaTypes = (dist.mediaType ?? []).filter(
+            (value) => !isEmpty(value),
+          );
+          return mediaTypes.length > 0 ? mediaTypes : undefined;
+        })(),
       }
     : {
         title: {},
@@ -121,7 +127,6 @@ export const distributionTemplate = (dist: Distribution | undefined) => {
         downloadURL: [],
         accessURL: [""],
         format: [],
-        mediaType: [],
         license: "",
         conformsTo: [],
         page: [],
