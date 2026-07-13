@@ -1,4 +1,3 @@
-import { redirect } from "next/navigation";
 import { localization } from "@catalog-frontend/utils";
 import { withReadProtectedPage } from "@concept-catalog/utils/auth";
 import {
@@ -13,10 +12,6 @@ import { CommentActivityLogContent } from "./comment-activity-log-content";
 const ActivityLogPage = withReadProtectedPage(
   ({ catalogId }) => `/catalogs/${catalogId}/activity-log`,
   async ({ catalogId, searchParams }) => {
-    if (process.env.ACTIVITY_LOG_ENABLED !== "true") {
-      redirect(`/catalogs/${catalogId}/concepts`);
-    }
-
     const currentPage = Number(searchParams.page) || 0;
     const view = searchParams.view || "concepts";
 

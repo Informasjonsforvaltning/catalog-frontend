@@ -9,7 +9,6 @@ import {
   useQueryState,
 } from "nuqs";
 import { isEmpty } from "lodash";
-import { useRouter } from "next/navigation";
 import {
   SearchableField,
   QuerySort,
@@ -29,7 +28,7 @@ import {
   localization,
   setClientConceptsPageSettings,
 } from "@catalog-frontend/utils";
-import { Chip, Tabs } from "@digdir/designsystemet-react";
+import { Chip } from "@digdir/designsystemet-react";
 import { PlusCircleIcon } from "@navikt/aksel-icons";
 import {
   SortOption,
@@ -40,8 +39,7 @@ import {
 import SearchFilter from "@concept-catalog/components/search-filter";
 import ConceptSearchHits from "@concept-catalog/components/concept-search-hits";
 import styles from "./search-page.module.scss";
-import { ImportModal } from "@concept-catalog/components";
-import { useFeatureFlags } from "@concept-catalog/context/feature-flags";
+import { ImportModal, CatalogTabsLayout } from "@concept-catalog/components";
 
 export type FilterType =
   | "published"
@@ -72,9 +70,6 @@ export const SearchPageClient = ({
   conceptStatuses,
   pageSettings,
 }: Props) => {
-  const router = useRouter();
-  const { activityLogEnabled } = useFeatureFlags();
-
   // Memoize default values for query states
   const defaultSelectedFieldOption = useMemo(
     () => pageSettings?.searchField ?? "alleFelter",
@@ -451,117 +446,90 @@ export const SearchPageClient = ({
   };
 
   return (
-    <div className="container">
-      <Tabs className={styles.tabs} defaultValue="conceptTab" data-size="md">
-        <Tabs.List className={styles.tabsList}>
-          <Tabs.Tab value="conceptTab">
-            {localization.concept.concepts}
-          </Tabs.Tab>
-          <Tabs.Tab
-            value="changeRequestTab"
-            onClick={() =>
-              router.push(`/catalogs/${catalogId}/change-requests`)
-            }
-          >
-            {localization.changeRequest.changeRequest}
-          </Tabs.Tab>
-          {activityLogEnabled && (
-            <Tabs.Tab
-              value="activityLogTab"
-              onClick={() => router.push(`/catalogs/${catalogId}/activity-log`)}
-            >
-              {localization.activityLog.title}
-            </Tabs.Tab>
-          )}
-        </Tabs.List>
-        <Tabs.Panel value="conceptTab" className={styles.tabsContent}>
-          <SearchHitsLayout>
-            <SearchHitsLayout.SearchRow>
-              <div className={styles.searchRow}>
-                <div className={styles.searchFieldWrapper}>
-                  <SearchField
-                    className={styles.searchField}
-                    placeholder={localization.search.search}
-                    value={searchTerm}
-                    options={getSelectOptions(localization.search.fields).map(
-                      ({ label, value }) => ({
-                        label,
-                        value,
-                        default: value === "alleFelter",
-                      }),
-                    )}
-                    optionValue={selectedFieldOption}
-                    onSearch={(value, option) => {
-                      setSelectedFieldOption(option as SearchableField);
-                      setSearchTerm(value);
-                      setPage(0);
-                    }}
-                  />
-                  <Select
-                    aria-label={localization.search.sort}
-                    data-size="sm"
-                    onChange={(event) =>
-                      onSortSelect(event?.target.value as SortOption)
-                    }
-                    value={selectedSortOption}
-                  >
-                    {sortOptions}
-                  </Select>
-                </div>
-                <div className={styles.buttons}>
-                  <>
-                    {hasAdminPermission && (
-                      <ImportModal catalogId={catalogId} />
-                    )}
-                    {hasWritePermission && (
-                      <LinkButton
-                        href={`/catalogs/${catalogId}/concepts/new`}
-                        data-size="sm"
-                      >
-                        <>
-                          <PlusCircleIcon fontSize="1.5rem" />
-                          <span>{localization.button.createConcept}</span>
-                        </>
-                      </LinkButton>
-                    )}
-                  </>
-                </div>
-              </div>
-              <FilterChips />
-            </SearchHitsLayout.SearchRow>
-            <SearchHitsLayout.LeftColumn>
-              <SearchFilter
-                internalFields={fieldsResult?.internal}
-                subjectCodeList={subjectCodeList}
-                conceptStatuses={conceptStatuses}
-                pageSettings={pageSettings}
-                users={usersResult?.users}
+    <CatalogTabsLayout catalogId={catalogId} activeTab="concepts">
+      <SearchHitsLayout>
+        <SearchHitsLayout.SearchRow>
+          <div className={styles.searchRow}>
+            <div className={styles.searchFieldWrapper}>
+              <SearchField
+                className={styles.searchField}
+                placeholder={localization.search.search}
+                value={searchTerm}
+                options={getSelectOptions(localization.search.fields).map(
+                  ({ label, value }) => ({
+                    label,
+                    value,
+                    default: value === "alleFelter",
+                  }),
+                )}
+                optionValue={selectedFieldOption}
+                onSearch={(value, option) => {
+                  setSelectedFieldOption(option as SearchableField);
+                  setSearchTerm(value);
+                  setPage(0);
+                }}
               />
-            </SearchHitsLayout.LeftColumn>
-            <SearchHitsLayout.MainColumn>
-              {status === "pending" ? (
-                <Spinner />
-              ) : (
-                <SearchHitContainer
-                  onPageChange={onPageChange}
-                  noSearchHits={!data?.hits?.length}
-                  paginationInfo={data?.page}
-                  searchHits={
-                    <ConceptSearchHits
-                      catalogId={catalogId}
-                      data={data}
-                      conceptStatuses={conceptStatuses}
-                      subjectCodeList={subjectCodeList}
-                      assignableUsers={usersResult?.users ?? []}
-                      onLabelClick={onLabelClick}
-                    />
-                  }
+              <Select
+                aria-label={localization.search.sort}
+                data-size="sm"
+                onChange={(event) =>
+                  onSortSelect(event?.target.value as SortOption)
+                }
+                value={selectedSortOption}
+              >
+                {sortOptions}
+              </Select>
+            </div>
+            <div className={styles.buttons}>
+              <>
+                {hasAdminPermission && <ImportModal catalogId={catalogId} />}
+                {hasWritePermission && (
+                  <LinkButton
+                    href={`/catalogs/${catalogId}/concepts/new`}
+                    data-size="sm"
+                  >
+                    <>
+                      <PlusCircleIcon fontSize="1.5rem" />
+                      <span>{localization.button.createConcept}</span>
+                    </>
+                  </LinkButton>
+                )}
+              </>
+            </div>
+          </div>
+          <FilterChips />
+        </SearchHitsLayout.SearchRow>
+        <SearchHitsLayout.LeftColumn>
+          <SearchFilter
+            internalFields={fieldsResult?.internal}
+            subjectCodeList={subjectCodeList}
+            conceptStatuses={conceptStatuses}
+            pageSettings={pageSettings}
+            users={usersResult?.users}
+          />
+        </SearchHitsLayout.LeftColumn>
+        <SearchHitsLayout.MainColumn>
+          {status === "pending" ? (
+            <Spinner />
+          ) : (
+            <SearchHitContainer
+              onPageChange={onPageChange}
+              noSearchHits={!data?.hits?.length}
+              paginationInfo={data?.page}
+              searchHits={
+                <ConceptSearchHits
+                  catalogId={catalogId}
+                  data={data}
+                  conceptStatuses={conceptStatuses}
+                  subjectCodeList={subjectCodeList}
+                  assignableUsers={usersResult?.users ?? []}
+                  onLabelClick={onLabelClick}
                 />
-              )}
-            </SearchHitsLayout.MainColumn>
-          </SearchHitsLayout>
-        </Tabs.Panel>
-      </Tabs>
-    </div>
+              }
+            />
+          )}
+        </SearchHitsLayout.MainColumn>
+      </SearchHitsLayout>
+    </CatalogTabsLayout>
   );
 };

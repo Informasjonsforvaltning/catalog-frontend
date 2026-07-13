@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import {
   Card,
   Checkbox,
@@ -19,15 +20,59 @@ type Props = {
 };
 
 const ChangeRequestsFilter = ({ itemType, status }: Props) => {
-  const { getRadioProps } = useRadioGroup({
+  const isInitialItemTypeMount = useRef(true);
+  const isInitialStatusMount = useRef(true);
+  const onItemTypeChangeRef = useRef(itemType.onChange);
+  onItemTypeChangeRef.current = itemType.onChange;
+  const onStatusChangeRef = useRef(status.onChange);
+  onStatusChangeRef.current = status.onChange;
+
+  const {
+    getRadioProps,
+    setValue: setItemTypeValue,
+    value: itemTypeGroupValue,
+  } = useRadioGroup({
     value: itemType.selected,
-    onChange: (nextValue) => itemType.onChange(nextValue),
   });
 
-  const { getCheckboxProps } = useCheckboxGroup({
+  const {
+    getCheckboxProps,
+    setValue: setStatusValue,
+    value: statusGroupValue,
+  } = useCheckboxGroup({
     value: status.selected,
-    onChange: status.onChange,
   });
+
+  useEffect(() => {
+    setItemTypeValue(itemType.selected);
+  }, [itemType.selected, setItemTypeValue]);
+
+  useEffect(() => {
+    if (isInitialItemTypeMount.current) {
+      isInitialItemTypeMount.current = false;
+      return;
+    }
+    if (itemTypeGroupValue !== itemType.selected) {
+      onItemTypeChangeRef.current(itemTypeGroupValue);
+    }
+  }, [itemTypeGroupValue, itemType.selected]);
+
+  useEffect(() => {
+    setStatusValue(status.selected);
+  }, [status.selected, setStatusValue]);
+
+  useEffect(() => {
+    if (isInitialStatusMount.current) {
+      isInitialStatusMount.current = false;
+      return;
+    }
+    if (
+      statusGroupValue.length !== status.selected.length ||
+      statusGroupValue.some((value) => !status.selected.includes(value))
+    ) {
+      onStatusChangeRef.current(statusGroupValue);
+    }
+  }, [statusGroupValue, status.selected]);
 
   return (
     <Card className={styles.accordionContainer}>

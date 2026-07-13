@@ -31,16 +31,3 @@
   flex-wrap: wrap;
   gap: var(--ds-size-2);
 }
-
-.tabsList {
-  margin: var(--ds-size-8) 0 var(--ds-size-4) 0;
-}
-
-.tabsContent {
-  padding: 0;
-
-  & > div {
-    padding-left: 0;
-    padding-right: 0;
-  }
-}

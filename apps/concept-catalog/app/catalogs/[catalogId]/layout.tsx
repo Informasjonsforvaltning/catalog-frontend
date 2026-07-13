@@ -21,9 +21,7 @@ const Layout = async (props: {
       fdkCommunityBaseUrl={process.env.FDK_COMMUNITY_BASE_URI}
       fdkBaseUrl={process.env.FDK_BASE_URI}
     >
-      <FeatureFlagsProvider
-        activityLogEnabled={process.env.ACTIVITY_LOG_ENABLED === "true"}
-      >
+      <FeatureFlagsProvider>
         <TermsOfUseModal catalogId={catalogId} />
         {children}
       </FeatureFlagsProvider>
