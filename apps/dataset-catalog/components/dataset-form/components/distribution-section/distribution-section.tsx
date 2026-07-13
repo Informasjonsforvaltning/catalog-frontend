@@ -283,8 +283,6 @@ export const DistributionSection = ({
                       <DistributionModal
                         type="edit"
                         initialValues={{ ...item }}
-                        initialFileTypes={selectedFileTypes ?? []}
-                        initialMediaTypes={selectedMediaTypes ?? []}
                         initialAccessServices={selectedDataServices ?? []}
                         referenceDataEnv={referenceDataEnv}
                         searchEnv={searchEnv}
@@ -443,8 +441,6 @@ export const DistributionSection = ({
             openLicenses={openLicenses}
             mobilityDataStandards={mobilityDataStandards}
             mobilityRights={mobilityRights}
-            initialFileTypes={[]}
-            initialMediaTypes={[]}
             initialAccessServices={[]}
             initialValues={{
               title: {},
@@ -452,7 +448,6 @@ export const DistributionSection = ({
               downloadURL: [],
               accessURL: [],
               format: [],
-              mediaType: [],
               page: [],
               conformsTo: [],
               accessServices: [],
@@ -505,8 +500,6 @@ export const DistributionSection = ({
                         <DistributionModal
                           type="edit"
                           initialValues={{ ...item }}
-                          initialFileTypes={selectedFileTypes ?? []}
-                          initialMediaTypes={selectedMediaTypes ?? []}
                           initialAccessServices={selectedDataServices ?? []}
                           distributionType="sample"
                           referenceDataEnv={referenceDataEnv}
@@ -641,8 +634,6 @@ export const DistributionSection = ({
             openLicenses={openLicenses}
             mobilityDataStandards={mobilityDataStandards}
             mobilityRights={mobilityRights}
-            initialFileTypes={[]}
-            initialMediaTypes={[]}
             initialAccessServices={[]}
             isMobility={isMobility}
             initialValues={{
@@ -651,7 +642,6 @@ export const DistributionSection = ({
               downloadURL: [],
               accessURL: [],
               format: [],
-              mediaType: [],
               page: [],
               conformsTo: [],
               accessServices: [],
