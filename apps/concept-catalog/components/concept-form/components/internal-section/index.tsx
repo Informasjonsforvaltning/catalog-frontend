@@ -1,15 +1,17 @@
 "use client";
 
-import React from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import { FastField, FormikErrors, useFormikContext } from "formik";
 import {
   Checkbox,
-  Combobox,
+  EXPERIMENTAL_Suggestion as Suggestion,
   Fieldset,
+  Input,
   Textfield,
 } from "@digdir/designsystemet-react";
 import {
   AssignedUser,
+  Code,
   CodeList,
   Concept,
   InternalField,
@@ -34,6 +36,99 @@ export type InternalSectionProps = {
   changed?: string[];
 };
 
+type SuggestionOption = {
+  value: string;
+  label: string;
+  description?: string;
+};
+
+type SingleSuggestionSelectProps = {
+  ariaLabel: string;
+  fieldsetLegend: ReactNode;
+  isMounted: boolean;
+  onValueChange: (value: string | undefined) => void;
+  options: SuggestionOption[];
+  placeholder?: string;
+  readOnly?: boolean;
+  value?: string;
+};
+
+const SingleSuggestionSelect = ({
+  ariaLabel,
+  fieldsetLegend,
+  isMounted,
+  onValueChange,
+  options,
+  placeholder,
+  readOnly,
+  value,
+}: SingleSuggestionSelectProps) => {
+  const selectedItem = value
+    ? (options.find((option) => option.value === value) ?? {
+        value,
+        label: value,
+      })
+    : null;
+
+  return (
+    <Fieldset data-size="sm">
+      <Fieldset.Legend>{fieldsetLegend}</Fieldset.Legend>
+      {isMounted ? (
+        <Suggestion
+          data-size="sm"
+          selected={selectedItem}
+          onSelectedChange={(selected) => onValueChange(selected?.value)}
+        >
+          <Suggestion.Input
+            aria-label={ariaLabel}
+            placeholder={placeholder}
+            readOnly={readOnly}
+          />
+          <Suggestion.List>
+            <Suggestion.Empty>Fant ingen treff</Suggestion.Empty>
+            {options.map((option) => (
+              <Suggestion.Option
+                key={option.value}
+                value={option.value}
+                label={option.label}
+              >
+                {option.description ? (
+                  <div>
+                    <div>{option.label}</div>
+                    <div>{option.description}</div>
+                  </div>
+                ) : (
+                  option.label
+                )}
+              </Suggestion.Option>
+            ))}
+          </Suggestion.List>
+        </Suggestion>
+      ) : (
+        <Input
+          data-size="sm"
+          aria-label={ariaLabel}
+          disabled
+          placeholder={placeholder}
+          readOnly
+        />
+      )}
+    </Fieldset>
+  );
+};
+
+const getCodeOption = (code: Code, codes: Code[]): SuggestionOption => {
+  const parentPath = getParentPath(code, codes);
+  const description =
+    parentPath.length > 0 ? `Overordnet: ${parentPath.join(" - ")}` : undefined;
+
+  return {
+    value: code.id,
+    label: getTranslateText(code.name),
+    description,
+  };
+};
+
 export const InternalSection = ({
   internalFields,
   userList,
@@ -42,6 +137,18 @@ export const InternalSection = ({
   changed,
 }: InternalSectionProps) => {
   const { errors, values, setFieldValue } = useFormikContext<Concept>();
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  const userOptions: SuggestionOption[] = userList.map(
+    ({ id, name: userName }) => ({
+      value: id ?? "",
+      label: userName ?? "",
+    }),
+  );
 
   const renderInternalField = ({
     values,
@@ -53,7 +160,7 @@ export const InternalSection = ({
     values: Concept;
     setFieldValue: (
       field: string,
-      value: any,
+      value: unknown,
       validate?: boolean,
     ) => Promise<void | FormikErrors<Concept>>;
     internalField: InternalField;
@@ -62,13 +169,16 @@ export const InternalSection = ({
   }) => {
     const name = `interneFelt[${internalField.id}].value`;
     const fieldValue = values.interneFelt?.[internalField.id]?.value;
+    const fieldLabel = capitalizeFirstLetter(
+      getTranslateText(internalField.label),
+    );
 
     const FieldLabel = () => (
       <TitleWithHelpTextAndTag
         helpText={getTranslateText(internalField.description)}
         changed={changed?.includes(name)}
       >
-        {capitalizeFirstLetter(getTranslateText(internalField.label))}
+        {fieldLabel}
       </TitleWithHelpTextAndTag>
     );
 
@@ -118,26 +228,22 @@ export const InternalSection = ({
     }
 
     if (internalField.type === "user_list") {
+      const selectedValue =
+        fieldValue && userList.find((user) => user.id === fieldValue)
+          ? fieldValue
+          : undefined;
+
       return (
-        <Combobox
-          label={<FieldLabel />}
-          data-size="sm"
+        <SingleSuggestionSelect
+          ariaLabel={fieldLabel}
+          fieldsetLegend={<FieldLabel />}
+          isMounted={isMounted}
+          onValueChange={(value) => setFieldValue(name, value)}
+          options={userOptions}
           placeholder="select user"
-          value={
-            fieldValue && userList?.find((u) => u.id === fieldValue)
-              ? [fieldValue]
-              : []
-          }
-          onValueChange={(value) => setFieldValue(name, value[0])}
           readOnly={readOnly}
-        >
-          <Combobox.Empty>Fant ingen treff</Combobox.Empty>
-          {userList.map(({ id, name: userName }) => (
-            <Combobox.Option key={id ?? ""} value={id ?? ""}>
-              {userName}
-            </Combobox.Option>
-          ))}
-        </Combobox>
+          value={selectedValue}
+        />
       );
     }
 
@@ -145,73 +251,54 @@ export const InternalSection = ({
       const codes = codeLists.find(
         (list) => list.id === internalField.codeListId,
       )?.codes;
+      const codeOptions =
+        codes?.map((code) => getCodeOption(code, codes)) ?? [];
+      const selectedValue =
+        fieldValue && codes?.find((code) => code.id === fieldValue)
+          ? fieldValue
+          : undefined;
 
       return (
-        <Combobox
-          label={<FieldLabel />}
-          data-size="sm"
-          value={
-            fieldValue && codes?.find((code) => code.id === fieldValue)
-              ? [fieldValue]
-              : []
-          }
-          onValueChange={(value) => setFieldValue(name, value[0])}
+        <SingleSuggestionSelect
+          ariaLabel={fieldLabel}
+          fieldsetLegend={<FieldLabel />}
+          isMounted={isMounted}
+          onValueChange={(value) => setFieldValue(name, value)}
+          options={codeOptions}
           readOnly={readOnly}
-        >
-          <Combobox.Empty>Fant ingen treff</Combobox.Empty>
-          {codes?.map((code) => {
-            const parentPath = getParentPath(code, codes);
-            return (
-              <Combobox.Option
-                key={code.id}
-                value={code.id}
-                description={
-                  parentPath.length > 0
-                    ? `Overordnet: ${parentPath.join(" - ")}`
-                    : ""
-                }
-              >
-                {getTranslateText(code.name)}
-              </Combobox.Option>
-            );
-          })}
-        </Combobox>
+          value={selectedValue}
+        />
       );
     }
 
     return null;
   };
 
+  const assignedUserLabel = localization.conceptForm.fieldLabel.assignedUser;
+  const selectedAssignedUser =
+    values.assignedUser &&
+    userList.find((user) => user.id === values.assignedUser)
+      ? values.assignedUser
+      : undefined;
+
   return (
     <div className={styles.internalSection}>
-      <Combobox
-        label={
+      <SingleSuggestionSelect
+        ariaLabel={assignedUserLabel}
+        fieldsetLegend={
           <TitleWithHelpTextAndTag
             helpText={localization.conceptForm.helpText.assignedUser}
             changed={changed?.includes("assignedUser")}
           >
-            {localization.conceptForm.fieldLabel.assignedUser}
+            {assignedUserLabel}
           </TitleWithHelpTextAndTag>
         }
-        data-size="sm"
-        value={
-          values.assignedUser &&
-          userList?.find((user) => user.id === values.assignedUser)
-            ? [values.assignedUser]
-            : []
-        }
-        onValueChange={(val) => setFieldValue("assignedUser", val[0])}
+        isMounted={isMounted}
+        onValueChange={(value) => setFieldValue("assignedUser", value)}
+        options={userOptions}
         readOnly={readOnly}
-      >
-        <Combobox.Empty>Fant ingen treff</Combobox.Empty>
-        {userList?.map((user) => {
-          return (
-            <Combobox.Option key={user.id} value={user.id ?? ""}>
-              {user.name}
-            </Combobox.Option>
-          );
-        })}
-      </Combobox>
+        value={selectedAssignedUser}
+      />
 
       <FastField
         as={Textfield}
