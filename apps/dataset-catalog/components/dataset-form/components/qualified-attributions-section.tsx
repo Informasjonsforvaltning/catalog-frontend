@@ -1,17 +1,25 @@
+"use client";
+
 import { Dataset } from "@catalog-frontend/types";
-import { TitleWithHelpTextAndTag, useDebounce } from "@catalog-frontend/ui";
+import {
+  SearchSuggestionSelect,
+  SuggestionSelectOption,
+  TitleWithHelpTextAndTag,
+  useDebounce,
+  useSuggestionMounted,
+} from "@catalog-frontend/ui";
 import {
   containsNonNumberRegex,
   localization,
   onlyNumbersRegex,
 } from "@catalog-frontend/utils";
-import { Combobox, Fieldset } from "@digdir/designsystemet-react";
+import { Fieldset } from "@digdir/designsystemet-react";
 import {
   useSearchEnheter,
   useSearchEnheterByOrgNmbs,
 } from "../../../hooks/useEnhetsregister";
 import { useFormikContext } from "formik";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 export const QualifiedAttributionsSection = ({
   ref,
@@ -19,7 +27,7 @@ export const QualifiedAttributionsSection = ({
   ref: React.RefObject<HTMLInputElement>;
 }) => {
   const { setFieldValue, values } = useFormikContext<Dataset>();
-
+  const isMounted = useSuggestionMounted();
   const [searchTerm, setSearchTerm] = useState("");
   const debouncedSearchTerm = useDebounce(searchTerm);
   const { data: selectedEnheter } = useSearchEnheterByOrgNmbs(
@@ -28,25 +36,62 @@ export const QualifiedAttributionsSection = ({
   const { data: enheter, isLoading: searching } =
     useSearchEnheter(debouncedSearchTerm);
 
-  const comboboxOptions = [
-    ...new Map(
+  const attributionOptions: SuggestionSelectOption[] = useMemo(
+    () =>
       [
-        ...(selectedEnheter ?? []),
-        ...(enheter ?? []),
-        ...(values.qualifiedAttributions ?? []).map((orgNmb) => {
-          const foundItem =
-            selectedEnheter?.find(
-              (item) => item.organisasjonsnummer === orgNmb,
-            ) || enheter?.find((item) => item.organisasjonsnummer === orgNmb);
+        ...new Map(
+          [
+            ...(selectedEnheter ?? []),
+            ...(enheter ?? []),
+            ...(values.qualifiedAttributions ?? []).map((orgNmb) => {
+              const foundItem =
+                selectedEnheter?.find(
+                  (item) => item.organisasjonsnummer === orgNmb,
+                ) ||
+                enheter?.find((item) => item.organisasjonsnummer === orgNmb);
 
-          return {
-            navn: foundItem?.navn ?? null,
-            organisasjonsnummer: foundItem?.organisasjonsnummer ?? orgNmb,
-          };
-        }),
-      ].map((option) => [option.organisasjonsnummer, option]),
-    ).values(),
-  ];
+              return {
+                navn: foundItem?.navn ?? null,
+                organisasjonsnummer: foundItem?.organisasjonsnummer ?? orgNmb,
+              };
+            }),
+          ].map((option) => [option.organisasjonsnummer, option]),
+        ).values(),
+      ].map((org) => ({
+        value: org.organisasjonsnummer,
+        label: org.navn ?? org.organisasjonsnummer,
+        description: org.organisasjonsnummer,
+      })),
+    [enheter, selectedEnheter, values.qualifiedAttributions],
+  );
+
+  const selectedAttributions = useMemo(
+    () =>
+      (values.qualifiedAttributions ?? []).map((orgNmb) => {
+        const option = attributionOptions.find((item) => item.value === orgNmb);
+
+        return {
+          value: orgNmb,
+          label: option?.label ?? orgNmb,
+        };
+      }),
+    [attributionOptions, values.qualifiedAttributions],
+  );
+
+  const emptyMessage = searching
+    ? `${localization.loading}...`
+    : debouncedSearchTerm
+      ? localization.search.noHits
+      : `${localization.search.typeToSearch}...`;
+
+  const handleSearch = (term: string) => {
+    const isOnlyNumbers = onlyNumbersRegex.test(term);
+    const hasNonNumber = containsNonNumberRegex.test(term);
+
+    if (isOnlyNumbers || hasNonNumber) {
+      setSearchTerm(term);
+    }
+  };
 
   return (
     <div>
@@ -58,38 +103,23 @@ export const QualifiedAttributionsSection = ({
             {localization.datasetForm.fieldLabel.qualifiedAttributions}
           </TitleWithHelpTextAndTag>
         </Fieldset.Legend>
-        <Combobox
-          data-size="sm"
-          onValueChange={(selectedValues: string[]) =>
-            setFieldValue("qualifiedAttributions", selectedValues)
-          }
-          onChange={(input: React.ChangeEvent<HTMLInputElement>) => {
-            const term = input.target.value;
-            const isOnlyNumbers = onlyNumbersRegex.test(term);
-            const hasNonNumber = containsNonNumberRegex.test(term);
-            if (isOnlyNumbers || hasNonNumber) {
-              setSearchTerm(term);
-            }
-          }}
-          loading={searching}
+        <SearchSuggestionSelect
+          emptyMessage={emptyMessage}
+          inputRef={ref}
+          isFetching={searching}
+          isMounted={isMounted}
           multiple
-          value={values.qualifiedAttributions}
+          onSearch={handleSearch}
+          onSelectedChange={(selectedItems) =>
+            setFieldValue(
+              "qualifiedAttributions",
+              selectedItems.map((item) => item.value),
+            )
+          }
+          options={attributionOptions}
           placeholder={`${localization.search.search}...`}
-          filter={() => true} // Deactivate filter, handled by backend
-          virtual
-          ref={ref}
-        >
-          <Combobox.Empty>{`${localization.search.noHits}...`}</Combobox.Empty>
-          {comboboxOptions.map((org) => (
-            <Combobox.Option
-              value={org.organisasjonsnummer}
-              key={org.organisasjonsnummer}
-              description={org.organisasjonsnummer}
-            >
-              {org.navn}
-            </Combobox.Option>
-          ))}
-        </Combobox>
+          selected={selectedAttributions}
+        />
       </Fieldset>
     </div>
   );

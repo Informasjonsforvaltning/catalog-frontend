@@ -6,7 +6,7 @@ import {
   Input,
   ValidationMessage,
 } from "@digdir/designsystemet-react";
-import { ReactNode } from "react";
+import { ReactNode, Ref } from "react";
 import {
   getSuggestionSelectedItem,
   SuggestionSelectOption,
@@ -21,6 +21,7 @@ type SearchSuggestionSelectBaseProps = {
   emptyMessage: string;
   error?: string;
   fieldsetLegend?: ReactNode;
+  inputRef?: Ref<HTMLInputElement>;
   isFetching: boolean;
   isMounted: boolean;
   onSearch: (value: string) => void;
@@ -66,6 +67,7 @@ type SuggestionFieldContentProps = {
   ariaLabel?: string;
   emptyMessage: string;
   error?: string;
+  inputRef?: Ref<HTMLInputElement>;
   isFetching: boolean;
   multiple?: boolean;
   onSearch: (value: string) => void;
@@ -79,6 +81,7 @@ const SuggestionFieldContent = ({
   ariaLabel,
   emptyMessage,
   error,
+  inputRef,
   isFetching,
   multiple,
   onSearch,
@@ -89,6 +92,7 @@ const SuggestionFieldContent = ({
 }: SuggestionFieldContentProps) => (
   <>
     <Suggestion.Input
+      ref={inputRef}
       aria-busy={isFetching}
       aria-invalid={error ? true : undefined}
       aria-label={ariaLabel}
@@ -119,6 +123,7 @@ export const SearchSuggestionSelect = (props: SearchSuggestionSelectProps) => {
     emptyMessage,
     error,
     fieldsetLegend,
+    inputRef,
     isFetching,
     isMounted,
     onSearch,
@@ -132,6 +137,7 @@ export const SearchSuggestionSelect = (props: SearchSuggestionSelectProps) => {
     ariaLabel,
     emptyMessage,
     error,
+    inputRef,
     isFetching,
     onSearch,
     options,
