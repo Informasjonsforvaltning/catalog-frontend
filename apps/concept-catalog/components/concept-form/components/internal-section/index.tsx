@@ -1,14 +1,8 @@
 "use client";
 
-import React, { ReactNode, useEffect, useState } from "react";
+import React from "react";
 import { FastField, FormikErrors, useFormikContext } from "formik";
-import {
-  Checkbox,
-  EXPERIMENTAL_Suggestion as Suggestion,
-  Fieldset,
-  Input,
-  Textfield,
-} from "@digdir/designsystemet-react";
+import { Checkbox, Fieldset, Textfield } from "@digdir/designsystemet-react";
 import {
   AssignedUser,
   Code,
@@ -23,7 +17,9 @@ import {
 } from "@catalog-frontend/utils";
 import {
   FormikMultivalueTextfield,
+  SingleSuggestionSelect,
   TitleWithHelpTextAndTag,
+  useSuggestionMounted,
 } from "@catalog-frontend/ui";
 import styles from "../../concept-form.module.scss";
 import { getParentPath } from "../../../../utils/codeList";
@@ -40,81 +36,6 @@ type SuggestionOption = {
   value: string;
   label: string;
   description?: string;
-};
-
-type SingleSuggestionSelectProps = {
-  ariaLabel: string;
-  fieldsetLegend: ReactNode;
-  isMounted: boolean;
-  onValueChange: (value: string | undefined) => void;
-  options: SuggestionOption[];
-  placeholder?: string;
-  readOnly?: boolean;
-  value?: string;
-};
-
-const SingleSuggestionSelect = ({
-  ariaLabel,
-  fieldsetLegend,
-  isMounted,
-  onValueChange,
-  options,
-  placeholder,
-  readOnly,
-  value,
-}: SingleSuggestionSelectProps) => {
-  const selectedItem = value
-    ? (options.find((option) => option.value === value) ?? {
-        value,
-        label: value,
-      })
-    : null;
-
-  return (
-    <Fieldset data-size="sm">
-      <Fieldset.Legend>{fieldsetLegend}</Fieldset.Legend>
-      {isMounted ? (
-        <Suggestion
-          data-size="sm"
-          selected={selectedItem}
-          onSelectedChange={(selected) => onValueChange(selected?.value)}
-        >
-          <Suggestion.Input
-            aria-label={ariaLabel}
-            placeholder={placeholder}
-            readOnly={readOnly}
-          />
-          <Suggestion.List>
-            <Suggestion.Empty>Fant ingen treff</Suggestion.Empty>
-            {options.map((option) => (
-              <Suggestion.Option
-                key={option.value}
-                value={option.value}
-                label={option.label}
-              >
-                {option.description ? (
-                  <div>
-                    <div>{option.label}</div>
-                    <div>{option.description}</div>
-                  </div>
-                ) : (
-                  option.label
-                )}
-              </Suggestion.Option>
-            ))}
-          </Suggestion.List>
-        </Suggestion>
-      ) : (
-        <Input
-          data-size="sm"
-          aria-label={ariaLabel}
-          disabled
-          placeholder={placeholder}
-          readOnly
-        />
-      )}
-    </Fieldset>
-  );
 };
 
 const getCodeOption = (code: Code, codes: Code[]): SuggestionOption => {
@@ -137,11 +58,7 @@ export const InternalSection = ({
   changed,
 }: InternalSectionProps) => {
   const { errors, values, setFieldValue } = useFormikContext<Concept>();
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
+  const isMounted = useSuggestionMounted();
 
   const userOptions: SuggestionOption[] = userList.map(
     ({ id, name: userName }) => ({
