@@ -22,7 +22,7 @@ export * from "./lib/formik-fast-field-with-ref";
 export * from "./lib/formik-language-fieldset";
 export * from "./lib/formik-multivalue-textfield";
 export * from "./lib/formik-optional-fields-fieldset";
-export * from "./lib/formik-reference-data-combobox";
+export * from "./lib/reference-data-suggestion-select";
 export * from "./lib/header";
 export * from "./lib/help-markdown";
 export * from "./lib/icon";

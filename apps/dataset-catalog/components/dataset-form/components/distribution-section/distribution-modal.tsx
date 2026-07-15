@@ -11,7 +11,7 @@ import {
   DeleteButton,
   FieldsetDivider,
   FormikLanguageFieldset,
-  FormikReferenceDataCombobox,
+  ReferenceDataSuggestionSelect,
   getSuggestionSelectedItem,
   SearchSuggestionSelect,
   SuggestionSelectOption,
@@ -474,27 +474,19 @@ export const DistributionModal = ({
                 setSelectedMediaTypeUris([]);
               }}
             >
-              <FormikReferenceDataCombobox
-                onChange={(event) =>
-                  setSearchQueryMediaTypes(event.target.value)
-                }
+              <ReferenceDataSuggestionSelect
+                onSearch={setSearchQueryMediaTypes}
                 onValueChange={(selectedValues) => {
                   const selectedMediaTypes = nonEmptyValues(selectedValues);
                   setFieldValue("mediaType", selectedMediaTypes);
                   setSelectedMediaTypeUris(selectedMediaTypes);
                 }}
-                value={mediaTypeValues}
                 selectedValuesSearchHits={selectedMediaTypes ?? []}
                 querySearchHits={mediaTypes ?? []}
                 formikValues={mediaTypeValues}
-                loading={loadingSelectedMediaTypes || searchingMediaTypes}
-                portal={false}
+                isFetching={loadingSelectedMediaTypes || searchingMediaTypes}
                 showCodeAsDescription={true}
-                hideClearButton={false}
-                ref={(el: HTMLInputElement | null) =>
-                  setInputRef("mediaType", el)
-                }
-                size="md"
+                inputRef={(el) => setInputRef("mediaType", el)}
               />
             </FieldsetWithDelete>
           </Fieldset>
@@ -1001,28 +993,24 @@ export const DistributionModal = ({
                             {localization.datasetForm.fieldLabel.format}
                           </TitleWithHelpTextAndTag>
                         </Fieldset.Legend>
-                        <FormikReferenceDataCombobox
-                          onChange={(event) =>
-                            setSearchQueryFileTypes(event.target.value)
-                          }
+                        <ReferenceDataSuggestionSelect
+                          onSearch={setSearchQueryFileTypes}
                           onValueChange={(selectedValues) => {
                             setFieldValue("format", selectedValues);
                             setSelectedFileTypeUris(selectedValues);
                           }}
-                          value={values?.format || []}
                           selectedValuesSearchHits={selectedFileTypes ?? []}
                           querySearchHits={fileTypes ?? []}
                           formikValues={values?.format ?? []}
-                          loading={
+                          isFetching={
                             loadingSelectedFileTypes || searchingFileTypes
                           }
-                          portal={false}
-                          hideClearButton={false}
-                          ref={(el: HTMLInputElement | null) =>
-                            setInputRef("format", el)
+                          inputRef={(el) => setInputRef("format", el)}
+                          error={
+                            typeof errors.format === "string"
+                              ? errors.format
+                              : undefined
                           }
-                          error={errors.format}
-                          size="md"
                         />
                       </Fieldset>
                       <FieldsetDivider />

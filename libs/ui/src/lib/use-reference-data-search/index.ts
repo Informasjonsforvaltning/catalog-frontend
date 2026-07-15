@@ -68,6 +68,7 @@ export const useSearchMediaTypes = (
       return data;
     },
     enabled: !!searchQuery,
+    placeholderData: keepPreviousData,
   });
 };
 
@@ -105,6 +106,7 @@ export const useSearchFileTypes = (
       ]);
     },
     enabled: !!searchQuery,
+    placeholderData: keepPreviousData,
   });
 };
 

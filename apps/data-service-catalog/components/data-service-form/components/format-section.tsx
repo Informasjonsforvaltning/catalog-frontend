@@ -1,6 +1,6 @@
 import { DataService } from "@catalog-frontend/types";
 import {
-  FormikReferenceDataCombobox,
+  ReferenceDataSuggestionSelect,
   TitleWithHelpTextAndTag,
   useSearchFileTypeByUri,
   useSearchFileTypes,
@@ -38,18 +38,15 @@ export const FormatSection = ({ referenceDataEnv }: Props) => {
             {localization.dataServiceForm.fieldLabel.format}
           </TitleWithHelpTextAndTag>
         </Fieldset.Legend>
-        <FormikReferenceDataCombobox
-          onChange={(event) => setSearchQueryFileTypes(event.target.value)}
+        <ReferenceDataSuggestionSelect
+          onSearch={setSearchQueryFileTypes}
           onValueChange={(selectedValues) =>
             setFieldValue("formats", selectedValues)
           }
-          value={values?.formats || []}
           selectedValuesSearchHits={selectedFileTypes ?? []}
           querySearchHits={fileTypes ?? []}
           formikValues={values?.formats ?? []}
-          loading={loadingSelectedFileTypes || searchingFileTypes}
-          hideClearButton
-          portal={false}
+          isFetching={loadingSelectedFileTypes || searchingFileTypes}
         />
       </Fieldset>
     </div>
