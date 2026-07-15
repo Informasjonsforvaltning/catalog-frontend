@@ -31,7 +31,7 @@ const getSelectedItem = (
   value: string | undefined,
   options: SuggestionSelectOption[],
 ) => {
-  if (value === undefined) {
+  if (!value) {
     return null;
   }
 
@@ -83,6 +83,11 @@ export const SingleSuggestionSelect = ({
           <Suggestion.Input
             aria-invalid={error ? true : undefined}
             aria-label={ariaLabel}
+            onInput={(event) => {
+              if (value && event.currentTarget.value === "") {
+                onValueChange(undefined);
+              }
+            }}
             placeholder={placeholder}
             readOnly={readOnly}
           />

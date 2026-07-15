@@ -144,11 +144,13 @@ type SuggestionFieldContentProps = {
   inputRef?: Ref<HTMLInputElement>;
   isFetching: boolean;
   multiple?: boolean;
+  onClear?: () => void;
   onSearch: (value: string) => void;
   options: SuggestionSelectOption[];
   placeholder?: string;
   readOnly?: boolean;
   renderOption?: (option: SuggestionSelectOption) => ReactNode;
+  value?: string;
 };
 
 const SuggestionFieldContent = ({
@@ -158,11 +160,13 @@ const SuggestionFieldContent = ({
   inputRef,
   isFetching,
   multiple,
+  onClear,
   onSearch,
   options,
   placeholder,
   readOnly,
   renderOption,
+  value,
 }: SuggestionFieldContentProps) => (
   <>
     <Suggestion.Input
@@ -170,7 +174,14 @@ const SuggestionFieldContent = ({
       aria-busy={isFetching}
       aria-invalid={error ? true : undefined}
       aria-label={ariaLabel}
-      onInput={(event) => onSearch(event.currentTarget.value)}
+      onInput={(event) => {
+        const nextValue = event.currentTarget.value;
+        onSearch(nextValue);
+
+        if (!multiple && value && nextValue === "") {
+          onClear?.();
+        }
+      }}
       placeholder={placeholder}
       readOnly={readOnly}
     />
@@ -245,7 +256,11 @@ export const SearchSuggestionSelect = (props: SearchSuggestionSelectProps) => {
         selected={getSuggestionSelectedItem(props.value, options)}
         onSelectedChange={(selected) => props.onValueChange(selected?.value)}
       >
-        <SuggestionFieldContent {...fieldContentProps} />
+        <SuggestionFieldContent
+          {...fieldContentProps}
+          onClear={() => props.onValueChange(undefined)}
+          value={props.value}
+        />
       </Suggestion>
     )
   ) : (

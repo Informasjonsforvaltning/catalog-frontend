@@ -146,9 +146,10 @@ export const useSearchDatasetSuggestions = (
     queryFn: async () => {
       const res = await searchSuggestions(searchEnv, searchQuery, "datasets");
       const data = await res.json();
-      return data.suggestions;
+      return data.suggestions as Search.Suggestion[];
     },
     enabled: !!searchQuery && !!searchEnv,
+    placeholderData: keepPreviousData,
   });
 };
 
