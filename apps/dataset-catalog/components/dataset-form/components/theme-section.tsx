@@ -1,21 +1,109 @@
+"use client";
+
 import {
   Dataset,
   DataTheme,
   LosTheme,
-  Option,
   MobilityTheme,
 } from "@catalog-frontend/types";
-import { TitleWithHelpTextAndTag } from "@catalog-frontend/ui";
-import { Combobox } from "@digdir/designsystemet-react";
+import {
+  SuggestionSelectOption,
+  TitleWithHelpTextAndTag,
+  useSuggestionMounted,
+} from "@catalog-frontend/ui";
+import {
+  EXPERIMENTAL_Suggestion as Suggestion,
+  Fieldset,
+  Input,
+  ValidationMessage,
+} from "@digdir/designsystemet-react";
 import { getTranslateText, localization } from "@catalog-frontend/utils";
-import { FastField, useFormikContext } from "formik";
+import { useFormikContext } from "formik";
 import { get } from "lodash";
+import { ReactNode, useMemo } from "react";
 
 type Props = {
   losThemes: LosTheme[];
   euDataThemes: DataTheme[];
   mobilityThemes?: MobilityTheme[];
   isMobility?: boolean;
+};
+
+type ThemeMultiSuggestionSelectProps = {
+  ariaLabel: string;
+  error?: string;
+  fieldsetLegend: ReactNode;
+  isMounted: boolean;
+  onSelectedChange: (values: string[]) => void;
+  options: SuggestionSelectOption[];
+  placeholder?: string;
+  selectedValues?: string[];
+};
+
+const getSelectedItems = (
+  selectedValues: string[] | undefined,
+  options: SuggestionSelectOption[],
+): SuggestionSelectOption[] =>
+  (selectedValues ?? []).map((value) => ({
+    value,
+    label: options.find((option) => option.value === value)?.label ?? value,
+  }));
+
+const ThemeMultiSuggestionSelect = ({
+  ariaLabel,
+  error,
+  fieldsetLegend,
+  isMounted,
+  onSelectedChange,
+  options,
+  placeholder,
+  selectedValues,
+}: ThemeMultiSuggestionSelectProps) => {
+  const selectedItems = getSelectedItems(selectedValues, options);
+
+  return (
+    <Fieldset data-size="sm">
+      <Fieldset.Legend>{fieldsetLegend}</Fieldset.Legend>
+      {isMounted ? (
+        <Suggestion
+          data-size="sm"
+          multiple
+          selected={selectedItems}
+          onSelectedChange={(selectedItems) =>
+            onSelectedChange(selectedItems.map((item) => item.value))
+          }
+        >
+          <Suggestion.Input
+            aria-invalid={error ? true : undefined}
+            aria-label={ariaLabel}
+            placeholder={placeholder}
+          />
+          <Suggestion.List>
+            <Suggestion.Empty>{localization.search.noHits}</Suggestion.Empty>
+            {options.map((option) => (
+              <Suggestion.Option
+                key={option.value}
+                value={option.value}
+                label={option.label}
+              >
+                {option.label}
+              </Suggestion.Option>
+            ))}
+          </Suggestion.List>
+        </Suggestion>
+      ) : (
+        <Input
+          data-size="sm"
+          aria-invalid={error ? true : undefined}
+          aria-label={ariaLabel}
+          disabled
+          placeholder={placeholder}
+          readOnly
+        />
+      )}
+      {error ? <ValidationMessage>{error}</ValidationMessage> : null}
+    </Fieldset>
+  );
 };
 
 export const ThemeSection = ({
@@ -25,20 +113,54 @@ export const ThemeSection = ({
   isMobility,
 }: Props) => {
   const { setFieldValue, values, errors } = useFormikContext<Dataset>();
-  const containsFilter = (inputValue: string, option: Option): boolean => {
-    return option.label.toLowerCase().includes(inputValue.toLowerCase());
-  };
+  const isMounted = useSuggestionMounted();
+
+  const mobilityThemeOptions = useMemo(
+    () =>
+      mobilityThemes
+        ?.sort((a, b) =>
+          (get(a.label, "nb")?.toString() ?? "").localeCompare(
+            get(b.label, "nb")?.toString() ?? "",
+          ),
+        )
+        .map((theme) => ({
+          value: theme.uri,
+          label: getTranslateText(theme.label),
+        })) ?? [],
+    [mobilityThemes],
+  );
+
+  const euDataThemeOptions = useMemo(
+    () =>
+      euDataThemes.map((theme) => ({
+        value: theme.uri,
+        label: getTranslateText(theme.label),
+      })),
+    [euDataThemes],
+  );
+
+  const losThemeOptions = useMemo(
+    () =>
+      losThemes
+        ?.sort((a, b) =>
+          (get(a.name, "nb")?.toString() ?? "").localeCompare(
+            get(b.name, "nb")?.toString() ?? "",
+          ),
+        )
+        .map((theme) => ({
+          value: theme.uri,
+          label: getTranslateText(theme.name),
+        })) ?? [],
+    [losThemes],
+  );
 
   return (
     <>
       {isMobility ? (
-        <FastField
-          id="mobilityTheme-combobox"
-          as={Combobox}
-          value={values.mobilityTheme}
-          multiple
-          hideClearButton
-          label={
+        <ThemeMultiSuggestionSelect
+          ariaLabel={localization.datasetForm.fieldLabel.mobilityTheme}
+          error={errors.mobilityTheme}
+          fieldsetLegend={
             <TitleWithHelpTextAndTag
               tagTitle={localization.tag.required}
               helpText={localization.datasetForm.helptext.mobilityTheme}
@@ -46,34 +168,19 @@ export const ThemeSection = ({
               {localization.datasetForm.fieldLabel.mobilityTheme}
             </TitleWithHelpTextAndTag>
           }
-          filter={containsFilter}
-          placeholder={`${localization.search.search}...`}
-          onValueChange={(values: string[]) =>
-            setFieldValue("mobilityTheme", values)
+          isMounted={isMounted}
+          onSelectedChange={(selectedValues) =>
+            setFieldValue("mobilityTheme", selectedValues)
           }
-          error={errors.mobilityTheme}
-          data-size="sm"
-        >
-          <Combobox.Empty>{localization.search.noHits}</Combobox.Empty>
-          {mobilityThemes
-            ?.sort((a, b) =>
-              (get(a.label, "nb")?.toString() ?? "").localeCompare(
-                get(b.label, "nb")?.toString() ?? "",
-              ),
-            )
-            ?.map((theme) => (
-              <Combobox.Option key={theme.uri} value={theme.uri}>
-                {getTranslateText(theme.label)}
-              </Combobox.Option>
-            ))}
-        </FastField>
-      ) : undefined}
-      <FastField
-        id="euDataTheme-combobox"
-        as={Combobox}
-        multiple
-        hideClearButton
-        label={
+          options={mobilityThemeOptions}
+          placeholder={`${localization.search.search}...`}
+          selectedValues={values.mobilityTheme}
+        />
+      ) : null}
+      <ThemeMultiSuggestionSelect
+        ariaLabel={localization.datasetForm.fieldLabel.euDataTheme}
+        error={errors.euDataTheme}
+        fieldsetLegend={
           <TitleWithHelpTextAndTag
             tagTitle={isMobility ? undefined : localization.tag.required}
             helpText={localization.datasetForm.helptext.euDataTheme}
@@ -81,54 +188,31 @@ export const ThemeSection = ({
             {localization.datasetForm.fieldLabel.euDataTheme}
           </TitleWithHelpTextAndTag>
         }
-        filter={containsFilter}
-        placeholder={`${localization.search.search}...`}
-        error={errors.euDataTheme}
-        value={values.euDataTheme}
-        onValueChange={(values: string[]) =>
-          setFieldValue("euDataTheme", values)
+        isMounted={isMounted}
+        onSelectedChange={(selectedValues) =>
+          setFieldValue("euDataTheme", selectedValues)
         }
-        data-size="sm"
-      >
-        <Combobox.Empty>{localization.search.noHits}</Combobox.Empty>
-        {euDataThemes &&
-          euDataThemes.map((theme) => (
-            <Combobox.Option key={theme.uri} value={theme.uri}>
-              {getTranslateText(theme.label)}
-            </Combobox.Option>
-          ))}
-      </FastField>
-      <FastField
-        id="losTheme-combobox"
-        as={Combobox}
-        value={values.losTheme}
-        multiple
-        hideClearButton
-        label={
+        options={euDataThemeOptions}
+        placeholder={`${localization.search.search}...`}
+        selectedValues={values.euDataTheme}
+      />
+      <ThemeMultiSuggestionSelect
+        ariaLabel={localization.datasetForm.fieldLabel.losTheme}
+        fieldsetLegend={
           <TitleWithHelpTextAndTag
             helpText={localization.datasetForm.helptext.losTheme}
           >
             {localization.datasetForm.fieldLabel.losTheme}
           </TitleWithHelpTextAndTag>
         }
-        filter={containsFilter}
+        isMounted={isMounted}
+        onSelectedChange={(selectedValues) =>
+          setFieldValue("losTheme", selectedValues)
+        }
+        options={losThemeOptions}
         placeholder={`${localization.search.search}...`}
-        onValueChange={(values: string[]) => setFieldValue("losTheme", values)}
-        data-size="sm"
-      >
-        <Combobox.Empty>{localization.search.noHits}</Combobox.Empty>
-        {losThemes
-          ?.sort((a, b) =>
-            (get(a.name, "nb")?.toString() ?? "").localeCompare(
-              get(b.name, "nb")?.toString() ?? "",
-            ),
-          )
-          ?.map((theme) => (
-            <Combobox.Option key={theme.uri} value={theme.uri}>
-              {getTranslateText(theme.name)}
-            </Combobox.Option>
-          ))}
-      </FastField>
+        selectedValues={values.losTheme}
+      />
     </>
   );
 };
