@@ -6,7 +6,17 @@ import {
   Input,
   ValidationMessage,
 } from "@digdir/designsystemet-react";
-import { ReactNode, useEffect, useState } from "react";
+import {
+  ComponentRef,
+  ReactNode,
+  Ref,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
+import { syncSuggestionList } from "../suggestion-sync";
 
 export type SuggestionSelectOption = {
   value: string;
@@ -19,6 +29,7 @@ export type SingleSuggestionSelectProps = {
   emptyMessage?: string;
   error?: string;
   fieldsetLegend?: ReactNode;
+  inputRef?: Ref<HTMLInputElement>;
   isMounted: boolean;
   onValueChange: (value: string | undefined) => void;
   options: SuggestionSelectOption[];
@@ -60,6 +71,7 @@ export const SingleSuggestionSelect = ({
   emptyMessage = "",
   error,
   fieldsetLegend,
+  inputRef,
   isMounted,
   onValueChange,
   options,
@@ -68,6 +80,42 @@ export const SingleSuggestionSelect = ({
   value,
 }: SingleSuggestionSelectProps) => {
   const selectedItem = getSelectedItem(value, options);
+  const comboboxRef = useRef<ComponentRef<typeof Suggestion>>(null);
+  const inputElementRef = useRef<HTMLInputElement | null>(null);
+  const optionsKey = options.map((option) => option.value).join("\0");
+
+  const setInputElementRef = useCallback(
+    (element: HTMLInputElement | null) => {
+      inputElementRef.current = element;
+
+      if (typeof inputRef === "function") {
+        inputRef(element);
+      } else if (inputRef) {
+        inputRef.current = element;
+      }
+    },
+    [inputRef],
+  );
+
+  const refocusInput = () => {
+    requestAnimationFrame(() => inputElementRef.current?.focus());
+  };
+
+  const handleSyncSuggestionList = useCallback(() => {
+    syncSuggestionList(comboboxRef.current);
+  }, []);
+
+  useLayoutEffect(() => {
+    handleSyncSuggestionList();
+  }, [handleSyncSuggestionList, optionsKey]);
+
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => {
+      handleSyncSuggestionList();
+    });
+
+    return () => cancelAnimationFrame(frame);
+  }, [handleSyncSuggestionList, isMounted, optionsKey]);
 
   return (
     <Fieldset data-size="sm">
@@ -76,16 +124,27 @@ export const SingleSuggestionSelect = ({
       ) : null}
       {isMounted ? (
         <Suggestion
+          ref={comboboxRef}
           data-size="sm"
           selected={selectedItem}
-          onSelectedChange={(selected) => onValueChange(selected?.value)}
+          onSelectedChange={(selected) => {
+            const hadValue = Boolean(value);
+            onValueChange(selected?.value);
+
+            if (hadValue && !selected?.value) {
+              refocusInput();
+            }
+          }}
         >
           <Suggestion.Input
+            ref={setInputElementRef}
             aria-invalid={error ? true : undefined}
             aria-label={ariaLabel}
+            onFocus={handleSyncSuggestionList}
             onInput={(event) => {
               if (value && event.currentTarget.value === "") {
                 onValueChange(undefined);
+                refocusInput();
               }
             }}
             placeholder={placeholder}
