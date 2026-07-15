@@ -6,7 +6,7 @@ import {
   Input,
   ValidationMessage,
 } from "@digdir/designsystemet-react";
-import { ReactNode, Ref } from "react";
+import { ComponentRef, ReactNode, Ref, useLayoutEffect, useRef } from "react";
 import {
   getSuggestionSelectedItem,
   SuggestionSelectOption,
@@ -15,6 +15,80 @@ import {
 
 export type { SuggestionSelectOption };
 export { useSuggestionMounted };
+
+type SuggestionRef = ComponentRef<typeof Suggestion>;
+
+type DataListElement = HTMLElement & {
+  hidden: boolean;
+  hidePopover?: () => void;
+};
+
+const restoreInputState = (
+  input: HTMLInputElement,
+  value: string,
+  selectionStart: number | null,
+  selectionEnd: number | null,
+) => {
+  if (input.value !== value) {
+    input.value = value;
+  }
+
+  if (selectionStart !== null && selectionEnd !== null) {
+    input.setSelectionRange(selectionStart, selectionEnd);
+  }
+};
+
+const syncSuggestionList = (combobox: SuggestionRef | null) => {
+  const input = combobox?.control;
+  const list = combobox?.list as DataListElement | null | undefined;
+
+  if (!input || !list || document.activeElement !== input) {
+    return;
+  }
+
+  const { value, selectionStart, selectionEnd } = input;
+
+  for (const option of combobox.options ?? []) {
+    if (!option.hasAttribute("data-empty")) {
+      option.disabled = false;
+      option.removeAttribute("aria-hidden");
+    }
+  }
+
+  if (!list.hidden) {
+    list.hidden = true;
+
+    try {
+      if (
+        typeof list.hidePopover === "function" &&
+        list.matches(":popover-open")
+      ) {
+        list.hidePopover();
+      }
+    } catch {
+      // Popover may be unavailable in some environments.
+    }
+  }
+
+  input.dispatchEvent(
+    new MouseEvent("click", { bubbles: true, cancelable: true }),
+  );
+
+  restoreInputState(input, value, selectionStart, selectionEnd);
+
+  window.dispatchEvent(new Event("resize"));
+
+  requestAnimationFrame(() => {
+    if (!list.hidden || document.activeElement !== input) {
+      return;
+    }
+
+    input.blur();
+    input.focus();
+    restoreInputState(input, value, selectionStart, selectionEnd);
+    window.dispatchEvent(new Event("resize"));
+  });
+};
 
 type SearchSuggestionSelectBaseProps = {
   ariaLabel?: string;
@@ -103,16 +177,15 @@ const SuggestionFieldContent = ({
     {!multiple && <Suggestion.Clear />}
     <Suggestion.List>
       <Suggestion.Empty>{emptyMessage}</Suggestion.Empty>
-      {!isFetching &&
-        options.map((option) => (
-          <Suggestion.Option
-            key={option.value}
-            value={option.value}
-            label={option.label}
-          >
-            {renderOptionContent(option, renderOption)}
-          </Suggestion.Option>
-        ))}
+      {options.map((option) => (
+        <Suggestion.Option
+          key={option.value}
+          value={option.value}
+          label={option.label}
+        >
+          {renderOptionContent(option, renderOption)}
+        </Suggestion.Option>
+      ))}
     </Suggestion.List>
   </>
 );
@@ -132,6 +205,12 @@ export const SearchSuggestionSelect = (props: SearchSuggestionSelectProps) => {
     readOnly,
     renderOption,
   } = props;
+  const comboboxRef = useRef<SuggestionRef>(null);
+  const optionsKey = options.map((option) => option.value).join("\0");
+
+  useLayoutEffect(() => {
+    syncSuggestionList(comboboxRef.current);
+  }, [optionsKey, isFetching]);
 
   const fieldContentProps: SuggestionFieldContentProps = {
     ariaLabel,
@@ -149,6 +228,7 @@ export const SearchSuggestionSelect = (props: SearchSuggestionSelectProps) => {
   const suggestion = isMounted ? (
     props.multiple ? (
       <Suggestion
+        ref={comboboxRef}
         data-size="sm"
         filter={() => true}
         multiple
@@ -159,6 +239,7 @@ export const SearchSuggestionSelect = (props: SearchSuggestionSelectProps) => {
       </Suggestion>
     ) : (
       <Suggestion
+        ref={comboboxRef}
         data-size="sm"
         filter={() => true}
         selected={getSuggestionSelectedItem(props.value, options)}

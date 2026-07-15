@@ -3,7 +3,7 @@ import {
   searchSuggestions,
 } from "@catalog-frontend/data-access";
 import { Search } from "@catalog-frontend/types";
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 
 export const useSearchInformationModelsSuggestions = (
   searchEnv: string,
@@ -78,9 +78,10 @@ export const useSearchDataServiceSuggestions = (
         "dataservices",
       );
       const data = await res.json();
-      return data.suggestions;
+      return data.suggestions as Search.Suggestion[];
     },
     enabled: !!searchQuery && !!searchEnv,
+    placeholderData: keepPreviousData,
   });
 };
 
