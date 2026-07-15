@@ -4,7 +4,7 @@ import {
   searchReferenceDataByUri,
 } from "@catalog-frontend/data-access";
 import { ReferenceDataCode } from "@catalog-frontend/types";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
 
 export const useSearchGeoNamesAndEULocations = (
   searchQuery: string,
@@ -139,6 +139,7 @@ export const useSearchLanguage = (searchQuery: string, envVariable: string) => {
       return data;
     },
     enabled: !!searchQuery,
+    placeholderData: keepPreviousData,
   });
 };
 
