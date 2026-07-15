@@ -10,7 +10,7 @@ import {
 } from "@digdir/designsystemet-react";
 import {
   Button,
-  ConceptCombobox,
+  ConceptSuggestionSelect,
   ConfirmModal,
   CostsTable,
   FieldsetDivider,
@@ -484,7 +484,7 @@ export const ServiceForm = (props: ServiceFormProps) => {
                             {localization.serviceForm.fieldLabel.subject}
                           </TitleWithHelpTextAndTag>
                         </Fieldset.Legend>
-                        <ConceptCombobox
+                        <ConceptSuggestionSelect
                           fieldLabel="subject"
                           searchEnv={searchEnv}
                         />

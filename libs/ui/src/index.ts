@@ -5,7 +5,7 @@ export * from "./lib/button";
 export * from "./lib/button-bar";
 export * from "./lib/center-container";
 export * from "./lib/checkbox-group-filter";
-export * from "./lib/concept-combobox";
+export * from "./lib/concept-suggestion-select";
 export * from "./lib/confirm-modal";
 export * from "./lib/costs";
 export * from "./lib/details-page-layout";
