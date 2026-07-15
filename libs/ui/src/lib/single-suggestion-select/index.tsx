@@ -26,6 +26,7 @@ export type SuggestionSelectOption = {
 
 export type SingleSuggestionSelectProps = {
   ariaLabel?: string;
+  disabled?: boolean;
   emptyMessage?: string;
   error?: string;
   fieldsetLegend?: ReactNode;
@@ -68,6 +69,7 @@ export const useSuggestionMounted = () => {
 
 export const SingleSuggestionSelect = ({
   ariaLabel,
+  disabled,
   emptyMessage = "",
   error,
   fieldsetLegend,
@@ -117,71 +119,82 @@ export const SingleSuggestionSelect = ({
     return () => cancelAnimationFrame(frame);
   }, [handleSyncSuggestionList, isMounted, optionsKey]);
 
-  return (
-    <Fieldset data-size="sm">
-      {fieldsetLegend ? (
-        <Fieldset.Legend>{fieldsetLegend}</Fieldset.Legend>
-      ) : null}
-      {isMounted ? (
-        <Suggestion
-          ref={comboboxRef}
-          data-size="sm"
-          selected={selectedItem}
-          onSelectedChange={(selected) => {
-            const hadValue = Boolean(value);
-            onValueChange(selected?.value);
+  const suggestion = isMounted ? (
+    <Suggestion
+      ref={comboboxRef}
+      data-size="sm"
+      selected={selectedItem}
+      onSelectedChange={(selected) => {
+        const hadValue = Boolean(value);
+        onValueChange(selected?.value);
 
-            if (hadValue && !selected?.value) {
-              refocusInput();
-            }
-          }}
-        >
-          <Suggestion.Input
-            ref={setInputElementRef}
-            aria-invalid={error ? true : undefined}
-            aria-label={ariaLabel}
-            onFocus={handleSyncSuggestionList}
-            onInput={(event) => {
-              if (value && event.currentTarget.value === "") {
-                onValueChange(undefined);
-                refocusInput();
-              }
-            }}
-            placeholder={placeholder}
-            readOnly={readOnly}
-          />
-          <Suggestion.Clear />
-          <Suggestion.List>
-            <Suggestion.Empty>{emptyMessage}</Suggestion.Empty>
-            {options.map((option) => (
-              <Suggestion.Option
-                key={option.value}
-                value={option.value}
-                label={option.label}
-              >
-                {option.description ? (
-                  <div>
-                    <div>{option.label}</div>
-                    <div>{option.description}</div>
-                  </div>
-                ) : (
-                  option.label
-                )}
-              </Suggestion.Option>
-            ))}
-          </Suggestion.List>
-        </Suggestion>
-      ) : (
-        <Input
-          data-size="sm"
-          aria-invalid={error ? true : undefined}
-          aria-label={ariaLabel}
-          disabled
-          placeholder={placeholder}
-          readOnly
-        />
-      )}
-      {error ? <ValidationMessage>{error}</ValidationMessage> : null}
-    </Fieldset>
+        if (hadValue && !selected?.value) {
+          refocusInput();
+        }
+      }}
+    >
+      <Suggestion.Input
+        ref={setInputElementRef}
+        aria-invalid={error ? true : undefined}
+        aria-label={ariaLabel}
+        disabled={disabled}
+        onFocus={handleSyncSuggestionList}
+        onInput={(event) => {
+          if (value && event.currentTarget.value === "") {
+            onValueChange(undefined);
+            refocusInput();
+          }
+        }}
+        placeholder={placeholder}
+        readOnly={readOnly}
+      />
+      {!disabled && <Suggestion.Clear />}
+      <Suggestion.List>
+        <Suggestion.Empty>{emptyMessage}</Suggestion.Empty>
+        {options.map((option) => (
+          <Suggestion.Option
+            key={option.value}
+            value={option.value}
+            label={option.label}
+          >
+            {option.description ? (
+              <div>
+                <div>{option.label}</div>
+                <div>{option.description}</div>
+              </div>
+            ) : (
+              option.label
+            )}
+          </Suggestion.Option>
+        ))}
+      </Suggestion.List>
+    </Suggestion>
+  ) : (
+    <Input
+      data-size="sm"
+      aria-invalid={error ? true : undefined}
+      aria-label={ariaLabel}
+      disabled
+      placeholder={placeholder}
+      readOnly
+    />
   );
+
+  const content = (
+    <>
+      {suggestion}
+      {error ? <ValidationMessage>{error}</ValidationMessage> : null}
+    </>
+  );
+
+  if (fieldsetLegend) {
+    return (
+      <Fieldset data-size="sm">
+        <Fieldset.Legend>{fieldsetLegend}</Fieldset.Legend>
+        {content}
+      </Fieldset>
+    );
+  }
+
+  return content;
 };
