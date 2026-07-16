@@ -23,6 +23,13 @@ const restoreInputState = (
   }
 };
 
+/**
+ * Reopens the Suggestion option list when it should be visible but stays hidden.
+ *
+ * EXPERIMENTAL_Suggestion can leave the list closed after options update while the
+ * input is focused. Direct showPopover() covers the input text, so the list is reset
+ * and re-opened via a click on the input, fall back to blur/focus if needed.
+ */
 export const syncSuggestionList = (combobox: SuggestionRef | null) => {
   const input = combobox?.control;
   const list = combobox?.list as DataListElement | null | undefined;
