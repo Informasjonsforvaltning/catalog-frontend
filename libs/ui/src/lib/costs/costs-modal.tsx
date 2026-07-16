@@ -23,10 +23,7 @@ import { DialogActions } from "../dialog-actions";
 import { FieldsetDivider } from "../fieldset-divider";
 import { FastFieldWithRef } from "../formik-fast-field-with-ref";
 import { FormikLanguageFieldset } from "../formik-language-fieldset";
-import {
-  SingleSuggestionSelect,
-  useSuggestionMounted,
-} from "../single-suggestion-select";
+import { SingleSuggestionSelect } from "../single-suggestion-select";
 import { TextareaWithPrefix } from "../textarea-with-prefix";
 import { TitleWithHelpTextAndTag } from "../title-with-help-text-and-tag";
 import { costValidationSchema } from "./cost-validation-schema";
@@ -55,7 +52,6 @@ export const CostsModal = ({
   const formikRef = useRef<FormikProps<Cost>>(null);
   const valueRef = React.createRef<HTMLInputElement | HTMLTextAreaElement>();
   const docRef = React.createRef<HTMLInputElement | HTMLTextAreaElement>();
-  const isMounted = useSuggestionMounted();
 
   const currencyOptions = useMemo(
     () =>
@@ -175,7 +171,6 @@ export const CostsModal = ({
                         <SingleSuggestionSelect
                           disabled={!isNumber(values?.value)}
                           emptyMessage={localization.search.noHits}
-                          isMounted={isMounted}
                           onValueChange={(value) =>
                             setFieldValue("currency", value ?? DEFAULT_CURRENCY)
                           }

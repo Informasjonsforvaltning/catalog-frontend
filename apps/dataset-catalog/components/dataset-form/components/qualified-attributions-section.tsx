@@ -6,7 +6,6 @@ import {
   SuggestionSelectOption,
   TitleWithHelpTextAndTag,
   useDebounce,
-  useSuggestionMounted,
 } from "@catalog-frontend/ui";
 import {
   containsNonNumberRegex,
@@ -27,7 +26,6 @@ export const QualifiedAttributionsSection = ({
   ref: React.RefObject<HTMLInputElement>;
 }) => {
   const { setFieldValue, values } = useFormikContext<Dataset>();
-  const isMounted = useSuggestionMounted();
   const [searchTerm, setSearchTerm] = useState("");
   const debouncedSearchTerm = useDebounce(searchTerm);
   const { data: selectedEnheter } = useSearchEnheterByOrgNmbs(
@@ -107,7 +105,6 @@ export const QualifiedAttributionsSection = ({
           emptyMessage={emptyMessage}
           inputRef={ref}
           isFetching={searching}
-          isMounted={isMounted}
           multiple
           onSearch={handleSearch}
           onSelectedChange={(selectedItems) =>

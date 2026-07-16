@@ -7,7 +7,6 @@ import {
   useDebounce,
   useSearchInformationModelsByUri,
   useSearchInformationModelsSuggestions,
-  useSuggestionMounted,
 } from "@catalog-frontend/ui";
 import {
   capitalizeFirstLetter,
@@ -36,7 +35,6 @@ const getOptionLabel = (option: InformationModelOption) =>
 
 export const InformationModelSection = ({ searchEnv }: Props) => {
   const { setFieldValue, errors, values } = useFormikContext<Dataset>();
-  const isMounted = useSuggestionMounted();
   const [searchTerm, setSearchTerm] = useState<string>("");
   const debouncedSearchTerm = useDebounce(searchTerm);
   const { data: informationModelSuggestions, isLoading: searching } =
@@ -140,7 +138,6 @@ export const InformationModelSection = ({ searchEnv }: Props) => {
           <SearchSuggestionSelect
             emptyMessage={emptyMessage}
             isFetching={searching}
-            isMounted={isMounted}
             multiple
             onSearch={setSearchTerm}
             onSelectedChange={(selectedItems) =>

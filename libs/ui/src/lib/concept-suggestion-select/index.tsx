@@ -11,7 +11,6 @@ import { useMemo, useState } from "react";
 import {
   SearchSuggestionSelect,
   SuggestionSelectOption,
-  useSuggestionMounted,
 } from "../search-suggestion-select";
 import { useDebounce } from "../use-debounce";
 import {
@@ -41,7 +40,6 @@ export const ConceptSuggestionSelect = <T extends string>(props: Props<T>) => {
   const { fieldLabel, searchEnv } = props;
   const [searchQuery, setSearchQuery] = useState("");
   const debouncedSearchQuery = useDebounce(searchQuery);
-  const isMounted = useSuggestionMounted();
   const { setFieldValue, values } = useFormikContext<Record<T, string[]>>();
   const fieldValues = values[fieldLabel] ?? [];
   const { data: searchHits, isFetching } = useSearchConceptSuggestions(
@@ -120,7 +118,6 @@ export const ConceptSuggestionSelect = <T extends string>(props: Props<T>) => {
     <SearchSuggestionSelect
       emptyMessage={emptyMessage}
       isFetching={isFetching}
-      isMounted={isMounted}
       multiple
       onSearch={setSearchQuery}
       onSelectedChange={(selectedItems) =>

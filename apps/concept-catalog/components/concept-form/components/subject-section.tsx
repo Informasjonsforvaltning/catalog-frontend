@@ -13,7 +13,6 @@ import {
   FormikMultivalueTextfield,
   MultiSuggestionSelect,
   TitleWithHelpTextAndTag,
-  useSuggestionMounted,
 } from "@catalog-frontend/ui";
 import { getTranslateText, localization } from "@catalog-frontend/utils";
 import styles from "../concept-form.module.scss";
@@ -35,7 +34,6 @@ export const SubjectSection = ({
   readOnly,
 }: SubjectSectionProps) => {
   const { errors, values, setFieldValue } = useFormikContext<Concept>();
-  const isMounted = useSuggestionMounted();
 
   const selected = values.fagområdeKoder?.filter((v) =>
     codes?.find((code) => code.id === v),
@@ -165,7 +163,6 @@ export const SubjectSection = ({
               : undefined
           }
           fieldsetLegend={codeListLabel}
-          isMounted={isMounted}
           onSelectedChange={(selectedValues) =>
             setFieldValue("fagområdeKoder", selectedValues)
           }

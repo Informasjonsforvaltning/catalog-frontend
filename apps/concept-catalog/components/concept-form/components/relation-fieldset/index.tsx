@@ -14,7 +14,6 @@ import {
   SearchSuggestionSelect,
   SingleSuggestionSelect,
   TitleWithHelpTextAndTag,
-  useSuggestionMounted,
 } from "@catalog-frontend/ui";
 import { getTranslateText, localization } from "@catalog-frontend/utils";
 import {
@@ -122,7 +121,6 @@ export const RelationFieldset = ({
   conceptId,
 }: RelationFieldsetProps) => {
   const { errors, values, setFieldValue } = useFormikContext<UnionRelation>();
-  const isMounted = useSuggestionMounted();
   const [relatedConcept, setRelatedConcept] = useState<string[]>(
     getRelatedConceptStateValue(initialRelatedConcept),
   );
@@ -427,7 +425,6 @@ export const RelationFieldset = ({
               emptyMessage={internalSearchEmptyMessage}
               error={errors.relatertBegrep}
               isFetching={isFetchingInternal}
-              isMounted={isMounted}
               onSearch={handleSearchConceptChange}
               onValueChange={handleRelatedConceptChange}
               options={internalRelatedConceptOptions}
@@ -440,7 +437,6 @@ export const RelationFieldset = ({
               emptyMessage={externalSearchEmptyMessage}
               error={errors.relatertBegrep}
               isFetching={isFetchingExternal}
-              isMounted={isMounted}
               onSearch={handleSearchConceptChange}
               onValueChange={handleRelatedConceptChange}
               options={externalRelatedConceptOptions}
@@ -471,7 +467,6 @@ export const RelationFieldset = ({
             {localization.conceptForm.fieldLabel.relation}
           </TitleWithHelpTextAndTag>
         }
-        isMounted={isMounted}
         onValueChange={(value) => {
           setFieldValue("relasjon", value);
           setFieldValue("relasjonsType", null);
@@ -500,7 +495,6 @@ export const RelationFieldset = ({
                   {localization.conceptForm.fieldLabel.relationLevel}
                 </TitleWithHelpTextAndTag>
               }
-              isMounted={isMounted}
               onValueChange={(value) => setFieldValue("relasjonsType", value)}
               options={relationSubtypeOptions}
               value={selectedRelationSubtype}

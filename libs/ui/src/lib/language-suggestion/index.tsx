@@ -8,10 +8,7 @@ import {
 } from "@catalog-frontend/utils";
 import { useFormikContext } from "formik";
 import { useMemo, useState } from "react";
-import {
-  SearchSuggestionSelect,
-  useSuggestionMounted,
-} from "../search-suggestion-select";
+import { SearchSuggestionSelect } from "../search-suggestion-select";
 import { useDebounce } from "../use-debounce";
 import {
   useSearchLanguage,
@@ -73,7 +70,6 @@ type LanguageFormValues = {
 export const LanguageSuggestion = ({ referenceDataEnv }: Props) => {
   const [searchTerm, setSearchTerm] = useState("");
   const debouncedSearchTerm = useDebounce(searchTerm);
-  const isMounted = useSuggestionMounted();
   const { data: searchHits, isFetching } = useSearchLanguage(
     debouncedSearchTerm,
     referenceDataEnv,
@@ -153,7 +149,6 @@ export const LanguageSuggestion = ({ referenceDataEnv }: Props) => {
       emptyMessage={emptyMessage}
       error={languageError}
       isFetching={isFetching}
-      isMounted={isMounted}
       multiple
       onSearch={setSearchTerm}
       onSelectedChange={(selectedItems) =>

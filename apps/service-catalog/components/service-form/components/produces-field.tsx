@@ -18,7 +18,6 @@ import {
   useSearchDatasetsByUri,
   useSearchDatasetSuggestions,
   useSearchLanguageByUri,
-  useSuggestionMounted,
 } from "@catalog-frontend/ui";
 import cn from "classnames";
 import {
@@ -102,7 +101,6 @@ const DatasetFieldset = ({ searchEnv }: { searchEnv: string }) => {
   const { values, setFieldValue } = useFormikContext<Output>();
   const [searchTerm, setSearchTerm] = useState("");
   const debouncedSearchTerm = useDebounce(searchTerm);
-  const isMounted = useSuggestionMounted();
   const fieldValues = values.isPartOf ?? [];
   const { data: datasetSuggestions, isFetching } = useSearchDatasetSuggestions(
     searchEnv,
@@ -187,7 +185,6 @@ const DatasetFieldset = ({ searchEnv }: { searchEnv: string }) => {
         </TitleWithHelpTextAndTag>
       }
       isFetching={isFetching}
-      isMounted={isMounted}
       multiple
       onSearch={setSearchTerm}
       onSelectedChange={(selectedItems) =>
@@ -223,7 +220,6 @@ const typeOptions = SERVICE_OUTPUT_TYPES.map((option) => ({
 
 const TypeFieldset = () => {
   const { values, setFieldValue } = useFormikContext<Output>();
-  const isMounted = useSuggestionMounted();
 
   return (
     <MultiSuggestionSelect
@@ -235,7 +231,6 @@ const TypeFieldset = () => {
           {localization.serviceForm.fieldLabel.producesType}
         </TitleWithHelpTextAndTag>
       }
-      isMounted={isMounted}
       onSelectedChange={(selectedValues) =>
         setFieldValue("type", selectedValues)
       }

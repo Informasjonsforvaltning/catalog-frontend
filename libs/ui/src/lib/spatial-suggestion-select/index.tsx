@@ -7,7 +7,6 @@ import { useMemo, useState } from "react";
 import {
   SearchSuggestionSelect,
   SuggestionSelectOption,
-  useSuggestionMounted,
 } from "../search-suggestion-select";
 import { useDebounce } from "../use-debounce";
 import {
@@ -37,7 +36,6 @@ const getDescription = (item: ReferenceDataCode | undefined) =>
 export const SpatialSuggestionSelect = ({ referenceDataEnv }: Props) => {
   const [searchTerm, setSearchTerm] = useState("");
   const debouncedSearchTerm = useDebounce(searchTerm);
-  const isMounted = useSuggestionMounted();
   const { data: searchHits, isFetching } = useSearchGeoNamesAndEULocations(
     debouncedSearchTerm,
     referenceDataEnv,
@@ -114,7 +112,6 @@ export const SpatialSuggestionSelect = ({ referenceDataEnv }: Props) => {
       emptyMessage={emptyMessage}
       error={spatialError}
       isFetching={isFetching}
-      isMounted={isMounted}
       multiple
       onSearch={setSearchTerm}
       onSelectedChange={(selectedItems) =>

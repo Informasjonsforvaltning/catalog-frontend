@@ -19,7 +19,6 @@ import {
   FormikMultivalueTextfield,
   SingleSuggestionSelect,
   TitleWithHelpTextAndTag,
-  useSuggestionMounted,
 } from "@catalog-frontend/ui";
 import styles from "../../concept-form.module.scss";
 import { getParentPath } from "../../../../utils/codeList";
@@ -58,7 +57,6 @@ export const InternalSection = ({
   changed,
 }: InternalSectionProps) => {
   const { errors, values, setFieldValue } = useFormikContext<Concept>();
-  const isMounted = useSuggestionMounted();
 
   const userOptions: SuggestionOption[] = userList.map(
     ({ id, name: userName }) => ({
@@ -154,7 +152,6 @@ export const InternalSection = ({
         <SingleSuggestionSelect
           ariaLabel={fieldLabel}
           fieldsetLegend={<FieldLabel />}
-          isMounted={isMounted}
           onValueChange={(value) => setFieldValue(name, value)}
           options={userOptions}
           placeholder="select user"
@@ -179,7 +176,6 @@ export const InternalSection = ({
         <SingleSuggestionSelect
           ariaLabel={fieldLabel}
           fieldsetLegend={<FieldLabel />}
-          isMounted={isMounted}
           onValueChange={(value) => setFieldValue(name, value)}
           options={codeOptions}
           readOnly={readOnly}
@@ -210,7 +206,6 @@ export const InternalSection = ({
             {assignedUserLabel}
           </TitleWithHelpTextAndTag>
         }
-        isMounted={isMounted}
         onValueChange={(value) => setFieldValue("assignedUser", value)}
         options={userOptions}
         readOnly={readOnly}

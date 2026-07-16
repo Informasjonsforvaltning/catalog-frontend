@@ -5,10 +5,7 @@ import {
   localization,
   sortAscending,
 } from "@catalog-frontend/utils";
-import {
-  SingleSuggestionSelect,
-  useSuggestionMounted,
-} from "@catalog-frontend/ui";
+import { SingleSuggestionSelect } from "@catalog-frontend/ui";
 
 import { Organization } from "@catalog-frontend/types";
 import { Field, Label, Spinner } from "@digdir/designsystemet-react";
@@ -27,7 +24,6 @@ const getOrganizationLabel = (organization: Organization) =>
 const OrganizationCombobox = (props: OrganizationComboboxProps) => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const isMounted = useSuggestionMounted();
 
   const { organizations, currentOrganization } = props;
 
@@ -54,7 +50,6 @@ const OrganizationCombobox = (props: OrganizationComboboxProps) => {
         <SingleSuggestionSelect
           disabled={loading}
           emptyMessage={localization.search.noHits}
-          isMounted={isMounted}
           onValueChange={(value) => {
             if (value) {
               setLoading(true);

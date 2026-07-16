@@ -22,14 +22,12 @@ import {
 import { reopenSuggestionList } from "../reopen-suggestion-list";
 
 export type { SuggestionSelectOption };
-export { useSuggestionMounted };
 
 export type MultiSuggestionSelectProps = {
   ariaLabel?: string;
   emptyMessage?: string;
   error?: string;
   fieldsetLegend?: ReactNode;
-  isMounted: boolean;
   onSelectedChange: (values: string[]) => void;
   options: SuggestionSelectOption[];
   placeholder?: string;
@@ -52,13 +50,13 @@ export const MultiSuggestionSelect = ({
   emptyMessage = localization.search.noHits,
   error,
   fieldsetLegend,
-  isMounted,
   onSelectedChange,
   options,
   placeholder,
   readOnly,
   selectedValues,
 }: MultiSuggestionSelectProps) => {
+  const isMounted = useSuggestionMounted();
   const selectedItems = getSelectedItems(selectedValues, options);
   const comboboxRef = useRef<ComponentRef<typeof Suggestion>>(null);
   const optionsKey = options.map((option) => option.value).join("\0");

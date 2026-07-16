@@ -7,7 +7,6 @@ import {
   TitleWithHelpTextAndTag,
   TextareaWithPrefix,
   SpatialSuggestionSelect,
-  useSuggestionMounted,
 } from "@catalog-frontend/ui";
 import {
   capitalizeFirstLetter,
@@ -36,7 +35,6 @@ export const AboutSection = ({
   frequencies,
 }: Props) => {
   const { setFieldValue, errors, values } = useFormikContext<Dataset>();
-  const isMounted = useSuggestionMounted();
 
   const frequencyOptions = useMemo(
     () =>
@@ -126,7 +124,6 @@ export const AboutSection = ({
                 {localization.datasetForm.fieldLabel.frequency}
               </TitleWithHelpTextAndTag>
             }
-            isMounted={isMounted}
             onValueChange={(value) => setFieldValue("frequency", value)}
             options={frequencyOptions}
             placeholder={`${localization.search.search}...`}

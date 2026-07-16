@@ -33,7 +33,6 @@ import {
   SingleSuggestionSelect,
   SuggestionSelectOption,
   useDebounce,
-  useSuggestionMounted,
 } from "@catalog-frontend/ui";
 import { useMemo, useRef, useState, useEffect } from "react";
 import { referenceSchema } from "../../utils/validation-schema";
@@ -250,7 +249,6 @@ const FieldModal = ({
   const [submitted, setSubmitted] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const debouncedSearchQuery = useDebounce(searchQuery);
-  const isMounted = useSuggestionMounted();
   const modalRef = useRef<HTMLDialogElement>(null);
 
   const { data: searchHits, isFetching: searching } =
@@ -321,7 +319,6 @@ const FieldModal = ({
                     <ReferenceFormFields
                       errors={errors}
                       initialDatasets={initialDatasets}
-                      isMounted={isMounted}
                       searchHits={searchHits}
                       searchQuery={searchQuery}
                       searching={searching}
@@ -368,7 +365,6 @@ const FieldModal = ({
 type ReferenceFormFieldsProps = {
   errors: FormikErrors<Reference>;
   initialDatasets: Search.SearchObject[];
-  isMounted: boolean;
   searchHits?: Search.Suggestion[];
   searchQuery: string;
   searching: boolean;
@@ -383,7 +379,6 @@ type ReferenceFormFieldsProps = {
 const ReferenceFormFields = ({
   errors,
   initialDatasets,
-  isMounted,
   searchHits,
   searchQuery,
   searching,
@@ -442,7 +437,6 @@ const ReferenceFormFields = ({
         emptyMessage={localization.search.noHits}
         error={errors?.referenceType}
         fieldsetLegend={localization.datasetForm.fieldLabel.relationType}
-        isMounted={isMounted}
         onValueChange={(value) => setFieldValue("referenceType", value ?? "")}
         options={relationTypeOptions}
         placeholder={`${localization.datasetForm.fieldLabel.choseRelation}...`}
@@ -457,7 +451,6 @@ const ReferenceFormFields = ({
           emptyMessage={datasetEmptyMessage}
           error={errors?.source}
           isFetching={searching}
-          isMounted={isMounted}
           onSearch={setSearchQuery}
           onValueChange={(value) => {
             setFieldValue("source", value ?? "");

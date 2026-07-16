@@ -6,7 +6,6 @@ import { Ref, useMemo } from "react";
 import {
   SearchSuggestionSelect,
   SuggestionSelectOption,
-  useSuggestionMounted,
 } from "../search-suggestion-select";
 
 interface Props {
@@ -34,8 +33,6 @@ export function ReferenceDataSuggestionSelect({
   error,
   placeholder = `${localization.search.search}...`,
 }: Props) {
-  const isMounted = useSuggestionMounted();
-
   const referenceDataOptions = useMemo(
     () => [
       ...new Map(
@@ -93,7 +90,6 @@ export function ReferenceDataSuggestionSelect({
       error={error}
       inputRef={inputRef}
       isFetching={isFetching}
-      isMounted={isMounted}
       multiple
       onSearch={onSearch}
       onSelectedChange={(selectedItems) =>

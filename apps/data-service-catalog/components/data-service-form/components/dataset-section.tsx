@@ -17,7 +17,6 @@ import {
   useDebounce,
   useSearchDatasetsByUri,
   useSearchDatasetSuggestions,
-  useSuggestionMounted,
 } from "@catalog-frontend/ui";
 
 interface Props {
@@ -40,7 +39,6 @@ export const DatasetSection = ({ searchEnv }: Props) => {
   const { setFieldValue, values } = useFormikContext<DataService>();
   const [searchTerm, setSearchTerm] = useState("");
   const debouncedSearchTerm = useDebounce(searchTerm);
-  const isMounted = useSuggestionMounted();
   const fieldValues = values.servesDataset ?? [];
   const { data: datasetSuggestions, isFetching } = useSearchDatasetSuggestions(
     searchEnv,
@@ -128,7 +126,6 @@ export const DatasetSection = ({ searchEnv }: Props) => {
       <SearchSuggestionSelect
         emptyMessage={emptyMessage}
         isFetching={isFetching}
-        isMounted={isMounted}
         multiple
         onSearch={setSearchTerm}
         onSelectedChange={(selectedItems) =>

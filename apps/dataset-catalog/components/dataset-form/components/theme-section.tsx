@@ -9,7 +9,6 @@ import {
 import {
   MultiSuggestionSelect,
   TitleWithHelpTextAndTag,
-  useSuggestionMounted,
 } from "@catalog-frontend/ui";
 import { getTranslateText, localization } from "@catalog-frontend/utils";
 import { useFormikContext } from "formik";
@@ -30,7 +29,6 @@ export const ThemeSection = ({
   isMobility,
 }: Props) => {
   const { setFieldValue, values, errors } = useFormikContext<Dataset>();
-  const isMounted = useSuggestionMounted();
 
   const mobilityThemeOptions = useMemo(
     () =>
@@ -90,7 +88,6 @@ export const ThemeSection = ({
               {localization.datasetForm.fieldLabel.mobilityTheme}
             </TitleWithHelpTextAndTag>
           }
-          isMounted={isMounted}
           onSelectedChange={(selectedValues) =>
             setFieldValue("mobilityTheme", selectedValues)
           }
@@ -115,7 +112,6 @@ export const ThemeSection = ({
             {localization.datasetForm.fieldLabel.euDataTheme}
           </TitleWithHelpTextAndTag>
         }
-        isMounted={isMounted}
         onSelectedChange={(selectedValues) =>
           setFieldValue("euDataTheme", selectedValues)
         }
@@ -133,7 +129,6 @@ export const ThemeSection = ({
             {localization.datasetForm.fieldLabel.losTheme}
           </TitleWithHelpTextAndTag>
         }
-        isMounted={isMounted}
         onSelectedChange={(selectedValues) =>
           setFieldValue("losTheme", selectedValues)
         }

@@ -15,7 +15,6 @@ import {
 import { reopenSuggestionList } from "../reopen-suggestion-list";
 
 export type { SuggestionSelectOption };
-export { useSuggestionMounted };
 
 type SuggestionRef = ComponentRef<typeof Suggestion>;
 
@@ -26,7 +25,6 @@ type SearchSuggestionSelectBaseProps = {
   fieldsetLegend?: ReactNode;
   inputRef?: Ref<HTMLInputElement>;
   isFetching: boolean;
-  isMounted: boolean;
   onSearch: (value: string) => void;
   options: SuggestionSelectOption[];
   placeholder?: string;
@@ -138,13 +136,13 @@ export const SearchSuggestionSelect = (props: SearchSuggestionSelectProps) => {
     fieldsetLegend,
     inputRef,
     isFetching,
-    isMounted,
     onSearch,
     options,
     placeholder,
     readOnly,
     renderOption,
   } = props;
+  const isMounted = useSuggestionMounted();
   const comboboxRef = useRef<SuggestionRef>(null);
   const optionsKey = options.map((option) => option.value).join("\0");
 

@@ -17,7 +17,6 @@ import {
   useSearchDatasetsByUri,
   useSearchDatasetSuggestions,
   useSearchLanguageByUri,
-  useSuggestionMounted,
 } from "@catalog-frontend/ui";
 import cn from "classnames";
 import {
@@ -97,7 +96,6 @@ const DatasetFieldset = ({ searchEnv }: { searchEnv: string }) => {
   const { values, setFieldValue } = useFormikContext<Evidence>();
   const [searchTerm, setSearchTerm] = useState("");
   const debouncedSearchTerm = useDebounce(searchTerm);
-  const isMounted = useSuggestionMounted();
   const fieldValues = values.dataset ?? [];
   const { data: datasetSuggestions, isFetching } = useSearchDatasetSuggestions(
     searchEnv,
@@ -182,7 +180,6 @@ const DatasetFieldset = ({ searchEnv }: { searchEnv: string }) => {
         </TitleWithHelpTextAndTag>
       }
       isFetching={isFetching}
-      isMounted={isMounted}
       multiple
       onSearch={setSearchTerm}
       onSelectedChange={(selectedItems) =>

@@ -28,7 +28,6 @@ import {
   StickyFooterBar,
   TextareaWithPrefix,
   TitleWithHelpTextAndTag,
-  useSuggestionMounted,
 } from "@catalog-frontend/ui";
 import {
   localization,
@@ -116,8 +115,6 @@ export const ServiceForm = (props: ServiceFormProps) => {
     statuses,
     type,
   } = props;
-
-  const isMounted = useSuggestionMounted();
   const searchParams = useSearchParams();
   const formikRef = useRef<FormikProps<ServiceToBeCreated>>(null);
   const { catalogId, serviceId } = useParams<{
@@ -531,7 +528,6 @@ export const ServiceForm = (props: ServiceFormProps) => {
                                 {localization.serviceForm.fieldLabel.dctType}
                               </TitleWithHelpTextAndTag>
                             }
-                            isMounted={isMounted}
                             onSelectedChange={(selectedValues) =>
                               setFieldValue("dctType", selectedValues)
                             }
@@ -553,7 +549,6 @@ export const ServiceForm = (props: ServiceFormProps) => {
                             {localization.serviceForm.fieldLabel.losTheme}
                           </TitleWithHelpTextAndTag>
                         }
-                        isMounted={isMounted}
                         onSelectedChange={(selectedValues) =>
                           setFieldValue("losTheme", selectedValues)
                         }

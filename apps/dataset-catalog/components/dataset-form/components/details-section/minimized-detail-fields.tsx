@@ -10,7 +10,6 @@ import {
   FastFieldWithRef,
   FieldsetDivider,
   SingleSuggestionSelect,
-  useSuggestionMounted,
 } from "@catalog-frontend/ui";
 import {
   capitalizeFirstLetter,
@@ -52,7 +51,6 @@ const FIELD_CONFIG = [
           </TitleWithHelpTextAndTag>
         }
         inputRef={props.ref}
-        isMounted={props.isMounted}
         onValueChange={(value) => props.setFieldValue("type", value ?? "")}
         options={props.datasetTypeSuggestionOptions}
         placeholder={`${localization.search.search}...`}
@@ -75,7 +73,6 @@ const FIELD_CONFIG = [
           </TitleWithHelpTextAndTag>
         }
         inputRef={props.ref}
-        isMounted={props.isMounted}
         onValueChange={(value) =>
           props.setFieldValue("provenance", value ?? "")
         }
@@ -100,7 +97,6 @@ const FIELD_CONFIG = [
           </TitleWithHelpTextAndTag>
         }
         inputRef={props.ref}
-        isMounted={props.isMounted}
         onValueChange={(value) => props.setFieldValue("frequency", value ?? "")}
         options={props.frequencySuggestionOptions}
         placeholder={`${localization.search.search}...`}
@@ -354,7 +350,6 @@ export const MinimizedDetailFields = ({
   isMobility,
 }: Props) => {
   const { setFieldValue, errors, values } = useFormikContext<Dataset>();
-  const isMounted = useSuggestionMounted();
   const [focus, setFocus] = useState<string | null>();
   const inputRefs = useRef<
     Record<string, HTMLInputElement | HTMLTextAreaElement | null>
@@ -442,7 +437,6 @@ export const MinimizedDetailFields = ({
           setFocus,
           expanded: isExpanded(fieldConfig),
           showDivider,
-          isMounted,
           datasetTypeSuggestionOptions,
           provenanceSuggestionOptions,
           frequencySuggestionOptions,
@@ -465,7 +459,6 @@ export const MinimizedDetailFields = ({
           setFieldValue,
           ref: (el: HTMLInputElement | HTMLTextAreaElement | null) =>
             setInputRef(fieldConfig.name, el),
-          isMounted,
           datasetTypeSuggestionOptions,
           provenanceSuggestionOptions,
           frequencySuggestionOptions,

@@ -6,7 +6,6 @@ import {
   FieldsetDivider,
   SingleSuggestionSelect,
   TitleWithHelpTextAndTag,
-  useSuggestionMounted,
 } from "@catalog-frontend/ui";
 import {
   accessRights,
@@ -42,7 +41,6 @@ type Props = {
 
 export const AccessSection = ({ openLicenses, currencies }: Props) => {
   const { values, setFieldValue } = useFormikContext<DataService>();
-  const isMounted = useSuggestionMounted();
 
   const licenseOptions = useMemo(() => {
     const sortedLicences = sortLicences(openLicenses ?? []);
@@ -73,7 +71,6 @@ export const AccessSection = ({ openLicenses, currencies }: Props) => {
             {localization.dataServiceForm.fieldLabel.license}
           </TitleWithHelpTextAndTag>
         }
-        isMounted={isMounted}
         onValueChange={(value) => setFieldValue("license", value ?? "")}
         options={licenseOptions}
         placeholder={`${localization.search.search}...`}

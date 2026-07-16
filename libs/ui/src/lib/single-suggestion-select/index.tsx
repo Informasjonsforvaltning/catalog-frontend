@@ -32,7 +32,6 @@ export type SingleSuggestionSelectProps = {
   error?: string;
   fieldsetLegend?: ReactNode;
   inputRef?: Ref<HTMLInputElement>;
-  isMounted: boolean;
   onValueChange: (value: string | undefined) => void;
   options: SuggestionSelectOption[];
   placeholder?: string;
@@ -75,13 +74,13 @@ export const SingleSuggestionSelect = ({
   error,
   fieldsetLegend,
   inputRef,
-  isMounted,
   onValueChange,
   options,
   placeholder,
   readOnly,
   value,
 }: SingleSuggestionSelectProps) => {
+  const isMounted = useSuggestionMounted();
   const selectedItem = getSelectedItem(value, options);
   const comboboxRef = useRef<ComponentRef<typeof Suggestion>>(null);
   const inputElementRef = useRef<HTMLInputElement | null>(null);

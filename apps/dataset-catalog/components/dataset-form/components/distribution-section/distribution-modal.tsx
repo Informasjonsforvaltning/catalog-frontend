@@ -25,7 +25,6 @@ import {
   useSearchDataServiceSuggestions,
   DialogActions,
   useDebounce,
-  useSuggestionMounted,
 } from "@catalog-frontend/ui";
 import {
   getTranslateText,
@@ -119,8 +118,6 @@ export const DistributionModal = ({
   const [submitted, setSubmitted] = useState(false);
   const modalRef = useRef<HTMLDialogElement>(null);
   const resetFormRef = useRef<(() => void) | null>(null);
-
-  const isMounted = useSuggestionMounted();
   const [searchQueryMediaTypes, setSearchQueryMediaTypes] =
     useState<string>("");
   const [searchQueryFileTypes, setSearchQueryFileTypes] = useState<string>("");
@@ -298,7 +295,6 @@ export const DistributionModal = ({
         accessServiceList,
         searchingDataServices,
         selectedAccessServiceUris,
-        isMounted,
       }: any) => {
         const accessServiceOptions: SuggestionSelectOption[] =
           accessServiceList.map((option: Search.Suggestion) => ({
@@ -344,7 +340,6 @@ export const DistributionModal = ({
                     setInputRef("accessServices", el)
                   }
                   isFetching={searchingDataServices}
-                  isMounted={isMounted}
                   multiple
                   onSearch={setSearchDataServicesQuery}
                   onSelectedChange={(selectedItems) => {
@@ -640,7 +635,6 @@ export const DistributionModal = ({
                 openLicenses,
                 mobilityDataStandards,
                 mobilityRights,
-                isMounted,
                 ref: (el: HTMLInputElement | HTMLTextAreaElement | null) =>
                   setInputRef(fieldConfig.name, el),
                 loadingSelectedFileTypes,
@@ -865,7 +859,6 @@ export const DistributionModal = ({
                                   ? errors.mobilityDataStandard
                                   : undefined
                               }
-                              isMounted={isMounted}
                               onValueChange={(value) =>
                                 setFieldValue(
                                   "mobilityDataStandard",
@@ -912,7 +905,6 @@ export const DistributionModal = ({
                                   ? getIn(errors, "rights.type")
                                   : undefined
                               }
-                              isMounted={isMounted}
                               onValueChange={(value) =>
                                 setFieldValue("rights.type", value ?? "")
                               }
@@ -977,7 +969,6 @@ export const DistributionModal = ({
                         </Fieldset.Legend>
                         <SingleSuggestionSelect
                           emptyMessage={localization.search.noHits}
-                          isMounted={isMounted}
                           onValueChange={(value) =>
                             setFieldValue("license", value ?? "")
                           }
