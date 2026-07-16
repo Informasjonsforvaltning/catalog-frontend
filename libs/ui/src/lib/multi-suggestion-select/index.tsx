@@ -18,7 +18,7 @@ import {
   SuggestionSelectOption,
   useSuggestionMounted,
 } from "../single-suggestion-select";
-import { syncSuggestionList } from "../suggestion-sync";
+import { reopenSuggestionList } from "../reopen-suggestion-list";
 
 export type { SuggestionSelectOption };
 export { useSuggestionMounted };
@@ -60,21 +60,21 @@ export const MultiSuggestionSelect = ({
   const comboboxRef = useRef<ComponentRef<typeof Suggestion>>(null);
   const optionsKey = options.map((option) => option.value).join("\0");
 
-  const handleSyncSuggestionList = useCallback(() => {
-    syncSuggestionList(comboboxRef.current);
+  const handleReopenSuggestionList = useCallback(() => {
+    reopenSuggestionList(comboboxRef.current);
   }, []);
 
   useLayoutEffect(() => {
-    handleSyncSuggestionList();
-  }, [handleSyncSuggestionList, optionsKey]);
+    handleReopenSuggestionList();
+  }, [handleReopenSuggestionList, optionsKey]);
 
   useEffect(() => {
     const frame = requestAnimationFrame(() => {
-      handleSyncSuggestionList();
+      handleReopenSuggestionList();
     });
 
     return () => cancelAnimationFrame(frame);
-  }, [handleSyncSuggestionList, isMounted, optionsKey]);
+  }, [handleReopenSuggestionList, isMounted, optionsKey]);
 
   const suggestion = isMounted ? (
     <Suggestion
@@ -89,7 +89,7 @@ export const MultiSuggestionSelect = ({
       <Suggestion.Input
         aria-invalid={error ? true : undefined}
         aria-label={ariaLabel}
-        onFocus={handleSyncSuggestionList}
+        onFocus={handleReopenSuggestionList}
         placeholder={placeholder}
       />
       <Suggestion.List>

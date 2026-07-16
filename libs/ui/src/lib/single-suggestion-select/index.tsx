@@ -16,7 +16,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { syncSuggestionList } from "../suggestion-sync";
+import { reopenSuggestionList } from "../reopen-suggestion-list";
 
 export type SuggestionSelectOption = {
   value: string;
@@ -103,21 +103,21 @@ export const SingleSuggestionSelect = ({
     requestAnimationFrame(() => inputElementRef.current?.focus());
   };
 
-  const handleSyncSuggestionList = useCallback(() => {
-    syncSuggestionList(comboboxRef.current);
+  const handleReopenSuggestionList = useCallback(() => {
+    reopenSuggestionList(comboboxRef.current);
   }, []);
 
   useLayoutEffect(() => {
-    handleSyncSuggestionList();
-  }, [handleSyncSuggestionList, optionsKey]);
+    handleReopenSuggestionList();
+  }, [handleReopenSuggestionList, optionsKey]);
 
   useEffect(() => {
     const frame = requestAnimationFrame(() => {
-      handleSyncSuggestionList();
+      handleReopenSuggestionList();
     });
 
     return () => cancelAnimationFrame(frame);
-  }, [handleSyncSuggestionList, isMounted, optionsKey]);
+  }, [handleReopenSuggestionList, isMounted, optionsKey]);
 
   const suggestion = isMounted ? (
     <Suggestion
@@ -138,7 +138,7 @@ export const SingleSuggestionSelect = ({
         aria-invalid={error ? true : undefined}
         aria-label={ariaLabel}
         disabled={disabled}
-        onFocus={handleSyncSuggestionList}
+        onFocus={handleReopenSuggestionList}
         onInput={(event) => {
           if (value && event.currentTarget.value === "") {
             onValueChange(undefined);

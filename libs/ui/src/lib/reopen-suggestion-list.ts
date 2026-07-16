@@ -30,7 +30,7 @@ const restoreInputState = (
  * input is focused. Direct showPopover() covers the input text, so the list is reset
  * and re-opened via a click on the input, fall back to blur/focus if needed.
  */
-export const syncSuggestionList = (combobox: SuggestionRef | null) => {
+export const reopenSuggestionList = (combobox: SuggestionRef | null) => {
   const input = combobox?.control;
   const list = combobox?.list as DataListElement | null | undefined;
 

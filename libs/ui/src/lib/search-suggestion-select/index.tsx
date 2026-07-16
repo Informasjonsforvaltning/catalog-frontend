@@ -12,7 +12,7 @@ import {
   SuggestionSelectOption,
   useSuggestionMounted,
 } from "../single-suggestion-select";
-import { syncSuggestionList } from "../suggestion-sync";
+import { reopenSuggestionList } from "../reopen-suggestion-list";
 
 export type { SuggestionSelectOption };
 export { useSuggestionMounted };
@@ -149,7 +149,7 @@ export const SearchSuggestionSelect = (props: SearchSuggestionSelectProps) => {
   const optionsKey = options.map((option) => option.value).join("\0");
 
   useLayoutEffect(() => {
-    syncSuggestionList(comboboxRef.current);
+    reopenSuggestionList(comboboxRef.current);
   }, [optionsKey, isFetching]);
 
   const fieldContentProps: SuggestionFieldContentProps = {
