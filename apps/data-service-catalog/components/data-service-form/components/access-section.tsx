@@ -1,26 +1,24 @@
-import {
-  DataService,
-  Option,
-  ReferenceDataCode,
-} from "@catalog-frontend/types";
+"use client";
+
+import { DataService, ReferenceDataCode } from "@catalog-frontend/types";
 import {
   CostsTable,
   FieldsetDivider,
+  SingleSuggestionSelect,
   TitleWithHelpTextAndTag,
+  useSuggestionMounted,
 } from "@catalog-frontend/ui";
 import {
   accessRights,
   getTranslateText,
   localization,
 } from "@catalog-frontend/utils";
-import { Combobox, Fieldset } from "@digdir/designsystemet-react";
+import { Fieldset } from "@digdir/designsystemet-react";
 import { useFormikContext } from "formik";
+import { useMemo } from "react";
 import { ReferenceDataRadioGroup } from "@data-service-catalog/components/data-service-form/components/reference-data-radio-group";
 
 const PRIORITY_LICENCE_CODES = ["CC0", "CC_BY_4_0"];
-
-const containsFilter = (inputValue: string, option: Option): boolean =>
-  option.label.toLowerCase().includes(inputValue.toLowerCase());
 
 const sortLicences = (licences: ReferenceDataCode[]): ReferenceDataCode[] =>
   [...licences].sort((a, b) => {
@@ -44,46 +42,47 @@ type Props = {
 
 export const AccessSection = ({ openLicenses, currencies }: Props) => {
   const { values, setFieldValue } = useFormikContext<DataService>();
+  const isMounted = useSuggestionMounted();
+
+  const licenseOptions = useMemo(() => {
+    const sortedLicences = sortLicences(openLicenses ?? []);
+    const options = sortedLicences.map((license) => ({
+      value: license.uri,
+      label: getTranslateText(license.label),
+    }));
+
+    if (
+      values.license &&
+      values.license !== "none" &&
+      !sortedLicences.some((license) => license.uri === values.license)
+    ) {
+      return [{ value: values.license, label: values.license }, ...options];
+    }
+
+    return options;
+  }, [openLicenses, values.license]);
 
   return (
     <div>
-      <Fieldset>
-        <Fieldset.Legend>
+      <SingleSuggestionSelect
+        emptyMessage={localization.search.noHits}
+        fieldsetLegend={
           <TitleWithHelpTextAndTag
             helpText={localization.dataServiceForm.helptext.license}
           >
             {localization.dataServiceForm.fieldLabel.license}
           </TitleWithHelpTextAndTag>
-        </Fieldset.Legend>
-        <Combobox
-          value={
-            values?.license && values.license !== "none" ? [values.license] : []
-          }
-          portal={false}
-          onValueChange={(selectedValues) =>
-            setFieldValue("license", selectedValues.toString())
-          }
-          filter={containsFilter}
-          placeholder={`${localization.search.search}...`}
-        >
-          <Combobox.Empty>{localization.search.noHits}</Combobox.Empty>
-          {values?.license &&
-            values.license !== "none" &&
-            !openLicenses?.some((l) => l.uri === values.license) && (
-              <Combobox.Option value={values.license}>
-                {values.license}
-              </Combobox.Option>
-            )}
-          {sortLicences(openLicenses ?? []).map((license, i) => (
-            <Combobox.Option
-              key={`license-${license.uri}-${i}`}
-              value={license.uri}
-            >
-              {getTranslateText(license.label)}
-            </Combobox.Option>
-          ))}
-        </Combobox>
-      </Fieldset>
+        }
+        isMounted={isMounted}
+        onValueChange={(value) => setFieldValue("license", value ?? "")}
+        options={licenseOptions}
+        placeholder={`${localization.search.search}...`}
+        value={
+          values.license && values.license !== "none"
+            ? values.license
+            : undefined
+        }
+      />
 
       <FieldsetDivider />
 
