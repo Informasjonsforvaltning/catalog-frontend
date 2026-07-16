@@ -57,7 +57,7 @@ export * from "./lib/select";
 export * from "./lib/single-suggestion-select";
 export * from "./lib/service-messages";
 export * from "./lib/snackbar";
-export * from "./lib/spatial-combobox";
+export * from "./lib/spatial-suggestion-select";
 export * from "./lib/spinner";
 export * from "./lib/sticky-footer-bar";
 export * from "./lib/tag";

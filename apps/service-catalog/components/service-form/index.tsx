@@ -24,7 +24,7 @@ import {
   Select,
   Snackbar,
   SnackbarSeverity,
-  SpatialCombobox,
+  SpatialSuggestionSelect,
   StickyFooterBar,
   TextareaWithPrefix,
   TitleWithHelpTextAndTag,
@@ -471,7 +471,9 @@ export const ServiceForm = (props: ServiceFormProps) => {
                             {localization.serviceForm.fieldLabel.spatial}
                           </TitleWithHelpTextAndTag>
                         </Fieldset.Legend>
-                        <SpatialCombobox referenceDataEnv={referenceDataEnv} />
+                        <SpatialSuggestionSelect
+                          referenceDataEnv={referenceDataEnv}
+                        />
                       </Fieldset>
                       <FieldsetDivider />
                       <Fieldset data-size="sm">

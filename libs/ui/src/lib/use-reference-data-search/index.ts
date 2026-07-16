@@ -24,6 +24,7 @@ export const useSearchGeoNamesAndEULocations = (
       return data;
     },
     enabled: !!searchQuery,
+    placeholderData: keepPreviousData,
   });
 };
 

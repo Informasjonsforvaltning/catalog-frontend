@@ -6,7 +6,7 @@ import {
   SingleSuggestionSelect,
   TitleWithHelpTextAndTag,
   TextareaWithPrefix,
-  SpatialCombobox,
+  SpatialSuggestionSelect,
   useSuggestionMounted,
 } from "@catalog-frontend/ui";
 import {
@@ -111,7 +111,7 @@ export const AboutSection = ({
                 {localization.datasetForm.fieldLabel.spatial}
               </TitleWithHelpTextAndTag>
             </Fieldset.Legend>
-            <SpatialCombobox referenceDataEnv={referenceDataEnv} />
+            <SpatialSuggestionSelect referenceDataEnv={referenceDataEnv} />
           </Fieldset>
           <FieldsetDivider />
           <SingleSuggestionSelect
