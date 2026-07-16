@@ -14,6 +14,7 @@ import {
   useLayoutEffect,
   useRef,
 } from "react";
+import { localization } from "@catalog-frontend/utils";
 import {
   SuggestionSelectOption,
   useSuggestionMounted,
@@ -48,7 +49,7 @@ const getSelectedItems = (
 
 export const MultiSuggestionSelect = ({
   ariaLabel,
-  emptyMessage = "",
+  emptyMessage = localization.search.noHits,
   error,
   fieldsetLegend,
   isMounted,

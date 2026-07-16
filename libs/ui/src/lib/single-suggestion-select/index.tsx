@@ -16,6 +16,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { localization } from "@catalog-frontend/utils";
 import { reopenSuggestionList } from "../reopen-suggestion-list";
 
 export type SuggestionSelectOption = {
@@ -70,7 +71,7 @@ export const useSuggestionMounted = () => {
 export const SingleSuggestionSelect = ({
   ariaLabel,
   disabled,
-  emptyMessage = "",
+  emptyMessage = localization.search.noHits,
   error,
   fieldsetLegend,
   inputRef,
