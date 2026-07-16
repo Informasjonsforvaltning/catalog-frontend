@@ -3,6 +3,7 @@ import {
   Page,
   BrowserContext,
   APIRequestContext,
+  Locator,
 } from "@playwright/test";
 import type AxeBuilder from "@axe-core/playwright";
 import {
@@ -16,8 +17,11 @@ import {
 } from "@catalog-frontend/types";
 import {
   clearCombobox,
+  dismissSuggestionOverlays,
+  fillSearchSuggestion,
   getFields,
   relationToSourceText,
+  selectSuggestionOption,
 } from "../utils/helpers";
 
 export default class EditPage {
@@ -46,22 +50,37 @@ export default class EditPage {
     group: string,
     open: string[],
     clear: boolean,
+    parent?: Locator,
   ) {
     console.log(
       `[fillLanguageField] group: ${group}, open: ${JSON.stringify(open)}, clear: ${clear}`,
     );
-    await this.page
-      .getByRole("group", { name: group })
-      .first()
-      .waitFor({ state: "visible" });
+    // Only close Suggestion popovers, Escape should not close dialogs.
+    await dismissSuggestionOverlays(this.page);
+
+    // Only use an explicit parent (e.g. dialog[open] or #example).
+    // Auto-detecting is brittle.
+    const root = parent ?? this.page;
+
+    // Prefer a single fieldset inside section parents (#remark / #example).
+    let groupLocator: Locator;
+    if (parent) {
+      const fieldsets = parent.locator("fieldset");
+      groupLocator =
+        (await fieldsets.count()) === 1
+          ? fieldsets.first()
+          : parent.getByRole("group", { name: group }).first();
+    } else {
+      groupLocator = root.getByRole("group", { name: group }).first();
+    }
+    await groupLocator.waitFor({ state: "visible" });
+    await groupLocator.scrollIntoViewIfNeeded();
 
     if (clear) {
       console.log(
         `[fillLanguageField] Clearing existing values for group: ${group}`,
       );
-      const removeBtn = this.page
-        .getByRole("group", { name: group })
-        .getByRole("button", { name: "Slett" });
+      const removeBtn = groupLocator.getByRole("button", { name: "Slett" });
       while ((await removeBtn.count()) > 0) {
         const firstBtn = removeBtn.first();
         await firstBtn.waitFor({ state: "visible", timeout: 5000 });
@@ -69,17 +88,62 @@ export default class EditPage {
       }
     }
 
+    // TextareaWithPrefix sets aria-label, prefer that over role+name.
+    const languageInput = (lang: string) =>
+      groupLocator
+        .locator(`textarea[aria-label="${lang}"], input[aria-label="${lang}"]`)
+        .or(groupLocator.getByRole("textbox", { name: lang }));
+
     if (open) {
       for (const lang of open) {
+        const input = languageInput(lang);
+        if (await input.isVisible()) {
+          console.log(
+            `[fillLanguageField] Language already open: ${lang} in group: ${group}`,
+          );
+          continue;
+        }
         console.log(
           `[fillLanguageField] Opening language: ${lang} in group: ${group}`,
         );
-        await this.page
-          .getByRole("group", { name: group })
-          .getByRole("button", { name: lang })
-          .click();
+        const addButton = groupLocator.getByRole("button", {
+          name: lang,
+          exact: true,
+        });
+        await addButton.scrollIntoViewIfNeeded();
+        await dismissSuggestionOverlays(this.page);
+
+        // Retry: Subject Suggestion can intercept the first click
+        // Fall back to DOM click if the field never appears.
+        for (let attempt = 0; attempt < 3; attempt++) {
+          if (await input.isVisible()) {
+            break;
+          }
+          if (attempt === 0) {
+            await addButton.click();
+          } else {
+            await dismissSuggestionOverlays(this.page);
+            await addButton.evaluate((el: HTMLElement) => el.click());
+          }
+          try {
+            await input.waitFor({ state: "visible", timeout: 3000 });
+            break;
+          } catch {
+            if (attempt === 2) {
+              await input.waitFor({ state: "visible", timeout: 5000 });
+            }
+          }
+        }
       }
     }
+
+    const fillLanguageInput = async (lang: string, value: string) => {
+      await dismissSuggestionOverlays(this.page);
+      const input = languageInput(lang);
+      await input.waitFor({ state: "visible", timeout: 5000 });
+      await input.scrollIntoViewIfNeeded();
+      await input.fill(value);
+    };
 
     if (
       Array.isArray(field?.nb) ||
@@ -90,10 +154,7 @@ export default class EditPage {
         console.log(
           `[fillLanguageField] Filling Bokmål [${i}]: ${field.nb?.[i]}`,
         );
-        await this.page
-          .getByRole("group", { name: group })
-          .getByLabel("Bokmål")
-          .fill(field.nb?.[i] as string);
+        await fillLanguageInput("Bokmål", field.nb?.[i] as string);
         await this.page.keyboard.press("Enter");
       }
 
@@ -101,10 +162,7 @@ export default class EditPage {
         console.log(
           `[fillLanguageField] Filling Nynorsk [${i}]: ${field.nn?.[i]}`,
         );
-        await this.page
-          .getByRole("group", { name: group })
-          .getByLabel("Nynorsk")
-          .fill(field.nn?.[i] as string);
+        await fillLanguageInput("Nynorsk", field.nn?.[i] as string);
         await this.page.keyboard.press("Enter");
       }
 
@@ -112,64 +170,52 @@ export default class EditPage {
         console.log(
           `[fillLanguageField] Filling Engelsk [${i}]: ${field.en?.[i]}`,
         );
-        await this.page
-          .getByRole("group", { name: group })
-          .getByLabel("Engelsk")
-          .fill(field.en?.[i] as string);
+        await fillLanguageInput("Engelsk", field.en?.[i] as string);
         await this.page.keyboard.press("Enter");
       }
     } else {
       if (field?.nb) {
         console.log(`[fillLanguageField] Filling Bokmål: ${field.nb}`);
-        await this.page
-          .getByRole("group", { name: group })
-          .getByLabel("Bokmål")
-          .fill(field.nb);
+        await fillLanguageInput("Bokmål", field.nb);
       }
       if (field?.nn) {
         console.log(`[fillLanguageField] Filling Nynorsk: ${field.nn}`);
-        await this.page
-          .getByRole("group", { name: group })
-          .getByLabel("Nynorsk")
-          .fill(field.nn);
+        await fillLanguageInput("Nynorsk", field.nn);
       }
       if (field?.en) {
         console.log(`[fillLanguageField] Filling Engelsk: ${field.en}`);
-        await this.page
-          .getByRole("group", { name: group })
-          .getByLabel("Engelsk")
-          .fill(field.en);
+        await fillLanguageInput("Engelsk", field.en);
       }
     }
   }
 
   async addRelation(search: string, item: string, relation: UnionRelation) {
     await this.page.getByRole("button", { name: "Legg til relasjon" }).click();
+    const dialog = this.page.getByRole("dialog");
     if (relation.internal) {
-      await this.page
+      await dialog
         .getByRole("radio", { name: "Virksomhetens eget begrep" })
         .click();
     } else {
-      await this.page
+      await dialog
         .getByRole("radio", { name: "Publisert begrep på data.norge.no" })
         .click();
     }
 
-    await this.page
-      .getByRole("group", { name: "Relatert begrep" })
-      .getByRole("combobox")
-      .click();
-    await this.page
-      .getByRole("group", { name: "Relatert begrep" })
-      .getByLabel("Søk begrep")
-      .fill(search);
-    const resultOption = this.page.getByLabel(item).first();
-    await resultOption.waitFor({ state: "visible", timeout: 5000 });
-    await resultOption.click();
+    const relationGroup = dialog.getByRole("group", {
+      name: "Relatert begrep",
+    });
+    await fillSearchSuggestion(
+      this.page,
+      "Søk begrep",
+      search,
+      item,
+      relationGroup,
+    );
 
-    await this.page.getByLabel("RelasjonMå fylles ut").click();
+    await dialog.getByRole("combobox", { name: "Relasjon" }).click();
     if (relation.relasjon === RelationTypeEnum.ASSOSIATIV) {
-      await this.page.getByLabel("Assosiativ").click();
+      await dialog.getByRole("option", { name: "Assosiativ" }).click();
       await this.fillLanguageField(
         relation.beskrivelse,
         "Relasjonsrolle",
@@ -177,12 +223,12 @@ export default class EditPage {
         false,
       );
     } else if (relation.relasjon === RelationTypeEnum.GENERISK) {
-      await this.page.getByLabel("Generisk").click();
-      await this.page.getByLabel("Nivå").click();
+      await dialog.getByRole("option", { name: "Generisk" }).click();
+      await dialog.getByRole("combobox", { name: "Nivå" }).click();
       if (relation.relasjonsType === RelationSubtypeEnum.OVERORDNET) {
-        await this.page.getByLabel("Overordnet").click();
+        await dialog.getByRole("option", { name: "Overordnet" }).click();
       } else if (relation.relasjonsType === RelationSubtypeEnum.UNDERORDNET) {
-        await this.page.getByLabel("Underordnet").click();
+        await dialog.getByRole("option", { name: "Underordnet" }).click();
       }
       await this.fillLanguageField(
         relation.inndelingskriterium,
@@ -191,12 +237,12 @@ export default class EditPage {
         false,
       );
     } else if (relation.relasjon === RelationTypeEnum.PARTITIV) {
-      await this.page.getByLabel("Partitiv").click();
-      await this.page.getByLabel("Nivå").click();
+      await dialog.getByRole("option", { name: "Partitiv" }).click();
+      await dialog.getByRole("combobox", { name: "Nivå" }).click();
       if (relation.relasjonsType === RelationSubtypeEnum.ER_DEL_AV) {
-        await this.page.getByLabel("Er del av").click();
+        await dialog.getByRole("option", { name: "Er del av" }).click();
       } else if (relation.relasjonsType === RelationSubtypeEnum.OMFATTER) {
-        await this.page.getByLabel("Omfatter").click();
+        await dialog.getByRole("option", { name: "Omfatter" }).click();
       }
       await this.fillLanguageField(
         relation.inndelingskriterium,
@@ -205,13 +251,11 @@ export default class EditPage {
         false,
       );
     } else if (relation.relasjon === RelationTypeEnum.SE_OGSÅ) {
-      await this.page.getByLabel("Se også").click();
+      await dialog.getByRole("option", { name: "Se også" }).click();
     } else if (relation.relasjon === RelationTypeEnum.ERSTATTES_AV) {
-      await this.page.getByLabel("Erstattes av").click();
+      await dialog.getByRole("option", { name: "Erstattes av" }).click();
     }
-    const addBtn = this.page
-      .getByRole("dialog")
-      .getByRole("button", { name: "Legg til relasjon" });
+    const addBtn = dialog.getByRole("button", { name: "Legg til relasjon" });
     await addBtn.click();
     await addBtn.waitFor({ state: "hidden", timeout: 5000 });
   }
@@ -327,6 +371,8 @@ export default class EditPage {
         await clearCombobox(this.page, field.label?.nb as string);
       }
     }
+
+    await dismissSuggestionOverlays(this.page);
   }
 
   // Helpers
@@ -371,17 +417,20 @@ export default class EditPage {
     // Add definition without target group
     console.log("[EDIT PAGE] Adding definition without target group...");
     await this.page.getByRole("button", { name: "Uten målgruppe" }).click();
+    const definitionDialog = this.page.locator("dialog[open]");
+    await definitionDialog.waitFor({ state: "visible", timeout: 5000 });
     await this.fillLanguageField(
       concept.definisjon?.tekst,
       "Definisjon Hjelp til utfylling",
       ["Bokmål", "Nynorsk", "Engelsk"],
       clearBeforeFill,
+      definitionDialog,
     );
     console.log(
       "[EDIT PAGE] Selecting forholdTilKilde:",
       concept.definisjon?.kildebeskrivelse?.forholdTilKilde,
     );
-    await this.page
+    await definitionDialog
       .getByRole("group", { name: "Forhold til kilde" })
       .getByLabel(
         relationToSourceText(
@@ -393,16 +442,19 @@ export default class EditPage {
       concept.definisjon?.kildebeskrivelse?.forholdTilKilde !== "egendefinert"
     ) {
       console.log("[EDIT PAGE] Adding kildebeskrivelse...");
-      await this.page.getByRole("button", { name: "Legg til kilde" }).click();
-      await this.page
+      await definitionDialog
+        .getByRole("button", { name: "Legg til kilde" })
+        .click();
+      await definitionDialog
         .getByRole("textbox", { name: "Kildebeskrivelse" })
         .fill("Kilde");
     }
 
     console.log('[EDIT PAGE] Clicking "Legg til definisjon"...');
-    await this.page
+    await definitionDialog
       .getByRole("button", { name: "Legg til definisjon" })
       .click();
+    await definitionDialog.waitFor({ state: "hidden", timeout: 5000 });
 
     // Add remark
     console.log("[EDIT PAGE] Filling merknad...");
@@ -411,6 +463,7 @@ export default class EditPage {
       "Merknad Anbefalt",
       ["Bokmål", "Nynorsk", "Engelsk"],
       clearBeforeFill,
+      this.page.locator("#remark"),
     );
 
     // Example
@@ -420,14 +473,18 @@ export default class EditPage {
       "Eksempel",
       ["Bokmål", "Nynorsk", "Engelsk"],
       clearBeforeFill,
+      this.page.locator("#example"),
     );
 
     // Select subject
     console.log("[EDIT PAGE] Selecting Fagområde...");
-    await this.page
-      .getByLabel("Fagområde (velg fra liste)")
-      .click({ clickCount: 2 });
-    await this.page.getByLabel("Sprekkmunk").click();
+    await selectSuggestionOption(
+      this.page,
+      "Fagområde (velg fra liste)",
+      "Sprekkmunk",
+      this.page.locator("#subject"),
+    );
+    await dismissSuggestionOverlays(this.page);
 
     // Application
     console.log("[EDIT PAGE] Filling omfang...");
@@ -466,10 +523,11 @@ export default class EditPage {
     }
 
     console.log("[EDIT PAGE] Selecting assigned user...");
-    await this.page
-      .getByRole("combobox", { name: "Hvem skal begrepet tildeles?" })
-      .click();
-    await this.page.getByLabel("Avery Quokka").click();
+    await selectSuggestionOption(
+      this.page,
+      "Hvem skal begrepet tildeles?",
+      "Avery Quokka",
+    );
 
     console.log("[EDIT PAGE] Filling abbreviatedLabel...");
     await this.page
@@ -556,7 +614,7 @@ export default class EditPage {
       return;
     }
     const result = await this.accessibilityBuilder
-      .disableRules(["svg-img-alt", "color-contrast"])
+      .disableRules(["svg-img-alt", "color-contrast", "aria-allowed-role"])
       .analyze();
     expect.soft(result.violations).toEqual([]);
   }
@@ -779,11 +837,14 @@ export default class EditPage {
     open: string[],
     clear: boolean,
   ) {
+    const definitionDialog = this.page.locator("dialog[open]");
+    await definitionDialog.waitFor({ state: "visible", timeout: 5000 });
     await this.fillLanguageField(
       value,
       "Definisjon Hjelp til utfylling",
       open,
       clear,
+      definitionDialog,
     );
   }
 

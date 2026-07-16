@@ -3,6 +3,8 @@ import { expect, runTestAsAdmin } from "../../fixtures/basePage";
 import {
   adminAuthFile,
   createConcept,
+  fillSearchSuggestion,
+  selectSuggestionOption,
   uniqueString,
 } from "../../utils/helpers";
 import EditPage from "../../page-object-model/editPage";
@@ -312,22 +314,18 @@ runTestAsAdmin(
     await editPage.clickAddRelation();
 
     // Search for the internal concept by its unique term
-    await editPage.page
-      .getByRole("group", { name: "Relatert begrep" })
-      .getByRole("combobox")
-      .click();
-    const searchInput = editPage.page
-      .getByRole("group", { name: "Relatert begrep" })
-      .getByLabel("Søk begrep");
-    await searchInput.waitFor({ state: "visible" });
-    await searchInput.fill(relationTermNb);
-    await editPage.page
-      .getByLabel(relationTermNb)
-      .first()
-      .waitFor({ state: "visible" });
-    await editPage.page.getByLabel(relationTermNb).first().click();
-    await editPage.page.getByRole("combobox", { name: /Relasjon/ }).click();
-    await editPage.page.getByRole("option", { name: "Se også" }).click();
+    const dialog = editPage.page.getByRole("dialog");
+    const relationGroup = dialog.getByRole("group", {
+      name: "Relatert begrep",
+    });
+    await fillSearchSuggestion(
+      editPage.page,
+      "Søk begrep",
+      relationTermNb,
+      relationTermNb,
+      relationGroup,
+    );
+    await selectSuggestionOption(editPage.page, /Relasjon/, "Se også", dialog);
     await editPage.waitForRelationAutoSaveToComplete();
 
     // Don't close the modal, just refresh the page
@@ -343,8 +341,13 @@ runTestAsAdmin(
     });
     await relationsSection.scrollIntoViewIfNeeded();
 
-    // Verify the relation was added using the internal concept's term
-    await expect(editPage.page.getByText(relationTermNb)).toBeVisible();
+    // Scope to the relations table.
+    const relationsTable = editPage.page.getByRole("table").filter({
+      has: editPage.page.getByRole("columnheader", { name: "Relasjon" }),
+    });
+    await expect(
+      relationsTable.getByRole("cell", { name: relationTermNb }),
+    ).toBeVisible();
   },
 );
 

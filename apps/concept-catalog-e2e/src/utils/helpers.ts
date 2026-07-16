@@ -1,6 +1,6 @@
 import AxeBuilder from "@axe-core/playwright";
 import { Concept, FieldsResult, UsersResult } from "@catalog-frontend/types";
-import { APIRequestContext, Page } from "@playwright/test";
+import { APIRequestContext, Locator, Page } from "@playwright/test";
 import * as crypto from "crypto";
 
 export const adminAuthFile = `${__dirname}/../../.playwright/auth/admin.json`;
@@ -37,14 +37,64 @@ export const getStatusText = (uri: string): string => {
   }
 };
 
+export const dismissSuggestionOverlays = async (page: Page) => {
+  // Only Escape when a Suggestion list popover is open.
+  const openSuggestionList = page.locator("u-datalist[popover]:popover-open");
+  if ((await openSuggestionList.count()) === 0) {
+    return;
+  }
+  await page.keyboard.press("Escape");
+  await openSuggestionList
+    .first()
+    .waitFor({ state: "hidden", timeout: 1000 })
+    .catch(() => undefined);
+};
+
 export const clearCombobox = async (page: Page, label: string) => {
   // Use getByLabel as primary locator — more stable with Designsystemet's
-  // Combobox where nested <label> from TitleWithHelpTextAndTag can break
+  // Suggestion input where nested <label> from TitleWithHelpTextAndTag can break
   // getByRole accessible name resolution.
   const combobox = page.getByLabel(label);
   await combobox.fill("");
-  await page.keyboard.press("Escape");
+  await dismissSuggestionOverlays(page);
+  await combobox.blur();
   await page.waitForTimeout(200);
+};
+
+export const selectSuggestionOption = async (
+  page: Page,
+  fieldLabel: string | RegExp,
+  optionName: string,
+  scope?: Locator,
+) => {
+  const root = scope ?? page;
+  // Prefer combobox role
+  const input = root.getByRole("combobox", { name: fieldLabel });
+  await input.scrollIntoViewIfNeeded();
+  await input.click();
+  // Filter by typing
+  await input.fill(optionName);
+
+  const option = page.getByRole("option", { name: optionName }).first();
+  await option.waitFor({ state: "visible", timeout: 10000 });
+  await option.click();
+  await dismissSuggestionOverlays(page);
+};
+
+export const fillSearchSuggestion = async (
+  page: Page,
+  fieldLabel: string | RegExp,
+  searchValue: string,
+  optionName: string,
+  scope?: Locator,
+) => {
+  const root = scope ?? page;
+  const input = root.getByLabel(fieldLabel);
+  await input.click();
+  await input.fill(searchValue);
+  const option = root.getByRole("option", { name: optionName }).first();
+  await option.waitFor({ state: "visible", timeout: 5000 });
+  await option.click();
 };
 
 export const relationToSourceText = (relationToSource?: string) => {

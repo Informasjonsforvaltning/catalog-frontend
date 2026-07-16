@@ -348,30 +348,27 @@ runTestAsAdmin(
       .getByRole("radio", { name: "Virksomhetens eget begrep" })
       .click();
 
-    console.log("[TEST] Opening the search combobox...");
-    await conceptsPage.page
-      .getByRole("group", { name: "Relatert begrep" })
-      .getByRole("combobox")
-      .click();
+    const relationGroup = conceptsPage.page
+      .getByRole("dialog")
+      .getByRole("group", {
+        name: "Relatert begrep",
+      });
+    const searchInput = relationGroup.getByLabel("Søk begrep");
+
+    console.log("[TEST] Opening the search suggestion field...");
+    await searchInput.click();
     await conceptsPage.page.waitForTimeout(100);
 
     console.log("[TEST] Searching for the concept itself...");
-    await conceptsPage.page
-      .getByRole("group", { name: "Relatert begrep" })
-      .getByLabel("Søk begrep")
-      .fill(concept.anbefaltTerm?.navn.nb);
+    await searchInput.fill(concept.anbefaltTerm?.navn.nb);
     await conceptsPage.page.waitForTimeout(100);
 
     console.log(
       "[TEST] Verifying that the concept itself is not available in search results...",
     );
-    // The concept should not appear in the search results due to the filter
-    const searchResults = conceptsPage.page.getByRole("listbox");
-    await expect(searchResults).toBeVisible();
+    await expect(searchInput).toHaveAttribute("aria-expanded", "true");
 
-    // Check that the current concept's name is not in the search results
-    // We need to get the actual concept name that was generated
-    const matchingOptions = conceptsPage.page.getByRole("option", {
+    const matchingOptions = relationGroup.getByRole("option", {
       name: concept.anbefaltTerm?.navn.nb,
     });
     await expect(matchingOptions).toHaveCount(0);
@@ -489,15 +486,15 @@ runTestAsAdmin(
       .click();
 
     // Wait for the definition dialog to appear
-    await conceptsPage.page
-      .getByRole("dialog")
-      .waitFor({ state: "visible", timeout: 5000 });
+    const definitionDialog = conceptsPage.page.locator("dialog[open]");
+    await definitionDialog.waitFor({ state: "visible", timeout: 5000 });
 
     await conceptsPage.editPage.fillLanguageField(
       { nb: "Min definisjon nb" },
       "Definisjon Hjelp til utfylling",
       ["Bokmål"],
       false,
+      definitionDialog,
     );
     // Add a source
     await conceptsPage.page
