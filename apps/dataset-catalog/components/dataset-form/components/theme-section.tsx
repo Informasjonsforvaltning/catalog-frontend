@@ -7,103 +7,20 @@ import {
   MobilityTheme,
 } from "@catalog-frontend/types";
 import {
-  SuggestionSelectOption,
+  MultiSuggestionSelect,
   TitleWithHelpTextAndTag,
   useSuggestionMounted,
 } from "@catalog-frontend/ui";
-import {
-  EXPERIMENTAL_Suggestion as Suggestion,
-  Fieldset,
-  Input,
-  ValidationMessage,
-} from "@digdir/designsystemet-react";
 import { getTranslateText, localization } from "@catalog-frontend/utils";
 import { useFormikContext } from "formik";
 import { get } from "lodash";
-import { ReactNode, useMemo } from "react";
+import { useMemo } from "react";
 
 type Props = {
   losThemes: LosTheme[];
   euDataThemes: DataTheme[];
   mobilityThemes?: MobilityTheme[];
   isMobility?: boolean;
-};
-
-type ThemeMultiSuggestionSelectProps = {
-  ariaLabel: string;
-  error?: string;
-  fieldsetLegend: ReactNode;
-  isMounted: boolean;
-  onSelectedChange: (values: string[]) => void;
-  options: SuggestionSelectOption[];
-  placeholder?: string;
-  selectedValues?: string[];
-};
-
-const getSelectedItems = (
-  selectedValues: string[] | undefined,
-  options: SuggestionSelectOption[],
-): SuggestionSelectOption[] =>
-  (selectedValues ?? []).map((value) => ({
-    value,
-    label: options.find((option) => option.value === value)?.label ?? value,
-  }));
-
-const ThemeMultiSuggestionSelect = ({
-  ariaLabel,
-  error,
-  fieldsetLegend,
-  isMounted,
-  onSelectedChange,
-  options,
-  placeholder,
-  selectedValues,
-}: ThemeMultiSuggestionSelectProps) => {
-  const selectedItems = getSelectedItems(selectedValues, options);
-
-  return (
-    <Fieldset data-size="sm">
-      <Fieldset.Legend>{fieldsetLegend}</Fieldset.Legend>
-      {isMounted ? (
-        <Suggestion
-          data-size="sm"
-          multiple
-          selected={selectedItems}
-          onSelectedChange={(selectedItems) =>
-            onSelectedChange(selectedItems.map((item) => item.value))
-          }
-        >
-          <Suggestion.Input
-            aria-invalid={error ? true : undefined}
-            aria-label={ariaLabel}
-            placeholder={placeholder}
-          />
-          <Suggestion.List>
-            <Suggestion.Empty>{localization.search.noHits}</Suggestion.Empty>
-            {options.map((option) => (
-              <Suggestion.Option
-                key={option.value}
-                value={option.value}
-                label={option.label}
-              >
-                {option.label}
-              </Suggestion.Option>
-            ))}
-          </Suggestion.List>
-        </Suggestion>
-      ) : (
-        <Input
-          data-size="sm"
-          aria-invalid={error ? true : undefined}
-          aria-label={ariaLabel}
-          disabled
-          placeholder={placeholder}
-          readOnly
-        />
-      )}
-      {error ? <ValidationMessage>{error}</ValidationMessage> : null}
-    </Fieldset>
-  );
 };
 
 export const ThemeSection = ({
@@ -157,9 +74,14 @@ export const ThemeSection = ({
   return (
     <>
       {isMobility ? (
-        <ThemeMultiSuggestionSelect
+        <MultiSuggestionSelect
           ariaLabel={localization.datasetForm.fieldLabel.mobilityTheme}
-          error={errors.mobilityTheme}
+          emptyMessage={localization.search.noHits}
+          error={
+            typeof errors.mobilityTheme === "string"
+              ? errors.mobilityTheme
+              : undefined
+          }
           fieldsetLegend={
             <TitleWithHelpTextAndTag
               tagTitle={localization.tag.required}
@@ -177,9 +99,14 @@ export const ThemeSection = ({
           selectedValues={values.mobilityTheme}
         />
       ) : null}
-      <ThemeMultiSuggestionSelect
+      <MultiSuggestionSelect
         ariaLabel={localization.datasetForm.fieldLabel.euDataTheme}
-        error={errors.euDataTheme}
+        emptyMessage={localization.search.noHits}
+        error={
+          typeof errors.euDataTheme === "string"
+            ? errors.euDataTheme
+            : undefined
+        }
         fieldsetLegend={
           <TitleWithHelpTextAndTag
             tagTitle={isMobility ? undefined : localization.tag.required}
@@ -196,8 +123,9 @@ export const ThemeSection = ({
         placeholder={`${localization.search.search}...`}
         selectedValues={values.euDataTheme}
       />
-      <ThemeMultiSuggestionSelect
+      <MultiSuggestionSelect
         ariaLabel={localization.datasetForm.fieldLabel.losTheme}
+        emptyMessage={localization.search.noHits}
         fieldsetLegend={
           <TitleWithHelpTextAndTag
             helpText={localization.datasetForm.helptext.losTheme}
