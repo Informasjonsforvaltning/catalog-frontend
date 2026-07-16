@@ -1,3 +1,5 @@
+"use client";
+
 import { LocalizedStrings, Output, Service } from "@catalog-frontend/types";
 import {
   AddButton,
@@ -7,12 +9,16 @@ import {
   FieldsetDivider,
   FormikLanguageFieldset,
   LanguageSuggestion,
+  MultiSuggestionSelect,
+  SearchSuggestionSelect,
+  SuggestionSelectOption,
   TextareaWithPrefix,
   TitleWithHelpTextAndTag,
   useDebounce,
   useSearchDatasetsByUri,
   useSearchDatasetSuggestions,
   useSearchLanguageByUri,
+  useSuggestionMounted,
 } from "@catalog-frontend/ui";
 import cn from "classnames";
 import {
@@ -24,7 +30,6 @@ import {
 import {
   Button,
   Card,
-  Combobox,
   Fieldset,
   Heading,
   Paragraph,
@@ -34,7 +39,7 @@ import {
 } from "@digdir/designsystemet-react";
 import { FieldArray, Formik, useFormikContext } from "formik";
 import styles from "../service-form.module.css";
-import { type ChangeEvent, useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { trim, isEmpty, pickBy, identity } from "lodash";
 import { producesSchema } from "../validation-schema";
 import {
@@ -81,136 +86,163 @@ const LanguageFieldset = ({
   </Fieldset>
 );
 
+type DatasetOption = {
+  uri: string;
+  title?: LocalizedStrings | null;
+  description?: LocalizedStrings | null;
+  organization?: { prefLabel?: LocalizedStrings } | null;
+};
+
+const getDatasetLabel = (dataset: DatasetOption) =>
+  dataset.title
+    ? capitalizeFirstLetter(getTranslateText(dataset.title))
+    : dataset.uri;
+
 const DatasetFieldset = ({ searchEnv }: { searchEnv: string }) => {
   const { values, setFieldValue } = useFormikContext<Output>();
-  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [searchTerm, setSearchTerm] = useState("");
   const debouncedSearchTerm = useDebounce(searchTerm);
-  const { data: datasetSuggestions, isLoading: searching } =
-    useSearchDatasetSuggestions(searchEnv, debouncedSearchTerm);
-  const { data: selectedDatasets, isLoading } = useSearchDatasetsByUri(
+  const isMounted = useSuggestionMounted();
+  const fieldValues = values.isPartOf ?? [];
+  const { data: datasetSuggestions, isFetching } = useSearchDatasetSuggestions(
     searchEnv,
-    values.isPartOf ?? [],
+    debouncedSearchTerm,
+  );
+  const { data: selectedDatasets } = useSearchDatasetsByUri(
+    searchEnv,
+    fieldValues,
   );
 
-  const comboboxOptions = [
-    ...new Map(
-      [
-        ...(selectedDatasets ?? []),
-        ...(datasetSuggestions ?? []),
-        ...(values.isPartOf ?? []).map((uri) => {
-          const foundItem =
-            selectedDatasets?.find(
-              (item: { uri: string }) => item.uri === uri,
-            ) ||
-            datasetSuggestions?.find(
-              (item: { uri: string }) => item.uri === uri,
-            );
+  const datasetOptions = useMemo((): DatasetOption[] => {
+    const selected = (selectedDatasets ?? []) as DatasetOption[];
+    const hits = (datasetSuggestions ?? []) as DatasetOption[];
 
-          return {
-            uri,
-            title: foundItem?.title ?? null,
-            description: foundItem?.description ?? null,
-            organization: foundItem?.organization ?? null,
-          };
-        }),
-      ].map((option) => [option.uri, option]),
-    ).values(),
-  ];
+    return [
+      ...new Map(
+        [
+          ...selected,
+          ...hits,
+          ...fieldValues.map((uri) => {
+            const foundItem =
+              selected.find((item) => item.uri === uri) ||
+              hits.find((item) => item.uri === uri);
 
-  if (isLoading) {
-    return null;
-  }
+            return {
+              uri,
+              title: foundItem?.title,
+              description: foundItem?.description,
+              organization: foundItem?.organization,
+            };
+          }),
+        ].map((option) => [option.uri, option]),
+      ).values(),
+    ];
+  }, [datasetSuggestions, fieldValues, selectedDatasets]);
+
+  const datasetByUri = useMemo(
+    () => new Map(datasetOptions.map((item) => [item.uri, item])),
+    [datasetOptions],
+  );
+
+  const options: SuggestionSelectOption[] = useMemo(
+    () =>
+      datasetOptions.map((dataset) => ({
+        value: dataset.uri,
+        label: getDatasetLabel(dataset),
+        description: capitalizeFirstLetter(
+          getTranslateText(dataset.description),
+        ),
+      })),
+    [datasetOptions],
+  );
+
+  const selected: SuggestionSelectOption[] = useMemo(
+    () =>
+      fieldValues.map((uri) => {
+        const option = options.find((item) => item.value === uri);
+
+        return {
+          value: uri,
+          label: option?.label ?? uri,
+          description: option?.description,
+        };
+      }),
+    [fieldValues, options],
+  );
+
+  const emptyMessage = isFetching
+    ? `${localization.loading}...`
+    : debouncedSearchTerm
+      ? localization.search.noHits
+      : `${localization.search.typeToSearch}...`;
 
   return (
-    <Fieldset data-size="sm">
-      <Fieldset.Legend>
+    <SearchSuggestionSelect
+      emptyMessage={emptyMessage}
+      fieldsetLegend={
         <TitleWithHelpTextAndTag
           helpText={localization.serviceForm.helptext.producesDataset}
         >
           {localization.serviceForm.fieldLabel.producesDataset}
         </TitleWithHelpTextAndTag>
-      </Fieldset.Legend>
-      <Combobox
-        data-size="sm"
-        portal={false}
-        onValueChange={(selectedValues: string[]) =>
-          setFieldValue("isPartOf", selectedValues)
-        }
-        onChange={(input: ChangeEvent<HTMLInputElement>) =>
-          setSearchTerm(input.target.value)
-        }
-        loading={searching}
-        multiple
-        hideClearButton
-        value={values.isPartOf ?? []}
-        placeholder={`${localization.search.search}...`}
-        filter={() => true}
-      >
-        <Combobox.Empty>{`${localization.search.noHits}...`}</Combobox.Empty>
-        {comboboxOptions.map((suggestion) => (
-          <Combobox.Option
-            value={suggestion.uri}
-            key={suggestion.uri}
-            displayValue={
-              suggestion.title
-                ? capitalizeFirstLetter(getTranslateText(suggestion.title))
-                : suggestion.uri
-            }
-          >
-            <div className={styles.comboboxOption}>
-              <div>
-                {capitalizeFirstLetter(getTranslateText(suggestion.title)) ??
-                  suggestion.uri}
-              </div>
-              <div>
-                {capitalizeFirstLetter(
-                  getTranslateText(suggestion.description),
-                )}
-              </div>
-              <div>{getTranslateText(suggestion.organization?.prefLabel)}</div>
+      }
+      isFetching={isFetching}
+      isMounted={isMounted}
+      multiple
+      onSearch={setSearchTerm}
+      onSelectedChange={(selectedItems) =>
+        setFieldValue(
+          "isPartOf",
+          selectedItems.map((item) => item.value),
+        )
+      }
+      options={options}
+      placeholder={`${localization.search.search}...`}
+      renderOption={(option) => {
+        const dataset = datasetByUri.get(option.value);
+
+        return (
+          <div className={styles.comboboxOption}>
+            <div>{option.label}</div>
+            <div>
+              {capitalizeFirstLetter(getTranslateText(dataset?.description))}
             </div>
-          </Combobox.Option>
-        ))}
-      </Combobox>
-    </Fieldset>
+            <div>{getTranslateText(dataset?.organization?.prefLabel)}</div>
+          </div>
+        );
+      }}
+      selected={selected}
+    />
   );
 };
 
+const typeOptions = SERVICE_OUTPUT_TYPES.map((option) => ({
+  value: option.uri,
+  label: option.label,
+}));
+
 const TypeFieldset = () => {
   const { values, setFieldValue } = useFormikContext<Output>();
+  const isMounted = useSuggestionMounted();
 
   return (
-    <Fieldset data-size="sm">
-      <Fieldset.Legend>
+    <MultiSuggestionSelect
+      emptyMessage={localization.search.noHits}
+      fieldsetLegend={
         <TitleWithHelpTextAndTag
           helpText={localization.serviceForm.helptext.producesType}
         >
           {localization.serviceForm.fieldLabel.producesType}
         </TitleWithHelpTextAndTag>
-      </Fieldset.Legend>
-      <Combobox
-        data-size="sm"
-        portal={false}
-        multiple
-        hideClearButton
-        value={values.type ?? []}
-        onValueChange={(selectedValues: string[]) =>
-          setFieldValue("type", selectedValues)
-        }
-        placeholder={`${localization.search.search}...`}
-      >
-        <Combobox.Empty>{`${localization.search.noHits}...`}</Combobox.Empty>
-        {SERVICE_OUTPUT_TYPES.map((option) => (
-          <Combobox.Option
-            key={option.uri}
-            value={option.uri}
-            displayValue={option.label}
-          >
-            {option.label}
-          </Combobox.Option>
-        ))}
-      </Combobox>
-    </Fieldset>
+      }
+      isMounted={isMounted}
+      onSelectedChange={(selectedValues) =>
+        setFieldValue("type", selectedValues)
+      }
+      options={typeOptions}
+      placeholder={`${localization.search.search}...`}
+      selectedValues={values.type}
+    />
   );
 };
 
