@@ -32,6 +32,7 @@ export type MultiSuggestionSelectProps = {
   onSelectedChange: (values: string[]) => void;
   options: SuggestionSelectOption[];
   placeholder?: string;
+  readOnly?: boolean;
   selectedValues?: string[];
 };
 
@@ -54,6 +55,7 @@ export const MultiSuggestionSelect = ({
   onSelectedChange,
   options,
   placeholder,
+  readOnly,
   selectedValues,
 }: MultiSuggestionSelectProps) => {
   const selectedItems = getSelectedItems(selectedValues, options);
@@ -91,6 +93,7 @@ export const MultiSuggestionSelect = ({
         aria-label={ariaLabel}
         onFocus={handleReopenSuggestionList}
         placeholder={placeholder}
+        readOnly={readOnly}
       />
       <Suggestion.List>
         <Suggestion.Empty>{emptyMessage}</Suggestion.Empty>

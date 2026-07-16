@@ -12,8 +12,8 @@ import {
   FieldsetDivider,
   FormikLanguageFieldset,
   ReferenceDataSuggestionSelect,
-  getSuggestionSelectedItem,
   SearchSuggestionSelect,
+  SingleSuggestionSelect,
   SuggestionSelectOption,
   TitleWithHelpTextAndTag,
   TextareaWithPrefix,
@@ -36,10 +36,8 @@ import {
   Button,
   Card,
   Dialog,
-  EXPERIMENTAL_Suggestion as Suggestion,
   Fieldset,
   Heading,
-  Input,
   Skeleton,
   Textfield,
   ValidationMessage,
@@ -56,63 +54,6 @@ import { get, isArray, isEmpty, isNil, isObject } from "lodash";
 import FieldsetWithDelete from "@dataset-catalog/components/fieldset-with-delete";
 
 const PRIORITY_LICENCE_CODES = ["CC0", "CC_BY_4_0"];
-
-type DistributionSingleSuggestionProps = {
-  error?: string;
-  isMounted: boolean;
-  onValueChange: (value: string | undefined) => void;
-  options: SuggestionSelectOption[];
-  placeholder?: string;
-  value?: string;
-};
-
-const DistributionSingleSuggestion = ({
-  error,
-  isMounted,
-  onValueChange,
-  options,
-  placeholder,
-  value,
-}: DistributionSingleSuggestionProps) => {
-  const selectedItem = getSuggestionSelectedItem(value, options);
-
-  return isMounted ? (
-    <>
-      <Suggestion
-        data-size="sm"
-        selected={selectedItem}
-        onSelectedChange={(selected) => onValueChange(selected?.value)}
-      >
-        <Suggestion.Input
-          aria-invalid={error ? true : undefined}
-          placeholder={placeholder}
-        />
-        <Suggestion.Clear />
-        <Suggestion.List>
-          <Suggestion.Empty>{localization.search.noHits}</Suggestion.Empty>
-          {options.map((option) => (
-            <Suggestion.Option
-              key={option.value}
-              value={option.value}
-              label={option.label}
-            >
-              {option.label}
-            </Suggestion.Option>
-          ))}
-        </Suggestion.List>
-      </Suggestion>
-      {error ? <ValidationMessage>{error}</ValidationMessage> : null}
-    </>
-  ) : (
-    <Input
-      data-size="sm"
-      aria-invalid={error ? true : undefined}
-      disabled
-      placeholder={placeholder}
-      readOnly
-    />
-  );
-};
 
 const sortLicences = (licences: ReferenceDataCode[]): ReferenceDataCode[] =>
   [...licences].sort((a, b) => {
@@ -917,8 +858,13 @@ export const DistributionModal = ({
                                 }
                               </TitleWithHelpTextAndTag>
                             </Fieldset.Legend>
-                            <DistributionSingleSuggestion
-                              error={errors.mobilityDataStandard}
+                            <SingleSuggestionSelect
+                              emptyMessage={localization.search.noHits}
+                              error={
+                                typeof errors.mobilityDataStandard === "string"
+                                  ? errors.mobilityDataStandard
+                                  : undefined
+                              }
                               isMounted={isMounted}
                               onValueChange={(value) =>
                                 setFieldValue(
@@ -936,7 +882,7 @@ export const DistributionModal = ({
                                   }),
                                 ) ?? []),
                               ]}
-                              value={values.mobilityDataStandard ?? ""}
+                              value={values.mobilityDataStandard || undefined}
                             />
                           </Fieldset>
                           <FieldsetDivider />
@@ -959,8 +905,13 @@ export const DistributionModal = ({
                                 }
                               </TitleWithHelpTextAndTag>
                             </Fieldset.Legend>
-                            <DistributionSingleSuggestion
-                              error={getIn(errors, "rights.type")}
+                            <SingleSuggestionSelect
+                              emptyMessage={localization.search.noHits}
+                              error={
+                                typeof getIn(errors, "rights.type") === "string"
+                                  ? getIn(errors, "rights.type")
+                                  : undefined
+                              }
                               isMounted={isMounted}
                               onValueChange={(value) =>
                                 setFieldValue("rights.type", value ?? "")
@@ -971,7 +922,7 @@ export const DistributionModal = ({
                                   label: getTranslateText(mobilityRight.label),
                                 })) ?? []),
                               ]}
-                              value={values.rights?.type ?? ""}
+                              value={values.rights?.type || undefined}
                             />
                           </Fieldset>
                           <FieldsetDivider />
@@ -1024,7 +975,8 @@ export const DistributionModal = ({
                             {localization.datasetForm.fieldLabel.license}
                           </TitleWithHelpTextAndTag>
                         </Fieldset.Legend>
-                        <DistributionSingleSuggestion
+                        <SingleSuggestionSelect
+                          emptyMessage={localization.search.noHits}
                           isMounted={isMounted}
                           onValueChange={(value) =>
                             setFieldValue("license", value ?? "")
@@ -1047,7 +999,7 @@ export const DistributionModal = ({
                             ),
                           ]}
                           placeholder={`${localization.search.search}...`}
-                          value={values.license}
+                          value={values.license || undefined}
                         />
                       </Fieldset>
                       <FieldsetDivider />

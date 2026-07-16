@@ -4,23 +4,21 @@ import { useFormikContext } from "formik";
 import {
   Alert,
   Button,
-  EXPERIMENTAL_Suggestion as Suggestion,
-  Fieldset,
   Heading,
-  Input,
   Paragraph,
-  ValidationMessage,
 } from "@digdir/designsystemet-react";
 import { Code, Concept } from "@catalog-frontend/types";
 import {
   FormikLanguageFieldset,
   FormikMultivalueTextfield,
+  MultiSuggestionSelect,
   TitleWithHelpTextAndTag,
+  useSuggestionMounted,
 } from "@catalog-frontend/ui";
 import { getTranslateText, localization } from "@catalog-frontend/utils";
 import styles from "../concept-form.module.scss";
 import { getParentPath } from "../../../utils/codeList";
-import { ReactNode, useEffect, useMemo, useState } from "react";
+import { ReactNode, useMemo } from "react";
 import { isEmpty } from "lodash";
 
 type SubjectSectionProps = {
@@ -37,28 +35,29 @@ export const SubjectSection = ({
   readOnly,
 }: SubjectSectionProps) => {
   const { errors, values, setFieldValue } = useFormikContext<Concept>();
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
+  const isMounted = useSuggestionMounted();
 
   const selected = values.fagområdeKoder?.filter((v) =>
     codes?.find((code) => code.id === v),
   );
   const codeListActivated = codes !== undefined;
 
-  const selectedSubjectCodes = useMemo(
+  const subjectCodeOptions = useMemo(
     () =>
-      (selected ?? []).map((codeId) => {
-        const code = codes?.find((item) => item.id === codeId);
+      codes?.map((code) => {
+        const parentPath = getParentPath(code, codes);
+        const description =
+          parentPath.length > 0
+            ? `Overordnet: ${parentPath.join(" - ")}`
+            : undefined;
 
         return {
-          value: codeId,
-          label: code ? getCodeLabel(code) : codeId,
+          value: code.id,
+          label: getCodeLabel(code),
+          description,
         };
-      }),
-    [codes, selected],
+      }) ?? [],
+    [codes],
   );
 
   const ConflictAlert = () => {
@@ -156,61 +155,24 @@ export const SubjectSection = ({
 
     if (codeListActivated) {
       fields.push(
-        <Fieldset key="fagområdeKoder" data-size="sm">
-          <Fieldset.Legend>{codeListLabel}</Fieldset.Legend>
-          {isMounted ? (
-            <Suggestion
-              data-size="sm"
-              multiple
-              selected={selectedSubjectCodes}
-              onSelectedChange={(selectedItems) =>
-                setFieldValue(
-                  "fagområdeKoder",
-                  selectedItems.map((item) => item.value),
-                )
-              }
-            >
-              <Suggestion.Input
-                aria-invalid={errors.fagområdeKoder ? true : undefined}
-                aria-label={localization.conceptForm.fieldLabel.subjectCodeList}
-                readOnly={!codeListActivated || readOnly}
-              />
-              <Suggestion.List>
-                <Suggestion.Empty>Fant ingen treff</Suggestion.Empty>
-                {codes?.map((code) => {
-                  const parentPath = getParentPath(code, codes);
-                  const description =
-                    parentPath.length > 0
-                      ? `Overordnet: ${parentPath.join(" - ")}`
-                      : "";
-
-                  return (
-                    <Suggestion.Option
-                      key={code.id}
-                      value={code.id}
-                      label={getCodeLabel(code)}
-                    >
-                      <div>
-                        <div>{getCodeLabel(code)}</div>
-                        {description ? <div>{description}</div> : null}
-                      </div>
-                    </Suggestion.Option>
-                  );
-                })}
-              </Suggestion.List>
-            </Suggestion>
-          ) : (
-            <Input
-              data-size="sm"
-              aria-label={localization.conceptForm.fieldLabel.subjectCodeList}
-              disabled
-              readOnly
-            />
-          )}
-          {errors.fagområdeKoder && (
-            <ValidationMessage>{errors.fagområdeKoder}</ValidationMessage>
-          )}
-        </Fieldset>,
+        <MultiSuggestionSelect
+          key="fagområdeKoder"
+          ariaLabel={localization.conceptForm.fieldLabel.subjectCodeList}
+          emptyMessage={localization.search.noHits}
+          error={
+            typeof errors.fagområdeKoder === "string"
+              ? errors.fagområdeKoder
+              : undefined
+          }
+          fieldsetLegend={codeListLabel}
+          isMounted={isMounted}
+          onSelectedChange={(selectedValues) =>
+            setFieldValue("fagområdeKoder", selectedValues)
+          }
+          options={subjectCodeOptions}
+          readOnly={!codeListActivated || readOnly}
+          selectedValues={selected}
+        />,
       );
     } else if (!isEmpty(values.fagområdeKoder)) {
       fields.push(
