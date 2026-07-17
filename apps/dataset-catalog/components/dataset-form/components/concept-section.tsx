@@ -2,7 +2,7 @@
 import { Fieldset } from "@digdir/designsystemet-react";
 import { localization } from "@catalog-frontend/utils";
 import {
-  ConceptCombobox,
+  ConceptSuggestionSelect,
   FormikLanguageFieldset,
   TitleWithHelpTextAndTag,
 } from "@catalog-frontend/ui";
@@ -24,7 +24,7 @@ export const ConceptSection = ({ searchEnv }: Props) => {
             {localization.datasetForm.fieldLabel.concepts}
           </TitleWithHelpTextAndTag>
         </Fieldset.Legend>
-        <ConceptCombobox fieldLabel="concepts" searchEnv={searchEnv} />
+        <ConceptSuggestionSelect fieldLabel="concepts" searchEnv={searchEnv} />
       </Fieldset>
 
       <FormikLanguageFieldset

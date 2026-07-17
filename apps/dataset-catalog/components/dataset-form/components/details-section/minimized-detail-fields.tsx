@@ -9,13 +9,14 @@ import {
   TextareaWithPrefix,
   FastFieldWithRef,
   FieldsetDivider,
+  SingleSuggestionSelect,
 } from "@catalog-frontend/ui";
 import {
   capitalizeFirstLetter,
   getTranslateText,
   localization,
 } from "@catalog-frontend/utils";
-import { Combobox, Fieldset, Textfield } from "@digdir/designsystemet-react";
+import { Fieldset, Textfield } from "@digdir/designsystemet-react";
 import { FieldArray, useFormikContext } from "formik";
 import { Dataset, ReferenceDataCode } from "@catalog-frontend/types";
 import styles from "./details.module.css";
@@ -23,7 +24,7 @@ import { QualifiedAttributionsSection } from "../qualified-attributions-section"
 import FieldsetWithDelete from "../../../fieldset-with-delete";
 import { ToggleFieldButton } from "../toggle-field-button";
 import { UriWithLabelFieldsetTable } from "../uri-with-label-field-set-table";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useLayoutEffect, useMemo, useRef, useState } from "react";
 import { isArray, isEmpty, isNil, isObject } from "lodash";
 import React from "react";
 
@@ -40,29 +41,21 @@ const FIELD_CONFIG = [
     name: "type",
     getValue: (values: Dataset) => values?.type,
     render: (props: any) => (
-      <Fieldset data-size="sm">
-        <Fieldset.Legend>
+      <SingleSuggestionSelect
+        emptyMessage={localization.search.noHits}
+        fieldsetLegend={
           <TitleWithHelpTextAndTag
             helpText={localization.datasetForm.helptext.type}
           >
             {localization.datasetForm.fieldLabel.type}
           </TitleWithHelpTextAndTag>
-        </Fieldset.Legend>
-        <FastFieldWithRef
-          as={Combobox}
-          ref={props.ref}
-          data-size="sm"
-          value={[props.values.type]}
-          virtual
-          placeholder={`${localization.search.search}...`}
-          onValueChange={(value: string[]) =>
-            props.setFieldValue("type", value.toString())
-          }
-        >
-          <Combobox.Option value="">{`${localization.choose}...`}</Combobox.Option>
-          {props.datasetTypeOptions}
-        </FastFieldWithRef>
-      </Fieldset>
+        }
+        inputRef={props.ref}
+        onValueChange={(value) => props.setFieldValue("type", value ?? "")}
+        options={props.datasetTypeSuggestionOptions}
+        placeholder={`${localization.search.search}...`}
+        value={props.values.type || undefined}
+      />
     ),
     hasDeleteButton: true,
   },
@@ -70,28 +63,23 @@ const FIELD_CONFIG = [
     name: "provenance",
     getValue: (values: Dataset) => values?.provenance,
     render: (props: any) => (
-      <Fieldset data-size="sm">
-        <Fieldset.Legend>
+      <SingleSuggestionSelect
+        emptyMessage={localization.search.noHits}
+        fieldsetLegend={
           <TitleWithHelpTextAndTag
             helpText={localization.datasetForm.helptext.provenance}
           >
             {localization.datasetForm.fieldLabel.provenance}
           </TitleWithHelpTextAndTag>
-        </Fieldset.Legend>
-        <FastFieldWithRef
-          as={Combobox}
-          ref={props.ref}
-          value={props.values?.provenance ? [props.values?.provenance] : []}
-          placeholder={`${localization.search.search}...`}
-          onValueChange={(value: string[]) =>
-            props.setFieldValue("provenance", value.toString())
-          }
-          data-size="sm"
-        >
-          <Combobox.Empty>{`${localization.choose}...`}</Combobox.Empty>
-          {props.provenanceOptions}
-        </FastFieldWithRef>
-      </Fieldset>
+        }
+        inputRef={props.ref}
+        onValueChange={(value) =>
+          props.setFieldValue("provenance", value ?? "")
+        }
+        options={props.provenanceSuggestionOptions}
+        placeholder={`${localization.search.search}...`}
+        value={props.values.provenance}
+      />
     ),
     hasDeleteButton: true,
   },
@@ -99,28 +87,21 @@ const FIELD_CONFIG = [
     name: "frequency",
     getValue: (values: Dataset) => values?.frequency,
     render: (props: any) => (
-      <Fieldset data-size="sm">
-        <Fieldset.Legend>
+      <SingleSuggestionSelect
+        emptyMessage={localization.search.noHits}
+        fieldsetLegend={
           <TitleWithHelpTextAndTag
             helpText={localization.datasetForm.helptext.frequency}
           >
             {localization.datasetForm.fieldLabel.frequency}
           </TitleWithHelpTextAndTag>
-        </Fieldset.Legend>
-        <FastFieldWithRef
-          data-size="sm"
-          as={Combobox}
-          ref={props.ref}
-          value={props.values?.frequency ? [props.values.frequency] : []}
-          virtual
-          placeholder={`${localization.search.search}...`}
-          onValueChange={(value: string[]) =>
-            props.setFieldValue("frequency", value.toString())
-          }
-        >
-          {props.frequencyOptions}
-        </FastFieldWithRef>
-      </Fieldset>
+        }
+        inputRef={props.ref}
+        onValueChange={(value) => props.setFieldValue("frequency", value ?? "")}
+        options={props.frequencySuggestionOptions}
+        placeholder={`${localization.search.search}...`}
+        value={props.values.frequency}
+      />
     ),
     hasDeleteButton: true,
   },
@@ -389,11 +370,24 @@ export const MinimizedDetailFields = ({
     return !isNil(fieldValues);
   };
 
-  useEffect(() => {
-    if (focus && inputRefs.current[focus]) {
+  useLayoutEffect(() => {
+    if (!focus) {
+      return;
+    }
+
+    const input = inputRefs.current[focus];
+    if (input) {
+      input.focus();
+      setFocus(null);
+      return;
+    }
+
+    const frame = requestAnimationFrame(() => {
       inputRefs.current[focus]?.focus();
       setFocus(null);
-    }
+    });
+
+    return () => cancelAnimationFrame(frame);
   }, [focus]);
 
   const setInputRef = (
@@ -403,37 +397,31 @@ export const MinimizedDetailFields = ({
     inputRefs.current[fieldName] = element;
   };
 
-  const datasetTypeOptions = useMemo(
+  const datasetTypeSuggestionOptions = useMemo(
     () =>
-      datasetTypes?.map((type) => (
-        <Combobox.Option
-          value={type.uri}
-          key={type.uri}
-          description={`${localization.code}: ${type.code}`}
-        >
-          {getTranslateText(type?.label)}
-        </Combobox.Option>
-      )),
+      datasetTypes?.map((type) => ({
+        value: type.uri,
+        label: getTranslateText(type.label),
+        description: `${localization.code}: ${type.code}`,
+      })) ?? [],
     [datasetTypes],
   );
 
-  const provenanceOptions = useMemo(
+  const provenanceSuggestionOptions = useMemo(
     () =>
-      provenanceStatements?.map((item) => (
-        <Combobox.Option value={item.uri} key={item.uri}>
-          {getTranslateText(item.label)}
-        </Combobox.Option>
-      )),
+      provenanceStatements?.map((item) => ({
+        value: item.uri,
+        label: getTranslateText(item.label),
+      })) ?? [],
     [provenanceStatements],
   );
 
-  const frequencyOptions = useMemo(
+  const frequencySuggestionOptions = useMemo(
     () =>
-      frequencies?.map((item) => (
-        <Combobox.Option value={item.uri} key={item.uri}>
-          {capitalizeFirstLetter(getTranslateText(item.label))}
-        </Combobox.Option>
-      )),
+      frequencies?.map((item) => ({
+        value: item.uri,
+        label: capitalizeFirstLetter(getTranslateText(item.label)),
+      })) ?? [],
     [frequencies],
   );
 
@@ -449,9 +437,9 @@ export const MinimizedDetailFields = ({
           setFocus,
           expanded: isExpanded(fieldConfig),
           showDivider,
-          datasetTypeOptions,
-          provenanceOptions,
-          frequencyOptions,
+          datasetTypeSuggestionOptions,
+          provenanceSuggestionOptions,
+          frequencySuggestionOptions,
           currencies,
         })}
       </div>
@@ -471,9 +459,9 @@ export const MinimizedDetailFields = ({
           setFieldValue,
           ref: (el: HTMLInputElement | HTMLTextAreaElement | null) =>
             setInputRef(fieldConfig.name, el),
-          datasetTypeOptions,
-          provenanceOptions,
-          frequencyOptions,
+          datasetTypeSuggestionOptions,
+          provenanceSuggestionOptions,
+          frequencySuggestionOptions,
           currencies,
         })}
       </ToggleFieldButton>

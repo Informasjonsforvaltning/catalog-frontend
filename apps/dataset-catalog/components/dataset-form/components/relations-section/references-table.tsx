@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Dataset,
   Reference,
@@ -12,13 +14,12 @@ import {
 } from "@catalog-frontend/utils";
 import {
   Button,
-  Combobox,
   Dialog,
   Fieldset,
   Heading,
   Table,
 } from "@digdir/designsystemet-react";
-import { Formik, useFormikContext } from "formik";
+import { Formik, FormikErrors, useFormikContext } from "formik";
 import relations from "../../utils/relations.json";
 import {
   AddButton,
@@ -28,8 +29,12 @@ import {
   useSearchDatasetsByUri,
   useSearchDatasetSuggestions,
   DialogActions,
+  SearchSuggestionSelect,
+  SingleSuggestionSelect,
+  SuggestionSelectOption,
+  useDebounce,
 } from "@catalog-frontend/ui";
-import { useState, useRef, useEffect } from "react";
+import { useMemo, useRef, useState, useEffect } from "react";
 import { referenceSchema } from "../../utils/validation-schema";
 import { compact, get, isEmpty } from "lodash";
 import styles from "../../dataset-form.module.css";
@@ -51,6 +56,26 @@ type ModalProps = {
   initialUri: string | undefined;
   initialDatasets: Search.SearchObject[];
 };
+
+type DatasetOption = {
+  uri: string;
+  title?: Search.Suggestion["title"] | Search.SearchObject["title"] | null;
+  organization?:
+    | Search.Suggestion["organization"]
+    | Search.SearchObject["organization"]
+    | null;
+};
+
+const relationTypeOptions: SuggestionSelectOption[] = relations.map(
+  (relation) => ({
+    value: relation.uri,
+    label: getTranslateText(relation.label),
+    description: `${relation.uriAsPrefix} (${relation.uri})`,
+  }),
+);
+
+const getDatasetLabel = (option: DatasetOption) =>
+  getTranslateText(option.title) || option.uri;
 
 const hasNoFieldValues = (values: Reference) => {
   if (!values) return true;
@@ -78,7 +103,6 @@ export const ReferenceTable = ({
   );
 
   const handleReferenceChange = (updatedRef: Reference, index: number) => {
-    // Save to secondary storage for auto-save
     if (autoSaveStorage && autoSaveId) {
       autoSaveStorage.setSecondary("reference", {
         id: autoSaveId,
@@ -92,7 +116,6 @@ export const ReferenceTable = ({
   };
 
   const handleReferenceCancel = () => {
-    // Clean up secondary storage on cancel
     if (autoSaveStorage) {
       autoSaveStorage.deleteSecondary("reference");
     }
@@ -101,7 +124,6 @@ export const ReferenceTable = ({
   const handleReferenceSuccess = (updatedRef: Reference, index: number) => {
     setFieldValue(`references[${index}]`, updatedRef);
 
-    // Clean up secondary storage on success
     if (autoSaveStorage) {
       autoSaveStorage.deleteSecondary("reference");
     }
@@ -196,7 +218,6 @@ export const ReferenceTable = ({
           onCancel={handleReferenceCancel}
           onChange={(updatedItem: Reference) => {
             const newIndex = values.references?.length ?? 0;
-            // Save to secondary storage for auto-save
             if (autoSaveStorage && autoSaveId) {
               autoSaveStorage.setSecondary("reference", {
                 id: autoSaveId,
@@ -223,58 +244,20 @@ const FieldModal = ({
   onCancel,
   onChange,
   searchEnv,
-  initialUri,
   initialDatasets,
 }: ModalProps) => {
   const [submitted, setSubmitted] = useState(false);
-  const [selectedUri, setSelectedUri] = useState(initialUri);
-
+  const [searchQuery, setSearchQuery] = useState("");
+  const debouncedSearchQuery = useDebounce(searchQuery);
   const modalRef = useRef<HTMLDialogElement>(null);
 
-  const [searchQuery, setSearchQuery] = useState("");
+  const { data: searchHits, isFetching: searching } =
+    useSearchDatasetSuggestions(searchEnv, debouncedSearchQuery);
 
-  const { data: searchHits, isLoading: searching } =
-    useSearchDatasetSuggestions(searchEnv, searchQuery);
-
-  const [selectedValue, setSelectedValue] = useState<
-    Search.SearchObject | undefined
-  >();
-  const [comboboxOptions, setComboboxOptions] =
-    useState<any[]>(initialDatasets);
-
-  useEffect(() => {
-    const allDatasets = [
-      ...(searchHits ?? []),
-      ...initialDatasets,
-      ...(selectedValue ? [selectedValue] : []),
-    ];
-    setSelectedValue(
-      allDatasets.find((dataset) => dataset.uri === selectedUri),
-    );
-  }, [selectedUri, searchHits, initialDatasets]);
-
-  useEffect(() => {
-    const titleFromSearch = searchHits?.find(
-      (item: { uri: string }) => item.uri === selectedUri,
-    )?.title;
-    const titleFromSelected = selectedValue?.title;
-    const uriOption = selectedUri
-      ? [
-          {
-            uri: selectedUri,
-            title: titleFromSearch ?? titleFromSelected ?? undefined,
-          },
-        ]
-      : [];
-    const options = [
-      ...new Map(
-        [...(searchHits ?? []), ...[selectedValue], ...uriOption]
-          .filter(Boolean)
-          .map((option) => [option.uri, option]),
-      ).values(),
-    ];
-    setComboboxOptions(options);
-  }, [selectedValue, searchHits]);
+  const resetLocalState = () => {
+    setSearchQuery("");
+    setSubmitted(false);
+  };
 
   return (
     <>
@@ -289,11 +272,7 @@ const FieldModal = ({
         <Dialog
           ref={modalRef}
           onClose={() => {
-            setSelectedUri(initialUri);
-            setSearchQuery("");
-            setSelectedValue(undefined);
-            setComboboxOptions(initialDatasets);
-            setSubmitted(false);
+            resetLocalState();
           }}
         >
           <Formik
@@ -308,6 +287,7 @@ const FieldModal = ({
               setSubmitting(false);
               setSubmitted(true);
               resetForm();
+              resetLocalState();
               modalRef.current?.close();
             }}
           >
@@ -325,11 +305,6 @@ const FieldModal = ({
                 }
               }, [values, dirty]);
 
-              const resolvedReferenceTypeUri = values.referenceType
-                ? (relations.find((r) => r.uri === values.referenceType)?.uri ??
-                  values.referenceType)
-                : undefined;
-
               return (
                 <>
                   <Heading data-size="xs">
@@ -341,103 +316,16 @@ const FieldModal = ({
                   <div
                     className={cn(styles.modalContent, styles.fieldContainer)}
                   >
-                    <Fieldset data-size="sm">
-                      <Fieldset.Legend>
-                        {localization.datasetForm.fieldLabel.relationType}
-                      </Fieldset.Legend>
-                      <Combobox
-                        onValueChange={(value) =>
-                          setFieldValue("referenceType", value.toString())
-                        }
-                        value={
-                          resolvedReferenceTypeUri &&
-                          relations.some(
-                            (r) => r.uri === resolvedReferenceTypeUri,
-                          )
-                            ? [resolvedReferenceTypeUri]
-                            : []
-                        }
-                        inputValue={resolvedReferenceTypeUri ? undefined : ""}
-                        placeholder={`${localization.datasetForm.fieldLabel.choseRelation}...`}
-                        portal={false}
-                        data-size="sm"
-                        error={errors?.referenceType}
-                        virtual
-                      >
-                        <Combobox.Empty>
-                          {localization.search.noHits}
-                        </Combobox.Empty>
-                        {relations.map((relation) => (
-                          <Combobox.Option
-                            key={relation?.uri}
-                            value={relation?.uri}
-                            description={`${relation?.uriAsPrefix} (${relation?.uri})`}
-                          >
-                            {getTranslateText(relation?.label)}
-                          </Combobox.Option>
-                        ))}
-                      </Combobox>
-                    </Fieldset>
-
-                    <Fieldset data-size="sm">
-                      <Fieldset.Legend>
-                        {localization.datasetForm.fieldLabel.dataset}
-                      </Fieldset.Legend>
-                      <Combobox
-                        onChange={(input: any) =>
-                          setSearchQuery(input.target.value)
-                        }
-                        onValueChange={(value) => {
-                          setSelectedUri(value.toString());
-                          setFieldValue("source", value.toString());
-                        }}
-                        loading={searching}
-                        value={
-                          values?.source &&
-                          !isEmpty(values.source) &&
-                          comboboxOptions?.some(
-                            (opt) => opt.uri === values.source,
-                          )
-                            ? [values.source]
-                            : []
-                        }
-                        inputValue={values.source ? undefined : ""}
-                        placeholder={`${localization.search.search}...`}
-                        portal={false}
-                        data-size="sm"
-                        error={errors?.source}
-                      >
-                        <Combobox.Empty>
-                          {localization.search.noHits}
-                        </Combobox.Empty>
-                        {comboboxOptions?.map((dataset) => {
-                          return (
-                            <Combobox.Option
-                              key={dataset.uri}
-                              value={dataset.uri}
-                              displayValue={
-                                dataset.title
-                                  ? getTranslateText(dataset.title)
-                                  : dataset.uri
-                              }
-                            >
-                              <div className={styles.comboboxOptionTwoColumns}>
-                                <div>
-                                  {dataset.title
-                                    ? getTranslateText(dataset.title)
-                                    : dataset.uri}
-                                </div>
-                                <div>
-                                  {getTranslateText(
-                                    dataset.organization?.prefLabel,
-                                  )}
-                                </div>
-                              </div>
-                            </Combobox.Option>
-                          );
-                        })}
-                      </Combobox>
-                    </Fieldset>
+                    <ReferenceFormFields
+                      errors={errors}
+                      initialDatasets={initialDatasets}
+                      searchHits={searchHits}
+                      searchQuery={searchQuery}
+                      searching={searching}
+                      setFieldValue={setFieldValue}
+                      setSearchQuery={setSearchQuery}
+                      values={values}
+                    />
                   </div>
 
                   <DialogActions>
@@ -470,6 +358,129 @@ const FieldModal = ({
           </Formik>
         </Dialog>
       </Dialog.TriggerContext>
+    </>
+  );
+};
+
+type ReferenceFormFieldsProps = {
+  errors: FormikErrors<Reference>;
+  initialDatasets: Search.SearchObject[];
+  searchHits?: Search.Suggestion[];
+  searchQuery: string;
+  searching: boolean;
+  setFieldValue: (
+    field: keyof Reference,
+    value: Reference[keyof Reference],
+  ) => void;
+  setSearchQuery: (value: string) => void;
+  values: Reference;
+};
+
+const ReferenceFormFields = ({
+  errors,
+  initialDatasets,
+  searchHits,
+  searchQuery,
+  searching,
+  setFieldValue,
+  setSearchQuery,
+  values,
+}: ReferenceFormFieldsProps) => {
+  const datasetOptionsList: DatasetOption[] = useMemo(() => {
+    const resolveDataset = (uri: string): DatasetOption =>
+      initialDatasets.find((dataset) => dataset.uri === uri) ||
+      searchHits?.find((dataset) => dataset.uri === uri) || {
+        uri,
+      };
+
+    const selectedItem = values.source ? resolveDataset(values.source) : null;
+    const searchResults = searchQuery.trim() ? (searchHits ?? []) : [];
+
+    return Array.from(
+      new Map(
+        [...(selectedItem ? [selectedItem] : []), ...searchResults]
+          .filter((item) => Boolean(item.uri))
+          .map((item) => [item.uri, item] as const),
+      ).values(),
+    );
+  }, [initialDatasets, searchHits, searchQuery, values.source]);
+
+  const datasetSuggestionOptions: SuggestionSelectOption[] = useMemo(
+    () =>
+      datasetOptionsList.map((option) => ({
+        value: option.uri,
+        label: getDatasetLabel(option),
+      })),
+    [datasetOptionsList],
+  );
+
+  const datasetEmptyMessage = searching
+    ? `${localization.loading}...`
+    : searchQuery.trim()
+      ? localization.search.noHits
+      : `${localization.search.typeToSearch}...`;
+
+  const resolvedReferenceTypeUri = values.referenceType
+    ? (relations.find((r) => r.uri === values.referenceType)?.uri ??
+      values.referenceType)
+    : undefined;
+
+  const referenceTypeValue =
+    resolvedReferenceTypeUri &&
+    relations.some((r) => r.uri === resolvedReferenceTypeUri)
+      ? resolvedReferenceTypeUri
+      : undefined;
+
+  return (
+    <>
+      <SingleSuggestionSelect
+        emptyMessage={localization.search.noHits}
+        error={errors?.referenceType}
+        fieldsetLegend={localization.datasetForm.fieldLabel.relationType}
+        onValueChange={(value) => setFieldValue("referenceType", value ?? "")}
+        options={relationTypeOptions}
+        placeholder={`${localization.datasetForm.fieldLabel.choseRelation}...`}
+        value={referenceTypeValue}
+      />
+
+      <Fieldset data-size="sm">
+        <Fieldset.Legend>
+          {localization.datasetForm.fieldLabel.dataset}
+        </Fieldset.Legend>
+        <SearchSuggestionSelect
+          emptyMessage={datasetEmptyMessage}
+          error={errors?.source}
+          isFetching={searching}
+          onSearch={setSearchQuery}
+          onValueChange={(value) => {
+            setFieldValue("source", value ?? "");
+            if (!value) {
+              setSearchQuery("");
+            }
+          }}
+          options={datasetSuggestionOptions}
+          placeholder={`${localization.search.search}...`}
+          renderOption={(option) => {
+            const dataset = datasetOptionsList.find(
+              (item) => item.uri === option.value,
+            );
+
+            return (
+              <div className={styles.comboboxOptionTwoColumns}>
+                <div>
+                  {dataset?.title
+                    ? getTranslateText(dataset.title)
+                    : option.label}
+                </div>
+                <div>
+                  {getTranslateText(dataset?.organization?.prefLabel) ?? ""}
+                </div>
+              </div>
+            );
+          }}
+          value={values.source || undefined}
+        />
+      </Fieldset>
     </>
   );
 };

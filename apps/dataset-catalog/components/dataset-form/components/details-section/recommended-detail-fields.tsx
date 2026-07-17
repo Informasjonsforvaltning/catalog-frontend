@@ -1,7 +1,7 @@
 "use client";
 import {
   FieldsetDivider,
-  SpatialCombobox,
+  SpatialSuggestionSelect,
   LanguageSuggestion,
   TitleWithHelpTextAndTag,
 } from "@catalog-frontend/ui";
@@ -46,7 +46,7 @@ export const RecommendedDetailFields = ({
                 {localization.datasetForm.fieldLabel.spatial}
               </TitleWithHelpTextAndTag>
             </Fieldset.Legend>
-            <SpatialCombobox referenceDataEnv={referenceDataEnv} />
+            <SpatialSuggestionSelect referenceDataEnv={referenceDataEnv} />
           </Fieldset>
           <FieldsetDivider />
         </>

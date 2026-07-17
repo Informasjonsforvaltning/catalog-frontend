@@ -1,22 +1,21 @@
+"use client";
+
 import {
   FieldsetDivider,
   FormikLanguageFieldset,
+  SingleSuggestionSelect,
   TitleWithHelpTextAndTag,
   TextareaWithPrefix,
-  SpatialCombobox,
+  SpatialSuggestionSelect,
 } from "@catalog-frontend/ui";
 import {
   capitalizeFirstLetter,
   getTranslateText,
   localization,
 } from "@catalog-frontend/utils";
-import {
-  Textfield,
-  Fieldset,
-  Combobox,
-  Paragraph,
-} from "@digdir/designsystemet-react";
+import { Textfield, Fieldset, Paragraph } from "@digdir/designsystemet-react";
 import { FastField, useFormikContext } from "formik";
+import { useMemo } from "react";
 import { AccessRightFields } from "./access-rights-fields";
 import {
   ApplicationProfile,
@@ -36,6 +35,15 @@ export const AboutSection = ({
   frequencies,
 }: Props) => {
   const { setFieldValue, errors, values } = useFormikContext<Dataset>();
+
+  const frequencyOptions = useMemo(
+    () =>
+      frequencies?.map((frequency) => ({
+        value: frequency.uri,
+        label: capitalizeFirstLetter(getTranslateText(frequency.label)),
+      })) ?? [],
+    [frequencies],
+  );
 
   return (
     <div>
@@ -101,40 +109,26 @@ export const AboutSection = ({
                 {localization.datasetForm.fieldLabel.spatial}
               </TitleWithHelpTextAndTag>
             </Fieldset.Legend>
-            <SpatialCombobox referenceDataEnv={referenceDataEnv} />
+            <SpatialSuggestionSelect referenceDataEnv={referenceDataEnv} />
           </Fieldset>
           <FieldsetDivider />
-          <Fieldset data-size="md">
-            <Fieldset.Legend>
+          <SingleSuggestionSelect
+            ariaLabel={localization.datasetForm.fieldLabel.frequency}
+            emptyMessage={localization.search.noHits}
+            error={errors.frequency}
+            fieldsetLegend={
               <TitleWithHelpTextAndTag
                 helpText={localization.datasetForm.helptext.frequency}
                 tagTitle={localization.tag.required}
               >
                 {localization.datasetForm.fieldLabel.frequency}
               </TitleWithHelpTextAndTag>
-            </Fieldset.Legend>
-            <Combobox
-              value={values?.frequency ? [values.frequency] : []}
-              portal={false}
-              onValueChange={(selectedValues) => {
-                setFieldValue("frequency", selectedValues.toString());
-              }}
-              placeholder={`${localization.search.search}...`}
-              data-size="md"
-              virtual
-              error={errors.frequency}
-            >
-              {frequencies &&
-                frequencies.map((frequency, i: number) => (
-                  <Combobox.Option
-                    key={`frequency-${frequency.uri}-${i}`}
-                    value={frequency.uri}
-                  >
-                    {capitalizeFirstLetter(getTranslateText(frequency.label))}
-                  </Combobox.Option>
-                ))}
-            </Combobox>
-          </Fieldset>
+            }
+            onValueChange={(value) => setFieldValue("frequency", value)}
+            options={frequencyOptions}
+            placeholder={`${localization.search.search}...`}
+            value={values.frequency}
+          />
           <FieldsetDivider />
         </>
       )}

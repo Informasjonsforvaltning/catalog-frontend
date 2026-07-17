@@ -1,9 +1,8 @@
 "use client";
 
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
 import { useFormikContext } from "formik";
 import {
-  Combobox,
   Fieldset,
   Radio,
   Textfield,
@@ -12,6 +11,8 @@ import {
 import {
   FieldsetDivider,
   FormikLanguageFieldset,
+  SearchSuggestionSelect,
+  SingleSuggestionSelect,
   TitleWithHelpTextAndTag,
 } from "@catalog-frontend/ui";
 import { getTranslateText, localization } from "@catalog-frontend/utils";
@@ -58,6 +59,38 @@ type RelationFieldsetProps = {
   conceptId: string;
 };
 
+const getInitialSelectedRelatedConceptOption = (
+  relatedConcept?: RelatedConcept,
+): Option | null => {
+  if (!relatedConcept) {
+    return null;
+  }
+
+  if (relatedConcept.id) {
+    return {
+      label: getTranslateText(relatedConcept.title),
+      value: relatedConcept.id,
+    };
+  }
+
+  if (relatedConcept.href) {
+    return {
+      label: getTranslateText(relatedConcept.title),
+      value: relatedConcept.href,
+    };
+  }
+
+  return null;
+};
+
+const withSelectedOption = (options: Option[], selected: Option | null) => {
+  if (!selected || options.some((option) => option.value === selected.value)) {
+    return options;
+  }
+
+  return [selected, ...options];
+};
+
 const getRelatedConceptStateValue = (
   relatedConcept?: RelatedConcept,
 ): string[] => {
@@ -97,6 +130,11 @@ export const RelationFieldset = ({
     );
   const [search, setSearch] = useState("");
   const [searchTriggered, setSearchTriggered] = useState(false);
+  const [selectedRelatedConceptOption, setSelectedRelatedConceptOption] =
+    useState<Option | null>(
+      getInitialSelectedRelatedConceptOption(initialRelatedConcept),
+    );
+  const skipSearchClearRef = useRef(false);
 
   const { data: internalConcepts, isFetching: isFetchingInternal } =
     useSearchInternalConcepts({
@@ -128,89 +166,134 @@ export const RelationFieldset = ({
     value: item,
   }));
 
-  const relationSubtypeOptions = relationSubtypes
-    .filter((subtype) => {
-      if (values.relasjon === RelationTypeEnum.PARTITIV) {
-        return (
-          subtype === RelationSubtypeEnum.ER_DEL_AV ||
-          subtype === RelationSubtypeEnum.OMFATTER
-        );
-      } else if (values.relasjon === RelationTypeEnum.GENERISK) {
-        return (
-          subtype === RelationSubtypeEnum.OVERORDNET ||
-          subtype === RelationSubtypeEnum.UNDERORDNET
-        );
-      }
-      return false;
-    })
-    .map((item) => ({
-      label: localization.conceptForm.fieldLabel.relationSubtypes[item],
-      value: item,
-    }));
-  relationSubtypeOptions.unshift({
-    label: localization.conceptForm.fieldLabel.relationSubtypes["none"],
-    value: "",
-  });
+  const relationSubtypeOptions = useMemo(() => {
+    const options = relationSubtypes
+      .filter((subtype) => {
+        if (values.relasjon === RelationTypeEnum.PARTITIV) {
+          return (
+            subtype === RelationSubtypeEnum.ER_DEL_AV ||
+            subtype === RelationSubtypeEnum.OMFATTER
+          );
+        } else if (values.relasjon === RelationTypeEnum.GENERISK) {
+          return (
+            subtype === RelationSubtypeEnum.OVERORDNET ||
+            subtype === RelationSubtypeEnum.UNDERORDNET
+          );
+        }
+        return false;
+      })
+      .map((item) => ({
+        label: localization.conceptForm.fieldLabel.relationSubtypes[item],
+        value: item,
+      }));
 
-  let internalRelatedConceptOptions: Option[] = [];
-  let externalRelatedConceptOptions: Option[] = [];
-  if (relatedConceptType === "internal" && searchTriggered) {
-    internalRelatedConceptOptions =
-      internalConcepts?.hits
-        .filter((rel) => !conceptId || rel.originaltBegrep !== conceptId)
-        .map((concept) => ({
-          label: getTranslateText(concept.anbefaltTerm?.navn),
-          value: concept.originaltBegrep as string,
-        })) ?? [];
-  } else if (
-    relatedConceptType === "internal" &&
-    !searchTriggered &&
-    initialRelatedConcept
-  ) {
-    internalRelatedConceptOptions = [
-      {
-        label: getTranslateText(initialRelatedConcept.title),
-        value: initialRelatedConcept.id as string,
-      },
-    ];
-  }
+    return options;
+  }, [values.relasjon]);
 
-  if (relatedConceptType === "external" && searchTriggered) {
-    const mapped =
-      externalConcepts?.hits
-        .filter((rel) => !conceptId || !rel.uri?.includes(conceptId))
-        .filter((concept) => Boolean(concept.uri))
-        .map(
-          (concept) =>
-            [
-              concept.uri,
-              {
-                label: getTranslateText(concept.title),
-                description: getTranslateText(
-                  concept.organization?.prefLabel,
-                ) as string,
-                value: concept.uri as string,
-              },
-            ] as const,
-        ) ?? [];
+  const internalRelatedConceptOptions = useMemo(() => {
+    let options: Option[] = [];
 
-    externalRelatedConceptOptions = [...new Map(mapped).values()];
-  } else if (
-    relatedConceptType === "external" &&
-    !searchTriggered &&
-    initialRelatedConcept
-  ) {
-    externalRelatedConceptOptions = [
-      {
-        label: getTranslateText(initialRelatedConcept.title),
-        value: initialRelatedConcept.href as string,
-      },
-    ];
-  }
+    if (relatedConceptType === "internal" && searchTriggered) {
+      options =
+        internalConcepts?.hits
+          .filter((rel) => !conceptId || rel.originaltBegrep !== conceptId)
+          .map((concept) => ({
+            label: getTranslateText(concept.anbefaltTerm?.navn),
+            value: concept.originaltBegrep as string,
+          })) ?? [];
+    } else if (
+      relatedConceptType === "internal" &&
+      !searchTriggered &&
+      initialRelatedConcept
+    ) {
+      options = [
+        {
+          label: getTranslateText(initialRelatedConcept.title),
+          value: initialRelatedConcept.id as string,
+        },
+      ];
+    }
 
-  const handleRelatedConceptTypeChange = (value) => {
+    if (relatedConceptType === "internal") {
+      options = withSelectedOption(options, selectedRelatedConceptOption);
+    }
+
+    return options;
+  }, [
+    conceptId,
+    initialRelatedConcept,
+    internalConcepts?.hits,
+    relatedConceptType,
+    searchTriggered,
+    selectedRelatedConceptOption,
+  ]);
+
+  const externalRelatedConceptOptions = useMemo(() => {
+    let options: Option[] = [];
+
+    if (relatedConceptType === "external" && searchTriggered) {
+      const mapped =
+        externalConcepts?.hits
+          .filter((rel) => !conceptId || !rel.uri?.includes(conceptId))
+          .filter((concept) => Boolean(concept.uri))
+          .map(
+            (concept) =>
+              [
+                concept.uri,
+                {
+                  label: getTranslateText(concept.title),
+                  description: getTranslateText(
+                    concept.organization?.prefLabel,
+                  ) as string,
+                  value: concept.uri as string,
+                },
+              ] as const,
+          ) ?? [];
+
+      options = [...new Map(mapped).values()];
+    } else if (
+      relatedConceptType === "external" &&
+      !searchTriggered &&
+      initialRelatedConcept
+    ) {
+      options = [
+        {
+          label: getTranslateText(initialRelatedConcept.title),
+          value: initialRelatedConcept.href as string,
+        },
+      ];
+    }
+
+    if (relatedConceptType === "external") {
+      options = withSelectedOption(options, selectedRelatedConceptOption);
+    }
+
+    return options;
+  }, [
+    conceptId,
+    externalConcepts?.hits,
+    initialRelatedConcept,
+    relatedConceptType,
+    searchTriggered,
+    selectedRelatedConceptOption,
+  ]);
+
+  const internalSearchEmptyMessage = isFetchingInternal
+    ? `${localization.loading}...`
+    : search
+      ? localization.search.noHits
+      : `${localization.search.typeToSearch}...`;
+
+  const externalSearchEmptyMessage = isFetchingExternal
+    ? `${localization.loading}...`
+    : search
+      ? localization.search.noHits
+      : `${localization.search.typeToSearch}...`;
+
+  const handleRelatedConceptTypeChange = (value: string) => {
     setRelatedConceptType(value as RelatedConceptType);
     setRelatedConcept([]);
+    setSelectedRelatedConceptOption(null);
   };
 
   const { getRadioProps: getRelatedConceptTypeRadioProps } = useRadioGroup({
@@ -218,53 +301,101 @@ export const RelationFieldset = ({
     onChange: (nextValue) => handleRelatedConceptTypeChange(nextValue),
   });
 
-  const handleRelationTypeChange = (value: string[]) => {
-    setFieldValue("relasjon", value[0]);
-    setFieldValue("relasjonsType", null);
-  };
+  const handleSearchConceptChange = (value: string) => {
+    if (skipSearchClearRef.current) {
+      skipSearchClearRef.current = false;
+      return;
+    }
 
-  const handleRelationSubtypeChange = (value: string[]) => {
-    setFieldValue("relasjonsType", value[0]);
-  };
+    if (relatedConcept[0] && selectedRelatedConceptOption?.label === value) {
+      return;
+    }
 
-  const handleSearchConceptChange = (event: ChangeEvent<HTMLInputElement>) => {
     setRelatedConcept([]);
-    setSearch(event.target.value);
+    setSelectedRelatedConceptOption(null);
+    setSearch(value);
     setSearchTriggered(true);
   };
 
-  const handleRelatedConceptChange = (value: string[]) => {
-    setFieldValue("relatertBegrep", value[0]);
-    setRelatedConcept(value);
+  const handleRelatedConceptChange = (value: string | undefined) => {
+    skipSearchClearRef.current = true;
+
+    if (value) {
+      if (relatedConceptType === "internal") {
+        const selectedOption =
+          internalRelatedConceptOptions.find(
+            (option) => option.value === value,
+          ) ??
+          internalConcepts?.hits
+            .filter((rel) => !conceptId || rel.originaltBegrep !== conceptId)
+            .map((concept) => ({
+              label: getTranslateText(concept.anbefaltTerm?.navn),
+              value: concept.originaltBegrep as string,
+            }))
+            .find((option) => option.value === value);
+
+        setSelectedRelatedConceptOption(
+          selectedOption ?? { value, label: value },
+        );
+      } else if (relatedConceptType === "external") {
+        const optionFromList = externalRelatedConceptOptions.find(
+          (option) => option.value === value,
+        );
+
+        if (optionFromList) {
+          setSelectedRelatedConceptOption(optionFromList);
+        } else {
+          const hit = externalConcepts?.hits
+            .filter((rel) => !conceptId || !rel.uri?.includes(conceptId))
+            .find((concept) => concept.uri === value);
+
+          setSelectedRelatedConceptOption(
+            hit
+              ? {
+                  value,
+                  label: getTranslateText(hit.title),
+                  description: getTranslateText(hit.organization?.prefLabel),
+                }
+              : { value, label: value },
+          );
+        }
+      }
+    } else {
+      setSelectedRelatedConceptOption(null);
+    }
+
+    setFieldValue("relatertBegrep", value);
+    setRelatedConcept(value ? [value] : []);
   };
 
-  const handleCustomRelatedConceptChange = (e) => {
-    setRelatedConcept([e.target.value]);
+  const handleCustomRelatedConceptChange = (
+    event: ChangeEvent<HTMLInputElement>,
+  ) => {
+    setRelatedConcept([event.target.value]);
   };
 
-  const internalRelatedConceptComboValue = () => {
-    return internalRelatedConceptOptions.find(
-      (option) => option.value === relatedConcept[0],
-    )
-      ? relatedConcept
-      : [];
-  };
+  const selectedInternalRelatedConcept = relatedConcept[0];
+  const selectedExternalRelatedConcept = relatedConcept[0];
 
-  const externalRelatedConceptComboValue = () => {
-    return externalRelatedConceptOptions.find(
-      (option) => option.value === relatedConcept[0],
-    )
-      ? relatedConcept
-      : [];
-  };
+  const selectedRelationType =
+    values.relasjon &&
+    relationTypeOptions.find((type) => type.value === values.relasjon)
+      ? values.relasjon
+      : undefined;
+
+  const selectedRelationSubtype =
+    values.relasjonsType &&
+    relationSubtypeOptions.find((type) => type.value === values.relasjonsType)
+      ? values.relasjonsType
+      : "";
 
   useEffect(() => {
     setFieldValue("internal", relatedConceptType === "internal");
-  }, [relatedConceptType]);
+  }, [relatedConceptType, setFieldValue]);
 
   useEffect(() => {
     setFieldValue("relatertBegrep", relatedConcept[0]);
-  }, [relatedConcept]);
+  }, [relatedConcept, setFieldValue]);
 
   return (
     <div className={styles.root}>
@@ -289,52 +420,28 @@ export const RelationFieldset = ({
             />
           ))}
           {relatedConceptType === "internal" && (
-            <Combobox
-              data-size="sm"
-              portal={false}
-              value={internalRelatedConceptComboValue()}
-              label="Søk begrep"
-              hideLabel
-              loading={isFetchingInternal}
-              onChange={handleSearchConceptChange}
-              onValueChange={handleRelatedConceptChange}
+            <SearchSuggestionSelect
+              ariaLabel="Søk begrep"
+              emptyMessage={internalSearchEmptyMessage}
               error={errors.relatertBegrep}
-            >
-              <Combobox.Empty>Fant ingen treff</Combobox.Empty>
-              {internalRelatedConceptOptions.map((option) => (
-                <Combobox.Option
-                  key={option.value}
-                  value={option.value}
-                  description={option.description}
-                >
-                  {option.label}
-                </Combobox.Option>
-              ))}
-            </Combobox>
+              isFetching={isFetchingInternal}
+              onSearch={handleSearchConceptChange}
+              onValueChange={handleRelatedConceptChange}
+              options={internalRelatedConceptOptions}
+              value={selectedInternalRelatedConcept}
+            />
           )}
           {relatedConceptType === "external" && (
-            <Combobox
-              data-size="sm"
-              portal={false}
-              value={externalRelatedConceptComboValue()}
-              label="Søk begrep"
-              hideLabel
-              loading={isFetchingExternal}
-              onChange={handleSearchConceptChange}
-              onValueChange={handleRelatedConceptChange}
+            <SearchSuggestionSelect
+              ariaLabel="Søk begrep"
+              emptyMessage={externalSearchEmptyMessage}
               error={errors.relatertBegrep}
-            >
-              <Combobox.Empty>Fant ingen treff</Combobox.Empty>
-              {externalRelatedConceptOptions.map((option) => (
-                <Combobox.Option
-                  key={option.value}
-                  value={option.value}
-                  description={option.description}
-                >
-                  {option.label}
-                </Combobox.Option>
-              ))}
-            </Combobox>
+              isFetching={isFetchingExternal}
+              onSearch={handleSearchConceptChange}
+              onValueChange={handleRelatedConceptChange}
+              options={externalRelatedConceptOptions}
+              value={selectedExternalRelatedConcept}
+            />
           )}
           {relatedConceptType === "custom" && (
             <Textfield
@@ -348,8 +455,10 @@ export const RelationFieldset = ({
       </div>
       <FieldsetDivider />
 
-      <Combobox
-        label={
+      <SingleSuggestionSelect
+        ariaLabel={localization.conceptForm.fieldLabel.relation}
+        error={errors?.relasjon}
+        fieldsetLegend={
           <TitleWithHelpTextAndTag
             helpText={localization.conceptForm.helpText.relation}
             tagColor="warning"
@@ -358,30 +467,22 @@ export const RelationFieldset = ({
             {localization.conceptForm.fieldLabel.relation}
           </TitleWithHelpTextAndTag>
         }
-        data-size="sm"
-        portal={false}
-        error={errors?.relasjon}
-        value={
-          values.relasjon &&
-          relationTypeOptions.find((type) => type.value === values.relasjon)
-            ? [values.relasjon]
-            : []
-        }
-        onValueChange={handleRelationTypeChange}
-      >
-        {relationTypeOptions.map((rel) => (
-          <Combobox.Option key={rel.value} value={rel.value}>
-            {rel.label}
-          </Combobox.Option>
-        ))}
-      </Combobox>
+        onValueChange={(value) => {
+          setFieldValue("relasjon", value);
+          setFieldValue("relasjonsType", null);
+        }}
+        options={relationTypeOptions}
+        value={selectedRelationType}
+      />
 
       {(values.relasjon === RelationTypeEnum.GENERISK ||
         values.relasjon === RelationTypeEnum.PARTITIV) && (
         <>
           <div className={styles.flex}>
-            <Combobox
-              label={
+            <SingleSuggestionSelect
+              ariaLabel={localization.conceptForm.fieldLabel.relationLevel}
+              error={errors?.relasjonsType}
+              fieldsetLegend={
                 <TitleWithHelpTextAndTag
                   tagColor="warning"
                   tagTitle={localization.tag.required}
@@ -394,25 +495,10 @@ export const RelationFieldset = ({
                   {localization.conceptForm.fieldLabel.relationLevel}
                 </TitleWithHelpTextAndTag>
               }
-              data-size="sm"
-              portal={false}
-              value={
-                values.relasjonsType &&
-                relationSubtypeOptions.find(
-                  (type) => type.value === values.relasjonsType,
-                )
-                  ? [values.relasjonsType]
-                  : [""]
-              }
-              error={errors?.relasjonsType}
-              onValueChange={handleRelationSubtypeChange}
-            >
-              {relationSubtypeOptions.map((type) => (
-                <Combobox.Option key={type.value} value={type.value}>
-                  {type.label}
-                </Combobox.Option>
-              ))}
-            </Combobox>
+              onValueChange={(value) => setFieldValue("relasjonsType", value)}
+              options={relationSubtypeOptions}
+              value={selectedRelationSubtype}
+            />
           </div>
           <FormikLanguageFieldset
             name="inndelingskriterium"

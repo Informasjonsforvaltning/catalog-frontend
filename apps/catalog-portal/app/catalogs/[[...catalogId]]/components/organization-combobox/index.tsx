@@ -1,17 +1,25 @@
 "use client";
 
-import { getTranslateText, sortAscending } from "@catalog-frontend/utils";
+import {
+  getTranslateText,
+  localization,
+  sortAscending,
+} from "@catalog-frontend/utils";
+import { SingleSuggestionSelect } from "@catalog-frontend/ui";
 
 import { Organization } from "@catalog-frontend/types";
-import { Combobox, Spinner } from "@digdir/designsystemet-react";
+import { Field, Label, Spinner } from "@digdir/designsystemet-react";
 import { useRouter } from "next/navigation";
 import styles from "./organization-combobox.module.css";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 type OrganizationComboboxProps = {
   organizations: Organization[];
   currentOrganization?: Organization;
 };
+
+const getOrganizationLabel = (organization: Organization) =>
+  getTranslateText(organization.prefLabel);
 
 const OrganizationCombobox = (props: OrganizationComboboxProps) => {
   const router = useRouter();
@@ -19,40 +27,39 @@ const OrganizationCombobox = (props: OrganizationComboboxProps) => {
 
   const { organizations, currentOrganization } = props;
 
-  const sortedOrganization = organizations.sort((a, b) =>
-    sortAscending(getTranslateText(a.prefLabel), getTranslateText(b.prefLabel)),
+  const organizationOptions = useMemo(
+    () =>
+      [...organizations]
+        .filter(
+          (org) => org.organizationId !== currentOrganization?.organizationId,
+        )
+        .sort((a, b) =>
+          sortAscending(getOrganizationLabel(a), getOrganizationLabel(b)),
+        )
+        .map((org) => ({
+          value: org.organizationId,
+          label: getOrganizationLabel(org),
+        })),
+    [organizations, currentOrganization?.organizationId],
   );
 
   return (
     <div className={styles.container}>
-      <Combobox
-        className={styles.combobox}
-        data-size="sm"
-        label="Virksomhet"
-        placeholder="Velg en virksomhet"
-        onValueChange={(value) => {
-          const match = organizations.find(
-            (org) => org.organizationId === value[0],
-          );
-          if (match) {
-            setLoading(true);
-            router.push(`/catalogs/${value[0]}`);
-          }
-        }}
-      >
-        {sortedOrganization
-          .filter(
-            (org) => org.organizationId !== currentOrganization?.organizationId,
-          )
-          .map((org) => (
-            <Combobox.Option
-              key={org.organizationId}
-              value={org.organizationId}
-            >
-              {getTranslateText(org.prefLabel)}
-            </Combobox.Option>
-          ))}
-      </Combobox>
+      <Field data-size="sm" className={styles.combobox}>
+        <Label>Virksomhet</Label>
+        <SingleSuggestionSelect
+          disabled={loading}
+          emptyMessage={localization.search.noHits}
+          onValueChange={(value) => {
+            if (value) {
+              setLoading(true);
+              router.push(`/catalogs/${value}`);
+            }
+          }}
+          options={organizationOptions}
+          placeholder="Velg en virksomhet"
+        />
+      </Field>
       {loading && <Spinner aria-label="Laster virksomhet" />}
     </div>
   );

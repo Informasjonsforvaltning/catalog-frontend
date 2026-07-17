@@ -1,9 +1,8 @@
 "use client";
 
-import React, { ReactNode, useEffect, useRef, useState } from "react";
+import React, { ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import {
   Distribution,
-  Option,
   ReferenceDataCode,
   Search,
 } from "@catalog-frontend/types";
@@ -12,7 +11,10 @@ import {
   DeleteButton,
   FieldsetDivider,
   FormikLanguageFieldset,
-  FormikReferenceDataCombobox,
+  ReferenceDataSuggestionSelect,
+  SearchSuggestionSelect,
+  SingleSuggestionSelect,
+  SuggestionSelectOption,
   TitleWithHelpTextAndTag,
   TextareaWithPrefix,
   FastFieldWithRef,
@@ -22,6 +24,7 @@ import {
   useSearchMediaTypes,
   useSearchDataServiceSuggestions,
   DialogActions,
+  useDebounce,
 } from "@catalog-frontend/ui";
 import {
   getTranslateText,
@@ -31,12 +34,12 @@ import {
 import {
   Button,
   Card,
-  Combobox,
   Dialog,
   Fieldset,
   Heading,
   Skeleton,
   Textfield,
+  ValidationMessage,
 } from "@digdir/designsystemet-react";
 import { FastField, FieldArray, Formik, getIn } from "formik";
 import styles from "./distributions.module.scss";
@@ -50,9 +53,6 @@ import { get, isArray, isEmpty, isNil, isObject } from "lodash";
 import FieldsetWithDelete from "@dataset-catalog/components/fieldset-with-delete";
 
 const PRIORITY_LICENCE_CODES = ["CC0", "CC_BY_4_0"];
-
-const containsFilter = (inputValue: string, option: Option): boolean =>
-  option.label.toLowerCase().includes(inputValue.toLowerCase());
 
 const sortLicences = (licences: ReferenceDataCode[]): ReferenceDataCode[] =>
   [...licences].sort((a, b) => {
@@ -114,21 +114,16 @@ export const DistributionModal = ({
   const [selectedAccessServiceUris, setSelectedAccessServiceUris] = useState(
     initialValues?.accessServices ?? [],
   );
-  const [
-    selectedAndSearchedAccessServices,
-    setSelectedAndSearchedAccessServices,
-  ] = useState<Search.SearchObject[]>([]);
   const template = distributionTemplate(initialValues);
   const [submitted, setSubmitted] = useState(false);
   const modalRef = useRef<HTMLDialogElement>(null);
   const resetFormRef = useRef<(() => void) | null>(null);
-
-  const [searchQueryLicense, setSearchQueryLicense] = useState<string>("");
   const [searchQueryMediaTypes, setSearchQueryMediaTypes] =
     useState<string>("");
   const [searchQueryFileTypes, setSearchQueryFileTypes] = useState<string>("");
   const [searchDataServicesQuery, setSearchDataServicesQuery] =
     useState<string>("");
+  const debouncedSearchDataServicesQuery = useDebounce(searchDataServicesQuery);
 
   const [focus, setFocus] = useState<string | null>();
 
@@ -136,7 +131,6 @@ export const DistributionModal = ({
     setSelectedFileTypeUris(initialValues?.format ?? []);
     setSelectedMediaTypeUris(nonEmptyValues(initialValues?.mediaType));
     setSelectedAccessServiceUris(initialValues?.accessServices ?? []);
-    setSearchQueryLicense("");
     setSearchQueryMediaTypes("");
     setSearchQueryFileTypes("");
     setSearchDataServicesQuery("");
@@ -165,32 +159,41 @@ export const DistributionModal = ({
     useSearchMediaTypeByUri(selectedMediaTypeUris, referenceDataEnv);
   const { data: selectedFileTypes, isLoading: loadingSelectedFileTypes } =
     useSearchFileTypeByUri(selectedFileTypeUris, referenceDataEnv);
-  const { data: dataServices } = useSearchDataServiceSuggestions(
-    searchEnv,
-    searchDataServicesQuery,
-  );
+  const { data: dataServices, isFetching: searchingDataServices } =
+    useSearchDataServiceSuggestions(
+      searchEnv,
+      debouncedSearchDataServicesQuery,
+    );
 
-  useEffect(() => {
-    setSelectedAndSearchedAccessServices((prev) => {
-      const allKnown = [
-        ...prev,
-        ...initialAccessServices,
-        ...(dataServices ?? []),
-      ];
-      const selectedAccessServices = selectedAccessServiceUris
-        ?.map((uri) => allKnown.find((service) => service.uri === uri))
-        .filter((service) => service !== undefined);
-      return Array.from(
-        new Map(
-          [
-            ...prev,
-            ...(selectedAccessServices ?? []),
-            ...(dataServices ?? []),
-          ].map((item) => [item.uri, item]),
-        ).values(),
-      );
-    });
-  }, [dataServices, selectedAccessServiceUris, initialAccessServices]);
+  const accessServiceList = useMemo(() => {
+    const resolveAccessService = (uri: string) =>
+      initialAccessServices.find((service) => service.uri === uri) ||
+      dataServices?.find(
+        (service: Search.Suggestion) => service.uri === uri,
+      ) || {
+        id: uri,
+        uri,
+        searchType: "DATA_SERVICE" as const,
+      };
+
+    const selectedItems = selectedAccessServiceUris.map(resolveAccessService);
+    const searchHits = searchDataServicesQuery.trim()
+      ? (dataServices ?? [])
+      : [];
+
+    return Array.from(
+      new Map(
+        [...selectedItems, ...searchHits]
+          .filter((item) => Boolean(item.uri))
+          .map((item) => [item.uri, item] as const),
+      ).values(),
+    );
+  }, [
+    dataServices,
+    initialAccessServices,
+    searchDataServicesQuery,
+    selectedAccessServiceUris,
+  ]);
 
   const handleSubmit = (
     values: Distribution,
@@ -289,81 +292,93 @@ export const DistributionModal = ({
         setFieldValue,
         setSelectedAccessServiceUris,
         setSearchDataServicesQuery,
-        selectedAndSearchedAccessServices,
-      }: any) => (
-        <Fieldset data-size="sm">
-          <Fieldset.Legend>
-            <TitleWithHelpTextAndTag
-              helpText={localization.datasetForm.helptext.accessServices}
-            >
-              {localization.datasetForm.fieldLabel.accessServices}
-            </TitleWithHelpTextAndTag>
-          </Fieldset.Legend>
-          {selectedAccessServiceUris?.every((v) =>
-            selectedAndSearchedAccessServices.find(
-              (option: { uri: string }) => option.uri === v,
-            ),
-          ) ? (
-            <FieldsetWithDelete
-              onDelete={() => setFieldValue("accessServices", null)}
-            >
-              <Combobox
-                multiple
-                hideClearButton
-                portal={false}
-                onChange={(event) =>
-                  setSearchDataServicesQuery(event.target.value)
-                }
-                value={selectedAccessServiceUris}
-                onValueChange={(selectedValues) => {
-                  setFieldValue("accessServices", selectedValues);
-                  setSelectedAccessServiceUris(selectedValues);
-                }}
-                placeholder={`${localization.search.search}...`}
-                data-size="sm"
-                virtual
-                ref={(el: HTMLInputElement | null) =>
-                  setInputRef("accessServices", el)
-                }
+        accessServiceList,
+        searchingDataServices,
+        selectedAccessServiceUris,
+      }: any) => {
+        const accessServiceOptions: SuggestionSelectOption[] =
+          accessServiceList.map((option: Search.Suggestion) => ({
+            value: option.uri,
+            label: getTranslateText(option.title) || option.uri,
+          }));
+
+        const selectedAccessServices = (selectedAccessServiceUris ?? []).map(
+          (uri: string) => ({
+            value: uri,
+            label:
+              accessServiceOptions.find((option) => option.value === uri)
+                ?.label ?? uri,
+          }),
+        );
+
+        const emptyMessage = searchingDataServices
+          ? `${localization.loading}...`
+          : searchDataServicesQuery.trim()
+            ? localization.search.noHits
+            : `${localization.search.typeToSearch}...`;
+
+        return (
+          <Fieldset data-size="sm">
+            <Fieldset.Legend>
+              <TitleWithHelpTextAndTag
+                helpText={localization.datasetForm.helptext.accessServices}
               >
-                {selectedAndSearchedAccessServices.map(
-                  (
-                    option: {
-                      uri: any;
-                      description: any;
-                      title: any;
-                      organization: { prefLabel: any };
-                    },
-                    i: any,
-                  ) => (
-                    <Combobox.Option
-                      key={`distribution-${option.uri}-${i}`}
-                      value={option.uri ?? option.description}
-                      displayValue={
-                        getTranslateText(option.title) || option.uri
-                      }
-                    >
+                {localization.datasetForm.fieldLabel.accessServices}
+              </TitleWithHelpTextAndTag>
+            </Fieldset.Legend>
+            {selectedAccessServiceUris?.every((v: string) =>
+              accessServiceList.find(
+                (option: Search.Suggestion) => option.uri === v,
+              ),
+            ) ? (
+              <FieldsetWithDelete
+                onDelete={() => setFieldValue("accessServices", null)}
+              >
+                <SearchSuggestionSelect
+                  emptyMessage={emptyMessage}
+                  inputRef={(el: HTMLInputElement | null) =>
+                    setInputRef("accessServices", el)
+                  }
+                  isFetching={searchingDataServices}
+                  multiple
+                  onSearch={setSearchDataServicesQuery}
+                  onSelectedChange={(selectedItems) => {
+                    const selectedValues = selectedItems.map(
+                      (item) => item.value,
+                    );
+                    setFieldValue("accessServices", selectedValues);
+                    setSelectedAccessServiceUris(selectedValues);
+                  }}
+                  options={accessServiceOptions}
+                  placeholder={`${localization.search.search}...`}
+                  renderOption={(option) => {
+                    const service = accessServiceList.find(
+                      (item: Search.Suggestion) => item.uri === option.value,
+                    );
+
+                    return (
                       <div className={styles.comboboxOptionTwoColumns}>
                         <div>
-                          {option.title
-                            ? getTranslateText(option.title)
-                            : getTranslateText(option.description)}
+                          {service?.title
+                            ? getTranslateText(service.title)
+                            : getTranslateText(service?.description)}
                         </div>
                         <div>
-                          {getTranslateText(option.organization?.prefLabel) ??
+                          {getTranslateText(service?.organization?.prefLabel) ??
                             ""}
                         </div>
                       </div>
-                    </Combobox.Option>
-                  ),
-                )}
-              </Combobox>
-            </FieldsetWithDelete>
-          ) : (
-            <Skeleton variant="rectangle" height="100px" width="100%" />
-          )}
-        </Fieldset>
-      ),
+                    );
+                  }}
+                  selected={selectedAccessServices}
+                />
+              </FieldsetWithDelete>
+            ) : (
+              <Skeleton variant="rectangle" height="100px" width="100%" />
+            )}
+          </Fieldset>
+        );
+      },
     },
     {
       name: "mediaType",
@@ -395,27 +410,19 @@ export const DistributionModal = ({
                 setSelectedMediaTypeUris([]);
               }}
             >
-              <FormikReferenceDataCombobox
-                onChange={(event) =>
-                  setSearchQueryMediaTypes(event.target.value)
-                }
+              <ReferenceDataSuggestionSelect
+                onSearch={setSearchQueryMediaTypes}
                 onValueChange={(selectedValues) => {
                   const selectedMediaTypes = nonEmptyValues(selectedValues);
                   setFieldValue("mediaType", selectedMediaTypes);
                   setSelectedMediaTypeUris(selectedMediaTypes);
                 }}
-                value={mediaTypeValues}
                 selectedValuesSearchHits={selectedMediaTypes ?? []}
                 querySearchHits={mediaTypes ?? []}
                 formikValues={mediaTypeValues}
-                loading={loadingSelectedMediaTypes || searchingMediaTypes}
-                portal={false}
+                isFetching={loadingSelectedMediaTypes || searchingMediaTypes}
                 showCodeAsDescription={true}
-                hideClearButton={false}
-                ref={(el: HTMLInputElement | null) =>
-                  setInputRef("mediaType", el)
-                }
-                size="md"
+                inputRef={(el) => setInputRef("mediaType", el)}
               />
             </FieldsetWithDelete>
           </Fieldset>
@@ -616,7 +623,9 @@ export const DistributionModal = ({
               showDivider: boolean = false,
             ) => {
               const props = {
-                selectedAndSearchedAccessServices,
+                accessServiceList,
+                searchingDataServices,
+                selectedAccessServiceUris,
                 distributionType,
                 expanded: isExpanded(fieldConfig),
                 fileTypes,
@@ -843,43 +852,31 @@ export const DistributionModal = ({
                                 }
                               </TitleWithHelpTextAndTag>
                             </Fieldset.Legend>
-                            <Combobox
-                              value={
-                                values?.mobilityDataStandard
-                                  ? [values.mobilityDataStandard]
-                                  : [""]
+                            <SingleSuggestionSelect
+                              emptyMessage={localization.search.noHits}
+                              error={
+                                typeof errors.mobilityDataStandard === "string"
+                                  ? errors.mobilityDataStandard
+                                  : undefined
                               }
-                              portal={false}
-                              onValueChange={(selectedValues) => {
+                              onValueChange={(value) =>
                                 setFieldValue(
                                   "mobilityDataStandard",
-                                  selectedValues.toString(),
-                                );
-                              }}
-                              data-size="sm"
-                              virtual
-                              error={errors.mobilityDataStandard}
-                            >
-                              <Combobox.Option
-                                key="mobilityDataStandard"
-                                value=""
-                              >
-                                {localization.none}
-                              </Combobox.Option>
-                              {mobilityDataStandards &&
-                                mobilityDataStandards.map(
-                                  (mobilityDataStandard, i: number) => (
-                                    <Combobox.Option
-                                      key={`mobilityDataStandard-${mobilityDataStandard.uri}-${i}`}
-                                      value={mobilityDataStandard.uri}
-                                    >
-                                      {getTranslateText(
-                                        mobilityDataStandard.label,
-                                      )}
-                                    </Combobox.Option>
-                                  ),
-                                )}
-                            </Combobox>
+                                  value ?? "",
+                                )
+                              }
+                              options={[
+                                ...(mobilityDataStandards?.map(
+                                  (mobilityDataStandard) => ({
+                                    value: mobilityDataStandard.uri,
+                                    label: getTranslateText(
+                                      mobilityDataStandard.label,
+                                    ),
+                                  }),
+                                ) ?? []),
+                              ]}
+                              value={values.mobilityDataStandard || undefined}
+                            />
                           </Fieldset>
                           <FieldsetDivider />
                         </>
@@ -901,38 +898,24 @@ export const DistributionModal = ({
                                 }
                               </TitleWithHelpTextAndTag>
                             </Fieldset.Legend>
-                            <Combobox
-                              value={
-                                values?.rights?.type
-                                  ? [values.rights.type]
-                                  : [""]
+                            <SingleSuggestionSelect
+                              emptyMessage={localization.search.noHits}
+                              error={
+                                typeof getIn(errors, "rights.type") === "string"
+                                  ? getIn(errors, "rights.type")
+                                  : undefined
                               }
-                              portal={false}
-                              onValueChange={(selectedValues) => {
-                                setFieldValue(
-                                  "rights.type",
-                                  selectedValues.toString(),
-                                );
-                              }}
-                              data-size="sm"
-                              virtual
-                              error={getIn(errors, "rights.type")}
-                            >
-                              <Combobox.Option key="right.type" value="">
-                                {localization.none}
-                              </Combobox.Option>
-                              {mobilityRights &&
-                                mobilityRights.map(
-                                  (mobilityRight, i: number) => (
-                                    <Combobox.Option
-                                      key={`mobilityRights-${mobilityRight.uri}-${i}`}
-                                      value={mobilityRight.uri}
-                                    >
-                                      {getTranslateText(mobilityRight.label)}
-                                    </Combobox.Option>
-                                  ),
-                                )}
-                            </Combobox>
+                              onValueChange={(value) =>
+                                setFieldValue("rights.type", value ?? "")
+                              }
+                              options={[
+                                ...(mobilityRights?.map((mobilityRight) => ({
+                                  value: mobilityRight.uri,
+                                  label: getTranslateText(mobilityRight.label),
+                                })) ?? []),
+                              ]}
+                              value={values.rights?.type || undefined}
+                            />
                           </Fieldset>
                           <FieldsetDivider />
                         </>
@@ -953,28 +936,24 @@ export const DistributionModal = ({
                             {localization.datasetForm.fieldLabel.format}
                           </TitleWithHelpTextAndTag>
                         </Fieldset.Legend>
-                        <FormikReferenceDataCombobox
-                          onChange={(event) =>
-                            setSearchQueryFileTypes(event.target.value)
-                          }
+                        <ReferenceDataSuggestionSelect
+                          onSearch={setSearchQueryFileTypes}
                           onValueChange={(selectedValues) => {
                             setFieldValue("format", selectedValues);
                             setSelectedFileTypeUris(selectedValues);
                           }}
-                          value={values?.format || []}
                           selectedValuesSearchHits={selectedFileTypes ?? []}
                           querySearchHits={fileTypes ?? []}
                           formikValues={values?.format ?? []}
-                          loading={
+                          isFetching={
                             loadingSelectedFileTypes || searchingFileTypes
                           }
-                          portal={false}
-                          hideClearButton={false}
-                          ref={(el: HTMLInputElement | null) =>
-                            setInputRef("format", el)
+                          inputRef={(el) => setInputRef("format", el)}
+                          error={
+                            typeof errors.format === "string"
+                              ? errors.format
+                              : undefined
                           }
-                          error={errors.format}
-                          size="md"
                         />
                       </Fieldset>
                       <FieldsetDivider />
@@ -988,41 +967,31 @@ export const DistributionModal = ({
                             {localization.datasetForm.fieldLabel.license}
                           </TitleWithHelpTextAndTag>
                         </Fieldset.Legend>
-                        <Combobox
-                          value={values?.license ? [values.license] : []}
-                          portal={false}
-                          onValueChange={(selectedValues) => {
-                            setFieldValue("license", selectedValues.toString());
-                          }}
-                          filter={containsFilter}
-                          placeholder={`${localization.search.search}...`}
-                          inputValue={searchQueryLicense}
-                          onChange={(event) =>
-                            setSearchQueryLicense(event.target.value)
+                        <SingleSuggestionSelect
+                          emptyMessage={localization.search.noHits}
+                          onValueChange={(value) =>
+                            setFieldValue("license", value ?? "")
                           }
-                        >
-                          <Combobox.Empty>
-                            {localization.search.noHits}
-                          </Combobox.Empty>
-                          {values?.license &&
-                            !openLicenses?.some(
-                              (l) => l.uri === values.license,
-                            ) && (
-                              <Combobox.Option value={values.license}>
-                                {values.license}
-                              </Combobox.Option>
-                            )}
-                          {sortLicences(openLicenses ?? []).map(
-                            (license, i) => (
-                              <Combobox.Option
-                                key={`license-${license.uri}-${i}`}
-                                value={license.uri}
-                              >
-                                {getTranslateText(license.label)}
-                              </Combobox.Option>
+                          options={[
+                            ...(values?.license &&
+                            !openLicenses?.some((l) => l.uri === values.license)
+                              ? [
+                                  {
+                                    value: values.license,
+                                    label: values.license,
+                                  },
+                                ]
+                              : []),
+                            ...sortLicences(openLicenses ?? []).map(
+                              (license) => ({
+                                value: license.uri,
+                                label: getTranslateText(license.label),
+                              }),
                             ),
-                          )}
-                        </Combobox>
+                          ]}
+                          placeholder={`${localization.search.search}...`}
+                          value={values.license || undefined}
+                        />
                       </Fieldset>
                       <FieldsetDivider />
                       {expandedFields.map((f, index) =>

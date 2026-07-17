@@ -2,7 +2,6 @@
 
 import {
   Checkbox,
-  Combobox,
   Fieldset,
   Paragraph,
   Spinner,
@@ -10,7 +9,7 @@ import {
 } from "@digdir/designsystemet-react";
 import {
   Button,
-  ConceptCombobox,
+  ConceptSuggestionSelect,
   ConfirmModal,
   CostsTable,
   FieldsetDivider,
@@ -20,11 +19,12 @@ import {
   FormLayout,
   getFormNotifications,
   HelpMarkdown,
+  MultiSuggestionSelect,
   NotificationCarousel,
   Select,
   Snackbar,
   SnackbarSeverity,
-  SpatialCombobox,
+  SpatialSuggestionSelect,
   StickyFooterBar,
   TextareaWithPrefix,
   TitleWithHelpTextAndTag,
@@ -38,7 +38,6 @@ import {
 } from "@catalog-frontend/utils";
 import {
   LosTheme,
-  Option,
   ReferenceDataCode,
   Service,
   ServiceToBeCreated,
@@ -49,7 +48,7 @@ import styles from "./service-form.module.css";
 import { useParams, useSearchParams } from "next/navigation";
 import { FastField, Field, Form, Formik, FormikProps } from "formik";
 import { serviceTemplate } from "./service-template";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ProducesField } from "./components/produces-field";
 import { EvidenceField } from "./components/evidence-field";
 import {
@@ -116,10 +115,6 @@ export const ServiceForm = (props: ServiceFormProps) => {
     statuses,
     type,
   } = props;
-
-  const containsFilter = (inputValue: string, option: Option): boolean => {
-    return option.label.toLowerCase().includes(inputValue.toLowerCase());
-  };
   const searchParams = useSearchParams();
   const formikRef = useRef<FormikProps<ServiceToBeCreated>>(null);
   const { catalogId, serviceId } = useParams<{
@@ -127,6 +122,31 @@ export const ServiceForm = (props: ServiceFormProps) => {
     serviceId?: string;
   }>();
   const restoreOnRender = Boolean(searchParams.get("restore"));
+
+  const dctTypeOptions = useMemo(
+    () =>
+      mainActivities?.map((item) => ({
+        value: item.uri,
+        label: getTranslateText(item.label),
+      })) ?? [],
+    [mainActivities],
+  );
+
+  const losThemeOptions = useMemo(
+    () =>
+      losThemes
+        ?.slice()
+        .sort((a, b) =>
+          (get(a.name, "nb")?.toString() ?? "").localeCompare(
+            get(b.name, "nb")?.toString() ?? "",
+          ),
+        )
+        .map((theme) => ({
+          value: theme.uri,
+          label: getTranslateText(theme.name),
+        })) ?? [],
+    [losThemes],
+  );
 
   const [isCanceled, setIsCanceled] = useState(false);
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
@@ -471,7 +491,9 @@ export const ServiceForm = (props: ServiceFormProps) => {
                             {localization.serviceForm.fieldLabel.spatial}
                           </TitleWithHelpTextAndTag>
                         </Fieldset.Legend>
-                        <SpatialCombobox referenceDataEnv={referenceDataEnv} />
+                        <SpatialSuggestionSelect
+                          referenceDataEnv={referenceDataEnv}
+                        />
                       </Fieldset>
                       <FieldsetDivider />
                       <Fieldset data-size="sm">
@@ -484,7 +506,7 @@ export const ServiceForm = (props: ServiceFormProps) => {
                             {localization.serviceForm.fieldLabel.subject}
                           </TitleWithHelpTextAndTag>
                         </Fieldset.Legend>
-                        <ConceptCombobox
+                        <ConceptSuggestionSelect
                           fieldLabel="subject"
                           searchEnv={searchEnv}
                         />
@@ -493,8 +515,9 @@ export const ServiceForm = (props: ServiceFormProps) => {
                       {type === "public-services" && (
                         <>
                           <FieldsetDivider />
-                          <Fieldset data-size="sm">
-                            <Fieldset.Legend>
+                          <MultiSuggestionSelect
+                            emptyMessage={localization.search.noHits}
+                            fieldsetLegend={
                               <TitleWithHelpTextAndTag
                                 tagTitle={localization.tag.recommended}
                                 tagColor="info"
@@ -504,36 +527,20 @@ export const ServiceForm = (props: ServiceFormProps) => {
                               >
                                 {localization.serviceForm.fieldLabel.dctType}
                               </TitleWithHelpTextAndTag>
-                            </Fieldset.Legend>
-                            <Combobox
-                              multiple
-                              onValueChange={(value) =>
-                                setFieldValue("dctType", value)
-                              }
-                              placeholder={`${localization.search.search}...`}
-                              size="sm"
-                              value={values.dctType || []}
-                            >
-                              {mainActivities?.map((item) => (
-                                <Combobox.Option
-                                  key={item.uri}
-                                  value={item.uri}
-                                >
-                                  {getTranslateText(item.label)}
-                                </Combobox.Option>
-                              ))}
-                            </Combobox>
-                          </Fieldset>
+                            }
+                            onSelectedChange={(selectedValues) =>
+                              setFieldValue("dctType", selectedValues)
+                            }
+                            options={dctTypeOptions}
+                            placeholder={`${localization.search.search}...`}
+                            selectedValues={values.dctType}
+                          />
                         </>
                       )}
                       <FieldsetDivider />
-                      <FastField
-                        id="losTheme-combobox"
-                        as={Combobox}
-                        value={values.losTheme}
-                        multiple
-                        hideClearButton
-                        label={
+                      <MultiSuggestionSelect
+                        emptyMessage={localization.search.noHits}
+                        fieldsetLegend={
                           <TitleWithHelpTextAndTag
                             helpText={
                               localization.serviceForm.helptext.losTheme
@@ -542,29 +549,13 @@ export const ServiceForm = (props: ServiceFormProps) => {
                             {localization.serviceForm.fieldLabel.losTheme}
                           </TitleWithHelpTextAndTag>
                         }
-                        filter={containsFilter}
-                        placeholder={`${localization.search.search}...`}
-                        onValueChange={(selected: string[]) =>
-                          setFieldValue("losTheme", selected)
+                        onSelectedChange={(selectedValues) =>
+                          setFieldValue("losTheme", selectedValues)
                         }
-                        data-size="sm"
-                      >
-                        <Combobox.Empty>
-                          {localization.search.noHits}
-                        </Combobox.Empty>
-                        {losThemes
-                          ?.slice()
-                          .sort((a, b) =>
-                            (get(a.name, "nb")?.toString() ?? "").localeCompare(
-                              get(b.name, "nb")?.toString() ?? "",
-                            ),
-                          )
-                          .map((theme) => (
-                            <Combobox.Option key={theme.uri} value={theme.uri}>
-                              {getTranslateText(theme.name)}
-                            </Combobox.Option>
-                          ))}
-                      </FastField>
+                        options={losThemeOptions}
+                        placeholder={`${localization.search.search}...`}
+                        selectedValues={values.losTheme}
+                      />
                     </div>
                   </FormLayout.Section>
 

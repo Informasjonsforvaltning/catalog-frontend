@@ -1,15 +1,17 @@
 import { render } from "@testing-library/react";
 
 import React from "react";
-import FormikReferenceDataCombobox from "./index";
+import ReferenceDataSuggestionSelect from "./index";
 
-describe("FormikReferenceDataCombobox", () => {
+describe("ReferenceDataSuggestionSelect", () => {
   it("should render successfully", () => {
     const { baseElement } = render(
-      <FormikReferenceDataCombobox
+      <ReferenceDataSuggestionSelect
         selectedValuesSearchHits={[]}
         querySearchHits={[]}
         formikValues={[]}
+        onSearch={jest.fn()}
+        onValueChange={jest.fn()}
       />,
     );
     expect(baseElement).toBeTruthy();

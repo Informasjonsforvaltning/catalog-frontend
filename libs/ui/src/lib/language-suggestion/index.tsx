@@ -1,22 +1,19 @@
 "use client";
 
-import {
-  useDebounce,
-  useSearchLanguage,
-  useSearchLanguageByUri,
-} from "@catalog-frontend/ui";
+import { ReferenceDataCode } from "@catalog-frontend/types";
 import {
   capitalizeFirstLetter,
   getTranslateText,
   localization,
 } from "@catalog-frontend/utils";
-import {
-  EXPERIMENTAL_Suggestion as Suggestion,
-  ValidationMessage,
-} from "@digdir/designsystemet-react";
-import { ReferenceDataCode } from "@catalog-frontend/types";
-import { useMemo, useState } from "react";
 import { useFormikContext } from "formik";
+import { useMemo, useState } from "react";
+import { SearchSuggestionSelect } from "../search-suggestion-select";
+import { useDebounce } from "../use-debounce";
+import {
+  useSearchLanguage,
+  useSearchLanguageByUri,
+} from "../use-reference-data-search";
 
 interface Props {
   referenceDataEnv: string;
@@ -71,16 +68,16 @@ type LanguageFormValues = {
 };
 
 export const LanguageSuggestion = ({ referenceDataEnv }: Props) => {
-  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [searchTerm, setSearchTerm] = useState("");
   const debouncedSearchTerm = useDebounce(searchTerm);
-  const { data: searchHits, isLoading: isSearching } = useSearchLanguage(
+  const { data: searchHits, isFetching } = useSearchLanguage(
     debouncedSearchTerm,
     referenceDataEnv,
   );
   const { values, errors, setFieldValue } =
     useFormikContext<LanguageFormValues>();
   const { data: selectedValues } = useSearchLanguageByUri(
-    values?.language,
+    values.language,
     referenceDataEnv,
   );
 
@@ -89,7 +86,7 @@ export const LanguageSuggestion = ({ referenceDataEnv }: Props) => {
     [searchHits],
   );
 
-  const languageOptions: ReferenceDataCode[] = useMemo(
+  const languageOptions = useMemo(
     () => [
       ...new Map(
         [
@@ -112,6 +109,19 @@ export const LanguageSuggestion = ({ referenceDataEnv }: Props) => {
     [selectedValues, sortedSearchHits, values.language],
   );
 
+  const suggestionOptions = useMemo(
+    () =>
+      languageOptions
+        .filter((item): item is ReferenceDataCode & { uri: string } =>
+          Boolean(item.uri),
+        )
+        .map((item) => ({
+          value: item.uri,
+          label: getTranslatedLabel(item),
+        })),
+    [languageOptions],
+  );
+
   const selectedLanguages = useMemo(
     () =>
       (values.language ?? []).map((uri) => {
@@ -125,45 +135,31 @@ export const LanguageSuggestion = ({ referenceDataEnv }: Props) => {
     [languageOptions, values.language],
   );
 
-  const emptyMessage = isSearching
+  const emptyMessage = isFetching
     ? `${localization.loading}...`
     : debouncedSearchTerm
       ? localization.search.noHits
       : `${localization.search.typeToSearch}...`;
 
+  const languageError =
+    typeof errors.language === "string" ? errors.language : undefined;
+
   return (
-    <>
-      <Suggestion
-        data-size="sm"
-        filter={() => true}
-        multiple
-        onSelectedChange={(selectedItems) =>
-          setFieldValue(
-            "language",
-            selectedItems.map((item) => item.value),
-          )
-        }
-        selected={selectedLanguages}
-      >
-        <Suggestion.Input
-          aria-busy={isSearching}
-          aria-invalid={errors.language ? true : undefined}
-          onInput={(event) => setSearchTerm(event.currentTarget.value)}
-          placeholder={`${localization.search.search}...`}
-        />
-        <Suggestion.List>
-          <Suggestion.Empty>{emptyMessage}</Suggestion.Empty>
-          {!isSearching &&
-            languageOptions.map((item) => (
-              <Suggestion.Option key={item.uri} value={item.uri ?? ""}>
-                {getTranslatedLabel(item)}
-              </Suggestion.Option>
-            ))}
-        </Suggestion.List>
-      </Suggestion>
-      {errors.language && (
-        <ValidationMessage>{errors.language}</ValidationMessage>
-      )}
-    </>
+    <SearchSuggestionSelect
+      emptyMessage={emptyMessage}
+      error={languageError}
+      isFetching={isFetching}
+      multiple
+      onSearch={setSearchTerm}
+      onSelectedChange={(selectedItems) =>
+        setFieldValue(
+          "language",
+          selectedItems.map((item) => item.value),
+        )
+      }
+      options={suggestionOptions}
+      placeholder={`${localization.search.search}...`}
+      selected={selectedLanguages}
+    />
   );
 };

@@ -1,6 +1,8 @@
 "use client";
 import { Dataset, Search } from "@catalog-frontend/types";
 import {
+  SearchSuggestionSelect,
+  SuggestionSelectOption,
   TitleWithHelpTextAndTag,
   useDebounce,
   useSearchInformationModelsByUri,
@@ -11,10 +13,7 @@ import {
   getTranslateText,
   localization,
 } from "@catalog-frontend/utils";
-import {
-  EXPERIMENTAL_Suggestion as Suggestion,
-  Fieldset,
-} from "@digdir/designsystemet-react";
+import { Fieldset } from "@digdir/designsystemet-react";
 import { useFormikContext } from "formik";
 import { useMemo, useState } from "react";
 import styles from "../dataset-form.module.css";
@@ -75,6 +74,15 @@ export const InformationModelSection = ({ searchEnv }: Props) => {
     ],
   );
 
+  const suggestionOptions: SuggestionSelectOption[] = useMemo(
+    () =>
+      informationModelOptions.map((option) => ({
+        value: option.uri,
+        label: getOptionLabel(option),
+      })),
+    [informationModelOptions],
+  );
+
   const selectedInformationModelItems = useMemo(
     () =>
       (values.informationModelsFromFDK ?? []).map((uri) => {
@@ -94,6 +102,26 @@ export const InformationModelSection = ({ searchEnv }: Props) => {
       ? localization.search.noHits
       : `${localization.search.typeToSearch}...`;
 
+  const renderInformationModelOption = (option: SuggestionSelectOption) => {
+    const suggestion = informationModelOptions.find(
+      (item) => item.uri === option.value,
+    );
+
+    if (!suggestion) {
+      return option.label;
+    }
+
+    return (
+      <div className={styles.comboboxOption}>
+        <div>{getOptionLabel(suggestion)}</div>
+        <div>
+          {capitalizeFirstLetter(getTranslateText(suggestion.description))}
+        </div>
+        <div>{getTranslateText(suggestion.organization?.prefLabel)}</div>
+      </div>
+    );
+  };
+
   return (
     <>
       {!isLoading && (
@@ -107,47 +135,22 @@ export const InformationModelSection = ({ searchEnv }: Props) => {
               {localization.datasetForm.fieldLabel.informationModelsFromFDK}
             </TitleWithHelpTextAndTag>
           </Fieldset.Legend>
-          <Suggestion
-            data-size="sm"
-            filter={() => true} // Deactivate filter, handled by backend
+          <SearchSuggestionSelect
+            emptyMessage={emptyMessage}
+            isFetching={searching}
             multiple
+            onSearch={setSearchTerm}
             onSelectedChange={(selectedItems) =>
               setFieldValue(
                 "informationModelsFromFDK",
                 selectedItems.map((item) => item.value),
               )
             }
+            options={suggestionOptions}
+            placeholder={`${localization.search.search}...`}
+            renderOption={renderInformationModelOption}
             selected={selectedInformationModelItems}
-          >
-            <Suggestion.Input
-              aria-busy={searching}
-              onInput={(event) => setSearchTerm(event.currentTarget.value)}
-              placeholder={`${localization.search.search}...`}
-            />
-            <Suggestion.List>
-              <Suggestion.Empty>{emptyMessage}</Suggestion.Empty>
-              {!searching &&
-                informationModelOptions.map((suggestion) => (
-                  <Suggestion.Option
-                    value={suggestion.uri}
-                    key={suggestion.uri}
-                    label={getOptionLabel(suggestion)}
-                  >
-                    <div className={styles.comboboxOption}>
-                      <div>{getOptionLabel(suggestion)}</div>
-                      <div>
-                        {capitalizeFirstLetter(
-                          getTranslateText(suggestion.description),
-                        )}
-                      </div>
-                      <div>
-                        {getTranslateText(suggestion.organization?.prefLabel)}
-                      </div>
-                    </div>
-                  </Suggestion.Option>
-                ))}
-            </Suggestion.List>
-          </Suggestion>
+          />
         </Fieldset>
       )}
 

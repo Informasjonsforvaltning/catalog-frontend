@@ -9,7 +9,6 @@ import {
 } from "@catalog-frontend/utils";
 import {
   Button,
-  Combobox,
   Dialog,
   ErrorSummary,
   Fieldset,
@@ -17,13 +16,14 @@ import {
   Textfield,
 } from "@digdir/designsystemet-react";
 import { FieldArray, Formik, FormikProps } from "formik";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { isEmpty, isNumber } from "lodash";
 import { AddButton, DeleteButton, EditButton } from "../button";
 import { DialogActions } from "../dialog-actions";
 import { FieldsetDivider } from "../fieldset-divider";
 import { FastFieldWithRef } from "../formik-fast-field-with-ref";
 import { FormikLanguageFieldset } from "../formik-language-fieldset";
+import { SingleSuggestionSelect } from "../single-suggestion-select";
 import { TextareaWithPrefix } from "../textarea-with-prefix";
 import { TitleWithHelpTextAndTag } from "../title-with-help-text-and-tag";
 import { costValidationSchema } from "./cost-validation-schema";
@@ -52,6 +52,17 @@ export const CostsModal = ({
   const formikRef = useRef<FormikProps<Cost>>(null);
   const valueRef = React.createRef<HTMLInputElement | HTMLTextAreaElement>();
   const docRef = React.createRef<HTMLInputElement | HTMLTextAreaElement>();
+
+  const currencyOptions = useMemo(
+    () =>
+      currencies?.map((currencyRef) => ({
+        value: currencyRef.uri,
+        label: `${currencyRef.code} (${capitalizeFirstLetter(
+          getTranslateText(currencyRef.label),
+        )})`,
+      })) ?? [],
+    [currencies],
+  );
 
   useEffect(() => {
     if (focus === "value") {
@@ -157,30 +168,16 @@ export const CostsModal = ({
                           ref={valueRef}
                           type="number"
                         />
-                        <Combobox
-                          value={[values?.currency ?? DEFAULT_CURRENCY]}
-                          portal={false}
-                          onValueChange={(selectedValues) => {
-                            if (selectedValues.length === 0) return;
-                            setFieldValue("currency", selectedValues[0]);
-                          }}
-                          data-size="sm"
+                        <SingleSuggestionSelect
                           disabled={!isNumber(values?.value)}
-                          hideClearButton
-                        >
-                          {currencies?.map((currencyRef, i) => (
-                            <Combobox.Option
-                              key={`currency-${currencyRef.uri}-${i}`}
-                              value={currencyRef.uri}
-                            >
-                              {currencyRef.code} (
-                              {capitalizeFirstLetter(
-                                getTranslateText(currencyRef.label),
-                              )}
-                              )
-                            </Combobox.Option>
-                          ))}
-                        </Combobox>
+                          emptyMessage={localization.search.noHits}
+                          onValueChange={(value) =>
+                            setFieldValue("currency", value ?? DEFAULT_CURRENCY)
+                          }
+                          options={currencyOptions}
+                          placeholder={`${localization.search.search}...`}
+                          value={values.currency ?? DEFAULT_CURRENCY}
+                        />
                         <DeleteButton
                           onClick={() => {
                             setFieldValue("value", undefined);
