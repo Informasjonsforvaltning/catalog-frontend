@@ -121,6 +121,7 @@
     "typescript-eslint": "^8.59.2"
   },
   "resolutions": {
+    "websocket-driver": "^0.7.5",
     "shell-quote": "^1.8.4",
     "axios": "^1.16.0",
     "ip-address": "^10.2.0",
