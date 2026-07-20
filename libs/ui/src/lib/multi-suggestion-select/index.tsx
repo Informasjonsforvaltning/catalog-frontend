@@ -9,6 +9,7 @@ import {
 import {
   ComponentRef,
   ReactNode,
+  Ref,
   useCallback,
   useEffect,
   useLayoutEffect,
@@ -28,6 +29,7 @@ export type MultiSuggestionSelectProps = {
   emptyMessage?: string;
   error?: string;
   fieldsetLegend?: ReactNode;
+  inputRef?: Ref<HTMLInputElement>;
   onSelectedChange: (values: string[]) => void;
   options: SuggestionSelectOption[];
   placeholder?: string;
@@ -50,6 +52,7 @@ export const MultiSuggestionSelect = ({
   emptyMessage = localization.search.noHits,
   error,
   fieldsetLegend,
+  inputRef,
   onSelectedChange,
   options,
   placeholder,
@@ -88,6 +91,7 @@ export const MultiSuggestionSelect = ({
       }
     >
       <Suggestion.Input
+        ref={inputRef}
         aria-invalid={error ? true : undefined}
         aria-label={ariaLabel}
         onFocus={handleReopenSuggestionList}

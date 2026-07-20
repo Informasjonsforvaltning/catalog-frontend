@@ -24,7 +24,7 @@ export type DatasetToBeCreated = {
   euDataTheme?: string[];
   losTheme?: string[];
   mobilityTheme?: string[];
-  type?: string;
+  type?: string[];
   keywords?: LocalizedStrings;
   concepts?: string[];
   provenance?: string;
