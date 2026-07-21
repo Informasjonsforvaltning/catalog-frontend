@@ -38,14 +38,21 @@ export type MultiSuggestionSelectProps = {
 };
 
 const getSelectedItems = (
-  selectedValues: string[] | undefined,
+  selectedValues: string[] | string | undefined,
   options: SuggestionSelectOption[],
-): SuggestionSelectOption[] =>
-  (selectedValues ?? []).map((value) => ({
+): SuggestionSelectOption[] => {
+  const values = Array.isArray(selectedValues)
+    ? selectedValues
+    : selectedValues
+      ? [selectedValues]
+      : [];
+
+  return values.map((value) => ({
     value,
     label: options.find((option) => option.value === value)?.label ?? value,
     description: options.find((option) => option.value === value)?.description,
   }));
+};
 
 export const MultiSuggestionSelect = ({
   ariaLabel,
