@@ -6,6 +6,10 @@ import {
 } from "@catalog-frontend/types";
 import { isEmpty } from "lodash";
 
+const toStringArray = (
+  value: string[] | string | null | undefined,
+): string[] => (Array.isArray(value) ? value : value ? [value] : []);
+
 export const datasetTemplate = (dataset: Dataset): Dataset => {
   return {
     id: dataset?.id ?? "",
@@ -33,7 +37,7 @@ export const datasetTemplate = (dataset: Dataset): Dataset => {
     euDataTheme: dataset.euDataTheme ?? [],
     losTheme: dataset.losTheme ?? [],
     mobilityTheme: dataset.mobilityTheme ?? [],
-    type: dataset?.type,
+    type: toStringArray(dataset?.type),
     keywords: dataset.keywords,
     concepts: dataset.concepts,
     provenance: dataset?.provenance,
@@ -78,7 +82,7 @@ export const datasetToBeCreatedTemplate = (
     euDataTheme: [],
     losTheme: [],
     mobilityTheme: [],
-    type: undefined,
+    type: [],
     keywords: {},
     concepts: [],
     provenance: undefined,

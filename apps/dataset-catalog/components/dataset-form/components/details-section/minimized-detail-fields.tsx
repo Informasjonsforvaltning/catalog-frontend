@@ -9,6 +9,7 @@ import {
   TextareaWithPrefix,
   FastFieldWithRef,
   FieldsetDivider,
+  MultiSuggestionSelect,
   SingleSuggestionSelect,
 } from "@catalog-frontend/ui";
 import {
@@ -41,7 +42,7 @@ const FIELD_CONFIG = [
     name: "type",
     getValue: (values: Dataset) => values?.type,
     render: (props: any) => (
-      <SingleSuggestionSelect
+      <MultiSuggestionSelect
         emptyMessage={localization.search.noHits}
         fieldsetLegend={
           <TitleWithHelpTextAndTag
@@ -51,10 +52,12 @@ const FIELD_CONFIG = [
           </TitleWithHelpTextAndTag>
         }
         inputRef={props.ref}
-        onValueChange={(value) => props.setFieldValue("type", value ?? "")}
+        onSelectedChange={(selectedValues) =>
+          props.setFieldValue("type", selectedValues)
+        }
         options={props.datasetTypeSuggestionOptions}
         placeholder={`${localization.search.search}...`}
-        value={props.values.type || undefined}
+        selectedValues={props.values.type}
       />
     ),
     hasDeleteButton: true,
