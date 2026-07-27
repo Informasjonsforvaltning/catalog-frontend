@@ -9076,7 +9076,7 @@ __metadata:
     lodash: "npm:^4.18.1"
     luxon: "npm:3.7.2"
     next: "npm:16.2.11"
-    next-auth: "npm:^4.24.14"
+    next-auth: "npm:^4.24.15"
     nuqs: "npm:^2.8.9"
     nx: "npm:22.7.4"
     playwright-core: "npm:^1.59.1"
@@ -15704,9 +15704,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"next-auth@npm:^4.24.14":
-  version: 4.24.14
-  resolution: "next-auth@npm:4.24.14"
+"next-auth@npm:^4.24.15":
+  version: 4.24.15
+  resolution: "next-auth@npm:4.24.15"
   dependencies:
     "@babel/runtime": "npm:^7.20.13"
     "@panva/hkdf": "npm:^1.0.2"
@@ -15716,7 +15716,7 @@ __metadata:
     openid-client: "npm:^5.4.0"
     preact: "npm:^10.6.3"
     preact-render-to-string: "npm:^5.1.19"
-    uuid: "npm:^8.3.2"
+    uuid: "npm:^11.1.1"
   peerDependencies:
     "@auth/core": 0.34.3
     next: ^12.2.5 || ^13 || ^14 || ^15 || ^16
@@ -15728,7 +15728,7 @@ __metadata:
       optional: true
     nodemailer:
       optional: true
-  checksum: 10/ae8e3b5a84c580b34217a7cd273cc43ec3e8336f971856f2b6ded5eddf73544def04bfe64f6577bb3f9b4973e74a30e4ca3d4a2aca595b65e0ded654f83a81c0
+  checksum: 10/e92f3a5ea448b251ae13c64186d054a56877356275b5e53c358fd551d4ba92d38d9cab3c43f5ff190c16849072e5d0471b9dafb115ec895d42097d0beac72ef1
   languageName: node
   linkType: hard
 
