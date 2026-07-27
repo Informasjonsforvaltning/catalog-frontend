@@ -4716,65 +4716,65 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@next/env@npm:16.2.11":
-  version: 16.2.11
-  resolution: "@next/env@npm:16.2.11"
-  checksum: 10/57423578764a3672fc135c22f9e84639a2a2290069fdf8552f04163be640fd4eddfd3f6678df63bde8d524371990e9f2ab311139aec2e94dc1ade16c9c81958c
+"@next/env@npm:16.2.8":
+  version: 16.2.8
+  resolution: "@next/env@npm:16.2.8"
+  checksum: 10/fcca5b67513efc32b84c687018eb6d9332df2122d3928463534d0d723799ff678eb7d3500f7adcc4b3d3ffc071229c901b43b485eaeb2f313ba75d88a83f52f5
   languageName: node
   linkType: hard
 
-"@next/swc-darwin-arm64@npm:16.2.11":
-  version: 16.2.11
-  resolution: "@next/swc-darwin-arm64@npm:16.2.11"
+"@next/swc-darwin-arm64@npm:16.2.8":
+  version: 16.2.8
+  resolution: "@next/swc-darwin-arm64@npm:16.2.8"
   conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
 
-"@next/swc-darwin-x64@npm:16.2.11":
-  version: 16.2.11
-  resolution: "@next/swc-darwin-x64@npm:16.2.11"
+"@next/swc-darwin-x64@npm:16.2.8":
+  version: 16.2.8
+  resolution: "@next/swc-darwin-x64@npm:16.2.8"
   conditions: os=darwin & cpu=x64
   languageName: node
   linkType: hard
 
-"@next/swc-linux-arm64-gnu@npm:16.2.11":
-  version: 16.2.11
-  resolution: "@next/swc-linux-arm64-gnu@npm:16.2.11"
+"@next/swc-linux-arm64-gnu@npm:16.2.8":
+  version: 16.2.8
+  resolution: "@next/swc-linux-arm64-gnu@npm:16.2.8"
   conditions: os=linux & cpu=arm64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@next/swc-linux-arm64-musl@npm:16.2.11":
-  version: 16.2.11
-  resolution: "@next/swc-linux-arm64-musl@npm:16.2.11"
+"@next/swc-linux-arm64-musl@npm:16.2.8":
+  version: 16.2.8
+  resolution: "@next/swc-linux-arm64-musl@npm:16.2.8"
   conditions: os=linux & cpu=arm64 & libc=musl
   languageName: node
   linkType: hard
 
-"@next/swc-linux-x64-gnu@npm:16.2.11":
-  version: 16.2.11
-  resolution: "@next/swc-linux-x64-gnu@npm:16.2.11"
+"@next/swc-linux-x64-gnu@npm:16.2.8":
+  version: 16.2.8
+  resolution: "@next/swc-linux-x64-gnu@npm:16.2.8"
   conditions: os=linux & cpu=x64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@next/swc-linux-x64-musl@npm:16.2.11":
-  version: 16.2.11
-  resolution: "@next/swc-linux-x64-musl@npm:16.2.11"
+"@next/swc-linux-x64-musl@npm:16.2.8":
+  version: 16.2.8
+  resolution: "@next/swc-linux-x64-musl@npm:16.2.8"
   conditions: os=linux & cpu=x64 & libc=musl
   languageName: node
   linkType: hard
 
-"@next/swc-win32-arm64-msvc@npm:16.2.11":
-  version: 16.2.11
-  resolution: "@next/swc-win32-arm64-msvc@npm:16.2.11"
+"@next/swc-win32-arm64-msvc@npm:16.2.8":
+  version: 16.2.8
+  resolution: "@next/swc-win32-arm64-msvc@npm:16.2.8"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
-"@next/swc-win32-x64-msvc@npm:16.2.11":
-  version: 16.2.11
-  resolution: "@next/swc-win32-x64-msvc@npm:16.2.11"
+"@next/swc-win32-x64-msvc@npm:16.2.8":
+  version: 16.2.8
+  resolution: "@next/swc-win32-x64-msvc@npm:16.2.8"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
@@ -9075,7 +9075,7 @@ __metadata:
     lint-staged: "npm:^16.4.0"
     lodash: "npm:^4.18.1"
     luxon: "npm:3.7.2"
-    next: "npm:16.2.11"
+    next: "npm:16.2.8"
     next-auth: "npm:^4.24.15"
     nuqs: "npm:^2.8.9"
     nx: "npm:22.7.4"
@@ -15732,19 +15732,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"next@npm:16.2.11":
-  version: 16.2.11
-  resolution: "next@npm:16.2.11"
+"next@npm:16.2.8":
+  version: 16.2.8
+  resolution: "next@npm:16.2.8"
   dependencies:
-    "@next/env": "npm:16.2.11"
-    "@next/swc-darwin-arm64": "npm:16.2.11"
-    "@next/swc-darwin-x64": "npm:16.2.11"
-    "@next/swc-linux-arm64-gnu": "npm:16.2.11"
-    "@next/swc-linux-arm64-musl": "npm:16.2.11"
-    "@next/swc-linux-x64-gnu": "npm:16.2.11"
-    "@next/swc-linux-x64-musl": "npm:16.2.11"
-    "@next/swc-win32-arm64-msvc": "npm:16.2.11"
-    "@next/swc-win32-x64-msvc": "npm:16.2.11"
+    "@next/env": "npm:16.2.8"
+    "@next/swc-darwin-arm64": "npm:16.2.8"
+    "@next/swc-darwin-x64": "npm:16.2.8"
+    "@next/swc-linux-arm64-gnu": "npm:16.2.8"
+    "@next/swc-linux-arm64-musl": "npm:16.2.8"
+    "@next/swc-linux-x64-gnu": "npm:16.2.8"
+    "@next/swc-linux-x64-musl": "npm:16.2.8"
+    "@next/swc-win32-arm64-msvc": "npm:16.2.8"
+    "@next/swc-win32-x64-msvc": "npm:16.2.8"
     "@swc/helpers": "npm:0.5.15"
     baseline-browser-mapping: "npm:^2.9.19"
     caniuse-lite: "npm:^1.0.30001579"
@@ -15788,7 +15788,7 @@ __metadata:
       optional: true
   bin:
     next: dist/bin/next
-  checksum: 10/ceb25d1b34b07e4f0f903d5dc9063fa2d7a4d161132d8bd38c41fd70c8ccc5abb2d13b7085c845303e1c2882c2110a58027dc3626595076108069ddc70626c03
+  checksum: 10/3ed9bf17a8354ac4246032d98d9f832c93aa58c93183e6f1ee285ffb0353b5e65e763f0f6d58054daed89a6978e57fff28bf341d4619850435e691c61ad3a190
   languageName: node
   linkType: hard
 
