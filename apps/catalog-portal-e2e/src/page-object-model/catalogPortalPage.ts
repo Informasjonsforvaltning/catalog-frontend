@@ -31,6 +31,10 @@ export default class CatalogPortalPage {
 
   public async goto(url: string = this.url) {
     await this.page.goto(url);
+    // Firefox is markedly slower to receive the streamed SSR output for the
+    // catalog navigation cards; wait for the network to settle so the links
+    // are present before assertions run.
+    await this.page.waitForLoadState("networkidle");
   }
 
   public async checkAccessibility() {
@@ -46,7 +50,9 @@ export default class CatalogPortalPage {
     expectedUrl: RegExp,
   ) {
     const locator = (this[locatorFunction] as () => Locator)();
-    await expect(locator).toBeVisible();
+    // Allow extra time: the nav-card links are streamed in and render later on
+    // Firefox than the 5s default assertion timeout.
+    await expect(locator).toBeVisible({ timeout: 30000 });
     await expect(locator).toHaveAttribute("href", expectedUrl);
   }
 }
