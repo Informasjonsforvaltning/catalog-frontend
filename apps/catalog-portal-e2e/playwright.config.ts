@@ -37,10 +37,13 @@ export default defineConfig({
   /* Run your local dev server before starting the tests */
   webServer: {
     command:
-      "yarn kill-port 4200 && yarn nx serve catalog-portal --configuration=e2e",
+      "yarn kill-port 4200 && yarn nx run catalog-portal:build:production && yarn nx serve catalog-portal --configuration=e2e",
     url: "http://127.0.0.1:4200",
     reuseExistingServer: !process.env.CI,
     cwd: workspaceRoot,
+    // e2e runs against a production build (next start), which needs time to
+    // compile before the server is ready — well beyond Playwright's 60s default.
+    timeout: 300 * 1000,
   },
   projects: [
     {
