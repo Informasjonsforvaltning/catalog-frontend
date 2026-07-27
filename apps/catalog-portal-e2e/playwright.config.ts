@@ -41,6 +41,9 @@ export default defineConfig({
     url: "http://127.0.0.1:4200",
     reuseExistingServer: !process.env.CI,
     cwd: workspaceRoot,
+    // e2e runs against a production build (next start), which needs time to
+    // compile before the server is ready — well beyond Playwright's 60s default.
+    timeout: 300 * 1000,
   },
   projects: [
     {

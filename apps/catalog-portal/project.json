@@ -31,8 +31,8 @@
           "dev": true
         },
         "e2e": {
-          "buildTarget": "catalog-portal:build:development",
-          "dev": true
+          "buildTarget": "catalog-portal:build:production",
+          "dev": false
         },
         "production": {
           "buildTarget": "catalog-portal:build:production",
