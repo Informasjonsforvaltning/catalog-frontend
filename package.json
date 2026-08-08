@@ -111,7 +111,7 @@
     "jest-environment-jsdom": "^30.4.1",
     "kill-port": "^2.0.1",
     "lint-staged": "^16.4.0",
-    "nx": "22.7.4",
+    "nx": "22.7.7",
     "playwright-core": "^1.59.1",
     "playwright-ctrf-json-reporter": "^0.0.29",
     "prettier": "3.8.3",
