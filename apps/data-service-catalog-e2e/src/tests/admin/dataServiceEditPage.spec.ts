@@ -10,6 +10,8 @@ import {
   getMinimalDataService,
 } from "../../utils/dataService";
 
+const WHITESPACE_TITLE = "Test whitespace";
+
 runTestAsAdmin(
   "should create new data service",
   async ({ page, playwright, accessibilityBuilder }) => {
@@ -207,5 +209,83 @@ runTestAsAdmin(
 
     // Should show restore dialog
     await expect(page.getByText("Vil du gjenopprette?")).toBeVisible();
+  },
+);
+
+runTestAsAdmin(
+  "empty submit check prevents save when only whitespace added",
+  async ({ page, playwright, accessibilityBuilder }) => {
+    const apiRequestContext = await playwright.request.newContext({
+      storageState: adminAuthFile,
+    });
+
+    // A valid data service, so a missing empty submit check would really result
+    // in a save instead of being masked by a validation error
+    const createdDataService = await createDataService(apiRequestContext, {
+      ...getRandomDataService(),
+      title: { nb: WHITESPACE_TITLE, nn: "", en: "" },
+    });
+
+    const dataServiceEditPage = new DataServiceEditPage(
+      page,
+      playwright,
+      accessibilityBuilder,
+    );
+    await dataServiceEditPage.goto(
+      process.env.E2E_CATALOG_ID as string,
+      createdDataService.id,
+    );
+
+    // Wait for form to be ready
+    await dataServiceEditPage.expectSaveButtonVisible();
+    await page.waitForLoadState("networkidle");
+
+    // Add trailing whitespace to title
+    await dataServiceEditPage.titleNbInput.fill(`${WHITESPACE_TITLE} `);
+
+    // The form registered the edit. Without this the test could pass silently
+    // because the input event was lost before hydration and nothing happened.
+    await expect(dataServiceEditPage.saveButton).toBeEnabled();
+
+    // Click save button
+    await dataServiceEditPage.clickSave();
+
+    // Wait for network to settle - if empty submit check works, no request is made
+    await page.waitForLoadState("networkidle");
+
+    // Verify NO snackbar appears (empty submit check should prevent save)
+    await expect(dataServiceEditPage.successSnackbar).not.toBeVisible();
+    await expect(dataServiceEditPage.errorSnackbar).not.toBeVisible();
+
+    // The whitespace was normalized away and the form is pristine again
+    await expect(dataServiceEditPage.titleNbInput).toHaveValue(
+      WHITESPACE_TITLE,
+    );
+    await expect(dataServiceEditPage.saveButton).toBeDisabled();
+
+    // The form was valid, so nothing was blocked by validation instead.
+    // toHaveCount(0) rather than not.toBeVisible(), since the message can match
+    // both the title group and the contact name group and trip strict mode.
+    await expect(
+      page.getByText("Må fylles ut for minst ett språk."),
+    ).toHaveCount(0);
+    await expect(page.getByText("Endepunkt må fylles ut.")).toHaveCount(0);
+
+    // Re-add the whitespace and submit without blurring the input, so the
+    // untrimmed value reaches onSubmit and the empty submit check itself runs
+    // (a real click blurs the field, which trims it first)
+    await dataServiceEditPage.titleNbInput.fill(`${WHITESPACE_TITLE} `);
+    await expect(dataServiceEditPage.saveButton).toBeEnabled();
+    await dataServiceEditPage.saveButton.dispatchEvent("click");
+    await page.waitForLoadState("networkidle");
+
+    await expect(dataServiceEditPage.successSnackbar).not.toBeVisible();
+    await expect(dataServiceEditPage.errorSnackbar).not.toBeVisible();
+    await expect(dataServiceEditPage.titleNbInput).toHaveValue(
+      WHITESPACE_TITLE,
+    );
+
+    // Clean up
+    await deleteDataService(apiRequestContext, createdDataService.id);
   },
 );
