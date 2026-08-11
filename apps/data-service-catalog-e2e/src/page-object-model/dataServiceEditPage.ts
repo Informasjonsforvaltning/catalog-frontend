@@ -15,6 +15,7 @@ export default class DataServiceEditPage {
   readonly descriptionNbInput: Locator;
   readonly descriptionNnInput: Locator;
   readonly descriptionEnInput: Locator;
+  readonly versionInput: Locator;
   readonly endpointUrlInput: Locator;
   readonly endpointDescriptionGroup: Locator;
   readonly endpointDescriptionNbInput: Locator;
@@ -73,6 +74,9 @@ export default class DataServiceEditPage {
     this.descriptionNbInput = this.descriptionGroup.getByLabel("Bokmål");
     this.descriptionNnInput = this.descriptionGroup.getByLabel("Nynorsk");
     this.descriptionEnInput = this.descriptionGroup.getByLabel("Engelsk");
+    this.versionInput = page.getByRole("textbox", {
+      name: "Versjon Hjelp til utfylling",
+    });
     this.endpointUrlInput = page.getByRole("textbox", {
       name: "EndepunktsURL Hjelp til utfylling Må fylles ut",
     });
@@ -275,6 +279,10 @@ export default class DataServiceEditPage {
     );
   }
 
+  async fillVersion(version: string) {
+    await this.versionInput.fill(version);
+  }
+
   async fillEndpointUrl(url: string) {
     await this.endpointUrlInput.fill(url);
   }
@@ -326,8 +334,14 @@ export default class DataServiceEditPage {
     }
   }
 
+  // Status, access rights and availability are rendered as radio groups by
+  // ReferenceDataRadioGroup, so they are selected by their visible label.
+  // exact: true is required because role name matching is substring based, and
+  // e.g. "Allmenn tilgang" would otherwise also match "Ikke-allmenn tilgang".
   async selectStatus(status: string) {
-    await this.statusGroup.getByRole("combobox").selectOption(status);
+    await this.statusGroup
+      .getByRole("radio", { name: status, exact: true })
+      .check();
   }
 
   async selectLicense(license: string) {
@@ -337,14 +351,14 @@ export default class DataServiceEditPage {
 
   async selectAccessRights(accessRights: string) {
     await this.accessRightsGroup
-      .getByRole("combobox")
-      .selectOption(accessRights);
+      .getByRole("radio", { name: accessRights, exact: true })
+      .check();
   }
 
   async selectAvailability(availability: string) {
     await this.availabilityGroup
-      .getByRole("combobox")
-      .selectOption(availability);
+      .getByRole("radio", { name: availability, exact: true })
+      .check();
   }
 
   // Button actions
@@ -423,6 +437,10 @@ export default class DataServiceEditPage {
 
   async expectEndpointUrlToBe(url: string) {
     await expect(this.endpointUrlInput).toHaveValue(url);
+  }
+
+  async expectSaveSuccessful() {
+    await expect(this.successSnackbar).toBeVisible();
   }
 
   async expectSaveButtonVisible() {

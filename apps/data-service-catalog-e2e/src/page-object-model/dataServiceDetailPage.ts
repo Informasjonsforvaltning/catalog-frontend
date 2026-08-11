@@ -11,6 +11,7 @@ export default class DataServiceDetailPage {
   readonly title: Locator;
   readonly description: Locator;
   readonly endpointUrl: Locator;
+  readonly version: Locator;
   readonly contactPoint: Locator;
   readonly publicationState: Locator;
   readonly dataServiceId: Locator;
@@ -38,6 +39,7 @@ export default class DataServiceDetailPage {
     this.title = page.locator("main").locator("h2");
     this.description = page.getByTestId("data-service-description");
     this.endpointUrl = page.getByTestId("data-service-endpoint-url");
+    this.version = page.getByTestId("data-service-version");
     this.contactPoint = page.getByTestId("data-service-contact-point");
     this.publicationState = page.getByTestId("data-service-publication-state");
     this.dataServiceId = page.getByTestId("data-service-id");
@@ -140,6 +142,10 @@ export default class DataServiceDetailPage {
 
   async expectEndpointUrlToBe(url: string) {
     await expect(this.endpointUrl).toContainText(url);
+  }
+
+  async expectVersionToBe(version: string) {
+    await expect(this.version).toContainText(version);
   }
 
   async expectContactPointToBe(contactPoint: string) {
