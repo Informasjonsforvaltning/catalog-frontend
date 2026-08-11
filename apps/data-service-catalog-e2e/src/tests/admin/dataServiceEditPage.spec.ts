@@ -1,14 +1,13 @@
 import { expect, runTestAsAdmin } from "../../fixtures/basePage";
 import DataServiceEditPage from "../../page-object-model/dataServiceEditPage";
+import DataServiceDetailPage from "../../page-object-model/dataServiceDetailPage";
 import {
   adminAuthFile,
   createDataService,
   deleteDataService,
+  uniqueString,
 } from "../../utils/helpers";
-import {
-  getRandomDataService,
-  getMinimalDataService,
-} from "../../utils/dataService";
+import { getRandomDataService } from "../../utils/dataService";
 
 const WHITESPACE_TITLE = "Test whitespace";
 
@@ -45,8 +44,10 @@ runTestAsAdmin(
       storageState: adminAuthFile,
     });
 
-    // Create a data service first
-    const originalDataService = getMinimalDataService();
+    // getRandomDataService rather than getMinimalDataService: the latter has no
+    // contact point, which the form requires, so the save would be rejected by
+    // validation and this test would pass without anything being saved
+    const originalDataService = getRandomDataService();
     const createdDataService = await createDataService(
       apiRequestContext,
       originalDataService,
@@ -81,6 +82,7 @@ runTestAsAdmin(
 
     // Save changes
     await dataServiceEditPage.clickSave();
+    await dataServiceEditPage.expectSaveSuccessful();
 
     // Verify the changes were saved
     await dataServiceEditPage.expectTitleToBe(updatedTitle);
@@ -284,6 +286,228 @@ runTestAsAdmin(
     await expect(dataServiceEditPage.titleNbInput).toHaveValue(
       WHITESPACE_TITLE,
     );
+
+    // Clean up
+    await deleteDataService(apiRequestContext, createdDataService.id);
+  },
+);
+
+runTestAsAdmin(
+  "should edit data service about section",
+  async ({ page, playwright, accessibilityBuilder }) => {
+    const apiRequestContext = await playwright.request.newContext({
+      storageState: adminAuthFile,
+    });
+
+    const originalDataService = getRandomDataService();
+    const createdDataService = await createDataService(
+      apiRequestContext,
+      originalDataService,
+    );
+
+    const dataServiceEditPage = new DataServiceEditPage(
+      page,
+      playwright,
+      accessibilityBuilder,
+    );
+    const dataServiceDetailPage = new DataServiceDetailPage(
+      page,
+      playwright,
+      accessibilityBuilder,
+    );
+
+    // Navigate to the detail page and click edit
+    await dataServiceDetailPage.goto(
+      process.env.E2E_CATALOG_ID as string,
+      createdDataService.id,
+    );
+    await dataServiceDetailPage.clickEdit();
+    await dataServiceEditPage.expectDataServiceEditPageUrl(
+      process.env.E2E_CATALOG_ID as string,
+      createdDataService.id,
+    );
+
+    // Verify the existing values are prefilled
+    await dataServiceEditPage.expectTitleToBe(originalDataService.title);
+    await dataServiceEditPage.expectDescriptionToBe(
+      originalDataService.description,
+    );
+
+    const newTitle = {
+      nb: uniqueString("new_title_nb"),
+      nn: uniqueString("new_title_nn"),
+      en: uniqueString("new_title_en"),
+    };
+    const newDescription = {
+      nb: uniqueString("new_description_nb"),
+      nn: uniqueString("new_description_nn"),
+      en: uniqueString("new_description_en"),
+    };
+    const newVersion = "2.0.0";
+
+    // All languages already have a value, so no language needs to be opened
+    await dataServiceEditPage.fillTitle(newTitle, [], false);
+    await dataServiceEditPage.fillDescription(newDescription, [], false);
+    await dataServiceEditPage.fillVersion(newVersion);
+
+    await dataServiceEditPage.clickSave();
+    await dataServiceEditPage.expectSaveSuccessful();
+
+    // Verify the changes were persisted
+    await dataServiceDetailPage.goto(
+      process.env.E2E_CATALOG_ID as string,
+      createdDataService.id,
+    );
+    await dataServiceDetailPage.expectTitleToBe(newTitle.nb);
+    await dataServiceDetailPage.expectDescriptionToBe(newDescription.nb);
+    await dataServiceDetailPage.expectVersionToBe(newVersion);
+
+    // Clean up
+    await deleteDataService(apiRequestContext, createdDataService.id);
+  },
+);
+
+runTestAsAdmin(
+  "should edit data service endpoint section",
+  async ({ page, playwright, accessibilityBuilder }) => {
+    const apiRequestContext = await playwright.request.newContext({
+      storageState: adminAuthFile,
+    });
+
+    const createdDataService = await createDataService(
+      apiRequestContext,
+      getRandomDataService(),
+    );
+
+    const dataServiceEditPage = new DataServiceEditPage(
+      page,
+      playwright,
+      accessibilityBuilder,
+    );
+    const dataServiceDetailPage = new DataServiceDetailPage(
+      page,
+      playwright,
+      accessibilityBuilder,
+    );
+
+    await dataServiceDetailPage.goto(
+      process.env.E2E_CATALOG_ID as string,
+      createdDataService.id,
+    );
+    await dataServiceDetailPage.clickEdit();
+
+    const newEndpointUrl = "https://api.example.com/updated-endpoint";
+    await dataServiceEditPage.fillEndpointUrl(newEndpointUrl);
+
+    await dataServiceEditPage.clickSave();
+    await dataServiceEditPage.expectSaveSuccessful();
+
+    // Verify the change was persisted
+    await dataServiceDetailPage.goto(
+      process.env.E2E_CATALOG_ID as string,
+      createdDataService.id,
+    );
+    await dataServiceDetailPage.expectEndpointUrlToBe(newEndpointUrl);
+
+    // Clean up
+    await deleteDataService(apiRequestContext, createdDataService.id);
+  },
+);
+
+runTestAsAdmin(
+  "should edit data service access section",
+  async ({ page, playwright, accessibilityBuilder }) => {
+    const apiRequestContext = await playwright.request.newContext({
+      storageState: adminAuthFile,
+    });
+
+    const createdDataService = await createDataService(
+      apiRequestContext,
+      getRandomDataService(),
+    );
+
+    const dataServiceEditPage = new DataServiceEditPage(
+      page,
+      playwright,
+      accessibilityBuilder,
+    );
+    const dataServiceDetailPage = new DataServiceDetailPage(
+      page,
+      playwright,
+      accessibilityBuilder,
+    );
+
+    await dataServiceDetailPage.goto(
+      process.env.E2E_CATALOG_ID as string,
+      createdDataService.id,
+    );
+    await dataServiceDetailPage.clickEdit();
+
+    // Access rights is a radio group backed by a static reference data list
+    await dataServiceEditPage.selectAccessRights("Allmenn tilgang");
+
+    await dataServiceEditPage.clickSave();
+    await dataServiceEditPage.expectSaveSuccessful();
+
+    // Verify the change was persisted
+    await dataServiceDetailPage.goto(
+      process.env.E2E_CATALOG_ID as string,
+      createdDataService.id,
+    );
+    await dataServiceDetailPage.expectAccessRightsToBe("Allmenn tilgang");
+
+    // Clean up
+    await deleteDataService(apiRequestContext, createdDataService.id);
+  },
+);
+
+runTestAsAdmin(
+  "should edit data service contact point section",
+  async ({ page, playwright, accessibilityBuilder }) => {
+    const apiRequestContext = await playwright.request.newContext({
+      storageState: adminAuthFile,
+    });
+
+    const createdDataService = await createDataService(
+      apiRequestContext,
+      getRandomDataService(),
+    );
+
+    const dataServiceEditPage = new DataServiceEditPage(
+      page,
+      playwright,
+      accessibilityBuilder,
+    );
+    const dataServiceDetailPage = new DataServiceDetailPage(
+      page,
+      playwright,
+      accessibilityBuilder,
+    );
+
+    await dataServiceDetailPage.goto(
+      process.env.E2E_CATALOG_ID as string,
+      createdDataService.id,
+    );
+    await dataServiceDetailPage.clickEdit();
+
+    const newContactPoint = {
+      email: "updated@example.com",
+      phone: "+4787654321",
+      url: "https://example.com/updated-contact",
+    };
+    await dataServiceEditPage.fillContactPoint(newContactPoint);
+
+    await dataServiceEditPage.clickSave();
+    await dataServiceEditPage.expectSaveSuccessful();
+
+    // Verify the changes were persisted
+    await dataServiceDetailPage.goto(
+      process.env.E2E_CATALOG_ID as string,
+      createdDataService.id,
+    );
+    await dataServiceDetailPage.expectContactEmailToBe(newContactPoint.email);
+    await dataServiceDetailPage.expectContactPhoneToBe(newContactPoint.phone);
+    await dataServiceDetailPage.expectContactUrlToBe(newContactPoint.url);
 
     // Clean up
     await deleteDataService(apiRequestContext, createdDataService.id);
