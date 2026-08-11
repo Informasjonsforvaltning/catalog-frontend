@@ -47,6 +47,10 @@ export default class DataServiceEditPage {
   readonly publishButton: Locator;
   readonly unpublishButton: Locator;
 
+  // Snackbars
+  readonly successSnackbar: Locator;
+  readonly errorSnackbar: Locator;
+
   constructor(
     page: Page,
     context: BrowserContext,
@@ -123,6 +127,10 @@ export default class DataServiceEditPage {
     this.deleteButton = page.getByRole("button", { name: "Slett" });
     this.publishButton = page.getByRole("button", { name: "Publiser" });
     this.unpublishButton = page.getByRole("button", { name: "Avpubliser" });
+
+    // Snackbars
+    this.successSnackbar = page.getByText("Endringene ble lagret.");
+    this.errorSnackbar = page.getByText("Lagring feilet");
   }
 
   // Navigation
