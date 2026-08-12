@@ -26,7 +26,7 @@ export default class DatasetEditPage {
     context: BrowserContext,
     accessibilityBuilder: AxeBuilder,
   ) {
-    this.url = `/catalogs/${process.env.E2E_CATALOG_ID}/concepts`;
+    this.url = `/catalogs/${process.env.E2E_CATALOG_ID}/datasets`;
     this.page = page;
     this.context = context;
     this.accessibilityBuilder = accessibilityBuilder;
@@ -689,6 +689,48 @@ export default class DatasetEditPage {
         .getByText("Endringene ble lagret.")
         .waitFor({ state: "visible" });
     }
+  }
+
+  // "Ignorer påkrevde felt" is checked by default, which makes the form
+  // validate against the lenient draft schema. Uncheck it to apply the full
+  // schema (description length, EU theme, contact point etc.)
+  async setIgnoreRequired(ignore: boolean) {
+    const checkbox = this.page.getByRole("checkbox", {
+      name: "Ignorer påkrevde felt",
+    });
+    if (ignore) {
+      await checkbox.check();
+    } else {
+      await checkbox.uncheck();
+    }
+  }
+
+  // Distribution modal, targeted so it does not depend on the maximal
+  // fillDistributionForm helper
+  distributionDialog() {
+    return this.page.getByRole("dialog");
+  }
+
+  // "Tilgangslenke" rather than "Lenke": the latter is a substring of
+  // "Nedlastingslenke" and "Lenke til dokumentasjon" and turns ambiguous as
+  // soon as one of those rows is added
+  async fillDistributionAccessUrl(url: string) {
+    await this.distributionDialog().getByLabel("Tilgangslenke").fill(url);
+  }
+
+  // Not exact: AddButton renders an icon alongside the text. The names used are
+  // unique on their own.
+  async expandDistributionField(addButtonName: string) {
+    await this.distributionDialog()
+      .getByRole("button", { name: addButtonName })
+      .click();
+  }
+
+  // exact is required: every collapsed field's toggle is also named "Legg til ..."
+  async submitDistributionModal() {
+    await this.distributionDialog()
+      .getByRole("button", { name: "Legg til", exact: true })
+      .click();
   }
 
   // Cancel button
