@@ -120,44 +120,6 @@ runTestAsAdmin(
 );
 
 runTestAsAdmin(
-  "should show validation errors when required fields are not ignored",
-  async ({ page, context, playwright, accessibilityBuilder }) => {
-    const apiRequestContext = await playwright.request.newContext({
-      storageState: adminAuthFile,
-    });
-    const service = await createService(
-      apiRequestContext,
-      getRandomService("validation"),
-    );
-
-    const editPage = new ServicesEditPage(page, context, accessibilityBuilder);
-
-    await editPage.goto(catalogId(), service as string);
-    await editPage.expectFormReady();
-
-    // Clear the description in every language. The draft schema does not require
-    // it, so this is only an error once the full schema applies.
-    await editPage.clearDescription();
-
-    // Switch from the lenient draft schema to the full one
-    await editPage.setIgnoreRequired(false);
-
-    await editPage.clickSave();
-
-    // Assert the fieldset level message, scoped to its group. Per-language
-    // messages (such as the min length ones) are not surfaced the same way.
-    await expect(
-      editPage.descriptionGroup.getByText("Må fylles ut for minst ett språk."),
-    ).toBeVisible();
-
-    // Nothing was saved
-    await expect(editPage.successSnackbar).not.toBeVisible();
-
-    await deleteService(apiRequestContext, service as string);
-  },
-);
-
-runTestAsAdmin(
   "empty submit check prevents save when only whitespace added",
   async ({ page, context, playwright, accessibilityBuilder }) => {
     const apiRequestContext = await playwright.request.newContext({

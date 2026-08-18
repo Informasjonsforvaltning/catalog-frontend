@@ -15,7 +15,6 @@ export default class ServicesEditPage {
   readonly contactCategoryGroup: Locator;
   readonly contactInfoGroup: Locator;
   readonly homepageInput: Locator;
-  readonly ignoreRequiredCheckbox: Locator;
   readonly saveButton: Locator;
   readonly successSnackbar: Locator;
   readonly errorSnackbar: Locator;
@@ -42,9 +41,6 @@ export default class ServicesEditPage {
       name: "Kontaktinformasjon Hjelp til utfylling Må fylles ut",
     });
     this.homepageInput = page.getByRole("textbox", { name: "Hjemmeside" });
-    this.ignoreRequiredCheckbox = page.getByRole("checkbox", {
-      name: "Ignorer påkrevde felt",
-    });
     // exact: true because the form also renders "Lagre endringer" elsewhere, and
     // the submitting state swaps in a Spinner labelled "Lagrer"
     this.saveButton = page.getByRole("button", { name: "Lagre", exact: true });
@@ -92,17 +88,6 @@ export default class ServicesEditPage {
     await this.fillLanguageField(this.descriptionGroup, description, open);
   }
 
-  // Empties every language input instead of deleting them, so the fieldset stays
-  // rendered and its "at least one language" error can be asserted
-  async clearDescription() {
-    for (const language of ["Bokmål", "Nynorsk", "Engelsk"]) {
-      const input = this.descriptionGroup.getByLabel(language);
-      if (await input.isVisible()) {
-        await input.fill("");
-      }
-    }
-  }
-
   async fillContactCategory(category: LocalizedStrings, open: string[] = []) {
     await this.fillLanguageField(this.contactCategoryGroup, category, open);
   }
@@ -113,16 +98,6 @@ export default class ServicesEditPage {
 
   async fillHomepage(homepage: string) {
     await this.homepageInput.fill(homepage);
-  }
-
-  // "Ignorer påkrevde felt" is checked by default, which validates against the
-  // lenient draft schema. Uncheck it to apply the full schema.
-  async setIgnoreRequired(ignore: boolean) {
-    if (ignore) {
-      await this.ignoreRequiredCheckbox.check();
-    } else {
-      await this.ignoreRequiredCheckbox.uncheck();
-    }
   }
 
   // This suite's expect timeout is 5s, which is not always enough for the edit
