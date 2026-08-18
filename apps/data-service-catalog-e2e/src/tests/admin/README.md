@@ -77,16 +77,15 @@ Tests use the following utilities for data management:
 - `createDataService()` - Creates test data services via API
 - `deleteDataService()` - Cleans up test data services
 - `publishDataService()` - Publishes data services for testing
-- `getRandomDataService()` - Generates random test data
-- `getMinimalDataService()` - Generates minimal test data
+- `getRandomDataService()` - Generates random test data that satisfies the form's validation schema
+- `getMinimalDataService()` - Minimal data for the API only. It has no contact point, so the **form** rejects
+  it; using it in a form test makes the save fail silently and the test pass for the wrong reason
 
 ## Accessibility Testing
 
-All tests include accessibility checks using axe-core. Tests verify:
-
-- WCAG 2.0 AA compliance
-- Best practices
-- Custom accessibility rules
+The page objects expose `checkAccessibility()` (axe-core, WCAG 2.0/2.1/2.2 AA plus best practices), but **no
+test in this suite currently calls it**, so accessibility is not verified here today. `concept-catalog-e2e` and
+`service-catalog-e2e` do call it, and are the examples to follow when enabling it.
 
 ## Test Patterns
 

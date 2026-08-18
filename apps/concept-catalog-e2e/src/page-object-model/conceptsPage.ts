@@ -32,8 +32,6 @@ export default class ConceptsPage {
   }
 
   // Locators
-  pageTitleLocator = () => this.page.getByRole("heading", { name: "" });
-  pageDescriptionLocator = () => this.page.getByText("");
   subjectFilterHeaderLocator = () =>
     this.page.getByRole("button", { name: "Fagområde" });
   statusFilterHeaderLocator = () =>
@@ -53,23 +51,6 @@ export default class ConceptsPage {
   searchInputLocator = () => this.page.getByPlaceholder("Søk");
   searchButtonLocator = () => this.page.getByRole("button", { name: "Søk" });
   noResultsLocator = () => this.page.getByText("Ditt søk ga ingen treff");
-
-  async deletedAllConcepts() {
-    try {
-      await this.noResultsLocator().waitFor({
-        state: "visible",
-        timeout: 5000,
-      });
-      return await this.noResultsLocator().isVisible();
-    } catch {
-      return false;
-    }
-  }
-
-  async deleteConcept(url: string) {
-    await this.detailPage.goto(url);
-    await this.detailPage.deleteConcept();
-  }
 
   public async goto() {
     await this.page.goto(this.url);
@@ -92,24 +73,6 @@ export default class ConceptsPage {
       ])
       .analyze();
     expect.soft(result.violations).toEqual([]);
-  }
-
-  public async checkPageTitleText() {
-    await expect(this.pageTitleLocator()).toHaveText("");
-  }
-
-  public async checkPageDescriptionText() {
-    await expect(this.pageDescriptionLocator()).toHaveText("");
-  }
-
-  public async checkIfNoConceptsExist() {
-    const items = (await this.page.getByRole("link").all()).filter(
-      async (link) => {
-        (await link.getAttribute("href"))?.startsWith(this.url);
-      },
-    );
-
-    expect(items.length).toBe(0);
   }
 
   public async createConceptUsingForm(
@@ -173,11 +136,6 @@ export default class ConceptsPage {
     await spinner.waitFor({ state: "hidden", timeout: 10000 }).catch(() => {});
   }
 
-  public async clearSearch() {
-    await this.searchInputLocator().fill("");
-    await this.searchButtonLocator().click();
-  }
-
   public async clearFilters() {
     await this.statusFilterDraftLocator().uncheck();
     await this.statusFilterCandidateLocator().uncheck();
@@ -211,62 +169,6 @@ export default class ConceptsPage {
       await this.statusFilterHeaderLocator().click();
     }
     await locatorFn().check();
-  }
-
-  public async filterStatusDraft() {
-    if (!(await this.statusFilterDraftLocator().isVisible())) {
-      await this.statusFilterHeaderLocator().click();
-    }
-    await this.statusFilterDraftLocator().check();
-  }
-
-  public async filterStatusCandidate() {
-    if (!(await this.statusFilterCandidateLocator().isVisible())) {
-      await this.statusFilterHeaderLocator().click();
-    }
-    await this.statusFilterCandidateLocator().check();
-  }
-
-  public async filterStatusWaiting() {
-    if (!(await this.statusFilterWaitingLocator().isVisible())) {
-      await this.statusFilterHeaderLocator().click();
-    }
-    await this.statusFilterWaitingLocator().check();
-  }
-
-  public async filterStatusRejected() {
-    if (!(await this.statusFilterRejectedLocator().isVisible())) {
-      await this.statusFilterHeaderLocator().click();
-    }
-    await this.statusFilterRejectedLocator().check();
-  }
-
-  public async filterStatusRetired() {
-    if (!(await this.statusFilterRetiredLocator().isVisible())) {
-      await this.statusFilterHeaderLocator().click();
-    }
-    await this.statusFilterRetiredLocator().check();
-  }
-
-  public async filterStatusCurrent() {
-    if (!(await this.statusFilterCurrentLocator().isVisible())) {
-      await this.statusFilterHeaderLocator().click();
-    }
-    await this.statusFilterCurrentLocator().check();
-  }
-
-  public async filterPublished() {
-    if (!(await this.publishedStateFilterPublishedLocator().isVisible())) {
-      await this.publishedStateFilterHeaderLocator().click();
-    }
-    await this.publishedStateFilterPublishedLocator().check();
-  }
-
-  public async filterNotPublished() {
-    if (!(await this.publishedStateFilterNotPublishedLocator().isVisible())) {
-      await this.publishedStateFilterHeaderLocator().click();
-    }
-    await this.publishedStateFilterNotPublishedLocator().check();
   }
 
   public async hideDevtools() {

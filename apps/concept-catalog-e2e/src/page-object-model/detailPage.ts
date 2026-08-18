@@ -36,8 +36,6 @@ export default class DetailPage {
   }
 
   // Locators
-  pageTitleLocator = () => this.page.getByRole("heading", { name: "" });
-  pageDescriptionLocator = () => this.page.getByText("");
 
   public async goto(url: string) {
     await this.page.goto(url);
@@ -73,24 +71,6 @@ export default class DetailPage {
       ])
       .analyze();
     expect.soft(result.violations).toEqual([]);
-  }
-
-  public async checkPageTitleText() {
-    await expect(this.pageTitleLocator()).toHaveText("");
-  }
-
-  public async checkPageDescriptionText() {
-    await expect(this.pageDescriptionLocator()).toHaveText("");
-  }
-
-  public async checkIfNoConceptsExist() {
-    const items = (await this.page.getByRole("link").all()).filter(
-      async (link) => {
-        (await link.getAttribute("href"))?.startsWith(this.url);
-      },
-    );
-
-    expect(items.length).toBe(0);
   }
 
   getStatusText(uri: string) {
@@ -372,7 +352,7 @@ export default class DetailPage {
     console.log("[DETAIL PAGE] Checking comments tab...");
     const tab = this.page.getByRole("tab", { name: "Kommentarer" });
     await expect(tab).toBeVisible();
-    tab.click();
+    await tab.click();
 
     await expect(this.page.getByLabel("Legg til kommentar")).toBeVisible();
     await expect(this.page.getByText("Kommentarer (0)")).toBeVisible();
@@ -383,7 +363,7 @@ export default class DetailPage {
     console.log("[DETAIL PAGE] Checking history tab...");
     const tab = this.page.getByRole("tab", { name: "Endringshistorikk" });
     await expect(tab).toBeVisible();
-    tab.click();
+    await tab.click();
 
     await expect(
       this.page
@@ -404,7 +384,7 @@ export default class DetailPage {
     console.log("[DETAIL PAGE] Checking version tab...");
     const tab = this.page.getByRole("tab", { name: "Versjoner" });
     await expect(tab).toBeVisible();
-    tab.click();
+    await tab.click();
 
     await expect(
       this.page

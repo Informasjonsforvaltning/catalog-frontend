@@ -1,8 +1,18 @@
 import { expect, Page, BrowserContext, Locator } from "@playwright/test";
 import type AxeBuilder from "@axe-core/playwright";
 
+export type CatalogLinkName =
+  | "datasetCatalog"
+  | "dataServiceCatalog"
+  | "conceptCatalog"
+  | "publicServiceCatalog"
+  | "serviceCatalog";
+
 export default class CatalogPortalPage {
-  url = "/catalogs";
+  // Include the catalog id: at bare /catalogs the cards only render because of
+  // the incidental single-organization redirect, so the tests would break as
+  // soon as the e2e user gains a second organization
+  url = `/catalogs/${process.env.E2E_CATALOG_ID}`;
   page: Page;
   context: BrowserContext;
   accessibilityBuilder;
@@ -17,7 +27,9 @@ export default class CatalogPortalPage {
     this.accessibilityBuilder = accessibilityBuilder;
   }
 
-  // Locators
+  // Locators. The ^ anchors are load bearing: the service and public service
+  // cards share the title "Tjenestekatalog" and differ only by their subtitle,
+  // so an unanchored name would match both.
   datasetCatalog = () =>
     this.page.getByRole("link", { name: /^Datasettkatalog/ });
   dataServiceCatalog = () =>
@@ -41,11 +53,22 @@ export default class CatalogPortalPage {
     expect.soft(result.violations).toEqual([]);
   }
 
-  async verifyAndClickCatalogLink(
-    locatorFunction: keyof CatalogPortalPage,
-    expectedUrl: RegExp,
-  ) {
-    const locator = (this[locatorFunction] as () => Locator)();
+  private catalogLink(name: CatalogLinkName): Locator {
+    const links: Record<CatalogLinkName, () => Locator> = {
+      datasetCatalog: this.datasetCatalog,
+      dataServiceCatalog: this.dataServiceCatalog,
+      conceptCatalog: this.conceptCatalog,
+      publicServiceCatalog: this.publicServiceCatalog,
+      serviceCatalog: this.serviceCatalog,
+    };
+    return links[name]();
+  }
+
+  // Named for what it does. The previous name promised a click that never
+  // happened; following the link would leave localhost for a staging host, so
+  // asserting the href is the right scope here.
+  async expectCatalogLink(name: CatalogLinkName, expectedUrl: string) {
+    const locator = this.catalogLink(name);
     await expect(locator).toBeVisible();
     await expect(locator).toHaveAttribute("href", expectedUrl);
   }

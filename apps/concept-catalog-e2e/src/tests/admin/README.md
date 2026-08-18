@@ -4,7 +4,7 @@ This directory contains end-to-end tests for the concept catalog application.
 
 ## Auto-Save Tests
 
-The `autoSave.spec.ts` file contains comprehensive tests for the auto-save functionality in the concept catalog. These tests verify that:
+The `conceptsEditPageAutoSave.spec.ts` file contains comprehensive tests for the auto-save functionality in the concept catalog. These tests verify that:
 
 ### Main Form Auto-Save
 
@@ -31,7 +31,7 @@ Each test follows this pattern:
 2. **Action**: Make changes to form fields or modal dialogs
 3. **Trigger**: Refresh the page to trigger auto-save restore dialog
 4. **Verify**: Check that the restore dialog appears and functions correctly
-5. **Cleanup**: Verify the final state is as expected
+5. **Verify final state**: Check the resulting state is as expected. Note that these tests do not delete the concepts they create; `default.init.ts` wipes unpublished concepts before each run.
 
 ## Helper Methods
 
@@ -44,7 +44,7 @@ The tests use helper methods from the `EditPage` page object model:
 - `waitForAutoSaveToComplete()`: Waits for auto-save to complete before proceeding
 - `expectAnbefaltTermField()`: Verifies the recommended term field has expected value
 - `fillAnbefaltTermField()`: Fills in the recommended term field
-- `expectDefinitionField()`: Verifies the definition field has expected value
+- `expectDefinitionCard()`: Verifies the definition card has expected content
 - `fillDefinitionField()`: Fills in the definition field
 - `clickAddRelation()`: Opens the relation modal dialog
 - `clickSaveButton()`: Saves the form and waits for success message
@@ -54,7 +54,7 @@ The tests use helper methods from the `EditPage` page object model:
 To run the auto-save tests specifically:
 
 ```bash
-npx playwright test autoSave.spec.ts
+npx playwright test conceptsEditPageAutoSave.spec.ts
 ```
 
 To run all admin tests:

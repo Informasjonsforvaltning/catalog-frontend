@@ -1,8 +1,13 @@
 import { runTestAsAdmin } from "../../fixtures/basePage";
+import type { CatalogLinkName } from "../../page-object-model/catalogPortalPage";
 
 const orgId = process.env.E2E_CATALOG_ID;
 
-const catalogTests = [
+const catalogTests: {
+  name: string;
+  locator: CatalogLinkName;
+  url: string;
+}[] = [
   {
     name: "dataset catalog",
     locator: "datasetCatalog",
@@ -35,7 +40,7 @@ catalogTests.forEach(({ name, locator, url }) => {
     `test navigation card for ${name}`,
     async ({ catalogPortalPage }) => {
       await catalogPortalPage.goto();
-      await catalogPortalPage.verifyAndClickCatalogLink(locator, url);
+      await catalogPortalPage.expectCatalogLink(locator, url);
     },
   );
 });

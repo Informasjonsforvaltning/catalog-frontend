@@ -662,14 +662,26 @@ runTestAsAdmin(
     await gyldigTom.fill("2299-01-01");
     await gyldigTom.blur();
 
-    await expect(
-      conceptsPage.page.getByText("Dato er ikke gyldig"),
-    ).not.toBeVisible();
-
     await saveButton.click();
 
     await expect(
       conceptsPage.page.getByText("Endringene ble lagret."),
     ).toBeVisible();
+
+    // Asserted after saving, not after blur: validateOnChange/validateOnBlur are
+    // false until the first save, so before that no validation has run and this
+    // assertion could not fail
+    await expect(
+      conceptsPage.page.getByText("Dato er ikke gyldig"),
+    ).toHaveCount(0);
+
+    // The date was persisted, not just accepted by the form
+    await conceptsPage.editPage.goto(id);
+    await expect(conceptsPage.page.getByLabel("Gyldig til og med")).toHaveValue(
+      "2299-01-01",
+    );
+    await expect(conceptsPage.page.getByLabel("Gyldig fra og med")).toHaveValue(
+      "",
+    );
   },
 );

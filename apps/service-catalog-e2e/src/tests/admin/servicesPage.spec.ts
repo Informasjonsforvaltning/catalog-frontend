@@ -4,6 +4,7 @@ import { expect, runTestAsAdmin } from "../../fixtures/basePage";
 import {
   adminAuthFile,
   createService,
+  deleteService,
   publishService,
   ServiceStatus,
   uniqueString,
@@ -460,13 +461,16 @@ runTestAsAdmin(
       storageState: adminAuthFile,
     });
 
-    // Create a service via API with structure matching form expectations
+    // identifier must be "0": on submit the form rewrites produces identifiers to
+    // their list index before comparing against the initial values, so any other
+    // value makes the comparison differ and a real save goes through even when
+    // only whitespace was added
     const service = await createService(apiRequestContext, {
       title: { nb: "Test whitespace", nn: "", en: "" },
       description: { nb: "Test description", nn: "", en: "" },
       produces: [
         {
-          identifier: "test-produce-1",
+          identifier: "0",
           title: { nb: "Test produce", nn: "", en: "" },
           description: { nb: "Test produce description", nn: "", en: "" },
         },
@@ -494,6 +498,10 @@ runTestAsAdmin(
       .getByLabel("Bokmål");
     await titleField.fill("Test whitespace ");
 
+    // The form registered the edit. Without this the test could pass silently
+    // because the input event was lost before hydration and nothing happened.
+    await expect(saveButton).toBeEnabled();
+
     // Click save button
     await saveButton.click();
 
@@ -503,5 +511,29 @@ runTestAsAdmin(
     // Verify NO snackbar appears (empty submit check should prevent save)
     await expect(page.getByText("Endringene ble lagret.")).not.toBeVisible();
     await expect(page.getByText("Lagring feilet")).not.toBeVisible();
+
+    // The whitespace was normalized away and the form is pristine again
+    await expect(titleField).toHaveValue("Test whitespace");
+    await expect(saveButton).toBeDisabled();
+
+    // Nothing was blocked by validation instead
+    await expect(
+      page.getByText("Skjemaet inneholder feil. Sjekk feltene i rødt."),
+    ).toHaveCount(0);
+
+    // Re-add the whitespace and submit without blurring the input, so the
+    // untrimmed value reaches onSubmit and the empty submit check itself runs
+    // (a real click blurs the field, which trims it first)
+    await titleField.fill("Test whitespace ");
+    await expect(saveButton).toBeEnabled();
+    await saveButton.dispatchEvent("click");
+    await page.waitForLoadState("networkidle");
+
+    await expect(page.getByText("Endringene ble lagret.")).not.toBeVisible();
+    await expect(page.getByText("Lagring feilet")).not.toBeVisible();
+    await expect(titleField).toHaveValue("Test whitespace");
+
+    // Clean up
+    await deleteService(apiRequestContext, service as string);
   },
 );
