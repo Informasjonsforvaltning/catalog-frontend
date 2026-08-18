@@ -56,7 +56,7 @@ runTestAsAdmin(
 
     await detailPage.goto(catalogId(), service as string);
     await detailPage.clickEdit();
-    await expect(editPage.saveButton).toBeVisible();
+    await editPage.expectFormReady();
 
     const newTitle = { nb: uniqueString("new_title_nb") };
     const newDescription = { nb: uniqueString("new_description_nb") };
@@ -100,7 +100,7 @@ runTestAsAdmin(
 
     await detailPage.goto(catalogId(), service as string);
     await detailPage.clickEdit();
-    await expect(editPage.saveButton).toBeVisible();
+    await editPage.expectFormReady();
 
     const newCategory = { nb: uniqueString("new_category_nb") };
     const newEmail = `${uniqueString("new_contact")}@example.com`;
@@ -133,18 +133,21 @@ runTestAsAdmin(
     const editPage = new ServicesEditPage(page, context, accessibilityBuilder);
 
     await editPage.goto(catalogId(), service as string);
-    await expect(editPage.saveButton).toBeVisible();
+    await editPage.expectFormReady();
 
-    // Four characters, one below the minimum of five
-    await editPage.fillDescription({ nb: "abcd" });
+    // Clear the description in every language. The draft schema does not require
+    // it, so this is only an error once the full schema applies.
+    await editPage.clearDescription();
 
     // Switch from the lenient draft schema to the full one
     await editPage.setIgnoreRequired(false);
 
     await editPage.clickSave();
 
+    // Assert the fieldset level message, scoped to its group. Per-language
+    // messages (such as the min length ones) are not surfaced the same way.
     await expect(
-      page.getByText("Beskrivelsen må være minst 5 karakterer lang."),
+      editPage.descriptionGroup.getByText("Må fylles ut for minst ett språk."),
     ).toBeVisible();
 
     // Nothing was saved
@@ -174,7 +177,7 @@ runTestAsAdmin(
 
     const editPage = new ServicesEditPage(page, context, accessibilityBuilder);
     await editPage.goto(catalogId(), service as string);
-    await expect(editPage.saveButton).toBeVisible();
+    await editPage.expectFormReady();
 
     const titleField = editPage.titleGroup.getByLabel("Bokmål");
     await titleField.fill(`${title} `);

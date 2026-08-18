@@ -92,6 +92,17 @@ export default class ServicesEditPage {
     await this.fillLanguageField(this.descriptionGroup, description, open);
   }
 
+  // Empties every language input instead of deleting them, so the fieldset stays
+  // rendered and its "at least one language" error can be asserted
+  async clearDescription() {
+    for (const language of ["Bokmål", "Nynorsk", "Engelsk"]) {
+      const input = this.descriptionGroup.getByLabel(language);
+      if (await input.isVisible()) {
+        await input.fill("");
+      }
+    }
+  }
+
   async fillContactCategory(category: LocalizedStrings, open: string[] = []) {
     await this.fillLanguageField(this.contactCategoryGroup, category, open);
   }
@@ -112,6 +123,12 @@ export default class ServicesEditPage {
     } else {
       await this.ignoreRequiredCheckbox.uncheck();
     }
+  }
+
+  // This suite's expect timeout is 5s, which is not always enough for the edit
+  // page to render after navigating from the detail page, so wait explicitly.
+  async expectFormReady() {
+    await expect(this.saveButton).toBeVisible({ timeout: 30000 });
   }
 
   async clickSave() {
