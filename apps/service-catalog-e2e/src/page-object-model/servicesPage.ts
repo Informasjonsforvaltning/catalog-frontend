@@ -55,10 +55,7 @@ export default class ServicesPage {
     expect.soft(result.violations).toEqual([]);
   }
 
-  // Both filter panels are <Details defaultOpen>, so they start expanded. The
-  // previous version clicked each header unconditionally, which collapsed them
-  // and then asserted their contents were visible. Expand only when needed, the
-  // same way filterPublished/filterNotPublished already do.
+  // Filters are defaultOpen, clicking the header would collapse them.
   private async expandFilter(header: () => ReturnType<Page["getByRole"]>) {
     await expect(header()).toBeVisible();
     if ((await header().getAttribute("aria-expanded")) !== "true") {

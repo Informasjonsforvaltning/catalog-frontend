@@ -9,9 +9,7 @@ export type CatalogLinkName =
   | "serviceCatalog";
 
 export default class CatalogPortalPage {
-  // Include the catalog id: at bare /catalogs the cards only render because of
-  // the incidental single-organization redirect, so the tests would break as
-  // soon as the e2e user gains a second organization
+  // Catalog id is required, /catalogs only works via single-org redirect.
   url = `/catalogs/${process.env.E2E_CATALOG_ID}`;
   page: Page;
   context: BrowserContext;
@@ -27,9 +25,7 @@ export default class CatalogPortalPage {
     this.accessibilityBuilder = accessibilityBuilder;
   }
 
-  // Locators. The ^ anchors are load bearing: the service and public service
-  // cards share the title "Tjenestekatalog" and differ only by their subtitle,
-  // so an unanchored name would match both.
+  // Anchor required, both service cards share the title "Tjenestekatalog".
   datasetCatalog = () =>
     this.page.getByRole("link", { name: /^Datasettkatalog/ });
   dataServiceCatalog = () =>
@@ -64,9 +60,6 @@ export default class CatalogPortalPage {
     return links[name]();
   }
 
-  // Named for what it does. The previous name promised a click that never
-  // happened; following the link would leave localhost for a staging host, so
-  // asserting the href is the right scope here.
   async expectCatalogLink(name: CatalogLinkName, expectedUrl: string) {
     const locator = this.catalogLink(name);
     await expect(locator).toBeVisible();

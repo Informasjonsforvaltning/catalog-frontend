@@ -7,9 +7,7 @@ export default class ServicesEditPage {
   context: BrowserContext;
   accessibilityBuilder: AxeBuilder;
 
-  // Group names come from TitleWithHelpTextAndTag, which appends the help
-  // button's aria-label and the required/recommended tag to the legend. They are
-  // therefore matched as substrings; exact: true would not match.
+  // Legend includes help button + required tag, match as substring.
   readonly titleGroup: Locator;
   readonly descriptionGroup: Locator;
   readonly contactCategoryGroup: Locator;
@@ -41,8 +39,7 @@ export default class ServicesEditPage {
       name: "Kontaktinformasjon Hjelp til utfylling Må fylles ut",
     });
     this.homepageInput = page.getByRole("textbox", { name: "Hjemmeside" });
-    // exact: true because the form also renders "Lagre endringer" elsewhere, and
-    // the submitting state swaps in a Spinner labelled "Lagrer"
+    // exact: true so this does not match the "Lagrer" spinner
     this.saveButton = page.getByRole("button", { name: "Lagre", exact: true });
     this.successSnackbar = page.getByText("Endringene ble lagret.");
     this.errorSnackbar = page.getByText("Lagring feilet");
@@ -57,9 +54,7 @@ export default class ServicesEditPage {
     await this.page.goto(`/catalogs/${catalogId}/services/new`);
   }
 
-  // On /new no language input is rendered yet, so the language has to be opened
-  // first. On an existing service the inputs are already there and `open` should
-  // be left empty.
+  // On /new, pass languages to open. On edit `open` should be left empty.
   async fillLanguageField(
     group: Locator,
     field: LocalizedStrings,
@@ -100,8 +95,7 @@ export default class ServicesEditPage {
     await this.homepageInput.fill(homepage);
   }
 
-  // This suite's expect timeout is 5s, which is not always enough for the edit
-  // page to render after navigating from the detail page, so wait explicitly.
+  // Edit page can exceed the 5s expect timeout after detail → edit.
   async expectFormReady() {
     await expect(this.saveButton).toBeVisible({ timeout: 30000 });
   }

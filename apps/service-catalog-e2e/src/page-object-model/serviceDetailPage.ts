@@ -1,9 +1,6 @@
 import { expect, Page, BrowserContext, Locator } from "@playwright/test";
 import type AxeBuilder from "@axe-core/playwright";
 
-// The service detail page carries no data-testid attributes, so assertions go
-// through roles and text. Fixture values are built with uniqueString(), so a
-// plain getByText stays unambiguous.
 export default class ServiceDetailPage {
   page: Page;
   context: BrowserContext;
@@ -31,8 +28,6 @@ export default class ServiceDetailPage {
     await this.editLink.click();
   }
 
-  // Substring matching on purpose: the heading also carries a status tag, and
-  // values are unique strings so there is nothing else they could match
   async expectHeading(title: string) {
     await expect(this.page.getByRole("heading", { name: title })).toBeVisible();
   }

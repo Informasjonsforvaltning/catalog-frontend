@@ -276,9 +276,7 @@ export default class EditPage {
       await this.page.waitForTimeout(300);
     }
 
-    // Loop 2: Clear all suggestion selects. The label is "Tøm" (Suggestion.Clear),
-    // not the deprecated Combobox's "Fjern alt", which no longer exists anywhere
-    // in the app and made this loop silently match nothing.
+    // Loop 2: Clear all suggestion selects. The label is "Tøm" (Suggestion.Clear).
     iterations = 0;
     const clearBtn = this.page.getByRole("button", { name: "Tøm" });
     while ((await clearBtn.count()) > 0) {
@@ -818,9 +816,7 @@ export default class EditPage {
     await this.page.getByRole("button", { name: "Legg til relasjon" }).click();
   }
 
-  // The Next dev overlay badge only exists when the app has dev time issues, so
-  // the click has to be guarded. Clicking it unconditionally hangs until the test
-  // timeout whenever there are no issues.
+  // The Next dev overlay is absent when there are no issues, an unguarded click hangs.
   async dismissDevOverlay() {
     const collapseButton = this.page.getByRole("button", {
       name: "Collapse issues badge",

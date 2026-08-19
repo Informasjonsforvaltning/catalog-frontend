@@ -14,8 +14,6 @@ export const test = base.extend<{
   publicServicesPage: PublicServicesPage;
   accessibilityBuilder: AxeBuilder;
 }>({
-  // Exposed on its own so page objects constructed inside a test (the edit and
-  // detail pages) get a real builder instead of undefined
   accessibilityBuilder: async ({ page }, use) => {
     await use(await generateAccessibilityBuilder(page));
   },

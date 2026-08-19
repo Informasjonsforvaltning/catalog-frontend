@@ -21,18 +21,18 @@ runTestAsAdmin(
     await page.getByRole("link", { name: "Opprett ny tjeneste" }).click();
     await page.waitForURL(`/catalogs/${catalogId()}/services/new`);
 
-    // No language input is rendered on /new until a language is opened. This is
-    // the main difference from the edit page, which arrives with them present.
+    // No language input is rendered on /new until a language is opened.
     await editPage.fillTitle({ nb: title }, ["Bokmål"]);
 
     // "Ignorer påkrevde felt" is on by default, so a title is enough to save
     await expect(editPage.saveButton).toBeEnabled();
     await editPage.clickSave();
 
-    // A successful create redirects to the edit page of the new service
     await page.waitForURL(
       new RegExp(`/catalogs/${catalogId()}/services/.+/edit`),
     );
+    await editPage.expectFormReady();
+    await expect(editPage.titleGroup.getByLabel("Bokmål")).toHaveValue(title);
   },
 );
 
@@ -62,7 +62,6 @@ runTestAsAdmin(
     const newDescription = { nb: uniqueString("new_description_nb") };
     const newHomepage = `https://${uniqueString("new_homepage")}.example.com`;
 
-    // All languages already have a value, so none need to be opened
     await editPage.fillTitle(newTitle);
     await editPage.fillDescription(newDescription);
     await editPage.fillHomepage(newHomepage);
@@ -70,7 +69,6 @@ runTestAsAdmin(
     await editPage.clickSave();
     await editPage.expectSaveSuccessful();
 
-    // Verify the changes were persisted, not just accepted by the form
     await detailPage.goto(catalogId(), service as string);
     await detailPage.expectHeading(newTitle.nb);
     await detailPage.expectText(newDescription.nb);
@@ -126,11 +124,6 @@ runTestAsAdmin(
       storageState: adminAuthFile,
     });
 
-    // identifier must be the list index: on submit the form rewrites
-    // produces/evidence identifiers to their index before comparing against the
-    // initial values, so any other value makes the comparison differ and a real
-    // save goes through even when only whitespace was added. getRandomService
-    // already does this.
     const title = "Test whitespace";
     const service = await createService(apiRequestContext, {
       ...getRandomService("whitespace"),
@@ -144,8 +137,7 @@ runTestAsAdmin(
     const titleField = editPage.titleGroup.getByLabel("Bokmål");
     await titleField.fill(`${title} `);
 
-    // The form registered the edit. Without this the test could pass silently
-    // because the input event was lost before hydration and nothing happened.
+    // Fail if the input event never reached the form.
     await expect(editPage.saveButton).toBeEnabled();
 
     await editPage.clickSave();
@@ -163,9 +155,7 @@ runTestAsAdmin(
       page.getByText("Skjemaet inneholder feil. Sjekk feltene i rødt."),
     ).toHaveCount(0);
 
-    // Re-add the whitespace and submit without blurring the input, so the
-    // untrimmed value reaches onSubmit and the empty submit check itself runs
-    // (a real click blurs the field, which trims it first)
+    // Re-add the whitespace and submit without blurring the input, value is trimmed on blur.
     await titleField.fill(`${title} `);
     await expect(editPage.saveButton).toBeEnabled();
     await editPage.saveButton.dispatchEvent("click");
