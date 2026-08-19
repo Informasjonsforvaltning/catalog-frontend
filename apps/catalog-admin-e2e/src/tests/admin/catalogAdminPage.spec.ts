@@ -1,4 +1,6 @@
+import type { Dialog } from "@playwright/test";
 import { expect, runTestAsAdmin } from "../../fixtures/basePage";
+import { uniqueString } from "../../utils/helpers";
 
 runTestAsAdmin(
   "the home page lists the organizations the user administers",
@@ -77,5 +79,66 @@ runTestAsAdmin(
     await expect(
       page.getByPlaceholder("Søk etter brukernavn..."),
     ).toBeVisible();
+  },
+);
+
+runTestAsAdmin(
+  "should create, rename and delete a code list",
+  async ({ page, catalogAdminPage }) => {
+    // This app reports every result through window.alert/confirm, which
+    // Playwright auto-dismisses, so accept and record them
+    const dialogs: string[] = [];
+    page.on("dialog", async (dialog: Dialog) => {
+      dialogs.push(dialog.message());
+      await dialog.accept();
+    });
+
+    await catalogAdminPage.gotoCatalog("/concepts/code-lists");
+    await catalogAdminPage.expectOnCatalogPath("/concepts/code-lists");
+
+    const name = uniqueString("e2e_code_list");
+    const renamed = `${name}_renamed`;
+
+    // Create. Only the create editor renders "Avbryt", the existing ones
+    // render "Slett", so it is scoped on that.
+    await page.getByRole("button", { name: "Opprett kodeliste" }).click();
+    const createEditor = page
+      .locator("u-details")
+      .filter({ has: page.getByRole("button", { name: "Avbryt" }) });
+    await createEditor.getByLabel("Navn").fill(name);
+    await createEditor.getByLabel("Beskrivelse").fill("Opprettet av e2e");
+    await createEditor.getByRole("button", { name: "Lagre endringer" }).click();
+    await expect(
+      page.getByRole("heading", { name, exact: true }),
+    ).toBeVisible();
+
+    // Rename
+    const codeList = page
+      .locator("u-details")
+      .filter({ has: page.getByRole("heading", { name, exact: true }) });
+    await codeList.locator("u-summary").click();
+    await codeList.getByLabel("Navn").fill(renamed);
+    await codeList.getByRole("button", { name: "Lagre endringer" }).click();
+    await expect(
+      page.getByRole("heading", { name: renamed, exact: true }),
+    ).toBeVisible();
+
+    // Delete
+    const renamedCodeList = page.locator("u-details").filter({
+      has: page.getByRole("heading", { name: renamed, exact: true }),
+    });
+    await renamedCodeList.getByRole("button", { name: "Slett" }).click();
+    await expect(
+      page.getByRole("heading", { name: renamed, exact: true }),
+    ).toHaveCount(0);
+
+    // Create and rename reported success, delete went through its confirm, and
+    // nothing failed silently. Delete itself reports no result.
+    expect(dialogs).toContain("Oppdatering vellykket!");
+    expect(dialogs).toContain(
+      "Er du sikker på at du ønsker å slette kodelisten?",
+    );
+    expect(dialogs).not.toContain("Oppdatering feilet.");
+    expect(dialogs).not.toContain("Ingen endringer funnet.");
   },
 );
