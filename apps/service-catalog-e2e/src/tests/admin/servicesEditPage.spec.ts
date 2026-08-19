@@ -168,3 +168,43 @@ runTestAsAdmin(
     await deleteService(apiRequestContext, service as string);
   },
 );
+
+runTestAsAdmin(
+  "should block saving a service without a description when required fields are enforced",
+  async ({ page, context, playwright, accessibilityBuilder }) => {
+    const apiRequestContext = await playwright.request.newContext({
+      storageState: adminAuthFile,
+    });
+    const service = await createService(
+      apiRequestContext,
+      getRandomService("required"),
+    );
+
+    const editPage = new ServicesEditPage(page, context, accessibilityBuilder);
+
+    await editPage.goto(catalogId(), service as string);
+    await editPage.expectFormReady();
+
+    // The draft schema does not require a description, so this is only an error
+    // once the full schema applies
+    await editPage.clearDescription();
+    await editPage.setIgnoreRequired(false);
+    await expect(editPage.ignoreRequiredCheckbox).not.toBeChecked();
+
+    await editPage.clickSave();
+    await page.waitForLoadState("networkidle");
+
+    await expect(editPage.successSnackbar).not.toBeVisible();
+    await expect(editPage.errorSnackbar).not.toBeVisible();
+
+    // Still on the edit page with the description empty, nothing was saved
+    await expect(page).toHaveURL(
+      `/catalogs/${catalogId()}/services/${service}/edit`,
+    );
+    await expect(editPage.descriptionGroup.getByLabel("Bokmål")).toHaveValue(
+      "",
+    );
+
+    await deleteService(apiRequestContext, service as string);
+  },
+);
