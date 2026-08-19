@@ -662,14 +662,23 @@ runTestAsAdmin(
     await gyldigTom.fill("2299-01-01");
     await gyldigTom.blur();
 
-    await expect(
-      conceptsPage.page.getByText("Dato er ikke gyldig"),
-    ).not.toBeVisible();
-
     await saveButton.click();
 
     await expect(
       conceptsPage.page.getByText("Endringene ble lagret."),
     ).toBeVisible();
+
+    // Assert after saving, validateOnChange is off until first save.
+    await expect(
+      conceptsPage.page.getByText("Dato er ikke gyldig"),
+    ).toHaveCount(0);
+
+    await conceptsPage.editPage.goto(id);
+    await expect(conceptsPage.page.getByLabel("Gyldig til og med")).toHaveValue(
+      "2299-01-01",
+    );
+    await expect(conceptsPage.page.getByLabel("Gyldig fra og med")).toHaveValue(
+      "",
+    );
   },
 );

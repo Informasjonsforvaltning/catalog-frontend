@@ -1,8 +1,16 @@
 import { expect, Page, BrowserContext, Locator } from "@playwright/test";
 import type AxeBuilder from "@axe-core/playwright";
 
+export type CatalogLinkName =
+  | "datasetCatalog"
+  | "dataServiceCatalog"
+  | "conceptCatalog"
+  | "publicServiceCatalog"
+  | "serviceCatalog";
+
 export default class CatalogPortalPage {
-  url = "/catalogs";
+  // Catalog id is required, /catalogs only works via single-org redirect.
+  url = `/catalogs/${process.env.E2E_CATALOG_ID}`;
   page: Page;
   context: BrowserContext;
   accessibilityBuilder;
@@ -17,7 +25,7 @@ export default class CatalogPortalPage {
     this.accessibilityBuilder = accessibilityBuilder;
   }
 
-  // Locators
+  // Anchor required, both service cards share the title "Tjenestekatalog".
   datasetCatalog = () =>
     this.page.getByRole("link", { name: /^Datasettkatalog/ });
   dataServiceCatalog = () =>
@@ -41,11 +49,19 @@ export default class CatalogPortalPage {
     expect.soft(result.violations).toEqual([]);
   }
 
-  async verifyAndClickCatalogLink(
-    locatorFunction: keyof CatalogPortalPage,
-    expectedUrl: RegExp,
-  ) {
-    const locator = (this[locatorFunction] as () => Locator)();
+  private catalogLink(name: CatalogLinkName): Locator {
+    const links: Record<CatalogLinkName, () => Locator> = {
+      datasetCatalog: this.datasetCatalog,
+      dataServiceCatalog: this.dataServiceCatalog,
+      conceptCatalog: this.conceptCatalog,
+      publicServiceCatalog: this.publicServiceCatalog,
+      serviceCatalog: this.serviceCatalog,
+    };
+    return links[name]();
+  }
+
+  async expectCatalogLink(name: CatalogLinkName, expectedUrl: string) {
+    const locator = this.catalogLink(name);
     await expect(locator).toBeVisible();
     await expect(locator).toHaveAttribute("href", expectedUrl);
   }

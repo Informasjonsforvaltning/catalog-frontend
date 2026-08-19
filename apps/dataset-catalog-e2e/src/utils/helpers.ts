@@ -88,7 +88,7 @@ export const deleteAllDatasets = async (
     console.log(datasets);
     console.log(`[DELETE ALL DATASETS] Found ${datasets.length} datasets`);
     for (const dataset of datasets) {
-      if (!dataset.erPublisert) {
+      if (!dataset.published) {
         console.log(`[DELETE ALL DATASETS] Deleting dataset: ${dataset.id}`);
         await apiRequestContext.delete(
           `/api/catalogs/${process.env.E2E_CATALOG_ID}/datasets/${dataset.id}`,

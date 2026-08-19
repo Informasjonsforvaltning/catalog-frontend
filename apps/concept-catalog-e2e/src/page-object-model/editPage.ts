@@ -42,8 +42,6 @@ export default class EditPage {
   }
 
   // Locators
-  pageTitleLocator = () => this.page.getByRole("heading", { name: "" });
-  pageDescriptionLocator = () => this.page.getByText("");
 
   async fillLanguageField(
     field: LocalizedStrings | undefined,
@@ -278,13 +276,13 @@ export default class EditPage {
       await this.page.waitForTimeout(300);
     }
 
-    // Loop 2: Remove all "Fjern alt" (clear-all) buttons
+    // Loop 2: Clear all suggestion selects. The label is "Tøm" (Suggestion.Clear).
     iterations = 0;
-    const clearBtn = this.page.getByRole("button", { name: "Fjern alt" });
+    const clearBtn = this.page.getByRole("button", { name: "Tøm" });
     while ((await clearBtn.count()) > 0) {
       if (++iterations > MAX_ITERATIONS) {
         throw new Error(
-          `clearFields: "Fjern alt" loop exceeded ${MAX_ITERATIONS} iterations`,
+          `clearFields: "Tøm" loop exceeded ${MAX_ITERATIONS} iterations`,
         );
       }
       const firstClear = clearBtn.first();
@@ -586,10 +584,7 @@ export default class EditPage {
     }
 
     // Save concept
-    console.log("[EDIT PAGE] Closing Nextjs portal issues if open...");
-    await this.page
-      .getByRole("button", { name: "Collapse issues badge" })
-      .click();
+    await this.dismissDevOverlay();
     console.log('[EDIT PAGE] Clicking "Lagre"...');
     await this.page.getByRole("button", { name: "Lagre" }).click();
     console.log("[EDIT PAGE] Waiting for confirmation message...");
@@ -617,24 +612,6 @@ export default class EditPage {
       .disableRules(["svg-img-alt", "color-contrast", "aria-allowed-role"])
       .analyze();
     expect.soft(result.violations).toEqual([]);
-  }
-
-  public async checkPageTitleText() {
-    await expect(this.pageTitleLocator()).toHaveText("");
-  }
-
-  public async checkPageDescriptionText() {
-    await expect(this.pageDescriptionLocator()).toHaveText("");
-  }
-
-  public async checkIfNoConceptsExist() {
-    const items = (await this.page.getByRole("link").all()).filter(
-      async (link) => {
-        (await link.getAttribute("href"))?.startsWith(this.url);
-      },
-    );
-
-    expect(items.length).toBe(0);
   }
 
   public async expectMenu() {
@@ -677,19 +654,6 @@ export default class EditPage {
     ).toBeVisible();
   }
 
-  async fillContactPointForm(data: {
-    email: string;
-    phone: string;
-    url: string;
-  }) {
-    const dialog = this.page.getByRole("dialog");
-    await dialog.getByLabel("E-post").fill(data.email);
-    await dialog.getByLabel("Telefonnummer").fill(data.phone);
-    await dialog.getByLabel("URL").fill(data.url);
-    await dialog.getByRole("button", { name: "Legg til" }).click();
-  }
-
-  // Auto-save testing helpers
   async expectRestoreDialog() {
     await expect(this.page.getByRole("dialog")).toBeVisible();
     await expect(
@@ -852,7 +816,19 @@ export default class EditPage {
     await this.page.getByRole("button", { name: "Legg til relasjon" }).click();
   }
 
+  // The Next dev overlay is absent when there are no issues, an unguarded click hangs.
+  async dismissDevOverlay() {
+    const collapseButton = this.page.getByRole("button", {
+      name: "Collapse issues badge",
+    });
+    if (await collapseButton.isVisible()) {
+      console.log("[EDIT PAGE] Closing Nextjs portal issues...");
+      await collapseButton.click();
+    }
+  }
+
   async clickSaveButton(success: boolean = true) {
+    await this.dismissDevOverlay();
     await this.page.getByRole("button", { name: "Lagre" }).click();
     if (success) {
       await this.page

@@ -1,4 +1,5 @@
 import { test as base } from "@playwright/test";
+import type AxeBuilder from "@axe-core/playwright";
 import HomePage from "../page-object-model/homePage";
 import LoginPage from "../page-object-model/loginPage";
 import ServicesPage from "../page-object-model/servicesPage";
@@ -11,7 +12,11 @@ export const test = base.extend<{
   homePage: HomePage;
   servicesPage: ServicesPage;
   publicServicesPage: PublicServicesPage;
+  accessibilityBuilder: AxeBuilder;
 }>({
+  accessibilityBuilder: async ({ page }, use) => {
+    await use(await generateAccessibilityBuilder(page));
+  },
   loginPage: async ({ page, context }, use) => {
     const accessibilityBuilder = await generateAccessibilityBuilder(page);
     const loginPage = new LoginPage(page, context, accessibilityBuilder);
