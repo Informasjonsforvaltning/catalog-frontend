@@ -13,7 +13,6 @@ export default class ServicesEditPage {
   readonly contactCategoryGroup: Locator;
   readonly contactInfoGroup: Locator;
   readonly homepageInput: Locator;
-  readonly ignoreRequiredCheckbox: Locator;
   readonly saveButton: Locator;
   readonly successSnackbar: Locator;
   readonly errorSnackbar: Locator;
@@ -40,9 +39,6 @@ export default class ServicesEditPage {
       name: "Kontaktinformasjon Hjelp til utfylling Må fylles ut",
     });
     this.homepageInput = page.getByRole("textbox", { name: "Hjemmeside" });
-    this.ignoreRequiredCheckbox = page.getByRole("checkbox", {
-      name: "Ignorer påkrevde felt",
-    });
     // exact: true so this does not match the "Lagrer" spinner
     this.saveButton = page.getByRole("button", { name: "Lagre", exact: true });
     this.successSnackbar = page.getByText("Endringene ble lagret.");
@@ -97,15 +93,6 @@ export default class ServicesEditPage {
 
   async fillHomepage(homepage: string) {
     await this.homepageInput.fill(homepage);
-  }
-
-  // Checked by default, which validates against the lenient draft schema
-  async setIgnoreRequired(ignore: boolean) {
-    if (ignore) {
-      await this.ignoreRequiredCheckbox.check();
-    } else {
-      await this.ignoreRequiredCheckbox.uncheck();
-    }
   }
 
   // Edit page can exceed the 5s expect timeout after detail → edit.
