@@ -1,6 +1,6 @@
 import type { Dialog } from "@playwright/test";
 import { expect, runTestAsAdmin } from "../../fixtures/basePage";
-import { uniqueString } from "../../utils/helpers";
+import { uniqueName, uniqueString } from "../../utils/helpers";
 
 runTestAsAdmin(
   "the home page lists the organizations the user administers",
@@ -155,8 +155,8 @@ runTestAsAdmin(
     await catalogAdminPage.gotoCatalog("/general/users");
     await catalogAdminPage.expectOnCatalogPath("/general/users");
 
-    const name = uniqueString("e2e_user");
-    const renamed = `${name}_renamed`;
+    const name = uniqueName("testbruker");
+    const renamed = `${name}-endret`;
 
     await page
       .getByRole("button", { name: "Legg til nytt brukernavn" })
@@ -206,8 +206,8 @@ runTestAsAdmin(
     await catalogAdminPage.gotoCatalog("/concepts/internal-fields");
     await catalogAdminPage.expectOnCatalogPath("/concepts/internal-fields");
 
-    const name = uniqueString("e2e_field");
-    const renamed = `${name}_renamed`;
+    const name = uniqueName("testfelt");
+    const renamed = `${name}-endret`;
 
     await page
       .getByRole("button", { name: "Opprett nytt internt felt" })
