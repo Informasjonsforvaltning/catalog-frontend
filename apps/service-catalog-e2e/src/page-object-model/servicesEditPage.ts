@@ -99,16 +99,6 @@ export default class ServicesEditPage {
     await this.homepageInput.fill(homepage);
   }
 
-  // Empties every language input rather than deleting them, so the fieldset stays
-  async clearDescription() {
-    for (const language of ["Bokmål", "Nynorsk", "Engelsk"]) {
-      const input = this.descriptionGroup.getByLabel(language);
-      if (await input.isVisible()) {
-        await input.fill("");
-      }
-    }
-  }
-
   // Checked by default, which validates against the lenient draft schema
   async setIgnoreRequired(ignore: boolean) {
     if (ignore) {

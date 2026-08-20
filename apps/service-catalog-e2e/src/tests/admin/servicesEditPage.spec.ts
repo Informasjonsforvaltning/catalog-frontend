@@ -185,9 +185,12 @@ runTestAsAdmin(
     await editPage.goto(catalogId(), service as string);
     await editPage.expectFormReady();
 
-    // The draft schema does not require a description, so this is only an error
-    // once the full schema applies
-    await editPage.clearDescription();
+    // Four characters, one below the minimum of five. The draft schema has no
+    // length rule, so this is only an error once the full schema applies.
+    await editPage.fillDescription({ nb: "abcd" });
+    await expect(editPage.descriptionGroup.getByLabel("Bokmål")).toHaveValue(
+      "abcd",
+    );
     await editPage.setIgnoreRequired(false);
     await expect(editPage.ignoreRequiredCheckbox).not.toBeChecked();
 
@@ -197,12 +200,9 @@ runTestAsAdmin(
     await expect(editPage.successSnackbar).not.toBeVisible();
     await expect(editPage.errorSnackbar).not.toBeVisible();
 
-    // Still on the edit page with the description empty, nothing was saved
+    // Still on the edit page, nothing was saved
     await expect(page).toHaveURL(
       `/catalogs/${catalogId()}/services/${service}/edit`,
-    );
-    await expect(editPage.descriptionGroup.getByLabel("Bokmål")).toHaveValue(
-      "",
     );
 
     await deleteService(apiRequestContext, service as string);
