@@ -1,5 +1,5 @@
 import AxeBuilder from "@axe-core/playwright";
-import { Page } from "@playwright/test";
+import { APIRequestContext, Page } from "@playwright/test";
 import * as crypto from "crypto";
 
 export const adminAuthFile = `${__dirname}/../../.playwright/auth/admin.json`;
@@ -26,3 +26,61 @@ export const generateAccessibilityBuilder = async (page: Page) =>
     "wcag22aa",
     "best-practice",
   ]);
+
+// Anything this suite creates is named with one of these. The e2e_ ones are from
+// an earlier naming scheme and are kept so leftovers get cleaned up too.
+const TEST_NAME_PREFIXES = [
+  "testbruker-",
+  "testfelt-",
+  "e2e_user",
+  "e2e_field",
+  "e2e_code_list",
+];
+
+const catalogId = () => process.env.E2E_CATALOG_ID;
+
+const isTestName = (name: unknown): boolean =>
+  typeof name === "string" &&
+  TEST_NAME_PREFIXES.some((prefix) => name.startsWith(prefix));
+
+const label = (value: unknown): unknown =>
+  value && typeof value === "object" && "nb" in value
+    ? (value as { nb?: unknown }).nb
+    : value;
+
+const deleteLeftovers = async (
+  apiRequestContext: APIRequestContext,
+  resource: string,
+  listKey: string,
+  nameOf: (item: Record<string, unknown>) => unknown,
+) => {
+  const response = await apiRequestContext.get(
+    `/api/${resource}/${catalogId()}`,
+  );
+  if (!response.ok()) {
+    return;
+  }
+  const items = (await response.json())?.[listKey] ?? [];
+  for (const item of items) {
+    if (isTestName(nameOf(item))) {
+      await apiRequestContext.delete(
+        `/api/${resource}/${catalogId()}/${item.id}`,
+      );
+    }
+  }
+};
+
+// Leftovers break the other suites: concept-catalog picks an assignee from the
+// shared user list and reads the internal fields into its form.
+export const deleteTestData = async (apiRequestContext: APIRequestContext) => {
+  await deleteLeftovers(apiRequestContext, "users", "users", (u) => u.name);
+  await deleteLeftovers(apiRequestContext, "internal-fields", "internal", (f) =>
+    label(f.label),
+  );
+  await deleteLeftovers(
+    apiRequestContext,
+    "code-lists",
+    "codeLists",
+    (c) => c.name,
+  );
+};

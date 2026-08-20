@@ -1,6 +1,11 @@
 import type { Dialog } from "@playwright/test";
 import { expect, runTestAsAdmin } from "../../fixtures/basePage";
-import { uniqueName, uniqueString } from "../../utils/helpers";
+import {
+  adminAuthFile,
+  deleteTestData,
+  uniqueName,
+  uniqueString,
+} from "../../utils/helpers";
 
 runTestAsAdmin(
   "the home page lists the organizations the user administers",
@@ -84,7 +89,11 @@ runTestAsAdmin(
 
 runTestAsAdmin(
   "should create, rename and delete a code list",
-  async ({ page, catalogAdminPage }) => {
+  async ({ page, playwright, catalogAdminPage }) => {
+    const apiRequestContext = await playwright.request.newContext({
+      storageState: adminAuthFile,
+    });
+
     // This app reports every result through window.alert/confirm, which
     // Playwright auto-dismisses, so accept and record them
     const dialogs: string[] = [];
@@ -93,154 +102,176 @@ runTestAsAdmin(
       await dialog.accept();
     });
 
-    await catalogAdminPage.gotoCatalog("/concepts/code-lists");
-    await catalogAdminPage.expectOnCatalogPath("/concepts/code-lists");
+    try {
+      await catalogAdminPage.gotoCatalog("/concepts/code-lists");
+      await catalogAdminPage.expectOnCatalogPath("/concepts/code-lists");
 
-    const name = uniqueString("e2e_code_list");
-    const renamed = `${name}_renamed`;
+      const name = uniqueString("e2e_code_list");
+      const renamed = `${name}_renamed`;
 
-    // Create. Only the create editor renders "Avbryt", the existing ones
-    // render "Slett", so it is scoped on that.
-    await page.getByRole("button", { name: "Opprett kodeliste" }).click();
-    const createEditor = page
-      .locator("u-details")
-      .filter({ has: page.getByRole("button", { name: "Avbryt" }) });
-    await createEditor.getByLabel("Navn").fill(name);
-    await createEditor.getByLabel("Beskrivelse").fill("Opprettet av e2e");
-    await createEditor.getByRole("button", { name: "Lagre endringer" }).click();
-    await expect(
-      page.getByRole("heading", { name, exact: true }),
-    ).toBeVisible();
+      // Create. Only the create editor renders "Avbryt", the existing ones
+      // render "Slett", so it is scoped on that.
+      await page.getByRole("button", { name: "Opprett kodeliste" }).click();
+      const createEditor = page
+        .locator("u-details")
+        .filter({ has: page.getByRole("button", { name: "Avbryt" }) });
+      await createEditor.getByLabel("Navn").fill(name);
+      await createEditor.getByLabel("Beskrivelse").fill("Opprettet av e2e");
+      await createEditor
+        .getByRole("button", { name: "Lagre endringer" })
+        .click();
+      await expect(
+        page.getByRole("heading", { name, exact: true }),
+      ).toBeVisible();
 
-    // Rename
-    const codeList = page
-      .locator("u-details")
-      .filter({ has: page.getByRole("heading", { name, exact: true }) });
-    await codeList.locator("u-summary").click();
-    await codeList.getByLabel("Navn").fill(renamed);
-    await codeList.getByRole("button", { name: "Lagre endringer" }).click();
-    await expect(
-      page.getByRole("heading", { name: renamed, exact: true }),
-    ).toBeVisible();
+      // Rename
+      const codeList = page
+        .locator("u-details")
+        .filter({ has: page.getByRole("heading", { name, exact: true }) });
+      await codeList.locator("u-summary").click();
+      await codeList.getByLabel("Navn").fill(renamed);
+      await codeList.getByRole("button", { name: "Lagre endringer" }).click();
+      await expect(
+        page.getByRole("heading", { name: renamed, exact: true }),
+      ).toBeVisible();
 
-    // Delete
-    const renamedCodeList = page.locator("u-details").filter({
-      has: page.getByRole("heading", { name: renamed, exact: true }),
-    });
-    await renamedCodeList.getByRole("button", { name: "Slett" }).click();
-    await expect(
-      page.getByRole("heading", { name: renamed, exact: true }),
-    ).toHaveCount(0);
+      // Delete
+      const renamedCodeList = page.locator("u-details").filter({
+        has: page.getByRole("heading", { name: renamed, exact: true }),
+      });
+      await renamedCodeList.getByRole("button", { name: "Slett" }).click();
+      await expect(
+        page.getByRole("heading", { name: renamed, exact: true }),
+      ).toHaveCount(0);
 
-    // Create and rename reported success, delete went through its confirm, and
-    // nothing failed silently. Delete itself reports no result.
-    expect(dialogs).toContain("Oppdatering vellykket!");
-    expect(dialogs).toContain(
-      "Er du sikker på at du ønsker å slette kodelisten?",
-    );
-    expect(dialogs).not.toContain("Oppdatering feilet.");
-    expect(dialogs).not.toContain("Ingen endringer funnet.");
+      // Create and rename reported success, delete went through its confirm, and
+      // nothing failed silently. Delete itself reports no result.
+      expect(dialogs).toContain("Oppdatering vellykket!");
+      expect(dialogs).toContain(
+        "Er du sikker på at du ønsker å slette kodelisten?",
+      );
+      expect(dialogs).not.toContain("Oppdatering feilet.");
+      expect(dialogs).not.toContain("Ingen endringer funnet.");
+    } finally {
+      await deleteTestData(apiRequestContext);
+    }
   },
 );
 
 runTestAsAdmin(
   "should create, rename and delete a username",
-  async ({ page, catalogAdminPage }) => {
+  async ({ page, playwright, catalogAdminPage }) => {
+    const apiRequestContext = await playwright.request.newContext({
+      storageState: adminAuthFile,
+    });
+
     const dialogs: string[] = [];
     page.on("dialog", async (dialog: Dialog) => {
       dialogs.push(dialog.message());
       await dialog.accept();
     });
 
-    await catalogAdminPage.gotoCatalog("/general/users");
-    await catalogAdminPage.expectOnCatalogPath("/general/users");
+    try {
+      await catalogAdminPage.gotoCatalog("/general/users");
+      await catalogAdminPage.expectOnCatalogPath("/general/users");
 
-    const name = uniqueName("testbruker");
-    const renamed = `${name}-endret`;
+      const name = uniqueName("testbruker");
+      const renamed = `${name}-endret`;
 
-    await page
-      .getByRole("button", { name: "Legg til nytt brukernavn" })
-      .click();
-    const createEditor = page
-      .locator("u-details")
-      .filter({ has: page.getByRole("button", { name: "Avbryt" }) });
-    await createEditor.getByLabel("Navn").fill(name);
-    await createEditor.getByLabel("E-post").fill(`${name}@example.com`);
-    await createEditor.getByRole("button", { name: "Lagre" }).click();
-    await expect(
-      page.getByRole("heading", { name, exact: true }),
-    ).toBeVisible();
+      await page
+        .getByRole("button", { name: "Legg til nytt brukernavn" })
+        .click();
+      const createEditor = page
+        .locator("u-details")
+        .filter({ has: page.getByRole("button", { name: "Avbryt" }) });
+      await createEditor.getByLabel("Navn").fill(name);
+      await createEditor.getByLabel("E-post").fill(`${name}@example.com`);
+      await createEditor.getByRole("button", { name: "Lagre" }).click();
+      await expect(
+        page.getByRole("heading", { name, exact: true }),
+      ).toBeVisible();
 
-    const user = page
-      .locator("u-details")
-      .filter({ has: page.getByRole("heading", { name, exact: true }) });
-    await user.locator("u-summary").click();
-    await user.getByLabel("Navn").fill(renamed);
-    await user.getByRole("button", { name: "Lagre" }).click();
-    await expect(
-      page.getByRole("heading", { name: renamed, exact: true }),
-    ).toBeVisible();
+      const user = page
+        .locator("u-details")
+        .filter({ has: page.getByRole("heading", { name, exact: true }) });
+      await user.locator("u-summary").click();
+      await user.getByLabel("Navn").fill(renamed);
+      await user.getByRole("button", { name: "Lagre" }).click();
+      await expect(
+        page.getByRole("heading", { name: renamed, exact: true }),
+      ).toBeVisible();
 
-    const renamedUser = page.locator("u-details").filter({
-      has: page.getByRole("heading", { name: renamed, exact: true }),
-    });
-    await renamedUser.getByRole("button", { name: "Slett" }).click();
-    await expect(
-      page.getByRole("heading", { name: renamed, exact: true }),
-    ).toHaveCount(0);
+      const renamedUser = page.locator("u-details").filter({
+        has: page.getByRole("heading", { name: renamed, exact: true }),
+      });
+      await renamedUser.getByRole("button", { name: "Slett" }).click();
+      await expect(
+        page.getByRole("heading", { name: renamed, exact: true }),
+      ).toHaveCount(0);
 
-    expect(dialogs).toContain("Oppdatering vellykket!");
-    expect(dialogs).not.toContain("Oppdatering feilet.");
+      expect(dialogs).toContain("Oppdatering vellykket!");
+      expect(dialogs).not.toContain("Oppdatering feilet.");
+    } finally {
+      await deleteTestData(apiRequestContext);
+    }
   },
 );
 
 runTestAsAdmin(
   "should create, rename and delete an internal field",
-  async ({ page, catalogAdminPage }) => {
+  async ({ page, playwright, catalogAdminPage }) => {
+    const apiRequestContext = await playwright.request.newContext({
+      storageState: adminAuthFile,
+    });
+
     const dialogs: string[] = [];
     page.on("dialog", async (dialog: Dialog) => {
       dialogs.push(dialog.message());
       await dialog.accept();
     });
 
-    await catalogAdminPage.gotoCatalog("/concepts/internal-fields");
-    await catalogAdminPage.expectOnCatalogPath("/concepts/internal-fields");
+    try {
+      await catalogAdminPage.gotoCatalog("/concepts/internal-fields");
+      await catalogAdminPage.expectOnCatalogPath("/concepts/internal-fields");
 
-    const name = uniqueName("testfelt");
-    const renamed = `${name}-endret`;
+      const name = uniqueName("testfelt");
+      const renamed = `${name}-endret`;
 
-    await page
-      .getByRole("button", { name: "Opprett nytt internt felt" })
-      .click();
-    const createEditor = page
-      .locator("u-details")
-      .filter({ has: page.getByRole("button", { name: "Avbryt" }) });
-    await createEditor.getByLabel("Navn på felt").fill(name);
-    await createEditor.getByLabel("Type felt").selectOption("text_short");
-    await createEditor.getByRole("button", { name: "Lagre" }).click();
-    await expect(
-      page.getByRole("heading", { name, exact: true }),
-    ).toBeVisible();
+      await page
+        .getByRole("button", { name: "Opprett nytt internt felt" })
+        .click();
+      const createEditor = page
+        .locator("u-details")
+        .filter({ has: page.getByRole("button", { name: "Avbryt" }) });
+      await createEditor.getByLabel("Navn på felt").fill(name);
+      await createEditor.getByLabel("Type felt").selectOption("text_short");
+      await createEditor.getByRole("button", { name: "Lagre" }).click();
+      await expect(
+        page.getByRole("heading", { name, exact: true }),
+      ).toBeVisible();
 
-    const field = page
-      .locator("u-details")
-      .filter({ has: page.getByRole("heading", { name, exact: true }) });
-    await field.locator("u-summary").click();
-    await field.getByLabel("Navn på felt").fill(renamed);
-    await field.getByRole("button", { name: "Lagre" }).click();
-    await expect(
-      page.getByRole("heading", { name: renamed, exact: true }),
-    ).toBeVisible();
+      const field = page
+        .locator("u-details")
+        .filter({ has: page.getByRole("heading", { name, exact: true }) });
+      await field.locator("u-summary").click();
+      await field.getByLabel("Navn på felt").fill(renamed);
+      await field.getByRole("button", { name: "Lagre" }).click();
+      await expect(
+        page.getByRole("heading", { name: renamed, exact: true }),
+      ).toBeVisible();
 
-    const renamedField = page.locator("u-details").filter({
-      has: page.getByRole("heading", { name: renamed, exact: true }),
-    });
-    await renamedField.getByRole("button", { name: "Slett" }).click();
-    await expect(
-      page.getByRole("heading", { name: renamed, exact: true }),
-    ).toHaveCount(0);
+      const renamedField = page.locator("u-details").filter({
+        has: page.getByRole("heading", { name: renamed, exact: true }),
+      });
+      await renamedField.getByRole("button", { name: "Slett" }).click();
+      await expect(
+        page.getByRole("heading", { name: renamed, exact: true }),
+      ).toHaveCount(0);
 
-    expect(dialogs).toContain("Oppdatering vellykket!");
-    expect(dialogs).not.toContain("Oppdatering feilet.");
+      expect(dialogs).toContain("Oppdatering vellykket!");
+      expect(dialogs).not.toContain("Oppdatering feilet.");
+    } finally {
+      await deleteTestData(apiRequestContext);
+    }
   },
 );
