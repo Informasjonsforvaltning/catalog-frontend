@@ -142,3 +142,105 @@ runTestAsAdmin(
     expect(dialogs).not.toContain("Ingen endringer funnet.");
   },
 );
+
+runTestAsAdmin(
+  "should create, rename and delete a username",
+  async ({ page, catalogAdminPage }) => {
+    const dialogs: string[] = [];
+    page.on("dialog", async (dialog: Dialog) => {
+      dialogs.push(dialog.message());
+      await dialog.accept();
+    });
+
+    await catalogAdminPage.gotoCatalog("/general/users");
+    await catalogAdminPage.expectOnCatalogPath("/general/users");
+
+    const name = uniqueString("e2e_user");
+    const renamed = `${name}_renamed`;
+
+    await page
+      .getByRole("button", { name: "Legg til nytt brukernavn" })
+      .click();
+    const createEditor = page
+      .locator("u-details")
+      .filter({ has: page.getByRole("button", { name: "Avbryt" }) });
+    await createEditor.getByLabel("Navn").fill(name);
+    await createEditor.getByLabel("E-post").fill(`${name}@example.com`);
+    await createEditor.getByRole("button", { name: "Lagre" }).click();
+    await expect(
+      page.getByRole("heading", { name, exact: true }),
+    ).toBeVisible();
+
+    const user = page
+      .locator("u-details")
+      .filter({ has: page.getByRole("heading", { name, exact: true }) });
+    await user.locator("u-summary").click();
+    await user.getByLabel("Navn").fill(renamed);
+    await user.getByRole("button", { name: "Lagre" }).click();
+    await expect(
+      page.getByRole("heading", { name: renamed, exact: true }),
+    ).toBeVisible();
+
+    const renamedUser = page.locator("u-details").filter({
+      has: page.getByRole("heading", { name: renamed, exact: true }),
+    });
+    await renamedUser.getByRole("button", { name: "Slett" }).click();
+    await expect(
+      page.getByRole("heading", { name: renamed, exact: true }),
+    ).toHaveCount(0);
+
+    expect(dialogs).toContain("Oppdatering vellykket!");
+    expect(dialogs).not.toContain("Oppdatering feilet.");
+  },
+);
+
+runTestAsAdmin(
+  "should create, rename and delete an internal field",
+  async ({ page, catalogAdminPage }) => {
+    const dialogs: string[] = [];
+    page.on("dialog", async (dialog: Dialog) => {
+      dialogs.push(dialog.message());
+      await dialog.accept();
+    });
+
+    await catalogAdminPage.gotoCatalog("/concepts/internal-fields");
+    await catalogAdminPage.expectOnCatalogPath("/concepts/internal-fields");
+
+    const name = uniqueString("e2e_field");
+    const renamed = `${name}_renamed`;
+
+    await page
+      .getByRole("button", { name: "Opprett nytt internt felt" })
+      .click();
+    const createEditor = page
+      .locator("u-details")
+      .filter({ has: page.getByRole("button", { name: "Avbryt" }) });
+    await createEditor.getByLabel("Navn på felt").fill(name);
+    await createEditor.getByLabel("Type felt").selectOption("text_short");
+    await createEditor.getByRole("button", { name: "Lagre" }).click();
+    await expect(
+      page.getByRole("heading", { name, exact: true }),
+    ).toBeVisible();
+
+    const field = page
+      .locator("u-details")
+      .filter({ has: page.getByRole("heading", { name, exact: true }) });
+    await field.locator("u-summary").click();
+    await field.getByLabel("Navn på felt").fill(renamed);
+    await field.getByRole("button", { name: "Lagre" }).click();
+    await expect(
+      page.getByRole("heading", { name: renamed, exact: true }),
+    ).toBeVisible();
+
+    const renamedField = page.locator("u-details").filter({
+      has: page.getByRole("heading", { name: renamed, exact: true }),
+    });
+    await renamedField.getByRole("button", { name: "Slett" }).click();
+    await expect(
+      page.getByRole("heading", { name: renamed, exact: true }),
+    ).toHaveCount(0);
+
+    expect(dialogs).toContain("Oppdatering vellykket!");
+    expect(dialogs).not.toContain("Oppdatering feilet.");
+  },
+);
