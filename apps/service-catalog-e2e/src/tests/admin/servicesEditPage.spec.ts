@@ -175,22 +175,24 @@ runTestAsAdmin(
     const apiRequestContext = await playwright.request.newContext({
       storageState: adminAuthFile,
     });
-    const service = await createService(
-      apiRequestContext,
-      getRandomService("required"),
-    );
+    // Seeded with a four character description, one below the minimum of five.
+    // Set through the API rather than typed: fill() inserts into this field
+    // instead of replacing its contents.
+    const service = await createService(apiRequestContext, {
+      ...getRandomService("required"),
+      description: { nb: "abcd", nn: "", en: "" },
+    });
 
     const editPage = new ServicesEditPage(page, context, accessibilityBuilder);
 
     await editPage.goto(catalogId(), service as string);
     await editPage.expectFormReady();
-
-    // Four characters, one below the minimum of five. The draft schema has no
-    // length rule, so this is only an error once the full schema applies.
-    await editPage.fillDescription({ nb: "abcd" });
     await expect(editPage.descriptionGroup.getByLabel("Bokmål")).toHaveValue(
       "abcd",
     );
+
+    // The draft schema has no length rule, so this is only an error once the
+    // full schema applies
     await editPage.setIgnoreRequired(false);
     await expect(editPage.ignoreRequiredCheckbox).not.toBeChecked();
 
