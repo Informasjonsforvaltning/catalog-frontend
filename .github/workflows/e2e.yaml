@@ -16,7 +16,6 @@ jobs:
     name: Test app ${{ matrix.appname }}
     runs-on: ubuntu-latest
     strategy:
-      fail-fast: false
       matrix:
         appname:
           [
