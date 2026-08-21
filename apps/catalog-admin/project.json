@@ -30,6 +30,10 @@
           "buildTarget": "catalog-admin:build:development",
           "dev": true
         },
+        "e2e": {
+          "buildTarget": "catalog-admin:build:production",
+          "dev": false
+        },
         "production": {
           "buildTarget": "catalog-admin:build:production",
           "dev": false

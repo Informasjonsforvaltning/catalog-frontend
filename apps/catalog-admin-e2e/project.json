@@ -1,0 +1,10 @@
+{
+  "name": "catalog-admin-e2e",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/catalog-admin-e2e/src",
+  "projectType": "application",
+  "tags": [],
+  "implicitDependencies": ["catalog-admin"],
+  "// targets": "to see all targets run: nx show project catalog-admin-e2e --web",
+  "targets": {}
+}
