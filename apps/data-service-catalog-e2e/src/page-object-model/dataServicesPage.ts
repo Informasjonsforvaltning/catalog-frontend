@@ -104,33 +104,44 @@ export default class DataServicesPage {
     );
   }
 
-  async clearFilters() {
-    console.log("[DataServicesPage] Clearing filters...");
-
-    // Find and click all filter pills to remove them
-    const filterChips = this.page
-      .locator('[role="button"]')
-      .filter({ hasText: /Fjern filter/ });
-    const chipCount = await filterChips.count();
-
-    console.log(`[DataServicesPage] Found ${chipCount} filter chips to remove`);
-
-    for (let i = 0; i < chipCount; i++) {
-      // Click the first pill each time since the list will update after each removal
-      const firstChip = filterChips.first();
-      if (await firstChip.isVisible()) {
-        console.log(
-          `[DataServicesPage] Removing filter chip ${i + 1}/${chipCount}`,
-        );
-        await firstChip.click();
-        // Wait for the pill to be removed (detached)
-        await firstChip.waitFor({ state: "detached", timeout: 5000 });
-      }
+  // AccordionItem renders the panels open, so clicking a header collapses it
+  private async expandFilter(header: Locator) {
+    await expect(header).toBeVisible();
+    if ((await header.getAttribute("aria-expanded")) !== "true") {
+      await header.click();
     }
+  }
 
-    // Wait for filters to be cleared and page to update
-    await this.page.waitForTimeout(1000);
-    console.log("[DataServicesPage] Filters cleared");
+  // Unchecks the boxes directly. The previous version looked for chips by text
+  // "Fjern filter", which only exists as their aria-label, so it never found any.
+  async clearFilters() {
+    await this.expandFilter(this.statusFilterHeader);
+    await this.statusFilterFerdigstilt.uncheck();
+    await this.statusFilterFrarådet.uncheck();
+    await this.statusFilterUnderUtvikling.uncheck();
+    await this.statusFilterTrukketTilbake.uncheck();
+
+    await this.expandFilter(this.publishedFilterHeader);
+    await this.publishedFilterPublished.uncheck();
+    await this.publishedFilterNotPublished.uncheck();
+  }
+
+  async filterStatusFerdigstilt() {
+    await this.expandFilter(this.statusFilterHeader);
+    await this.statusFilterFerdigstilt.check();
+    await expect(this.statusFilterFerdigstilt).toBeChecked();
+  }
+
+  async filterStatusFrarådet() {
+    await this.expandFilter(this.statusFilterHeader);
+    await this.statusFilterFrarådet.check();
+    await expect(this.statusFilterFrarådet).toBeChecked();
+  }
+
+  async filterNotPublished() {
+    await this.expandFilter(this.publishedFilterHeader);
+    await this.publishedFilterNotPublished.check();
+    await expect(this.publishedFilterNotPublished).toBeChecked();
   }
 
   async waitForDataServicesToLoad(timeout = 10000) {

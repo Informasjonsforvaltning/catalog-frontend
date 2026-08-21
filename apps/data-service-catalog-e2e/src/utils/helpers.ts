@@ -226,3 +226,10 @@ export const formatDate = (date: Date | null) =>
         .split("/")
         .join(".")
     : "";
+
+export enum DataServiceStatus {
+  COMPLETED = "http://purl.org/adms/status/Completed",
+  DEPRECATED = "http://purl.org/adms/status/Deprecated",
+  UNDER_DEVELOPMENT = "http://purl.org/adms/status/UnderDevelopment",
+  WITHDRAWN = "http://purl.org/adms/status/Withdrawn",
+}
