@@ -42,7 +42,10 @@ export default class DatasetsPage {
     this.createDatasetButton = page.getByRole("button", {
       name: "Legg til datasett",
     });
-    this.statusFilterHeader = page.getByRole("button", { name: "Status" });
+    this.statusFilterHeader = page.getByRole("button", {
+      name: "Status",
+      exact: true,
+    });
     this.statusFilterDraft = page.getByLabel("Utkast");
     this.statusFilterApproved = page.getByLabel("Godkjent");
     this.publishedFilterHeader = page.getByRole("button", {

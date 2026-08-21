@@ -45,7 +45,11 @@ export default class DataServicesPage {
     this.createDataServiceButton = page.getByRole("link", {
       name: "Legg til API-beskrivelse",
     });
-    this.statusFilterHeader = page.getByRole("button", { name: "Status" });
+    // exact: an applied filter renders a chip whose aria-label contains "status"
+    this.statusFilterHeader = page.getByRole("button", {
+      name: "Status",
+      exact: true,
+    });
     this.statusFilterFerdigstilt = page.getByLabel("Ferdigstilt");
     this.statusFilterFrarådet = page.getByLabel("Frarådet");
     this.statusFilterUnderUtvikling = page.getByLabel("Under utvikling");
