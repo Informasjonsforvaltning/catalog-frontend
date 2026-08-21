@@ -1,13 +1,14 @@
 "use client";
 
-import { FC, ReactNode, useEffect, useRef, useState } from "react";
 import {
-  Button,
-  Select,
-  Spinner,
-  Textfield,
-} from "@digdir/designsystemet-react";
-import { MagnifyingGlassIcon } from "@navikt/aksel-icons";
+  ChangeEvent,
+  FC,
+  FormEvent,
+  ReactNode,
+  useEffect,
+  useState,
+} from "react";
+import { Field, Label, Search, Select } from "@digdir/designsystemet-react";
 import styles from "./search-field.module.scss";
 import classNames from "classnames";
 import { localization } from "@catalog-frontend/utils";
@@ -44,87 +45,80 @@ const SearchField: FC<SearchFieldProps> = ({
     selectedOptionValue ??
       options?.find((option) => option.default === true)?.value,
   );
-  const searchActionsRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    if (onSearch) {
-      onSearch(query, optionValue);
-    }
-  };
-
-  const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    if (e.key === "Enter") {
-      if (onSearch) {
-        onSearch(query, optionValue);
-      }
-    }
-  };
 
   useEffect(() => {
-    if (inputRef?.current && searchActionsRef?.current) {
-      const actionsWidth = searchActionsRef.current.offsetWidth;
-      inputRef.current.style.paddingRight = `${actionsWidth + 20}px`;
+    setQuery(value);
+  }, [value]);
+
+  useEffect(() => {
+    if (selectedOptionValue !== undefined) {
+      setOptionValue(selectedOptionValue);
     }
-  }, []);
+  }, [selectedOptionValue]);
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    onSearch?.(query, optionValue);
+  };
+
+  const searchInput = (
+    <Search
+      data-size="sm"
+      className={classNames(styles.searchControl, {
+        [styles.withOptions]: Boolean(options?.length),
+      })}
+    >
+      <Search.Input
+        autoComplete="off"
+        placeholder={placeholder}
+        value={query}
+        aria-label={
+          label ? undefined : placeholder || localization.search.search
+        }
+        onChange={(e) => setQuery(e.target.value)}
+      />
+      <Search.Clear
+        aria-label={localization.search.clear}
+        onClick={() => {
+          setQuery("");
+          onSearch?.("", optionValue);
+        }}
+      />
+      {options && (
+        <Select
+          data-size="sm"
+          aria-label={localization.search.searchField}
+          value={optionValue}
+          className={styles.searchOptions}
+          onChange={(e: ChangeEvent<HTMLSelectElement>) =>
+            setOptionValue(e.target.value)
+          }
+        >
+          {options.map(({ value: optionVal, label: optionLabel }) => (
+            <option value={optionVal} key={optionVal}>
+              {optionLabel}
+            </option>
+          ))}
+        </Select>
+      )}
+      <Search.Button loading={loading}>
+        {localization.search.search}
+      </Search.Button>
+    </Search>
+  );
 
   return (
-    <div
-      className={classNames([styles.search, ...(className ? [className] : [])])}
-    >
-      <div className={styles.searchBox}>
-        <Textfield
-          ref={inputRef}
-          autoComplete="off"
-          className={styles.inputTextfield}
-          placeholder={placeholder}
-          data-size="lg"
-          value={query}
-          type="search"
-          label={label}
-          onChange={(e) => setQuery(e.target.value)}
-          onKeyUp={handleKeyUp}
-        />
-        <div ref={searchActionsRef} className={styles.searchActions}>
-          {options && (
-            <Select
-              data-size="sm"
-              aria-label="Velg alternativ"
-              value={optionValue}
-              className={styles.searchOptions}
-              onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                setOptionValue(e.target.value)
-              }
-            >
-              {options.map(({ value, label }) => (
-                <option value={value} key={value}>
-                  {label}
-                </option>
-              ))}
-            </Select>
-          )}
-          <Button
-            className={styles.searchButton}
-            type="submit"
-            data-size="sm"
-            onClick={handleClick}
-          >
-            {loading ? (
-              <Spinner aria-label={localization.loading} data-size="xs" />
-            ) : (
-              <>
-                <MagnifyingGlassIcon
-                  className={styles.searchIcon}
-                  aria-hidden
-                />
-                <span>{localization.search.search}</span>
-              </>
-            )}
-          </Button>
-        </div>
-      </div>
+    <div className={classNames(styles.search, className)}>
+      <form className={styles.searchForm} onSubmit={handleSubmit}>
+        {label ? (
+          <Field>
+            <Label>{label}</Label>
+            {searchInput}
+          </Field>
+        ) : (
+          searchInput
+        )}
+      </form>
     </div>
   );
 };

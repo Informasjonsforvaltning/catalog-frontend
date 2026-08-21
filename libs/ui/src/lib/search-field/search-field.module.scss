@@ -1,50 +1,38 @@
 .search {
   max-width: 640px;
+  width: 100%;
 }
 
-.searchBox {
-  position: relative;
+.searchForm {
+  width: 100%;
 }
 
-.searchActions {
-  position: absolute;
-  right: 0.5rem;
-  bottom: 0.5rem;
-  display: flex;
-  gap: var(--ds-size-2);
+.withOptions {
+  grid-template-columns: 1fr auto auto;
 }
 
-.searchButton {
-  font-size: medium;
-  min-width: var(--ds-size-16);
-
-  title + circle {
-    display: none;
-  }
-
-  @media (max-width: 650px) {
-    right: 0.44444rem;
-    bottom: 0.44444rem;
-  }
+.searchOptions {
+  border-end-start-radius: 0;
+  border-start-start-radius: 0;
+  border-end-end-radius: 0;
+  border-start-end-radius: 0;
+  border-inline-start: 0;
+  width: auto;
+  min-width: 9rem;
 }
 
-.searchIcon {
-  transform: scale(1.25);
-  margin-right: 0.25rem;
-}
+// Move focus ring from search input to entire search component
+.searchControl {
+  &:has(input:focus-visible),
+  &:has(select:focus-visible) {
+    box-shadow: var(--dsc-focus-boxShadow);
+    outline: var(--dsc-focus-outline);
+    outline-offset: var(--ds-border-width-focus);
 
-.inputTextfield {
-  position: relative;
-  gap: 1rem;
-
-  input {
-    font-size: 1.25rem;
-  }
-
-  > label + div + div {
-    position: absolute;
-    width: 0;
-    height: 0;
-    overflow: hidden;
+    :is(input, select):focus-visible {
+      box-shadow: none;
+      outline: none;
+      outline-offset: 0;
+    }
   }
 }
