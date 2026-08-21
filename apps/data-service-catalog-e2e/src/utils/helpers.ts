@@ -227,9 +227,7 @@ export const formatDate = (date: Date | null) =>
         .join(".")
     : "";
 
-export enum DataServiceStatus {
-  COMPLETED = "http://purl.org/adms/status/Completed",
-  DEPRECATED = "http://purl.org/adms/status/Deprecated",
-  UNDER_DEVELOPMENT = "http://purl.org/adms/status/UnderDevelopment",
-  WITHDRAWN = "http://purl.org/adms/status/Withdrawn",
-}
+// The status filter matches on the EU distribution-status uri, not the ADMS one
+// the service catalog uses
+export const STATUS_COMPLETED =
+  "http://publications.europa.eu/resource/authority/distribution-status/COMPLETED";

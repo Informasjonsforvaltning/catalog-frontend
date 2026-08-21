@@ -3,7 +3,7 @@ import { expect, runTestAsAdmin } from "../../fixtures/basePage";
 import {
   adminAuthFile,
   createDataService,
-  DataServiceStatus,
+  STATUS_COMPLETED,
   deleteDataService,
   uniqueString,
 } from "../../utils/helpers";
@@ -234,7 +234,7 @@ runTestAsAdmin(
     // The filter matches on the status uri, so the fixture has to set one
     const dataService = {
       ...getRandomDataService(),
-      status: DataServiceStatus.COMPLETED,
+      status: STATUS_COMPLETED,
     };
     const created = await createDataService(apiRequestContext, dataService);
 
