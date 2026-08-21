@@ -2,7 +2,13 @@ import type { Dialog } from "@playwright/test";
 import { expect, runTestAsAdmin } from "../../fixtures/basePage";
 import {
   adminAuthFile,
+  createCodeList,
+  deleteCodeList,
   deleteTestData,
+  getDesign,
+  getEditableFields,
+  setDesignColors,
+  setDomainCodeListId,
   uniqueName,
   uniqueString,
 } from "../../utils/helpers";
@@ -272,6 +278,93 @@ runTestAsAdmin(
       expect(dialogs).not.toContain("Oppdatering feilet.");
     } finally {
       await deleteTestData(apiRequestContext);
+    }
+  },
+);
+
+runTestAsAdmin(
+  "should change the code list used for Fagområde",
+  async ({ page, playwright, catalogAdminPage }) => {
+    const apiRequestContext = await playwright.request.newContext({
+      storageState: adminAuthFile,
+    });
+
+    const dialogs: string[] = [];
+    page.on("dialog", async (dialog: Dialog) => {
+      dialogs.push(dialog.message());
+      await dialog.accept();
+    });
+
+    // Fagområde in concept-catalog reads this, so remember it and put it back
+    const original = (await getEditableFields(apiRequestContext))
+      ?.domainCodeListId;
+    const codeListName = uniqueString("e2e_code_list");
+    let createdId: string | undefined;
+
+    try {
+      createdId = await createCodeList(apiRequestContext, codeListName);
+
+      await catalogAdminPage.gotoCatalog("/concepts/editable-fields");
+      await catalogAdminPage.expectOnCatalogPath("/concepts/editable-fields");
+
+      const select = page.getByLabel("Velg kodeliste");
+      await select.selectOption(createdId);
+      await page.getByRole("button", { name: "Lagre" }).click();
+
+      await expect.poll(() => dialogs).toContain("Oppdatering vellykket!");
+      expect(dialogs).not.toContain("Oppdatering feilet.");
+
+      await page.reload();
+      await expect(select).toHaveValue(createdId);
+    } finally {
+      await setDomainCodeListId(apiRequestContext, original ?? "");
+      if (createdId) {
+        await deleteCodeList(apiRequestContext, createdId);
+      }
+    }
+  },
+);
+
+runTestAsAdmin(
+  "should change the organization design colors",
+  async ({ page, playwright, catalogAdminPage }) => {
+    const apiRequestContext = await playwright.request.newContext({
+      storageState: adminAuthFile,
+    });
+
+    const dialogs: string[] = [];
+    page.on("dialog", async (dialog: Dialog) => {
+      dialogs.push(dialog.message());
+      await dialog.accept();
+    });
+
+    // These colors render in every catalog's page banner, so put them back
+    const design = await getDesign(apiRequestContext);
+    const originalBackground = design?.backgroundColor ?? "#FFFFFF";
+    const originalFont = design?.fontColor ?? "#2D3741";
+
+    try {
+      await catalogAdminPage.gotoCatalog("/general/design");
+      await catalogAdminPage.expectOnCatalogPath("/general/design");
+
+      // Both color fields share the aria-label "Farger", background comes first
+      const colorFields = page.getByLabel("Farger");
+      await expect(colorFields.first()).toBeVisible();
+      await colorFields.first().fill("#123456");
+
+      await page.getByRole("button", { name: "Lagre" }).click();
+
+      await expect.poll(() => dialogs).toContain("Oppdatering vellykket!");
+      expect(dialogs).not.toContain("Oppdatering feilet.");
+
+      await page.reload();
+      await expect(page.getByLabel("Farger").first()).toHaveValue("#123456");
+    } finally {
+      await setDesignColors(
+        apiRequestContext,
+        originalBackground,
+        originalFont,
+      );
     }
   },
 );

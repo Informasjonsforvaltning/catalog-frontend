@@ -84,3 +84,62 @@ export const deleteTestData = async (apiRequestContext: APIRequestContext) => {
     (c) => c.name,
   );
 };
+
+export const createCodeList = async (
+  apiRequestContext: APIRequestContext,
+  name: string,
+) => {
+  await apiRequestContext.post(`/api/code-lists/${catalogId()}`, {
+    data: { codeList: { name, description: "e2e", codes: [] } },
+  });
+  const response = await apiRequestContext.get(
+    `/api/code-lists/${catalogId()}`,
+  );
+  const codeLists = (await response.json())?.codeLists ?? [];
+  return codeLists.find((c: { name: string }) => c.name === name)?.id as string;
+};
+
+export const deleteCodeList = async (
+  apiRequestContext: APIRequestContext,
+  id: string,
+) => {
+  await apiRequestContext.delete(`/api/code-lists/${catalogId()}/${id}`);
+};
+
+export const getEditableFields = async (
+  apiRequestContext: APIRequestContext,
+) => {
+  const response = await apiRequestContext.get(
+    `/api/internal-fields/${catalogId()}`,
+  );
+  return (await response.json())?.editable ?? {};
+};
+
+export const setDomainCodeListId = async (
+  apiRequestContext: APIRequestContext,
+  value: string,
+) => {
+  await apiRequestContext.patch(`/api/editable-fields/${catalogId()}`, {
+    data: {
+      diff: [{ op: "replace", path: "/domainCodeListId", value: value ?? "" }],
+    },
+  });
+};
+
+export const getDesign = async (apiRequestContext: APIRequestContext) => {
+  const response = await apiRequestContext.get(`/api/design/${catalogId()}`);
+  return response.ok() ? await response.json() : {};
+};
+
+export const setDesignColors = async (
+  apiRequestContext: APIRequestContext,
+  backgroundColor: string,
+  fontColor: string,
+) => {
+  await apiRequestContext.patch(`/api/design/${catalogId()}`, {
+    data: [
+      { op: "replace", path: "/backgroundColor", value: backgroundColor },
+      { op: "replace", path: "/fontColor", value: fontColor },
+    ],
+  });
+};
