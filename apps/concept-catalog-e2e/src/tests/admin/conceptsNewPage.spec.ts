@@ -1,4 +1,3 @@
-import type { Dialog } from "@playwright/test";
 import { expect, runTestAsAdmin } from "../../fixtures/basePage";
 import {
   adminAuthFile,
@@ -73,7 +72,7 @@ runTestAsAdmin(
 );
 
 runTestAsAdmin(
-  "should not publish a concept when the confirmation is dismissed",
+  "should not allow publishing a concept with missing required fields",
   async ({ conceptsPage, playwright }) => {
     const apiRequestContext = await playwright.request.newContext({
       storageState: adminAuthFile,
@@ -83,26 +82,23 @@ runTestAsAdmin(
       anbefaltTerm: { navn: { nb: term, nn: "", en: "" } },
     });
 
-    // Dismissed on purpose: publishing a concept cannot be undone and
-    // deleteAllConcepts skips published concepts, so it would stay in the
-    // shared catalog for good.
-    const dialogs: string[] = [];
-    conceptsPage.page.on("dialog", async (dialog: Dialog) => {
-      dialogs.push(dialog.message());
-      await dialog.dismiss();
-    });
-
     try {
       await conceptsPage.detailPage.goto(
         `/catalogs/${catalogId()}/concepts/${id}`,
       );
 
+      // The concept only has a bokmål term, so it fails the full schema and the
+      // switch is read only. Publishing is deliberately not exercised: it cannot
+      // be undone and deleteAllConcepts skips published concepts.
+      await expect(
+        conceptsPage.page.getByRole("button", { name: "Valideringsfeil" }),
+      ).toBeVisible();
+
       const publishSwitch = conceptsPage.page.getByRole("switch", {
         name: "Ikke publisert",
       });
+      await expect(publishSwitch).not.toBeChecked();
       await publishSwitch.click();
-
-      expect(dialogs).toContain("Er du sikker på at du vil publisere?");
       await expect(publishSwitch).not.toBeChecked();
     } finally {
       await deleteConcept(apiRequestContext, id);
