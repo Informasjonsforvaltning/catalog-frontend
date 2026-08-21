@@ -4,6 +4,7 @@ import DatasetsPage from "../../page-object-model/datasetsPage";
 import {
   adminAuthFile,
   createDataset,
+  deleteDataset,
   uniqueString,
 } from "../../utils/helpers";
 import { dateStringToDate, formatDate } from "@catalog-frontend/utils";
@@ -160,5 +161,36 @@ runTestAsAdmin(
     await datasetsPage.expectSearchInputVisible();
     await datasetsPage.search("non-existent-dataset-123");
     await expect(datasetsPage.noResultsLocator()).toBeVisible();
+  },
+);
+
+runTestAsAdmin(
+  "should apply the status filter",
+  async ({ datasetsPage, playwright }) => {
+    const apiRequestContext = await playwright.request.newContext({
+      storageState: adminAuthFile,
+    });
+
+    const draft = getRandomDataset();
+    const id = await createDataset(apiRequestContext, draft);
+
+    try {
+      await datasetsPage.goto(process.env.E2E_CATALOG_ID as string);
+      await datasetsPage.clearFilters();
+
+      // The fixture is a draft, so it survives the draft filter
+      await datasetsPage.filterStatus(false);
+      await datasetsPage.search(draft.title.nb as string);
+      await datasetsPage.verifyDatasetExists(draft.title.nb as string);
+
+      // and is filtered out by the approved filter
+      await datasetsPage.clearFilters();
+      await datasetsPage.filterStatus(true);
+      await datasetsPage.search(draft.title.nb as string);
+      await datasetsPage.verifyDatasetDoesNotExist(draft.title.nb as string);
+    } finally {
+      await datasetsPage.clearFilters();
+      await deleteDataset(apiRequestContext, id);
+    }
   },
 );

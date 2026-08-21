@@ -171,6 +171,28 @@ export default class ConceptsPage {
     await locatorFn().check();
   }
 
+  // Only anbefaltTerm.navn.nb is required while "Ignorer påkrevde felt" is on,
+  // which it is by default. Returns the id of the created concept.
+  public async createMinimalConceptUsingForm(term: string) {
+    await this.goto();
+    await this.page.getByRole("link", { name: "Nytt begrep" }).click();
+    await this.editPage.expectMenu();
+
+    await this.page
+      .getByRole("group", { name: /Anbefalt term/ })
+      .getByRole("textbox", { name: "Bokmål" })
+      .fill(term);
+
+    await this.page.getByRole("button", { name: "Lagre" }).click();
+
+    await this.page.waitForURL(
+      new RegExp(
+        `/catalogs/${process.env.E2E_CATALOG_ID}/concepts/[0-9a-f-]+/edit`,
+      ),
+    );
+    return this.page.url().match(/concepts\/([0-9a-f-]+)\/edit/)?.[1] ?? "";
+  }
+
   public async hideDevtools() {
     if (
       await this.page

@@ -3,6 +3,8 @@ import { expect, runTestAsAdmin } from "../../fixtures/basePage";
 import {
   adminAuthFile,
   createDataService,
+  DataServiceStatus,
+  deleteDataService,
   uniqueString,
 } from "../../utils/helpers";
 import { getRandomDataService } from "../../utils/dataService";
@@ -219,5 +221,43 @@ runTestAsAdmin(
     }
 
     expect(cardCount).toBeGreaterThan(0);
+  },
+);
+
+runTestAsAdmin(
+  "should apply the status filter",
+  async ({ dataServicesPage, playwright }) => {
+    const apiRequestContext = await playwright.request.newContext({
+      storageState: adminAuthFile,
+    });
+
+    // The filter matches on the status uri, so the fixture has to set one
+    const dataService = {
+      ...getRandomDataService(),
+      status: DataServiceStatus.COMPLETED,
+    };
+    const created = await createDataService(apiRequestContext, dataService);
+
+    try {
+      await dataServicesPage.goto(process.env.E2E_CATALOG_ID as string);
+      await dataServicesPage.clearFilters();
+
+      await dataServicesPage.filterStatusFerdigstilt();
+      await dataServicesPage.search(dataService.title.nb as string);
+      await dataServicesPage.verifyDataServiceExists(
+        dataService.title.nb as string,
+      );
+
+      // A different status filters it out
+      await dataServicesPage.clearFilters();
+      await dataServicesPage.filterStatusFrarådet();
+      await dataServicesPage.search(dataService.title.nb as string);
+      await dataServicesPage.verifyDataServiceDoesNotExist(
+        dataService.title.nb as string,
+      );
+    } finally {
+      await dataServicesPage.clearFilters();
+      await deleteDataService(apiRequestContext, created.id);
+    }
   },
 );
