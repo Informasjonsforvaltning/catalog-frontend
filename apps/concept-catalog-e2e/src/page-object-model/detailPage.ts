@@ -52,11 +52,24 @@ export default class DetailPage {
     await this.editPage.expectMenu();
   }
 
-  public async deleteConcept() {
-    await this.page.getByRole("button", { name: "Slett" }).click();
-    await expect(this.page.getByRole("button", { name: "Slett" })).toBeHidden({
-      timeout: 5000,
-    });
+  // The page button and the confirm modal's button are both named "Slett", so
+  // the second click has to be dialog scoped. exact: true keeps it off
+  // "Slett kommentar".
+  public async deleteConcept(term: string) {
+    await this.page.getByRole("button", { name: "Slett", exact: true }).click();
+
+    const dialog = this.page.getByRole("dialog");
+    await expect(
+      dialog.getByRole("heading", { name: "Slett begrep" }),
+    ).toBeVisible();
+    await expect(
+      dialog.getByText(/Du er i ferd med å slette begrepet/),
+    ).toBeVisible();
+    await expect(dialog.getByText(term)).toBeVisible();
+
+    await dialog.getByRole("button", { name: "Slett", exact: true }).click();
+
+    await this.page.waitForURL(`/catalogs/${process.env.E2E_CATALOG_ID}`);
   }
 
   public async checkAccessibility() {
