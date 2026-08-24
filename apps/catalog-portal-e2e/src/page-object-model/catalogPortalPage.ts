@@ -66,9 +66,7 @@ export default class CatalogPortalPage {
     await expect(locator).toHaveAttribute("href", expectedUrl);
   }
 
-  // The card body starts as a "Laster..." spinner and resolves to a count, both
-  // part of the link's accessible name. The count itself is not asserted: the
-  // other suites create and delete data in the same catalog.
+  // The card body starts as a "Laster..." spinner and resolves to a count
   async expectResolvedCount(name: CatalogLinkName, descriptionType: string) {
     await expect(this.catalogLink(name)).toHaveAccessibleName(
       new RegExp(`(\\d+|Ingen) ${descriptionType}$`),
