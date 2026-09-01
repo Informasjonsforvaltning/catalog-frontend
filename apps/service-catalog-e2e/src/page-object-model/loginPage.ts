@@ -21,7 +21,15 @@ export default class LoginPage {
     this.page.getByRole("button", { name: "Sign in with Keycloak" });
 
   // Helpers
+  private async blockUnreachableIdportenAssets() {
+    await this.page.route(
+      /^https:\/\/(static\.idporten\.no|logo\.test\.idporten\.no|login\.test\.idporten\.no\/(img|js)\/)/,
+      (route) => route.abort(),
+    );
+  }
+
   public async loginAsAdmin() {
+    await this.blockUnreachableIdportenAssets();
     await this.page.goto("/auth/signin?callbackUrl=/");
 
     try {
