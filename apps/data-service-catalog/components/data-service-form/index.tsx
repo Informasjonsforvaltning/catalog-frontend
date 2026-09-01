@@ -215,11 +215,9 @@ const DataServiceForm = ({
                 message: localization.snackbar.saveSuccessful,
                 severity: "success",
               });
-              if (newValues) {
-                resetForm({ values: dataServiceTemplate(newValues) });
-              } else {
-                resetForm();
-              }
+              resetForm({
+                values: dataServiceTemplate(newValues ?? trimmedValues),
+              });
 
               // Discard stored data
               autoSaveStorage?.delete();

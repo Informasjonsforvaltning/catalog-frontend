@@ -23,6 +23,7 @@ export const ReferenceDataRadioGroup = ({
   const isInitialMount = useRef(true);
   const selectCodeRef = useRef(selectCode);
   selectCodeRef.current = selectCode;
+  const prevGroupValue = useRef(value);
 
   const {
     getRadioProps,
@@ -37,11 +38,14 @@ export const ReferenceDataRadioGroup = ({
   }, [value, setValue]);
 
   useEffect(() => {
+    const groupChanged = prevGroupValue.current !== groupValue;
+    prevGroupValue.current = groupValue;
+
     if (isInitialMount.current) {
       isInitialMount.current = false;
       return;
     }
-    if (groupValue !== value) {
+    if (groupChanged && groupValue !== value) {
       selectCodeRef.current(groupValue);
     }
   }, [groupValue, value]);
