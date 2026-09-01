@@ -16,16 +16,12 @@ jobs:
     name: Test app ${{ matrix.appname }}
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        appname:
-          [
-            concept-catalog-e2e,
-            service-catalog-e2e,
-            catalog-portal-e2e,
-            dataset-catalog-e2e,
-            data-service-catalog-e2e,
-            catalog-admin-e2e,
-          ]
+        # DIAGNOSTIC (temporary, do not merge): reduced to a single app to test
+        # whether the ID-porten login stall is caused by the six matrix jobs
+        # authenticating concurrently, or is external to us.
+        appname: [data-service-catalog-e2e]
     steps:
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
