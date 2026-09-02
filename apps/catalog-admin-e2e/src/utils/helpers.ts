@@ -85,6 +85,16 @@ export const deleteTestData = async (apiRequestContext: APIRequestContext) => {
   );
 };
 
+export const getCodeLists = async (apiRequestContext: APIRequestContext) => {
+  const response = await apiRequestContext.get(
+    `/api/code-lists/${catalogId()}`,
+  );
+  return ((await response.json())?.codeLists ?? []) as {
+    id: string;
+    name: string;
+  }[];
+};
+
 export const createCodeList = async (
   apiRequestContext: APIRequestContext,
   name: string,
@@ -92,11 +102,8 @@ export const createCodeList = async (
   await apiRequestContext.post(`/api/code-lists/${catalogId()}`, {
     data: { codeList: { name, description: "e2e", codes: [] } },
   });
-  const response = await apiRequestContext.get(
-    `/api/code-lists/${catalogId()}`,
-  );
-  const codeLists = (await response.json())?.codeLists ?? [];
-  return codeLists.find((c: { name: string }) => c.name === name)?.id as string;
+  const codeLists = await getCodeLists(apiRequestContext);
+  return codeLists.find((c) => c.name === name)?.id as string;
 };
 
 export const deleteCodeList = async (
