@@ -21,6 +21,13 @@ export default class LoginPage {
     this.page.getByRole("button", { name: "Sign in with Keycloak" });
 
   // Helpers
+  private async blockUnreachableIdportenAssets() {
+    await this.page.route(
+      /^https:\/\/(static\.idporten\.no|logo\.test\.idporten\.no|login\.test\.idporten\.no\/(img|js)\/)/,
+      (route) => route.abort(),
+    );
+  }
+
   public async goto() {
     const url = `/auth/signin?callbackUrl=/catalogs/${process.env.E2E_CATALOG_ID}/concepts`;
     console.log("[LOGIN PAGE] Navigating to:", url);
@@ -29,6 +36,7 @@ export default class LoginPage {
   }
 
   public async loginAsAdmin() {
+    await this.blockUnreachableIdportenAssets();
     console.log("[LOGIN PAGE] Starting login as admin...");
     try {
       console.log('[LOGIN PAGE] Waiting for "Sign in with Keycloak" button...');
@@ -75,6 +83,7 @@ export default class LoginPage {
   }
 
   public async loginAsWriteUser() {
+    await this.blockUnreachableIdportenAssets();
     console.log("[LOGIN PAGE] Starting login as write user...");
     try {
       console.log('[LOGIN PAGE] Waiting for "Sign in with Keycloak" button...');
@@ -121,6 +130,7 @@ export default class LoginPage {
   }
 
   public async loginAsReadUser() {
+    await this.blockUnreachableIdportenAssets();
     console.log("[LOGIN PAGE] Starting login as read user...");
     try {
       console.log('[LOGIN PAGE] Waiting for "Sign in with Keycloak" button...');
