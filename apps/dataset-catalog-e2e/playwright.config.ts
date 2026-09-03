@@ -62,6 +62,11 @@ export default defineConfig({
       name: "admin-init",
       dependencies: ["admin-login"],
       testMatch: "**/admin/*.init.ts",
+      teardown: "admin-teardown",
+    },
+    {
+      name: "admin-teardown",
+      testMatch: "**/admin/*.teardown.ts",
     },
     {
       name: "admin-chromium",

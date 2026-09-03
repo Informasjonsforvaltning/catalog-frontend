@@ -475,14 +475,25 @@ export default class EditPage {
     );
 
     // Select subject
-    console.log("[EDIT PAGE] Selecting Fagområde...");
-    await selectSuggestionOption(
-      this.page,
-      "Fagområde (velg fra liste)",
-      "Sprekkmunk",
-      this.page.locator("#subject"),
-    );
-    await dismissSuggestionOverlays(this.page);
+    const domainCodeListId = fields?.editable?.domainCodeListId;
+    if (domainCodeListId) {
+      console.log("[EDIT PAGE] Selecting Fagområde...");
+      await this.page
+        .locator("#subject")
+        .getByRole("combobox", { name: "Fagområde (velg fra liste)" })
+        .waitFor({ state: "visible", timeout: 15000 });
+      await selectSuggestionOption(
+        this.page,
+        "Fagområde (velg fra liste)",
+        "Sprekkmunk",
+        this.page.locator("#subject"),
+      );
+      await dismissSuggestionOverlays(this.page);
+    } else {
+      console.log(
+        "[EDIT PAGE] Skipping Fagområde, no domain code list configured for catalog",
+      );
+    }
 
     // Application
     console.log("[EDIT PAGE] Filling omfang...");

@@ -4,6 +4,7 @@ import {
   adminAuthFile,
   createCodeList,
   deleteCodeList,
+  getCodeLists,
   deleteTestData,
   getDesign,
   getEditableFields,
@@ -317,7 +318,14 @@ runTestAsAdmin(
       await page.reload();
       await expect(select).toHaveValue(createdId);
     } finally {
-      await setDomainCodeListId(apiRequestContext, original ?? "");
+      const codeLists = await getCodeLists(apiRequestContext);
+      const originalStillExists = codeLists.some(
+        (codeList) => codeList.id === original && codeList.id !== createdId,
+      );
+      await setDomainCodeListId(
+        apiRequestContext,
+        originalStillExists ? (original as string) : "",
+      );
       if (createdId) {
         await deleteCodeList(apiRequestContext, createdId);
       }

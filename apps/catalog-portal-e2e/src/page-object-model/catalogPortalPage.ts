@@ -65,4 +65,11 @@ export default class CatalogPortalPage {
     await expect(locator).toBeVisible();
     await expect(locator).toHaveAttribute("href", expectedUrl);
   }
+
+  // The card body starts as a "Laster..." spinner and resolves to a count
+  async expectResolvedCount(name: CatalogLinkName, descriptionType: string) {
+    await expect(this.catalogLink(name)).toHaveAccessibleName(
+      new RegExp(`(\\d+|Ingen) ${descriptionType}$`),
+    );
+  }
 }

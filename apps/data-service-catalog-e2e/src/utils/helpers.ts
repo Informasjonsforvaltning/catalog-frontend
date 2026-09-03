@@ -226,3 +226,8 @@ export const formatDate = (date: Date | null) =>
         .split("/")
         .join(".")
     : "";
+
+// The status filter matches on the EU distribution-status uri, not the ADMS one
+// the service catalog uses
+export const STATUS_COMPLETED =
+  "http://publications.europa.eu/resource/authority/distribution-status/COMPLETED";

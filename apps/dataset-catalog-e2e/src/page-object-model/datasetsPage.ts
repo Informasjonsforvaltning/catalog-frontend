@@ -42,7 +42,10 @@ export default class DatasetsPage {
     this.createDatasetButton = page.getByRole("button", {
       name: "Legg til datasett",
     });
-    this.statusFilterHeader = page.getByRole("button", { name: "Status" });
+    this.statusFilterHeader = page.getByRole("button", {
+      name: "Status",
+      exact: true,
+    });
     this.statusFilterDraft = page.getByLabel("Utkast");
     this.statusFilterApproved = page.getByLabel("Godkjent");
     this.publishedFilterHeader = page.getByRole("button", {
@@ -52,6 +55,37 @@ export default class DatasetsPage {
       exact: true,
     });
     this.publishedFilterNotPublished = page.getByLabel("Ikke publisert");
+  }
+
+  // AccordionItem renders the panels open, so clicking a header collapses it
+  private async expandFilter(header: Locator) {
+    await expect(header).toBeVisible();
+    if ((await header.getAttribute("aria-expanded")) !== "true") {
+      await header.click();
+    }
+  }
+
+  async clearFilters() {
+    await this.expandFilter(this.statusFilterHeader);
+    await this.statusFilterDraft.uncheck();
+    await this.statusFilterApproved.uncheck();
+
+    await this.expandFilter(this.publishedFilterHeader);
+    await this.publishedFilterPublished.uncheck();
+    await this.publishedFilterNotPublished.uncheck();
+  }
+
+  async filterStatus(approved: boolean) {
+    await this.expandFilter(this.statusFilterHeader);
+    const box = approved ? this.statusFilterApproved : this.statusFilterDraft;
+    await box.check();
+    await expect(box).toBeChecked();
+  }
+
+  async filterNotPublished() {
+    await this.expandFilter(this.publishedFilterHeader);
+    await this.publishedFilterNotPublished.check();
+    await expect(this.publishedFilterNotPublished).toBeChecked();
   }
 
   noResultsLocator = () => this.page.getByText("Ditt søk ga ingen treff");
