@@ -50,6 +50,14 @@ import { DataStorage } from "@catalog-frontend/utils";
 import { get, isEmpty, isEqual } from "lodash";
 import classNames from "classnames";
 
+const getErrorDigest = (error: unknown): string | undefined =>
+  typeof error === "object" &&
+  error !== null &&
+  "digest" in error &&
+  typeof error.digest === "string"
+    ? error.digest
+    : undefined;
+
 type Props = {
   initialValues: DataService | DataServiceToBeCreated;
   searchEnv: string; // Environment variable to search service
@@ -87,6 +95,7 @@ const DataServiceForm = ({
   const [validateOnChange, setValidateOnChange] = useState(false);
   const [isCanceled, setIsCanceled] = useState(false);
   const [ignoreRequired, setIgnoreRequired] = useState(false);
+  const ignoreRequiredKey = `dataServiceForm.ignoreRequired.${autoSaveId ?? "new"}`;
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
@@ -169,6 +178,20 @@ const DataServiceForm = ({
   };
 
   useEffect(() => {
+    if (typeof sessionStorage === "undefined") {
+      return;
+    }
+    setIgnoreRequired(sessionStorage.getItem(ignoreRequiredKey) === "true");
+  }, [ignoreRequiredKey]);
+
+  const handleIgnoreRequiredChange = (checked: boolean) => {
+    setIgnoreRequired(checked);
+    if (typeof sessionStorage !== "undefined") {
+      sessionStorage.setItem(ignoreRequiredKey, String(checked));
+    }
+  };
+
+  useEffect(() => {
     if (showSnackbarSuccessOnInit) {
       showSnackbarMessage({
         message: localization.snackbar.saveSuccessful,
@@ -215,11 +238,9 @@ const DataServiceForm = ({
                 message: localization.snackbar.saveSuccessful,
                 severity: "success",
               });
-              if (newValues) {
-                resetForm({ values: dataServiceTemplate(newValues) });
-              } else {
-                resetForm();
-              }
+              resetForm({
+                values: dataServiceTemplate(newValues ?? trimmedValues),
+              });
 
               // Discard stored data
               autoSaveStorage?.delete();
@@ -228,8 +249,12 @@ const DataServiceForm = ({
                 afterSubmit();
               }
             } catch (error) {
+              console.error("Failed to save data service:", error);
+              const digest = getErrorDigest(error);
               showSnackbarMessage({
-                message: localization.snackbar.saveFailed,
+                message: digest
+                  ? `${localization.snackbar.saveFailed} (${digest})`
+                  : localization.snackbar.saveFailed,
                 severity: "danger",
               });
             } finally {
@@ -531,7 +556,9 @@ const DataServiceForm = ({
                       }
                       value="ignoreRequired"
                       checked={ignoreRequired}
-                      onChange={(e) => setIgnoreRequired(e.target.checked)}
+                      onChange={(e) =>
+                        handleIgnoreRequiredChange(e.target.checked)
+                      }
                     />
                     <HelpMarkdown
                       aria-label={`Help ${localization.dataServiceForm.fieldLabel.ignoreRequired}`}

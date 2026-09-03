@@ -166,8 +166,8 @@ export async function updateDataService(
     const updatedDataService = await response.json();
     return updatedDataService;
   } catch (error) {
-    console.error(`${localization.alert.fail} ${error}`);
-    throw new Error("Noe gikk galt, prøv igjen...");
+    console.error("Error updating data service:", error);
+    throw new Error(localization.alert.fail);
   } finally {
     if (success) {
       updateTag("data-service");
