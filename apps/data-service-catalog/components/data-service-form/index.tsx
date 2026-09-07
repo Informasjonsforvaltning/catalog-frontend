@@ -95,7 +95,10 @@ const DataServiceForm = ({
   const [validateOnChange, setValidateOnChange] = useState(false);
   const [isCanceled, setIsCanceled] = useState(false);
   const [ignoreRequired, setIgnoreRequired] = useState(false);
-  const ignoreRequiredKey = `dataServiceForm.ignoreRequired.${autoSaveId ?? "new"}`;
+  const ignoreRequiredNewKey = "dataServiceForm.ignoreRequired.new";
+  const ignoreRequiredKey = autoSaveId
+    ? `dataServiceForm.ignoreRequired.${autoSaveId}`
+    : ignoreRequiredNewKey;
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
@@ -181,8 +184,18 @@ const DataServiceForm = ({
     if (typeof sessionStorage === "undefined") {
       return;
     }
-    setIgnoreRequired(sessionStorage.getItem(ignoreRequiredKey) === "true");
-  }, [ignoreRequiredKey]);
+    const stored = sessionStorage.getItem(ignoreRequiredKey);
+    if (stored !== null) {
+      setIgnoreRequired(stored === "true");
+      return;
+    }
+    const carriedOver = sessionStorage.getItem(ignoreRequiredNewKey);
+    if (autoSaveId && carriedOver !== null) {
+      sessionStorage.setItem(ignoreRequiredKey, carriedOver);
+      sessionStorage.removeItem(ignoreRequiredNewKey);
+      setIgnoreRequired(carriedOver === "true");
+    }
+  }, [ignoreRequiredKey, ignoreRequiredNewKey, autoSaveId]);
 
   const handleIgnoreRequiredChange = (checked: boolean) => {
     setIgnoreRequired(checked);
