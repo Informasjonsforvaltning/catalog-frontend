@@ -4,13 +4,14 @@ import {
   AddButton,
   CostsModal,
   CostsTable,
-  FormikLanguageFieldset,
-  TitleWithHelpTextAndTag,
-  TextareaWithPrefix,
   FastFieldWithRef,
   FieldsetDivider,
+  FormikLanguageFieldset,
   MultiSuggestionSelect,
   SingleSuggestionSelect,
+  TextareaWithPrefix,
+  TitleWithHelpTextAndTag,
+  UriWithLabelFieldsetTable,
 } from "@catalog-frontend/ui";
 import {
   capitalizeFirstLetter,
@@ -24,7 +25,6 @@ import styles from "./details.module.css";
 import { QualifiedAttributionsSection } from "../qualified-attributions-section";
 import FieldsetWithDelete from "../../../fieldset-with-delete";
 import { ToggleFieldButton } from "../toggle-field-button";
-import { UriWithLabelFieldsetTable } from "../uri-with-label-field-set-table";
 import { useLayoutEffect, useMemo, useRef, useState } from "react";
 import { isArray, isEmpty, isNil, isObject } from "lodash";
 import React from "react";
@@ -326,6 +326,7 @@ const FIELD_CONFIG = [
     render: (props: any) => (
       <UriWithLabelFieldsetTable
         fieldName="conformsTo"
+        itemLabel={localization.datasetForm.fieldLabel.conformsTo}
         errors={props.errors.conformsTo}
         hideHeadWhenEmpty={true}
         showDivider={props.showDivider}

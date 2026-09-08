@@ -1,5 +1,9 @@
 import { Dataset } from "@catalog-frontend/types";
-import { FieldsetDivider, TitleWithHelpTextAndTag } from "@catalog-frontend/ui";
+import {
+  FieldsetDivider,
+  TitleWithHelpTextAndTag,
+  UriWithLabelFieldsetTable,
+} from "@catalog-frontend/ui";
 import {
   accessRights,
   getTranslateText,
@@ -7,7 +11,6 @@ import {
 } from "@catalog-frontend/utils";
 import { Fieldset, Radio, useRadioGroup } from "@digdir/designsystemet-react";
 import { useFormikContext } from "formik";
-import { UriWithLabelFieldsetTable } from "./uri-with-label-field-set-table";
 
 interface Props {
   isMobility?: boolean;
@@ -53,6 +56,9 @@ export const AccessRightFields = ({ isMobility: isMobility }: Props) => {
           <FieldsetDivider />
           <UriWithLabelFieldsetTable
             fieldName="legalBasisForRestriction"
+            itemLabel={
+              localization.datasetForm.fieldLabel.legalBasisForRestriction
+            }
             errors={errors.legalBasisForRestriction}
             hideHeadWhenEmpty={true}
             label={
@@ -72,6 +78,9 @@ export const AccessRightFields = ({ isMobility: isMobility }: Props) => {
 
           <UriWithLabelFieldsetTable
             fieldName="legalBasisForProcessing"
+            itemLabel={
+              localization.datasetForm.fieldLabel.legalBasisForProcessing
+            }
             errors={errors.legalBasisForProcessing}
             hideHeadWhenEmpty={true}
             label={
@@ -91,6 +100,7 @@ export const AccessRightFields = ({ isMobility: isMobility }: Props) => {
 
           <UriWithLabelFieldsetTable
             fieldName="legalBasisForAccess"
+            itemLabel={localization.datasetForm.fieldLabel.legalBasisForAccess}
             errors={errors.legalBasisForAccess}
             hideHeadWhenEmpty={true}
             label={

@@ -7,6 +7,8 @@ export const dataServiceFormNb = {
     endpoint: "Rotplassering eller primært endepunkt for API-et.",
     endpointDescriptions:
       "Legg til lenke til spesifikasjon av API-et. F.eks OAS, Swagger, GraphQL eller lignende.",
+    conformsTo:
+      "Lenke til en etablert standard eller spesifikasjon som datatjenesten er i samsvar med.",
     accessRights: `Informasjon angående tilgang eller begrensninger basert på personvern, sikkerhet eller andre retningslinjer. Velg det mest restriktive tilgangsnivået som gjelder:
       - **Allmenn tilgang**: Tilgjengelig for alle.
       - **Betinget tilgang**: Tilgang krever oppfyllelse av bestemte betingelser.
@@ -62,6 +64,7 @@ export const dataServiceFormNb = {
     title: "Tittel",
     endpoint: "EndepunktsURL",
     endpointDescriptions: "Endepunktsbeskrivelse",
+    conformsTo: "Standard",
     accessRights: "Tilgangsrettigheter",
     format: "Format",
     landingPage: "Landingsside",

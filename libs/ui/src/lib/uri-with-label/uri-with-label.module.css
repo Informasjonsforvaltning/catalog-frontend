@@ -1,0 +1,29 @@
+.fieldContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.set {
+  display: flex;
+}
+
+.table {
+  width: 100%;
+  table-layout: fixed;
+}
+
+.table th,
+.table td {
+  word-wrap: break-word;
+  padding-bottom: 1rem;
+}
+
+.modalContent {
+  margin: var(--ds-size-8) 0;
+}
+
+.errorBorder {
+  border: 2px solid var(--ds-color-danger-border-default);
+  border-radius: var(--ds-border-radius-md);
+}

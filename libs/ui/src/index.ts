@@ -64,6 +64,7 @@ export * from "./lib/tag";
 export * from "./lib/terms-of-use";
 export * from "./lib/textarea-with-prefix";
 export * from "./lib/title-with-help-text-and-tag";
+export * from "./lib/uri-with-label";
 export * from "./lib/use-reference-data-search";
 export * from "./lib/use-search-service";
 export * from "./lib/use-warn-if-unsaved-changes";
