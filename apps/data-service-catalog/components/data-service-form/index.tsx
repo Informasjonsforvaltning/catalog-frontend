@@ -398,18 +398,12 @@ const DataServiceForm = ({
                       changed={
                         markDirty &&
                         dirtyFields.some((field) =>
-                          [
-                            "endpointUrl",
-                            "endpointDescriptions",
-                            "conformsTo",
-                          ].includes(field),
+                          ["endpointUrl", "endpointDescriptions"].includes(
+                            field,
+                          ),
                         )
                       }
-                      error={hasError([
-                        "endpointUrl",
-                        "endpointDescriptions",
-                        "conformsTo",
-                      ])}
+                      error={hasError(["endpointUrl", "endpointDescriptions"])}
                     >
                       <EndpointSection />
                     </FormLayout.Section>
@@ -423,10 +417,12 @@ const DataServiceForm = ({
                       changed={
                         markDirty &&
                         dirtyFields.some((field) =>
-                          ["landingPage", "pages"].includes(field),
+                          ["landingPage", "pages", "conformsTo"].includes(
+                            field,
+                          ),
                         )
                       }
-                      error={hasError(["landingPage", "pages"])}
+                      error={hasError(["landingPage", "pages", "conformsTo"])}
                     >
                       <DocumentationSection />
                     </FormLayout.Section>

@@ -4,7 +4,6 @@ import {
   FastFieldWithRef,
   FieldsetDivider,
   TitleWithHelpTextAndTag,
-  UriWithLabelFieldsetTable,
 } from "@catalog-frontend/ui";
 import { localization } from "@catalog-frontend/utils";
 import { Fieldset, Textfield } from "@digdir/designsystemet-react";
@@ -93,24 +92,6 @@ export const EndpointSection = () => {
           )}
         </FieldArray>
       </Fieldset>
-
-      <FieldsetDivider />
-
-      <UriWithLabelFieldsetTable
-        fieldName="conformsTo"
-        itemLabel={localization.dataServiceForm.fieldLabel.conformsTo}
-        errors={errors?.conformsTo}
-        hideHeadWhenEmpty={true}
-        label={
-          <TitleWithHelpTextAndTag
-            tagTitle={localization.tag.recommended}
-            tagColor="info"
-            helpText={localization.dataServiceForm.helptext.conformsTo}
-          >
-            {localization.dataServiceForm.fieldLabel.conformsTo}
-          </TitleWithHelpTextAndTag>
-        }
-      />
     </div>
   );
 };
