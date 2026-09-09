@@ -2,11 +2,12 @@ import {
   CostList,
   InfoCard,
   ReferenceDataTags,
-  useSearchLocationsByUri,
+  UriWithLabelTable,
   useSearchConceptsByUri,
   useSearchDatasetsByUri,
   useSearchInformationModelsByUri,
   useSearchLanguageByUri,
+  useSearchLocationsByUri,
 } from "@catalog-frontend/ui";
 import {
   localization,
@@ -33,7 +34,6 @@ import {
 import styles from "./details-columns.module.css";
 import { useSearchEnheterByOrgNmbs } from "../../hooks/useEnhetsregister";
 import relations from "../dataset-form/utils/relations.json";
-import { UriWithLabelTable } from "../uri-with-label-table";
 import { DistributionDetailsCard } from "./components/distribution-details";
 import { AccessRightsDetails } from "./components/access-rights-details";
 import { TemporalDetails } from "./components/temporal-details";

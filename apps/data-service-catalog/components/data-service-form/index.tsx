@@ -350,6 +350,7 @@ const DataServiceForm = ({
               "servesDataset",
               "status",
               "availability",
+              "conformsTo",
             ].forEach((name) => {
               if (isDirty(name)) {
                 dirtyFields.push(name);
@@ -416,10 +417,12 @@ const DataServiceForm = ({
                       changed={
                         markDirty &&
                         dirtyFields.some((field) =>
-                          ["landingPage", "pages"].includes(field),
+                          ["landingPage", "pages", "conformsTo"].includes(
+                            field,
+                          ),
                         )
                       }
-                      error={hasError(["landingPage", "pages"])}
+                      error={hasError(["landingPage", "pages", "conformsTo"])}
                     >
                       <DocumentationSection />
                     </FormLayout.Section>

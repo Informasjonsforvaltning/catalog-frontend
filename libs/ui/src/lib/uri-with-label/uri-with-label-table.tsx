@@ -1,3 +1,5 @@
+"use client";
+
 import { UriWithLabel } from "@catalog-frontend/types";
 import { localization, getTranslateText } from "@catalog-frontend/utils";
 import { Link, Table } from "@digdir/designsystemet-react";

@@ -4,7 +4,7 @@ import {
   ISOLanguage,
 } from "@catalog-frontend/types";
 import styles from "./details-columns.module.css";
-import { CostList, InfoCard } from "@catalog-frontend/ui";
+import { CostList, InfoCard, UriWithLabelTable } from "@catalog-frontend/ui";
 import { isEmpty } from "lodash";
 import { localization, getTranslateText } from "@catalog-frontend/utils";
 import { Paragraph, Tag } from "@digdir/designsystemet-react";
@@ -78,6 +78,18 @@ export const LeftColumn = ({
           data-testid="data-service-endpoint-descriptions"
         >
           <DetailsUrlList urls={dataService.endpointDescriptions} />
+        </InfoCard.Item>
+      )}
+
+      {!isEmpty(dataService?.conformsTo) && (
+        <InfoCard.Item
+          title={localization.dataServiceForm.fieldLabel.conformsTo}
+          data-testid="data-service-conforms-to"
+        >
+          <UriWithLabelTable
+            values={dataService?.conformsTo}
+            language={language}
+          />
         </InfoCard.Item>
       )}
 

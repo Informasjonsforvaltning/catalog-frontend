@@ -4,6 +4,7 @@ import {
   SearchSuggestionSelect,
   SuggestionSelectOption,
   TitleWithHelpTextAndTag,
+  UriWithLabelFieldsetTable,
   useDebounce,
   useSearchInformationModelsByUri,
   useSearchInformationModelsSuggestions,
@@ -17,7 +18,6 @@ import { Fieldset } from "@digdir/designsystemet-react";
 import { useFormikContext } from "formik";
 import { useMemo, useState } from "react";
 import styles from "../dataset-form.module.css";
-import { UriWithLabelFieldsetTable } from "./uri-with-label-field-set-table";
 
 interface Props {
   searchEnv: string;
@@ -156,6 +156,9 @@ export const InformationModelSection = ({ searchEnv }: Props) => {
 
       <UriWithLabelFieldsetTable
         fieldName="informationModelsFromOtherSources"
+        itemLabel={
+          localization.datasetForm.fieldLabel.informationModelsFromOtherSources
+        }
         errors={errors.informationModelsFromOtherSources}
         label={
           <TitleWithHelpTextAndTag

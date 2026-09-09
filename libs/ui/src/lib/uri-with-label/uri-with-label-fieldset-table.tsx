@@ -1,13 +1,6 @@
-import { Dataset, UriWithLabel } from "@catalog-frontend/types";
-import {
-  AddButton,
-  DeleteButton,
-  EditButton,
-  FieldsetDivider,
-  FormikLanguageFieldset,
-  FormHeading,
-  DialogActions,
-} from "@catalog-frontend/ui";
+"use client";
+
+import { UriWithLabel } from "@catalog-frontend/types";
 import {
   getTranslateText,
   localization,
@@ -21,13 +14,19 @@ import {
   Textfield,
 } from "@digdir/designsystemet-react";
 import { FastField, FieldArray, Formik, useFormikContext } from "formik";
-import styles from "../dataset-form.module.css";
-import { ReactNode, useEffect, useRef, useState } from "react";
+import { ReactNode, useRef, useState } from "react";
 import { trim, isEmpty, pickBy, identity } from "lodash";
-import { uriWithLabelSchema } from "../utils/validation-schema";
+import { AddButton, DeleteButton, EditButton } from "../button";
+import { DialogActions } from "../dialog-actions";
+import { FieldsetDivider } from "../fieldset-divider";
+import { FormHeading } from "../form-heading";
+import { FormikLanguageFieldset } from "../formik-language-fieldset";
+import { uriWithLabelSchema } from "./uri-with-label-validation-schema";
+import styles from "./uri-with-label.module.css";
 
 interface Props {
   fieldName: string;
+  itemLabel: string;
   errors: string | undefined;
   showDivider?: boolean;
   label?: string | ReactNode;
@@ -35,11 +34,9 @@ interface Props {
 }
 
 interface ModalProps {
-  fieldName: string;
+  itemLabel: string;
   type: "new" | "edit";
   onSuccess: (values: UriWithLabel) => void;
-  onCancel: () => void;
-  onChange: (values: UriWithLabel) => void;
   template: UriWithLabel;
 }
 
@@ -52,16 +49,14 @@ const hasNoFieldValues = (values: UriWithLabel) => {
 
 export const UriWithLabelFieldsetTable = ({
   fieldName,
+  itemLabel,
   label,
   errors,
   hideHeadWhenEmpty = false,
   showDivider,
 }: Props) => {
-  const { values, setFieldValue } = useFormikContext<Dataset>();
-  const fieldValues = values[fieldName as keyof Dataset] as
-    | UriWithLabel[]
-    | undefined;
-  const [snapshot, setSnapshot] = useState<UriWithLabel[]>(fieldValues ?? []);
+  const { values, setFieldValue } = useFormikContext<Record<string, unknown>>();
+  const fieldValues = values[fieldName] as UriWithLabel[] | undefined;
 
   const showHead = !hideHeadWhenEmpty || !isEmpty(fieldValues);
 
@@ -90,15 +85,10 @@ export const UriWithLabelFieldsetTable = ({
                     <Table.Cell>
                       <span className={styles.set}>
                         <FieldModal
-                          fieldName={fieldName}
+                          itemLabel={itemLabel}
                           template={item}
                           type="edit"
-                          onSuccess={(updatedItem: UriWithLabel) => {
-                            arrayHelpers.replace(index, updatedItem);
-                            setSnapshot([...(fieldValues ?? [])]);
-                          }}
-                          onCancel={() => setFieldValue(fieldName, snapshot)}
-                          onChange={(updatedItem: UriWithLabel) =>
+                          onSuccess={(updatedItem: UriWithLabel) =>
                             arrayHelpers.replace(index, updatedItem)
                           }
                         />
@@ -107,7 +97,6 @@ export const UriWithLabelFieldsetTable = ({
                             const newArray = [...(fieldValues ?? [])];
                             newArray.splice(index, 1);
                             setFieldValue(fieldName, newArray);
-                            setSnapshot([...newArray]);
                           }}
                         />
                       </span>
@@ -118,15 +107,10 @@ export const UriWithLabelFieldsetTable = ({
             </Table>
             <div>
               <FieldModal
-                fieldName={fieldName}
+                itemLabel={itemLabel}
                 template={{ prefLabel: {}, uri: "" }}
                 type="new"
-                onSuccess={(values: UriWithLabel) => {
-                  arrayHelpers.push(values);
-                  setSnapshot([...(fieldValues ?? []), values]);
-                }}
-                onCancel={() => setFieldValue(fieldName, snapshot)}
-                onChange={() => {}}
+                onSuccess={(values: UriWithLabel) => arrayHelpers.push(values)}
               />
             </div>
           </div>
@@ -137,14 +121,7 @@ export const UriWithLabelFieldsetTable = ({
   );
 };
 
-const FieldModal = ({
-  fieldName,
-  template,
-  type,
-  onSuccess,
-  onCancel,
-  onChange,
-}: ModalProps) => {
+const FieldModal = ({ itemLabel, template, type, onSuccess }: ModalProps) => {
   const [submitted, setSubmitted] = useState(false);
   const modalRef = useRef<HTMLDialogElement>(null);
 
@@ -156,10 +133,7 @@ const FieldModal = ({
             <EditButton />
           ) : (
             <AddButton>
-              {localization.add}{" "}
-              {localization.datasetForm.fieldLabel?.[
-                fieldName as keyof typeof localization.datasetForm.fieldLabel
-              ]?.toLowerCase()}
+              {localization.add} {itemLabel.toLowerCase()}
             </AddButton>
           )}
         </Dialog.Trigger>
@@ -179,20 +153,19 @@ const FieldModal = ({
               modalRef.current?.close();
             }}
           >
-            {({ errors, isSubmitting, submitForm, values, dirty }) => {
-              useEffect(() => {
-                if (dirty && modalRef.current?.open) {
-                  onChange({ ...values });
-                }
-              }, [values, dirty]);
-
+            {({
+              errors,
+              isSubmitting,
+              submitForm,
+              values,
+              dirty,
+              resetForm,
+            }) => {
               return (
                 <>
                   <Heading data-size="xs">
                     {type === "edit" ? localization.edit : localization.add}{" "}
-                    {localization.datasetForm.fieldLabel?.[
-                      fieldName as keyof typeof localization.datasetForm.fieldLabel
-                    ].toLowerCase()}
+                    {itemLabel.toLowerCase()}
                   </Heading>
 
                   <div className={styles.modalContent}>
@@ -226,7 +199,7 @@ const FieldModal = ({
                       variant="secondary"
                       type="button"
                       onClick={() => {
-                        onCancel();
+                        resetForm();
                         modalRef.current?.close();
                       }}
                       disabled={isSubmitting}

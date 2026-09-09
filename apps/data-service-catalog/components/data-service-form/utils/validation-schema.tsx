@@ -6,6 +6,8 @@ import {
 import * as Yup from "yup";
 import { nb } from "yup-locales";
 
+import { uriWithLabelSchema } from "@catalog-frontend/ui";
+
 export { costValidationSchema } from "@catalog-frontend/ui";
 
 Yup.setLocale(nb);
@@ -116,6 +118,7 @@ export const dataServiceValidationSchema = () =>
           .matches(httpsRegex, localization.validation.invalidProtocol)
           .url(localization.validation.invalidUrl),
       ),
+    conformsTo: Yup.array().of(uriWithLabelSchema),
     landingPage: Yup.string()
       .label(localization.dataServiceForm.fieldLabel.landingPage)
       .notRequired()

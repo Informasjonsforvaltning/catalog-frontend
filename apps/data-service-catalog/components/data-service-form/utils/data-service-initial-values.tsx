@@ -36,5 +36,6 @@ export const dataServiceToBeCreatedTemplate = (): DataServiceToBeCreated => {
     contactPoint: {},
     availability: "none",
     costs: [],
+    conformsTo: [],
   };
 };

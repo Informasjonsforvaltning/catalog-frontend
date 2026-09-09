@@ -680,6 +680,12 @@ ___Merk:__ Maksimal filstørrelse for opplastning er {0} MB. CSV/JSON-filer kan 
     },
   },
 
+  uriWithLabel: {
+    validation: {
+      title: "Tittelen må være minst 3 karakterer lang.",
+    },
+  },
+
   termsOfUse: {
     pageTitle: "Vilkår og betingelser",
     heading: "Bruksvilkår for registrering i Felles datakatalog",
