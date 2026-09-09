@@ -14,7 +14,7 @@ import {
   Textfield,
 } from "@digdir/designsystemet-react";
 import { FastField, FieldArray, Formik, useFormikContext } from "formik";
-import { ReactNode, useEffect, useRef, useState } from "react";
+import { ReactNode, useRef, useState } from "react";
 import { trim, isEmpty, pickBy, identity } from "lodash";
 import { AddButton, DeleteButton, EditButton } from "../button";
 import { DialogActions } from "../dialog-actions";
@@ -37,8 +37,6 @@ interface ModalProps {
   itemLabel: string;
   type: "new" | "edit";
   onSuccess: (values: UriWithLabel) => void;
-  onCancel: () => void;
-  onChange: (values: UriWithLabel) => void;
   template: UriWithLabel;
 }
 
@@ -59,7 +57,6 @@ export const UriWithLabelFieldsetTable = ({
 }: Props) => {
   const { values, setFieldValue } = useFormikContext<Record<string, unknown>>();
   const fieldValues = values[fieldName] as UriWithLabel[] | undefined;
-  const [snapshot, setSnapshot] = useState<UriWithLabel[]>(fieldValues ?? []);
 
   const showHead = !hideHeadWhenEmpty || !isEmpty(fieldValues);
 
@@ -91,12 +88,7 @@ export const UriWithLabelFieldsetTable = ({
                           itemLabel={itemLabel}
                           template={item}
                           type="edit"
-                          onSuccess={(updatedItem: UriWithLabel) => {
-                            arrayHelpers.replace(index, updatedItem);
-                            setSnapshot([...(fieldValues ?? [])]);
-                          }}
-                          onCancel={() => setFieldValue(fieldName, snapshot)}
-                          onChange={(updatedItem: UriWithLabel) =>
+                          onSuccess={(updatedItem: UriWithLabel) =>
                             arrayHelpers.replace(index, updatedItem)
                           }
                         />
@@ -105,7 +97,6 @@ export const UriWithLabelFieldsetTable = ({
                             const newArray = [...(fieldValues ?? [])];
                             newArray.splice(index, 1);
                             setFieldValue(fieldName, newArray);
-                            setSnapshot([...newArray]);
                           }}
                         />
                       </span>
@@ -119,12 +110,7 @@ export const UriWithLabelFieldsetTable = ({
                 itemLabel={itemLabel}
                 template={{ prefLabel: {}, uri: "" }}
                 type="new"
-                onSuccess={(values: UriWithLabel) => {
-                  arrayHelpers.push(values);
-                  setSnapshot([...(fieldValues ?? []), values]);
-                }}
-                onCancel={() => setFieldValue(fieldName, snapshot)}
-                onChange={() => {}}
+                onSuccess={(values: UriWithLabel) => arrayHelpers.push(values)}
               />
             </div>
           </div>
@@ -135,14 +121,7 @@ export const UriWithLabelFieldsetTable = ({
   );
 };
 
-const FieldModal = ({
-  itemLabel,
-  template,
-  type,
-  onSuccess,
-  onCancel,
-  onChange,
-}: ModalProps) => {
+const FieldModal = ({ itemLabel, template, type, onSuccess }: ModalProps) => {
   const [submitted, setSubmitted] = useState(false);
   const modalRef = useRef<HTMLDialogElement>(null);
 
@@ -174,13 +153,14 @@ const FieldModal = ({
               modalRef.current?.close();
             }}
           >
-            {({ errors, isSubmitting, submitForm, values, dirty }) => {
-              useEffect(() => {
-                if (dirty && modalRef.current?.open) {
-                  onChange({ ...values });
-                }
-              }, [values, dirty]);
-
+            {({
+              errors,
+              isSubmitting,
+              submitForm,
+              values,
+              dirty,
+              resetForm,
+            }) => {
               return (
                 <>
                   <Heading data-size="xs">
@@ -219,7 +199,7 @@ const FieldModal = ({
                       variant="secondary"
                       type="button"
                       onClick={() => {
-                        onCancel();
+                        resetForm();
                         modalRef.current?.close();
                       }}
                       disabled={isSubmitting}
