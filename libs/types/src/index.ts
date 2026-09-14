@@ -6,6 +6,7 @@ export * from "./lib/concept";
 export * from "./lib/cost";
 export * from "./lib/data-service";
 export * from "./lib/dataset";
+export * from "./lib/information-model";
 export * from "./lib/design";
 export * from "./lib/editor";
 export * from "./lib/enhet";

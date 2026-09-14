@@ -101,6 +101,7 @@ export const nb = {
     concept: "Begrepskatalog",
     dataset: "Datasettkatalog",
     dataService: "API-katalog",
+    informationModel: "Informasjonsmodellkatalog",
     service: "Tjenestekatalog",
     publicService: "Tjenestekatalog - offentlige tjenester",
     recordsOfProcessingActivities: "Behandlingsoversikt",
@@ -121,6 +122,7 @@ export const nb = {
   descriptionType: {
     dataset: "datasettbeskrivelser",
     dataService: "API-beskrivelser",
+    informationModel: "informasjonsmodellbeskrivelser",
     concept: "begrepsbeskrivelser",
     service: "tjenestebeskrivelser",
     recordsOfProcessingActivities: "behandlingsaktiviteter",
@@ -223,6 +225,7 @@ export const nb = {
     importConceptRDF: "Import av RDF",
     importLogo: "Importer logo",
     importDataService: "Importer OpenAPI",
+    importInformationModel: "Importer informasjonsmodell",
     removeFilter: "Fjern filter",
     removeFromCodeList: "Fjern fra kodeliste",
     restore: "Gjenopprett",
@@ -645,6 +648,23 @@ ___Merk:__ Maksimal filstørrelse for opplastning er {0} MB. CSV/JSON-filer kan 
       title: "API import",
       openapiDescription:
         "API-beskrivelser kan importeres ved å laste inn en OpenAPI-spesifikasjonsfil i JSON eller YAML-format, når importeringsforsøket er gjennomført vil du automatisk bli tatt til en side som detaljerer resultatet av importeringen.",
+      resultDescription:
+        "Bruk Resultater-knappen for å se alle tidligere gjennomførte importeringsforsøk.",
+    },
+  },
+  informationModelCatalog: {
+    status: {
+      PUBLISHED: "Publisert",
+      DRAFT: "Utkast",
+    },
+    searchInformationModel: "Søk etter informasjonsmodellbeskrivelse",
+    button: {
+      newInformationModel: "Legg til informasjonsmodellbeskrivelse",
+    },
+    importModal: {
+      title: "Informasjonsmodell import",
+      openapiDescription:
+        "Informasjonsmodellbeskrivelser kan importeres ved å laste inn en fil, når importeringsforsøket er gjennomført vil du automatisk bli tatt til en side som detaljerer resultatet av importeringen.",
       resultDescription:
         "Bruk Resultater-knappen for å se alle tidligere gjennomførte importeringsforsøk.",
     },

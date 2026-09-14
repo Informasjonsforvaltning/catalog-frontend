@@ -21,6 +21,7 @@
       "@catalog-portal/*": ["./apps/catalog-portal/*"],
       "@concept-catalog/*": ["./apps/concept-catalog/*"],
       "@data-service-catalog/*": ["./apps/data-service-catalog/*"],
+      "@information-model-catalog/*": ["./apps/information-model-catalog/*"],
       "@dataset-catalog/*": ["./apps/dataset-catalog/*"],
       "@service-catalog/*": ["./apps/service-catalog/*"],
       "react": ["./node_modules/@types/react"]

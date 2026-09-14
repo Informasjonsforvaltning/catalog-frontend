@@ -22,6 +22,7 @@ export * from "./lib/text/number-parser";
 export * from "./lib/text/text";
 export * from "./lib/validation/change-requests-id";
 export * from "./lib/validation/data-service-id";
+export * from "./lib/validation/information-model-id";
 export * from "./lib/validation/image-upload";
 export * from "./lib/validation/organization-number";
 export * from "./lib/validation/search";

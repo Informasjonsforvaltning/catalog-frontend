@@ -1,4 +1,5 @@
 export * from "./lib/data-service/api";
+export * from "./lib/information-model/api";
 export * from "./lib/design/api";
 export * from "./lib/catalog-comments/api";
 export * from "./lib/catalog-concept-history/api";
@@ -16,7 +17,6 @@ export * from "./lib/public-services/api";
 export * from "./lib/services/api";
 export * from "./lib/statuses/api";
 export * from "./lib/datasets/api";
-export * from "./lib/data-service/api";
 export * as StrapiGraphql from "./lib/strapi/generated/graphql";
 export * from "./lib/strapi/service-messages";
 export * from "./lib/enhetsregisteret";
