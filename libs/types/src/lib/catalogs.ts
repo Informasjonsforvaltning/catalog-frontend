@@ -21,6 +21,11 @@ export interface DataServiceCatalog {
   dataServiceCount: number;
 }
 
+export interface InformationModelCatalog {
+  catalogId: string;
+  informationModelCount: number;
+}
+
 export interface ConceptCatalog {
   id: string;
   antallBegrep: number;
