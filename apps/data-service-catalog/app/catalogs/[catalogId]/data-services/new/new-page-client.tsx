@@ -3,7 +3,7 @@
 import { Button, ButtonBar, ConfirmModal } from "@catalog-frontend/ui";
 import { LocalDataStorage, localization } from "@catalog-frontend/utils";
 import { ArrowLeftIcon } from "@navikt/aksel-icons";
-import { useRef, useState } from "react";
+import { useRef, useState, useMemo } from "react";
 import type { StorageData } from "@catalog-frontend/types";
 import DataServiceForm from "../../../../../components/data-service-form";
 import { createDataService } from "@data-service-catalog/app/actions/actions";
@@ -28,9 +28,10 @@ export const NewDataServicePageClient = ({
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
   const dataServiceIdRef = useRef<string | undefined>(undefined); // Ref to store the data service id
 
-  const dataStorage = new LocalDataStorage<StorageData>({
-    key: "dataServiceForm",
-  });
+  const dataStorage = useMemo(
+    () => new LocalDataStorage<StorageData>({ key: "dataServiceForm" }),
+    [],
+  );
 
   const handleCancel = () => {
     dataStorage.delete();

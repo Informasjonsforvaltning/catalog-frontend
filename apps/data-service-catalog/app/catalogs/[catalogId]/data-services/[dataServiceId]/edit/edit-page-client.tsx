@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import { ArrowLeftIcon } from "@navikt/aksel-icons";
 import { LocalDataStorage, localization } from "@catalog-frontend/utils";
@@ -29,9 +29,10 @@ export const EditPage = ({
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
 
-  const dataStorage = new LocalDataStorage<StorageData>({
-    key: "dataServiceForm",
-  });
+  const dataStorage = useMemo(
+    () => new LocalDataStorage<StorageData>({ key: "dataServiceForm" }),
+    [],
+  );
 
   const handleUpdate = async (values: DataService) => {
     return await updateDataService(catalogId, dataService, values);
