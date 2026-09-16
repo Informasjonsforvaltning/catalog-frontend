@@ -35,6 +35,19 @@ type LoaderArgs = {
   mode: EditMode;
 };
 
+const parseResponse = async (response: Response, resource: string) => {
+  if (!response.ok) {
+    console.error(`Failed to fetch ${resource}, status: ${response.status}`);
+    throw new Error(`Failed to fetch ${resource}`);
+  }
+  const body = await response.text();
+  if (!body) {
+    console.error(`Empty response body when fetching ${resource}`);
+    throw new Error(`Failed to fetch ${resource}`);
+  }
+  return JSON.parse(body);
+};
+
 const getTitle = (text: string | string[]) =>
   text ? text : localization.concept.noName;
 
@@ -97,26 +110,18 @@ export async function renderConceptEditPage({
       `${conceptId}`,
       session.accessToken,
       "OPEN",
-    ).then((response) => {
-      if (response.ok) {
-        return response.json();
-      }
-      console.error(
-        `Failed to fetch change requests, status: ${response.status}`,
-      );
-      throw new Error("Failed to fetch change requests");
-    }),
+    ).then((response) => parseResponse(response, "change requests")),
     getConceptStatuses().then((body) =>
       prepareStatusList(body.conceptStatuses),
     ),
     getAllCodeLists(catalogId, session.accessToken).then((response) =>
-      response.json(),
+      parseResponse(response, "code lists"),
     ),
     getFields(catalogId, session.accessToken).then((response) =>
-      response.json(),
+      parseResponse(response, "fields"),
     ),
     getUsers(catalogId, session.accessToken).then((response) =>
-      response.json(),
+      parseResponse(response, "users"),
     ),
   ])) as [
     ChangeRequest[],
