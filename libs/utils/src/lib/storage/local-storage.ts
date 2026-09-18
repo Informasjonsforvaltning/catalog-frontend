@@ -225,7 +225,6 @@ export class LocalDataStorage<T> implements DataStorage<T> {
 
   delete() {
     if (typeof localStorage !== "undefined") {
-      console.log("[LOCAL STORAGE]: Deleting main and secondary keys");
       localStorage.removeItem(this.key);
       Object.keys(this.secondaryKeys).forEach((key) => {
         localStorage.removeItem(this.secondaryKeys[key]);
