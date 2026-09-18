@@ -1,0 +1,48 @@
+.footerContent {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.fieldContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.comboboxOption {
+  display: grid;
+  grid-template-columns: 22% 50% 22%;
+  gap: 2.5%;
+}
+
+.set {
+  display: flex;
+}
+
+.padding {
+  padding-bottom: 0.5rem;
+}
+
+.flex {
+  display: flex;
+  align-items: center;
+}
+
+.gap2 {
+  gap: var(--ds-size-2);
+}
+
+.gap4 {
+  gap: var(--ds-size-4);
+}
+
+.noWrap {
+  flex-wrap: nowrap;
+}
+
+.verticalLine {
+  border-left: 1px solid var(--ds-color-border-default);
+  height: 24px;
+  margin: 0 var(--ds-size-2);
+}

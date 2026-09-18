@@ -8,6 +8,7 @@
     "start:concept": "nx serve concept-catalog",
     "start:service": "nx serve service-catalog",
     "start:data-service": "nx serve data-service-catalog",
+    "start:information-model": "nx serve information-model-catalog",
     "build": "nx build",
     "build-all": "nx run-many --target=build --all",
     "test": "yarn run affected:test",

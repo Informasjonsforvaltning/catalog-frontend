@@ -1,0 +1,11 @@
+.searchFilter {
+  display: flex;
+  flex-direction: column;
+  height: fit-content;
+  box-sizing: border-box;
+}
+
+.accordion {
+  flex-grow: 1;
+  box-sizing: border-box;
+}

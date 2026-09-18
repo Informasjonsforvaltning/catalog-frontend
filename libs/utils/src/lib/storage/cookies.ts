@@ -3,6 +3,7 @@ import {
   ConceptsPageSettings,
   DatasetsPageSettings,
   DataServicesPageSettings,
+  InformationModelsPageSettings,
 } from "@catalog-frontend/types";
 import Cookies from "js-cookie";
 
@@ -10,6 +11,8 @@ const cookieNameConceptsPageSettings = "concepts-page-settings";
 const cookieNameChangeRequestsPageSettings = "change-requests-page-settings";
 const cookieNameDatasetsPageSettings = "datasets-page-settings";
 const cookieNameDataServicesPageSettings = "data-services-page-settings";
+const cookieNameInformationModelsPageSettings =
+  "information-models-page-settings";
 
 export const getServerPageSettings = <T>(
   name: string,
@@ -45,6 +48,11 @@ export const getServerDataServicesPageSettings = (cookieStore: any) =>
     cookieNameDataServicesPageSettings,
     cookieStore,
   );
+export const getServerInformationModelsPageSettings = (cookieStore: any) =>
+  getServerPageSettings<InformationModelsPageSettings>(
+    cookieNameInformationModelsPageSettings,
+    cookieStore,
+  );
 
 export const setClientConceptsPageSettings = (settings: ConceptsPageSettings) =>
   Cookies.set(cookieNameConceptsPageSettings, JSON.stringify(settings));
@@ -57,3 +65,10 @@ export const setClientDatasetsPageSettings = (settings: DatasetsPageSettings) =>
 export const setClientDataServicesPageSettings = (
   settings: DataServicesPageSettings,
 ) => Cookies.set(cookieNameDataServicesPageSettings, JSON.stringify(settings));
+export const setClientInformationModelsPageSettings = (
+  settings: InformationModelsPageSettings,
+) =>
+  Cookies.set(
+    cookieNameInformationModelsPageSettings,
+    JSON.stringify(settings),
+  );
