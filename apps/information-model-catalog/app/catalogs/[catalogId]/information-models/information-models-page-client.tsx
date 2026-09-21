@@ -18,9 +18,12 @@ import SearchFilter from "../../../../components/search-filter";
 import React, { useState, useEffect, useMemo } from "react";
 import { Chip } from "@digdir/designsystemet-react";
 import {
+  dateStringToDate,
+  formatDate,
   getTranslateText,
   localization,
   sortAscending,
+  sortDateStringsDescending,
   sortDescending,
   setClientInformationModelsPageSettings,
 } from "@catalog-frontend/utils";
@@ -33,8 +36,8 @@ import {
 } from "nuqs";
 import { isEmpty } from "lodash";
 
-type SortTypes = "titleAsc" | "titleDesc";
-const sortTypes: SortTypes[] = ["titleAsc", "titleDesc"];
+type SortTypes = "titleAsc" | "titleDesc" | "lastChanged";
+const sortTypes: SortTypes[] = ["titleAsc", "titleDesc", "lastChanged"];
 const itemPerPage = 5;
 
 interface Props {
@@ -87,6 +90,12 @@ const InformationModelsPageClient = ({
             sortDescending(
               getTranslateText(a.title),
               getTranslateText(b.title),
+            );
+        case "lastChanged":
+          return (a: InformationModel, b: InformationModel) =>
+            sortDateStringsDescending(
+              a.lastModified || "",
+              b.lastModified || "",
             );
         default:
           return () => 0;
@@ -190,6 +199,9 @@ const InformationModelsPageClient = ({
                 <option value="titleDesc">
                   {localization.search.sortOptions.TITLE_ÅA}
                 </option>
+                <option value="lastChanged">
+                  {localization.search.sortOptions.LAST_UPDATED_FIRST}
+                </option>
               </Select>
             </div>
             <div className={styles.buttons}>
@@ -238,6 +250,19 @@ const InformationModelsPageClient = ({
                           titleHref={`/catalogs/${catalogId}/information-models/${informationModel?.id}`}
                           content={
                             <div className={styles.set}>
+                              {informationModel.lastModified && (
+                                <>
+                                  <p>
+                                    {localization.lastChanged}{" "}
+                                    {formatDate(
+                                      dateStringToDate(
+                                        informationModel.lastModified,
+                                      ),
+                                    )}
+                                  </p>
+                                  <span>•</span>
+                                </>
+                              )}
                               {informationModel.published
                                 ? localization.publicationState.publishedInFDK
                                 : localization.publicationState.unpublished}

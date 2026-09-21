@@ -1,6 +1,6 @@
 import { InfoCard } from "@catalog-frontend/ui";
 import { InformationModel } from "@catalog-frontend/types";
-import { localization } from "@catalog-frontend/utils";
+import { formatISO, localization } from "@catalog-frontend/utils";
 import PublishSwitch from "../publish-switch";
 
 type Props = {
@@ -43,6 +43,22 @@ export const RightColumn = ({
           ? localization.publicationState.publishedInFDK
           : localization.publicationState.unpublished}
       </InfoCard.Item>
+
+      {informationModel?.lastModified && (
+        <InfoCard.Item
+          key={`info-data-${localization.informationModelForm.fieldLabel.lastModified}`}
+          title={localization.informationModelForm.fieldLabel.lastModified}
+          headingColor="light"
+          data-testid="information-model-last-modified"
+        >
+          {formatISO(informationModel.lastModified, {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })}
+        </InfoCard.Item>
+      )}
     </InfoCard>
   );
 };
