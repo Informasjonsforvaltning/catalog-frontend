@@ -33,6 +33,7 @@ import {
 } from "@digdir/designsystemet-react";
 import styles from "./information-model-form.module.css";
 import { AboutSection } from "./components/about-section";
+import { ContactPointSection } from "./components/contact-point-section";
 import {
   informationModelValidationSchema,
   draftInformationModelValidationSchema,
@@ -330,6 +331,7 @@ const InformationModelForm = ({
               ...Object.keys({ ...formInitialValues, ...values }),
               "title",
               "description",
+              "contactPoints",
             ].forEach((name) => {
               if (isDirty(name)) {
                 dirtyFields.push(name);
@@ -369,6 +371,26 @@ const InformationModelForm = ({
                       error={hasError(["title", "description"])}
                     >
                       <AboutSection />
+                    </FormLayout.Section>
+
+                    <FormLayout.Section
+                      id="contact-point-section"
+                      title={
+                        localization.informationModelForm.heading.contactPoint
+                      }
+                      subtitle={
+                        localization.informationModelForm.subtitle.contactPoint
+                      }
+                      required
+                      changed={
+                        markDirty &&
+                        dirtyFields.some((field) =>
+                          ["contactPoints"].includes(field),
+                        )
+                      }
+                      error={hasError(["contactPoints"])}
+                    >
+                      <ContactPointSection />
                     </FormLayout.Section>
                   </FormLayout>
                 </Form>

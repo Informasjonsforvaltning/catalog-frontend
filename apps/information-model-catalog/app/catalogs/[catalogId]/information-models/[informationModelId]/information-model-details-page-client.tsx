@@ -117,6 +117,7 @@ const InformationModelDetailsPageClient = ({
         <DetailsPageLayout.Right>
           <RightColumn
             informationModel={currentInformationModel}
+            language={language}
             hasWritePermission={hasWritePermission}
             onPublishedChange={handlePublishedChange}
           />
