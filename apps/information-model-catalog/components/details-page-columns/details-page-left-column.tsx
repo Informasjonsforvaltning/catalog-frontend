@@ -22,6 +22,16 @@ export const LeftColumn = ({ informationModel, language }: Props) => {
           </Paragraph>
         </InfoCard.Item>
       )}
+      {!isEmpty(informationModel?.description) && (
+        <InfoCard.Item
+          title={localization.informationModelForm.fieldLabel.description}
+          data-testid="information-model-description"
+        >
+          <Paragraph>
+            {getTranslateText(informationModel?.description, language)}
+          </Paragraph>
+        </InfoCard.Item>
+      )}
     </InfoCard>
   );
 };

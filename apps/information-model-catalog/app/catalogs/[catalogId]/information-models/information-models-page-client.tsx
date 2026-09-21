@@ -137,10 +137,14 @@ const InformationModelsPageClient = ({
 
       if (searchTerm) {
         const lowercasedQuery = searchTerm.toLowerCase();
-        filtered = filtered.filter((informationModel) =>
-          getTranslateText(informationModel?.title)
-            .toLowerCase()
-            .includes(lowercasedQuery),
+        filtered = filtered.filter(
+          (informationModel) =>
+            getTranslateText(informationModel?.title)
+              .toLowerCase()
+              .includes(lowercasedQuery) ||
+            getTranslateText(informationModel?.description)
+              .toLowerCase()
+              .includes(lowercasedQuery),
         );
       }
 
@@ -247,6 +251,9 @@ const InformationModelsPageClient = ({
                       <li role="listitem" key={informationModel.id}>
                         <SearchHit
                           title={getTranslateText(informationModel?.title)}
+                          description={getTranslateText(
+                            informationModel?.description,
+                          )}
                           titleHref={`/catalogs/${catalogId}/information-models/${informationModel?.id}`}
                           content={
                             <div className={styles.set}>
