@@ -34,12 +34,36 @@ const titleValidationSchema = () =>
       },
     );
 
+const descriptionValidationSchema = () =>
+  Yup.object().shape({
+    nb: Yup.string()
+      .label(
+        `${localization.informationModelForm.fieldLabel.description} (${localization.language.nb})`,
+      )
+      .min(5, localization.informationModelForm.validation.description)
+      .notRequired(),
+    nn: Yup.string()
+      .label(
+        `${localization.informationModelForm.fieldLabel.description} (${localization.language.nn})`,
+      )
+      .min(5, localization.informationModelForm.validation.description)
+      .notRequired(),
+    en: Yup.string()
+      .label(
+        `${localization.informationModelForm.fieldLabel.description} (${localization.language.en})`,
+      )
+      .min(5, localization.informationModelForm.validation.description)
+      .notRequired(),
+  });
+
 export const draftInformationModelValidationSchema = () =>
   Yup.object().shape({
     title: titleValidationSchema(),
+    description: descriptionValidationSchema(),
   });
 
 export const informationModelValidationSchema = () =>
   Yup.object().shape({
     title: titleValidationSchema(),
+    description: descriptionValidationSchema(),
   });

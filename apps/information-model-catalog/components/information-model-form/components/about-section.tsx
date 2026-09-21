@@ -1,5 +1,7 @@
 import {
+  FieldsetDivider,
   FormikLanguageFieldset,
+  TextareaWithPrefix,
   TitleWithHelpTextAndTag,
 } from "@catalog-frontend/ui";
 import { localization } from "@catalog-frontend/utils";
@@ -17,6 +19,22 @@ export const AboutSection = () => {
             helpText={localization.informationModelForm.helptext.title}
           >
             {localization.informationModelForm.fieldLabel.title}
+          </TitleWithHelpTextAndTag>
+        }
+      />
+
+      <FieldsetDivider />
+
+      <FormikLanguageFieldset
+        name="description"
+        as={TextareaWithPrefix}
+        legend={
+          <TitleWithHelpTextAndTag
+            helpText={localization.informationModelForm.helptext.description}
+            tagTitle={localization.tag.recommended}
+            tagColor="info"
+          >
+            {localization.informationModelForm.fieldLabel.description}
           </TitleWithHelpTextAndTag>
         }
       />

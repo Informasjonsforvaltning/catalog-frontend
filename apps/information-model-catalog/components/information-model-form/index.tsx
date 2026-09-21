@@ -329,6 +329,7 @@ const InformationModelForm = ({
             [
               ...Object.keys({ ...formInitialValues, ...values }),
               "title",
+              "description",
             ].forEach((name) => {
               if (isDirty(name)) {
                 dirtyFields.push(name);
@@ -361,9 +362,11 @@ const InformationModelForm = ({
                       required
                       changed={
                         markDirty &&
-                        dirtyFields.some((field) => ["title"].includes(field))
+                        dirtyFields.some((field) =>
+                          ["title", "description"].includes(field),
+                        )
                       }
-                      error={hasError(["title"])}
+                      error={hasError(["title", "description"])}
                     >
                       <AboutSection />
                     </FormLayout.Section>

@@ -10,6 +10,7 @@ export const informationModelTemplate = (
   return {
     ...informationModel,
     title: omitBy(informationModel?.title, isEmpty),
+    description: omitBy(informationModel?.description, isEmpty),
   };
 };
 
@@ -17,5 +18,6 @@ export const informationModelToBeCreatedTemplate =
   (): InformationModelToBeCreated => {
     return {
       title: {},
+      description: {},
     };
   };
