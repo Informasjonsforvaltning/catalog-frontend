@@ -14,6 +14,7 @@ export const informationModelFormNb = {
   fieldLabel: {
     title: "Tittel",
     informationModelID: "Informasjonsmodell-ID",
+    lastModified: "Sist endret",
     ignoreRequired: "Ignorer påkrevde felt",
   },
   alert: {
