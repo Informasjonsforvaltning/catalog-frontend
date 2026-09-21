@@ -4,20 +4,29 @@ export const informationModelFormNb = {
       "Tittelen skal være kortfattet, kunne stå alene og gi mening. Forkortelser skal skrives helt ut.",
     description:
       "Beskrivelsen skal være kortfattet. Det bør fremgå hva informasjonsmodellen handler om, slik at den er enklere å finne og skille fra andre modeller.",
+    contactName:
+      "Navnet på kontaktpunktet. Typisk en organisasjon eller enhet.",
+    contactFields:
+      "Kontaktinformasjon for kontaktpunktet. Minst én av e-post eller kontaktside må fylles ut.",
     publish:
       "Publiser informasjonsmodellbeskrivelsen til Data.norge.no. For å publisere må du fylle ut alle påkrevde felt i skjemaet, en beskrivelse kan ikke slettes så lenge den er publisert.",
   },
   heading: {
     about: "Om informasjonsmodellen",
+    contactPoint: "Kontaktpunkt",
   },
   subtitle: {
     about: "Nøkkelinformasjon om informasjonsmodellen.",
+    contactPoint:
+      "Informasjon om en organisasjon eller enhet som kan kontaktes for spørsmål eller kommentarer om informasjonsmodellen. Det skal ikke oppgis personlig kontaktinformasjon.",
   },
   fieldLabel: {
     title: "Tittel",
     description: "Beskrivelse",
     informationModelID: "Informasjonsmodell-ID",
     lastModified: "Sist endret",
+    contactName: "Navn",
+    contactFields: "Kontaktinformasjon",
     ignoreRequired: "Ignorer påkrevde felt",
   },
   alert: {
@@ -34,6 +43,8 @@ export const informationModelFormNb = {
   },
   validation: {
     description: "Beskrivelsen må være minst 5 karakterer lang.",
+    contactPoints:
+      "Minst e-post eller kontaktside må fylles ut for kontaktpunktet.",
   },
   button: {
     update: "Oppdater",
