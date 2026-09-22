@@ -165,6 +165,20 @@ export const getProvenanceStatements = async (): Promise<{
   return response.json();
 };
 
+export const getAccessRights = async (): Promise<{
+  accessRights: ReferenceDataCode[];
+}> => {
+  const resource = `${process.env.FDK_BASE_URI}/reference-data/eu/access-rights`;
+  const options = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "GET",
+  };
+  const response = await fetch(resource, options);
+  return response.json();
+};
+
 export const getPlannedAvailabilities = async (): Promise<{
   plannedAvailabilities: ReferenceDataCode[];
 }> => {

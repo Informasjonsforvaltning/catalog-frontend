@@ -37,6 +37,21 @@ export const prepareStatusList = (conceptStatuses: ReferenceDataCode[]) => {
   return utilizedCodes;
 };
 
+export const DATA_SERVICE_ACCESS_RIGHT_CODES = [
+  "PUBLIC",
+  "RESTRICTED",
+  "NON_PUBLIC",
+];
+
+export const prepareAccessRightsList = (
+  accessRights: ReferenceDataCode[],
+): ReferenceDataCode[] =>
+  DATA_SERVICE_ACCESS_RIGHT_CODES.reduce<ReferenceDataCode[]>((acc, code) => {
+    const match = accessRights.find((accessRight) => accessRight.code === code);
+    if (match) acc.push(match);
+    return acc;
+  }, []);
+
 export const accessRightPublic: ReferenceDataCode = {
   uri: "http://publications.europa.eu/resource/authority/access-right/PUBLIC",
   code: "PUBLIC",

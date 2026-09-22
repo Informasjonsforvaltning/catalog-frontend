@@ -1,11 +1,7 @@
 import { InfoCard } from "@catalog-frontend/ui";
 import styles from "./details-columns.module.css";
 import { DataService, DataServiceReferenceData } from "@catalog-frontend/types";
-import {
-  accessRights,
-  getTranslateText,
-  localization,
-} from "@catalog-frontend/utils";
+import { getTranslateText, localization } from "@catalog-frontend/utils";
 import { isEmpty } from "lodash";
 import { EnvelopeClosedIcon, LinkIcon, PhoneIcon } from "@navikt/aksel-icons";
 import PublishSwitch from "../publish-switch";
@@ -61,7 +57,7 @@ export const RightColumn = ({
         >
           <ReferenceDataTag
             referenceDataURI={dataService.accessRights}
-            referenceDataCodes={accessRights}
+            referenceDataCodes={referenceData.accessRights}
             language={language}
           />
         </InfoCard.Item>
