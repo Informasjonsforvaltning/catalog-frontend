@@ -4,6 +4,8 @@ export const informationModelFormNb = {
       "Tittelen skal være kortfattet, kunne stå alene og gi mening. Forkortelser skal skrives helt ut.",
     description:
       "Beskrivelsen skal være kortfattet. Det bør fremgå hva informasjonsmodellen handler om, slik at den er enklere å finne og skille fra andre modeller.",
+    status:
+      "Angi modellens modenhet og utviklingsstadium. Verdiene hentes fra EUs kontrollerte vokabular [Product status](https://op.europa.eu/en/web/eu-vocabularies/concept-scheme/-/resource?uri=http://publications.europa.eu/resource/authority/product-status).",
     contactName:
       "Navnet på kontaktpunktet. Typisk en organisasjon eller enhet.",
     contactFields:
@@ -23,12 +25,14 @@ export const informationModelFormNb = {
   fieldLabel: {
     title: "Tittel",
     description: "Beskrivelse",
+    status: "Modellstatus",
     informationModelID: "Informasjonsmodell-ID",
     lastModified: "Sist endret",
     contactName: "Navn",
     contactFields: "Kontaktinformasjon",
     ignoreRequired: "Ignorer påkrevde felt",
   },
+  noStatus: "Ingen status",
   alert: {
     confirmDeleteTitle: "Bekreft sletting",
     confirmDelete:

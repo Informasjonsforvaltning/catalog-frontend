@@ -7,6 +7,7 @@ import { useRef, useState } from "react";
 import type {
   InformationModel,
   InformationModelToBeCreated,
+  ReferenceDataCode,
   StorageData,
 } from "@catalog-frontend/types";
 import InformationModelForm from "../../../../../components/information-model-form";
@@ -16,11 +17,13 @@ import { useRouter } from "next/navigation";
 type NewInformationModelPageClientProps = {
   catalogId: string;
   initialValues: InformationModelToBeCreated;
+  statuses: ReferenceDataCode[];
 };
 
 export const NewInformationModelPageClient = ({
   catalogId,
   initialValues,
+  statuses,
 }: NewInformationModelPageClientProps) => {
   const router = useRouter();
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
@@ -77,6 +80,7 @@ export const NewInformationModelPageClient = ({
       </ButtonBar>
       <InformationModelForm
         initialValues={initialValues}
+        statuses={statuses}
         autoSaveStorage={dataStorage}
         onCancel={handleCancel}
         onSubmit={handleCreate}

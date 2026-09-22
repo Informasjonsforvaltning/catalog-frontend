@@ -656,6 +656,7 @@ ___Merk:__ Maksimal filstørrelse for opplastning er {0} MB. CSV/JSON-filer kan 
       PUBLISHED: "Publisert",
       DRAFT: "Utkast",
     },
+    modelStatus: "Modellstatus",
     searchInformationModel: "Søk etter informasjonsmodellbeskrivelse",
     button: {
       newInformationModel: "Legg til informasjonsmodellbeskrivelse",

@@ -40,6 +40,21 @@ export const getDistributionStatuses = async (): Promise<{
   return response.json();
 };
 
+export const getProductStatuses = async (): Promise<{
+  productStatuses: ReferenceDataCode[];
+}> => {
+  const path = `${process.env.FDK_BASE_URI}/reference-data/eu/product-statuses`;
+  const options = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "GET",
+    cache: "no-cache" as RequestCache,
+  };
+  const response = await fetch(path, options);
+  return response.json();
+};
+
 export const getLosThemes = async (): Promise<{
   losNodes: LosTheme[];
 }> => {

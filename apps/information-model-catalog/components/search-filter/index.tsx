@@ -1,7 +1,8 @@
 "use client";
 
 import { memo } from "react";
-import { localization as loc } from "@catalog-frontend/utils";
+import { localization as loc, getTranslateText } from "@catalog-frontend/utils";
+import { ReferenceDataCode } from "@catalog-frontend/types";
 import styles from "./search-filter.module.css";
 import {
   parseAsArrayOf,
@@ -18,13 +19,21 @@ import { Card } from "@digdir/designsystemet-react";
 
 export type PublishedFilterType = "published" | "unpublished";
 
-const SearchFilter = () => {
+type Props = {
+  statuses: ReferenceDataCode[];
+};
+
+const SearchFilter = ({ statuses }: Props) => {
   const [pageState, setPageState] = useQueryState(
     "informationModelPage",
     parseAsInteger.withDefault(0),
   );
   const [filterPublicationState, setFilterPublicationState] = useQueryState(
     "informationModelFilter.pubState",
+    parseAsArrayOf(parseAsString),
+  );
+  const [filterStatus, setFilterStatus] = useQueryState(
+    "informationModelFilter.status",
     parseAsArrayOf(parseAsString),
   );
 
@@ -39,6 +48,11 @@ const SearchFilter = () => {
     },
   ];
 
+  const statusItems = statuses.map((status) => ({
+    value: status.uri,
+    label: getTranslateText(status.label),
+  }));
+
   const setPageDefault = () => {
     if (pageState != 0) {
       setPageState(0);
@@ -50,7 +64,22 @@ const SearchFilter = () => {
     setPageDefault();
   };
 
+  const handleStatusOnChange = (names: string[]) => {
+    setFilterStatus(names);
+    setPageDefault();
+  };
+
   const accordionItemContents: AccordionItemProps[] = [
+    {
+      header: loc.informationModelCatalog.modelStatus,
+      content: (
+        <CheckboxGroupFilter<string>
+          items={statusItems}
+          onChange={handleStatusOnChange}
+          value={filterStatus ?? []}
+        />
+      ),
+    },
     {
       header: loc.publicationState.state,
       content: (

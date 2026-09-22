@@ -138,6 +138,7 @@ export const draftInformationModelValidationSchema = () =>
     title: titleValidationSchema(),
     description: descriptionValidationSchema(),
     contactPoints: contactPointDraftValidationSchema(),
+    status: Yup.string().nullable().notRequired(),
   });
 
 export const informationModelValidationSchema = () =>
@@ -145,4 +146,5 @@ export const informationModelValidationSchema = () =>
     title: titleValidationSchema(),
     description: descriptionValidationSchema(),
     contactPoints: contactPointConfirmValidationSchema(),
+    status: Yup.string().nullable().notRequired(),
   });

@@ -8,6 +8,7 @@ import {
   localization,
   validInformationModelID,
 } from "@catalog-frontend/utils";
+import { getProductStatuses } from "@catalog-frontend/data-access";
 import { redirect, RedirectType } from "next/navigation";
 import { withWriteProtectedPage } from "@information-model-catalog/utils/auth";
 import { EditPage } from "./edit-page-client";
@@ -21,11 +22,14 @@ const EditInformationModelPage = withWriteProtectedPage(
       return redirect("/not-found", RedirectType.replace);
     }
 
-    const informationModel = await fetchInformationModelWithRetry(
-      catalogId,
-      informationModelId,
-      session.accessToken,
-    );
+    const [informationModel, statusesResponse] = await Promise.all([
+      fetchInformationModelWithRetry(
+        catalogId,
+        informationModelId,
+        session.accessToken,
+      ),
+      getProductStatuses(),
+    ]);
 
     if (!informationModel || informationModel.catalogId !== catalogId) {
       redirect("/not-found", RedirectType.replace);
@@ -56,7 +60,11 @@ const EditInformationModelPage = withWriteProtectedPage(
           title={localization.catalogType.informationModel}
           catalogId={catalogId}
         />
-        <EditPage catalogId={catalogId} informationModel={informationModel} />
+        <EditPage
+          catalogId={catalogId}
+          informationModel={informationModel}
+          statuses={statusesResponse.productStatuses}
+        />
       </>
     );
   },

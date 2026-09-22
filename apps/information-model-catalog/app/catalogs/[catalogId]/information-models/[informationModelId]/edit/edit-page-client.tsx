@@ -4,7 +4,11 @@ import { useEffect, useState } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import { ArrowLeftIcon } from "@navikt/aksel-icons";
 import { LocalDataStorage, localization } from "@catalog-frontend/utils";
-import type { InformationModel, StorageData } from "@catalog-frontend/types";
+import type {
+  InformationModel,
+  ReferenceDataCode,
+  StorageData,
+} from "@catalog-frontend/types";
 import { Button, ButtonBar, ConfirmModal } from "@catalog-frontend/ui";
 import InformationModelForm from "../../../../../../components/information-model-form";
 import { updateInformationModel } from "../../../../../../app/actions/actions";
@@ -12,9 +16,14 @@ import { updateInformationModel } from "../../../../../../app/actions/actions";
 type EditPageProps = {
   catalogId: string;
   informationModel: InformationModel;
+  statuses: ReferenceDataCode[];
 };
 
-export const EditPage = ({ catalogId, informationModel }: EditPageProps) => {
+export const EditPage = ({
+  catalogId,
+  informationModel,
+  statuses,
+}: EditPageProps) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [showSnackbar, setShowSnackbar] = useState(false);
@@ -77,6 +86,7 @@ export const EditPage = ({ catalogId, informationModel }: EditPageProps) => {
       </ButtonBar>
       <InformationModelForm
         initialValues={informationModel}
+        statuses={statuses}
         autoSaveStorage={dataStorage}
         autoSaveId={informationModel.id}
         onSubmit={handleUpdate}

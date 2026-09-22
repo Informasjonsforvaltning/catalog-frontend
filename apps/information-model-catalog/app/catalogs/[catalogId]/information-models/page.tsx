@@ -1,4 +1,3 @@
-import { InformationModel } from "@catalog-frontend/types";
 import {
   BreadcrumbType,
   Breadcrumbs,
@@ -8,6 +7,7 @@ import {
   localization,
   getServerInformationModelsPageSettings,
 } from "@catalog-frontend/utils";
+import { getProductStatuses } from "@catalog-frontend/data-access";
 
 import InformationModelPageClient from "./information-models-page-client";
 import { getInformationModels } from "../../../actions/actions";
@@ -17,8 +17,10 @@ import { cookies } from "next/headers";
 const InformationModelsSearchHits = withReadProtectedPage(
   ({ catalogId }) => `/catalogs/${catalogId}/information-models`,
   async ({ catalogId, hasWritePermission, hasAdminPermission }) => {
-    const informationModels: InformationModel[] =
-      await getInformationModels(catalogId);
+    const [informationModels, statusesResponse] = await Promise.all([
+      getInformationModels(catalogId),
+      getProductStatuses(),
+    ]);
 
     const cookieStore = await cookies();
     const pageSettings = getServerInformationModelsPageSettings(cookieStore);
@@ -46,6 +48,7 @@ const InformationModelsSearchHits = withReadProtectedPage(
           hasWritePermission={hasWritePermission}
           hasAdminPermission={hasAdminPermission}
           pageSettings={pageSettings}
+          statuses={statusesResponse.productStatuses}
         />
       </>
     );

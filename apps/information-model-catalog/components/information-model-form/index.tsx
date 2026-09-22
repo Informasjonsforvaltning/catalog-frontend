@@ -10,6 +10,7 @@ import {
 import {
   InformationModel,
   InformationModelToBeCreated,
+  ReferenceDataCode,
   StorageData,
 } from "@catalog-frontend/types";
 import {
@@ -53,6 +54,7 @@ const getErrorDigest = (error: unknown): string | undefined =>
 
 type Props = {
   initialValues: InformationModel | InformationModelToBeCreated;
+  statuses: ReferenceDataCode[];
   autoSaveStorage?: DataStorage<StorageData>;
   autoSave?: boolean;
   autoSaveId?: string;
@@ -68,6 +70,7 @@ type Props = {
 
 const InformationModelForm = ({
   initialValues,
+  statuses,
   autoSaveStorage,
   autoSave = true,
   autoSaveId,
@@ -331,6 +334,7 @@ const InformationModelForm = ({
               ...Object.keys({ ...formInitialValues, ...values }),
               "title",
               "description",
+              "status",
               "contactPoints",
             ].forEach((name) => {
               if (isDirty(name)) {
@@ -365,12 +369,12 @@ const InformationModelForm = ({
                       changed={
                         markDirty &&
                         dirtyFields.some((field) =>
-                          ["title", "description"].includes(field),
+                          ["title", "description", "status"].includes(field),
                         )
                       }
-                      error={hasError(["title", "description"])}
+                      error={hasError(["title", "description", "status"])}
                     >
-                      <AboutSection />
+                      <AboutSection statuses={statuses} />
                     </FormLayout.Section>
 
                     <FormLayout.Section

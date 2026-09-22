@@ -1,13 +1,20 @@
 import {
   FieldsetDivider,
   FormikLanguageFieldset,
+  Select,
   TextareaWithPrefix,
   TitleWithHelpTextAndTag,
 } from "@catalog-frontend/ui";
-import { localization } from "@catalog-frontend/utils";
-import { Textfield } from "@digdir/designsystemet-react";
+import { ReferenceDataCode } from "@catalog-frontend/types";
+import { getTranslateText, localization } from "@catalog-frontend/utils";
+import { Fieldset, Textfield } from "@digdir/designsystemet-react";
+import { Field } from "formik";
 
-export const AboutSection = () => {
+type Props = {
+  statuses: ReferenceDataCode[];
+};
+
+export const AboutSection = ({ statuses }: Props) => {
   return (
     <div>
       <FormikLanguageFieldset
@@ -38,6 +45,26 @@ export const AboutSection = () => {
           </TitleWithHelpTextAndTag>
         }
       />
+
+      <FieldsetDivider />
+
+      <Fieldset data-size="sm">
+        <Fieldset.Legend>
+          <TitleWithHelpTextAndTag
+            helpText={localization.informationModelForm.helptext.status}
+          >
+            {localization.informationModelForm.fieldLabel.status}
+          </TitleWithHelpTextAndTag>
+        </Fieldset.Legend>
+        <Field as={Select} name="status">
+          <option value="">{localization.informationModelForm.noStatus}</option>
+          {statuses.map((status) => (
+            <option key={status.code} value={status.uri}>
+              {getTranslateText(status.label)}
+            </option>
+          ))}
+        </Field>
+      </Fieldset>
     </div>
   );
 };

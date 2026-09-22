@@ -11,6 +11,7 @@ const MUTABLE_INFORMATION_MODEL_FIELDS = [
   "title",
   "description",
   "contactPoints",
+  "status",
 ] as const;
 
 export const toMutableInformationModelValues = (

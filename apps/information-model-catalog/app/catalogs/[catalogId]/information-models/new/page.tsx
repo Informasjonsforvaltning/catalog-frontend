@@ -5,6 +5,7 @@ import {
 } from "@catalog-frontend/ui";
 import { informationModelToBeCreatedTemplate } from "../../../../../components/information-model-form/utils/information-model-initial-values";
 import { localization } from "@catalog-frontend/utils";
+import { getProductStatuses } from "@catalog-frontend/data-access";
 import { withWriteProtectedPage } from "@information-model-catalog/utils/auth";
 import { NewInformationModelPageClient } from "./new-page-client";
 
@@ -12,6 +13,7 @@ const NewInformationModelPage = withWriteProtectedPage(
   ({ catalogId }) => `/catalogs/${catalogId}/information-models/new`,
   async ({ catalogId }) => {
     const initialValues = informationModelToBeCreatedTemplate();
+    const statusesResponse = await getProductStatuses();
 
     const breadcrumbList = [
       {
@@ -37,6 +39,7 @@ const NewInformationModelPage = withWriteProtectedPage(
         <NewInformationModelPageClient
           catalogId={catalogId}
           initialValues={initialValues}
+          statuses={statusesResponse.productStatuses}
         />
       </>
     );
