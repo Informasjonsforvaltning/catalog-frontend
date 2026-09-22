@@ -7,9 +7,11 @@ import {
   getTranslateText,
   hasOrganizationWritePermission,
   localization,
+  prepareAccessRightsList,
   validDataServiceID,
 } from "@catalog-frontend/utils";
 import {
+  getAccessRights,
   getCurrencies,
   getDistributionStatuses,
   getLicences,
@@ -51,11 +53,13 @@ const EditDataServicePage = withReadProtectedPage(
       licenseResponse,
       statusResponse,
       availabilitiesResponse,
+      accessRightsResponse,
       currenciesResponse,
     ] = await Promise.all([
       getLicences(),
       getDistributionStatuses(),
       getPlannedAvailabilities(),
+      getAccessRights(),
       getCurrencies(),
     ]);
 
@@ -63,6 +67,7 @@ const EditDataServicePage = withReadProtectedPage(
       distributionStatuses: statusResponse.distributionStatuses,
       openLicenses: licenseResponse.licences,
       plannedAvailabilities: availabilitiesResponse.plannedAvailabilities,
+      accessRights: prepareAccessRightsList(accessRightsResponse.accessRights),
       currencies: currenciesResponse.currencies,
     };
 

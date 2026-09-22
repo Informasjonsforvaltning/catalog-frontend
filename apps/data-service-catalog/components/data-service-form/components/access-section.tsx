@@ -7,11 +7,7 @@ import {
   SingleSuggestionSelect,
   TitleWithHelpTextAndTag,
 } from "@catalog-frontend/ui";
-import {
-  accessRights,
-  getTranslateText,
-  localization,
-} from "@catalog-frontend/utils";
+import { getTranslateText, localization } from "@catalog-frontend/utils";
 import { Fieldset } from "@digdir/designsystemet-react";
 import { useFormikContext } from "formik";
 import { useMemo } from "react";
@@ -36,10 +32,15 @@ const sortLicences = (licences: ReferenceDataCode[]): ReferenceDataCode[] =>
 
 type Props = {
   openLicenses?: ReferenceDataCode[];
+  accessRights?: ReferenceDataCode[];
   currencies?: ReferenceDataCode[];
 };
 
-export const AccessSection = ({ openLicenses, currencies }: Props) => {
+export const AccessSection = ({
+  openLicenses,
+  accessRights,
+  currencies,
+}: Props) => {
   const { values, setFieldValue } = useFormikContext<DataService>();
 
   const licenseOptions = useMemo(() => {

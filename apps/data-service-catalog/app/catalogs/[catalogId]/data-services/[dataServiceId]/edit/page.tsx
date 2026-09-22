@@ -4,6 +4,7 @@ import {
   DesignBanner,
 } from "@catalog-frontend/ui";
 import {
+  getAccessRights,
   getCurrencies,
   getDistributionStatuses,
   getLicences,
@@ -12,6 +13,7 @@ import {
 import {
   getTranslateText,
   localization,
+  prepareAccessRightsList,
   validDataServiceID,
 } from "@catalog-frontend/utils";
 import { redirect, RedirectType } from "next/navigation";
@@ -44,11 +46,13 @@ const EditDataServicePage = withWriteProtectedPage(
       licenseResponse,
       statusResponse,
       availabilitiesResponse,
+      accessRightsResponse,
       currenciesResponse,
     ] = await Promise.all([
       getLicences(),
       getDistributionStatuses(),
       getPlannedAvailabilities(),
+      getAccessRights(),
       getCurrencies(),
     ]);
 
@@ -56,6 +60,7 @@ const EditDataServicePage = withWriteProtectedPage(
       distributionStatuses: statusResponse.distributionStatuses,
       openLicenses: licenseResponse.licences,
       plannedAvailabilities: availabilitiesResponse.plannedAvailabilities,
+      accessRights: prepareAccessRightsList(accessRightsResponse.accessRights),
       currencies: currenciesResponse.currencies,
     };
 

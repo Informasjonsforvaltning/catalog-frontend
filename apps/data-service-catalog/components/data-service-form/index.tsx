@@ -454,6 +454,7 @@ const DataServiceForm = ({
                     >
                       <AccessSection
                         openLicenses={referenceData.openLicenses}
+                        accessRights={referenceData.accessRights}
                         currencies={referenceData.currencies}
                       />
                     </FormLayout.Section>

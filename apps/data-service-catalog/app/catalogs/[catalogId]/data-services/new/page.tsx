@@ -4,6 +4,7 @@ import {
   DesignBanner,
 } from "@catalog-frontend/ui";
 import {
+  getAccessRights,
   getCurrencies,
   getDistributionStatuses,
   getLicences,
@@ -11,7 +12,7 @@ import {
 } from "@catalog-frontend/data-access";
 
 import { dataServiceToBeCreatedTemplate } from "../../../../../components/data-service-form/utils/data-service-initial-values";
-import { localization } from "@catalog-frontend/utils";
+import { localization, prepareAccessRightsList } from "@catalog-frontend/utils";
 import { withWriteProtectedPage } from "@data-service-catalog/utils/auth";
 import { NewDataServicePageClient } from "./new-page-client";
 
@@ -26,11 +27,13 @@ const NewDataServicePage = withWriteProtectedPage(
       licenseResponse,
       statusResponse,
       availabilitiesResponse,
+      accessRightsResponse,
       currenciesResponse,
     ] = await Promise.all([
       getLicences(),
       getDistributionStatuses(),
       getPlannedAvailabilities(),
+      getAccessRights(),
       getCurrencies(),
     ]);
 
@@ -38,6 +41,7 @@ const NewDataServicePage = withWriteProtectedPage(
       openLicenses: licenseResponse.licences,
       distributionStatuses: statusResponse.distributionStatuses,
       plannedAvailabilities: availabilitiesResponse.plannedAvailabilities,
+      accessRights: prepareAccessRightsList(accessRightsResponse.accessRights),
       currencies: currenciesResponse.currencies,
     };
 
