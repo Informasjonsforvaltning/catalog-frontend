@@ -1,9 +1,5 @@
 import { Dataset } from "@catalog-frontend/types";
-import {
-  FieldsetDivider,
-  TitleWithHelpTextAndTag,
-  UriWithLabelFieldsetTable,
-} from "@catalog-frontend/ui";
+import { FieldsetDivider, TitleWithHelpTextAndTag } from "@catalog-frontend/ui";
 import {
   accessRights,
   getTranslateText,
@@ -11,13 +7,14 @@ import {
 } from "@catalog-frontend/utils";
 import { Fieldset, Radio, useRadioGroup } from "@digdir/designsystemet-react";
 import { useFormikContext } from "formik";
+import { ApplicableLegislationTable } from "./applicable-legislation/applicable-legislation-table";
 
 interface Props {
   isMobility?: boolean;
 }
 
 export const AccessRightFields = ({ isMobility: isMobility }: Props) => {
-  const { values, errors, setFieldValue } = useFormikContext<Dataset>();
+  const { values, setFieldValue } = useFormikContext<Dataset>();
 
   const { getRadioProps } = useRadioGroup({
     value: values?.accessRight || "none",
@@ -49,72 +46,9 @@ export const AccessRightFields = ({ isMobility: isMobility }: Props) => {
             />
           ))}
         </Fieldset>
+        <FieldsetDivider />
+        <ApplicableLegislationTable />
       </div>
-
-      {!isMobility && (
-        <div>
-          <FieldsetDivider />
-          <UriWithLabelFieldsetTable
-            fieldName="legalBasisForRestriction"
-            itemLabel={
-              localization.datasetForm.fieldLabel.legalBasisForRestriction
-            }
-            errors={errors.legalBasisForRestriction}
-            hideHeadWhenEmpty={true}
-            label={
-              <TitleWithHelpTextAndTag
-                helpText={
-                  localization.datasetForm.helptext.legalBasisForRestriction
-                }
-                tagTitle={localization.tag.recommended}
-                tagColor="info"
-              >
-                {localization.datasetForm.fieldLabel.legalBasisForRestriction}
-              </TitleWithHelpTextAndTag>
-            }
-          />
-
-          <FieldsetDivider />
-
-          <UriWithLabelFieldsetTable
-            fieldName="legalBasisForProcessing"
-            itemLabel={
-              localization.datasetForm.fieldLabel.legalBasisForProcessing
-            }
-            errors={errors.legalBasisForProcessing}
-            hideHeadWhenEmpty={true}
-            label={
-              <TitleWithHelpTextAndTag
-                helpText={
-                  localization.datasetForm.helptext.legalBasisForProcessing
-                }
-                tagTitle={localization.tag.recommended}
-                tagColor="info"
-              >
-                {localization.datasetForm.fieldLabel.legalBasisForProcessing}
-              </TitleWithHelpTextAndTag>
-            }
-          />
-
-          <FieldsetDivider />
-
-          <UriWithLabelFieldsetTable
-            fieldName="legalBasisForAccess"
-            itemLabel={localization.datasetForm.fieldLabel.legalBasisForAccess}
-            errors={errors.legalBasisForAccess}
-            hideHeadWhenEmpty={true}
-            label={
-              <TitleWithHelpTextAndTag
-                helpText={localization.datasetForm.helptext.legalBasisForAccess}
-                tagTitle={localization.tag.recommended}
-                tagColor="info"
-              >
-                {localization.datasetForm.fieldLabel.legalBasisForAccess}
-              </TitleWithHelpTextAndTag>
-            }
-          />
-        </div>
-      )}
     </>
   );
 };

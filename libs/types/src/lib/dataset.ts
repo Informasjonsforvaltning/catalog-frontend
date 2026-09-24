@@ -20,6 +20,7 @@ export type DatasetToBeCreated = {
   legalBasisForProcessing?: UriWithLabel[];
   legalBasisForAccess?: UriWithLabel[];
   legalBasisForRestriction?: UriWithLabel[];
+  applicableLegislations?: ApplicableLegislation[];
   landingPage?: string[];
   euDataTheme?: string[];
   losTheme?: string[];
@@ -75,6 +76,11 @@ export type DatasetSeries = {
 
 export type Rights = {
   type?: string;
+};
+
+export type ApplicableLegislation = {
+  title?: LocalizedStrings;
+  description?: LocalizedStrings;
 };
 
 export type Distribution = {
