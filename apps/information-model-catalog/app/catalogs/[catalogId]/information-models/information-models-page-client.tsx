@@ -3,6 +3,7 @@
 import {
   InformationModel,
   InformationModelsPageSettings,
+  ReferenceDataCode,
 } from "@catalog-frontend/types";
 import styles from "./information-models-page.module.css";
 
@@ -13,6 +14,8 @@ import {
   SearchHitContainer,
   SearchHitsLayout,
   Select,
+  ProductStatusTagProps,
+  Tag,
 } from "@catalog-frontend/ui";
 import SearchFilter from "../../../../components/search-filter";
 import React, { useState, useEffect, useMemo } from "react";
@@ -46,6 +49,7 @@ interface Props {
   hasWritePermission: boolean;
   hasAdminPermission: boolean;
   pageSettings?: InformationModelsPageSettings;
+  statuses: ReferenceDataCode[];
 }
 
 const InformationModelsPageClient = ({
@@ -53,10 +57,15 @@ const InformationModelsPageClient = ({
   catalogId,
   hasWritePermission,
   pageSettings,
+  statuses,
 }: Props) => {
   const defaultSearchTerm = useMemo(() => pageSettings?.search ?? "", []);
   const defaultFilterPublicationState = useMemo(
     () => pageSettings?.filter?.pubState ?? [],
+    [],
+  );
+  const defaultFilterStatus = useMemo(
+    () => pageSettings?.filter?.status ?? [],
     [],
   );
   const defaultSortValue = useMemo(() => pageSettings?.sort ?? "", []);
@@ -68,6 +77,10 @@ const InformationModelsPageClient = ({
   const [filterPublicationState, setFilterPublicationState] = useQueryState(
     "informationModelFilter.pubState",
     parseAsArrayOf(parseAsString).withDefault(defaultFilterPublicationState),
+  );
+  const [filterStatus, setFilterStatus] = useQueryState(
+    "informationModelFilter.status",
+    parseAsArrayOf(parseAsString).withDefault(defaultFilterStatus),
   );
   const [sortValue, setSortValue] = useQueryState("informationModelSort", {
     defaultValue: defaultSortValue,
@@ -103,10 +116,22 @@ const InformationModelsPageClient = ({
     };
   }, []);
 
-  const removeFilter = (filterName: string) => {
-    setFilterPublicationState(
-      filterPublicationState?.filter((name) => name !== filterName) ?? [],
-    );
+  const findStatus = (statusUri?: string | null) =>
+    statuses.find((s) => s.uri === statusUri);
+
+  const removeFilter = (
+    filterName: string,
+    filterType: "pubState" | "status",
+  ) => {
+    if (filterType === "pubState") {
+      setFilterPublicationState(
+        filterPublicationState?.filter((name) => name !== filterName) ?? [],
+      );
+    } else {
+      setFilterStatus(
+        filterStatus?.filter((name) => name !== filterName) ?? [],
+      );
+    }
     setPage(0);
   };
 
@@ -117,15 +142,23 @@ const InformationModelsPageClient = ({
       page,
       filter: {
         pubState: filterPublicationState,
-        status: null,
+        status: filterStatus,
       },
     };
     setClientInformationModelsPageSettings(settings);
-  }, [page, searchTerm, sortValue, filterPublicationState]);
+  }, [page, searchTerm, sortValue, filterPublicationState, filterStatus]);
 
   useEffect(() => {
     const filterAndSortInformationModels = () => {
       let filtered = informationModels;
+
+      if (!isEmpty(filterStatus)) {
+        filtered = filtered.filter(
+          (informationModel) =>
+            informationModel?.status &&
+            filterStatus?.includes(informationModel.status),
+        );
+      }
 
       if (!isEmpty(filterPublicationState)) {
         filtered = filtered.filter((informationModel) => {
@@ -161,12 +194,14 @@ const InformationModelsPageClient = ({
   }, [
     informationModels,
     filterPublicationState,
+    filterStatus,
     searchTerm,
     sortValue,
     getSortFunction,
   ]);
 
-  const hasActiveFilters = !isEmpty(filterPublicationState);
+  const hasActiveFilters =
+    !isEmpty(filterPublicationState) || !isEmpty(filterStatus);
 
   const totalPages = Math.ceil(filteredInformationModels.length / itemPerPage);
 
@@ -224,11 +259,20 @@ const InformationModelsPageClient = ({
           </div>
           {hasActiveFilters && (
             <div className={styles.chips}>
+              {filterStatus?.map((filter) => (
+                <Chip.Removable
+                  key={`status-${filter}`}
+                  aria-label={`Fjern filter for status ${filter}`}
+                  onClick={() => removeFilter(filter, "status")}
+                >
+                  {getTranslateText(findStatus(filter)?.label)}
+                </Chip.Removable>
+              ))}
               {filterPublicationState?.map((filter) => (
                 <Chip.Removable
                   key={`published-${filter}`}
                   aria-label={`Fjern filter for publisering ${filter}`}
-                  onClick={() => removeFilter(filter)}
+                  onClick={() => removeFilter(filter, "pubState")}
                 >
                   {filter === "published"
                     ? localization.publicationState.published
@@ -239,7 +283,7 @@ const InformationModelsPageClient = ({
           )}
         </SearchHitsLayout.SearchRow>
         <SearchHitsLayout.LeftColumn>
-          <SearchFilter />
+          <SearchFilter statuses={statuses} />
         </SearchHitsLayout.LeftColumn>
         <SearchHitsLayout.MainColumn>
           <SearchHitContainer
@@ -247,37 +291,51 @@ const InformationModelsPageClient = ({
               paginatedInformationModels.length > 0 ? (
                 <ul className={styles.searchHits} role="list">
                   {paginatedInformationModels.map(
-                    (informationModel: InformationModel) => (
-                      <li role="listitem" key={informationModel.id}>
-                        <SearchHit
-                          title={getTranslateText(informationModel?.title)}
-                          description={getTranslateText(
-                            informationModel?.description,
-                          )}
-                          titleHref={`/catalogs/${catalogId}/information-models/${informationModel?.id}`}
-                          content={
-                            <div className={styles.set}>
-                              {informationModel.lastModified && (
-                                <>
-                                  <p>
-                                    {localization.lastChanged}{" "}
-                                    {formatDate(
-                                      dateStringToDate(
-                                        informationModel.lastModified,
-                                      ),
-                                    )}
-                                  </p>
-                                  <span>•</span>
-                                </>
-                              )}
-                              {informationModel.published
-                                ? localization.publicationState.publishedInFDK
-                                : localization.publicationState.unpublished}
-                            </div>
-                          }
-                        />
-                      </li>
-                    ),
+                    (informationModel: InformationModel) => {
+                      const status = findStatus(informationModel.status);
+                      return (
+                        <li role="listitem" key={informationModel.id}>
+                          <SearchHit
+                            title={getTranslateText(informationModel?.title)}
+                            description={getTranslateText(
+                              informationModel?.description,
+                            )}
+                            titleHref={`/catalogs/${catalogId}/information-models/${informationModel?.id}`}
+                            statusTag={
+                              status?.code &&
+                              status?.label && (
+                                <Tag.ProductStatus
+                                  statusKey={
+                                    status.code as ProductStatusTagProps["statusKey"]
+                                  }
+                                  statusLabel={getTranslateText(status.label)}
+                                />
+                              )
+                            }
+                            content={
+                              <div className={styles.set}>
+                                {informationModel.lastModified && (
+                                  <>
+                                    <p>
+                                      {localization.lastChanged}{" "}
+                                      {formatDate(
+                                        dateStringToDate(
+                                          informationModel.lastModified,
+                                        ),
+                                      )}
+                                    </p>
+                                    <span>•</span>
+                                  </>
+                                )}
+                                {informationModel.published
+                                  ? localization.publicationState.publishedInFDK
+                                  : localization.publicationState.unpublished}
+                              </div>
+                            }
+                          />
+                        </li>
+                      );
+                    },
                   )}
                 </ul>
               ) : null

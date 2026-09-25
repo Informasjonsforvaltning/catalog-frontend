@@ -1,11 +1,13 @@
 "use client";
 
-import { InformationModel } from "@catalog-frontend/types";
+import { InformationModel, ReferenceDataCode } from "@catalog-frontend/types";
 import {
   ConfirmModal,
   DeleteButton,
   DetailsPageLayout,
   LinkButton,
+  ProductStatusTagProps,
+  Tag,
 } from "@catalog-frontend/ui";
 import { getTranslateText, localization } from "@catalog-frontend/utils";
 import React, { useEffect, useState } from "react";
@@ -20,6 +22,7 @@ interface InformationModelDetailsPageProps {
   catalogId: string;
   informationModelId: string;
   hasWritePermission: boolean;
+  statuses: ReferenceDataCode[];
 }
 
 const InformationModelDetailsPageClient = ({
@@ -27,6 +30,7 @@ const InformationModelDetailsPageClient = ({
   catalogId,
   informationModelId,
   hasWritePermission,
+  statuses,
 }: InformationModelDetailsPageProps) => {
   const [language, setLanguage] = useState("nb");
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -66,6 +70,10 @@ const InformationModelDetailsPageClient = ({
     setCurrentInformationModel((prev) => ({ ...prev, published }));
   };
 
+  const status = statuses.find(
+    (item) => item.uri === currentInformationModel.status,
+  );
+
   return (
     <>
       {showDeleteConfirm && (
@@ -84,6 +92,15 @@ const InformationModelDetailsPageClient = ({
           currentInformationModel?.title,
           language,
         )}
+        headingTag={
+          status?.code &&
+          status?.label && (
+            <Tag.ProductStatus
+              statusKey={status.code as ProductStatusTagProps["statusKey"]}
+              statusLabel={getTranslateText(status.label)}
+            />
+          )
+        }
         data-testid="information-model-details-page"
       >
         <DetailsPageLayout.Buttons>

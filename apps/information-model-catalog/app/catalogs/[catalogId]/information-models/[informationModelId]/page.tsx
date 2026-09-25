@@ -9,6 +9,7 @@ import {
   localization,
   validInformationModelID,
 } from "@catalog-frontend/utils";
+import { getProductStatuses } from "@catalog-frontend/data-access";
 import { redirect, RedirectType } from "next/navigation";
 import InformationModelDetailsPageClient from "./information-model-details-page-client";
 import { withReadProtectedPage } from "@information-model-catalog/utils/auth";
@@ -22,11 +23,14 @@ const InformationModelDetailsPage = withReadProtectedPage(
       return redirect("/not-found", RedirectType.replace);
     }
 
-    const informationModel = await fetchInformationModelWithRetry(
-      catalogId,
-      informationModelId,
-      session.accessToken,
-    );
+    const [informationModel, statusesResponse] = await Promise.all([
+      fetchInformationModelWithRetry(
+        catalogId,
+        informationModelId,
+        session.accessToken,
+      ),
+      getProductStatuses(),
+    ]);
 
     if (!informationModel || informationModel.catalogId !== catalogId) {
       redirect("/not-found", RedirectType.replace);
@@ -64,6 +68,7 @@ const InformationModelDetailsPage = withReadProtectedPage(
             catalogId={catalogId}
             informationModelId={informationModelId}
             hasWritePermission={hasWritePermission}
+            statuses={statusesResponse.productStatuses}
           />
         </div>
       </>
