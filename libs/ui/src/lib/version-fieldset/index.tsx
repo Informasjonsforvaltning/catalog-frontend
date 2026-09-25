@@ -1,33 +1,39 @@
+"use client";
+
+import { ReactNode } from "react";
 import { FastField, useFormikContext } from "formik";
 import {
   ValidationMessage,
   Fieldset,
   Textfield,
 } from "@digdir/designsystemet-react";
-import styles from "./version-fieldset.module.scss";
-import { Concept } from "@catalog-frontend/types";
-import { TitleWithHelpTextAndTag } from "@catalog-frontend/ui";
-import { localization } from "@catalog-frontend/utils";
 import { get } from "lodash";
+import TitleWithHelpTextAndTag from "../title-with-help-text-and-tag";
+import styles from "./version-fieldset.module.scss";
 
 export type VersionFieldsetProps = {
   name: string;
-  changed?: string[];
+  label: ReactNode;
+  helpText?: string;
+  changed?: boolean;
   readOnly?: boolean;
 };
 
-export const VersionFieldset = ({ name, changed, readOnly }) => {
-  const { errors } = useFormikContext<Concept>();
+export const VersionFieldset = ({
+  name,
+  label,
+  helpText,
+  changed,
+  readOnly,
+}: VersionFieldsetProps) => {
+  const { errors } = useFormikContext();
 
   return (
     <>
       <Fieldset data-size="sm">
         <Fieldset.Legend>
-          <TitleWithHelpTextAndTag
-            helpText={localization.conceptForm.helpText.versionNumber}
-            changed={changed?.includes(name)}
-          >
-            {localization.conceptForm.fieldLabel.versionNumber}
+          <TitleWithHelpTextAndTag helpText={helpText} changed={changed}>
+            {label}
           </TitleWithHelpTextAndTag>
         </Fieldset.Legend>
         <div className={styles.versionFieldset}>

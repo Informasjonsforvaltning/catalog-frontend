@@ -12,6 +12,13 @@ export const informationModelFormNb = {
       "Kontaktinformasjon for kontaktpunktet. Minst én av e-post eller kontaktside må fylles ut.",
     publish:
       "Publiser informasjonsmodellbeskrivelsen til Data.norge.no. For å publisere må du fylle ut alle påkrevde felt i skjemaet, en beskrivelse kan ikke slettes så lenge den er publisert.",
+    version: `
+Versjonsnummeret følger formatet 'major.minor.patch', hvor:
+- __Major__ økes ved store endringer som ikke er bakoverkompatible.
+- __Minor__ økes ved nye funksjoner eller forbedringer som er bakoverkompatible.
+- __Patch__ økes ved feilrettinger og mindre justeringer.
+
+Eksempel: Versjon 2.1.3 betyr andre hovedversjon, første mindre oppdatering, og tredje feilretting.`,
   },
   heading: {
     about: "Om informasjonsmodellen",
@@ -26,6 +33,7 @@ export const informationModelFormNb = {
     title: "Tittel",
     description: "Beskrivelse",
     status: "Modellstatus",
+    version: "Versjonsnummer",
     informationModelID: "Informasjonsmodell-ID",
     lastModified: "Sist endret",
     contactName: "Navn",
@@ -49,6 +57,8 @@ export const informationModelFormNb = {
     description: "Beskrivelsen må være minst 5 karakterer lang.",
     contactPoints:
       "Minst e-post eller kontaktside må fylles ut for kontaktpunktet.",
+    version:
+      "Versjonsnummer må fylles ut med major, minor og patch, eller være tomt.",
   },
   button: {
     update: "Oppdater",

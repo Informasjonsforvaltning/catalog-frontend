@@ -335,6 +335,7 @@ const InformationModelForm = ({
               "title",
               "description",
               "status",
+              "version",
               "contactPoints",
             ].forEach((name) => {
               if (isDirty(name)) {
@@ -369,10 +370,20 @@ const InformationModelForm = ({
                       changed={
                         markDirty &&
                         dirtyFields.some((field) =>
-                          ["title", "description", "status"].includes(field),
+                          [
+                            "title",
+                            "description",
+                            "status",
+                            "version",
+                          ].includes(field),
                         )
                       }
-                      error={hasError(["title", "description", "status"])}
+                      error={hasError([
+                        "title",
+                        "description",
+                        "status",
+                        "version",
+                      ])}
                     >
                       <AboutSection statuses={statuses} />
                     </FormLayout.Section>

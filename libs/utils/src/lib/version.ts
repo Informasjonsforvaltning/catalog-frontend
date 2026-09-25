@@ -1,5 +1,42 @@
 import { Version } from "@catalog-frontend/types";
 
+type VersionInput = {
+  major?: unknown;
+  minor?: unknown;
+  patch?: unknown;
+} | null;
+
+const toVersionPart = (value: unknown): number | undefined => {
+  if (value === undefined || value === null || value === "") {
+    return undefined;
+  }
+  const number = Number(value);
+  return Number.isNaN(number) ? undefined : number;
+};
+
+/** Returns a complete Version, or null when all parts are empty. */
+export const normalizeVersion = (
+  version?: VersionInput | Version,
+): Version | null => {
+  if (!version) {
+    return null;
+  }
+
+  const major = toVersionPart(version.major);
+  const minor = toVersionPart(version.minor);
+  const patch = toVersionPart(version.patch);
+
+  if (major === undefined && minor === undefined && patch === undefined) {
+    return null;
+  }
+
+  if (major === undefined || minor === undefined || patch === undefined) {
+    return null;
+  }
+
+  return { major, minor, patch };
+};
+
 export const compareVersion = (
   v1: Version | null | undefined,
   v2: Version | null | undefined,

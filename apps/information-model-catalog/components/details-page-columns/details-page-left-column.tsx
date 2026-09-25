@@ -1,6 +1,10 @@
 import { InformationModel } from "@catalog-frontend/types";
 import { InfoCard } from "@catalog-frontend/ui";
-import { localization, getTranslateText } from "@catalog-frontend/utils";
+import {
+  localization,
+  getTranslateText,
+  versionToString,
+} from "@catalog-frontend/utils";
 import { isEmpty } from "lodash";
 import { Paragraph } from "@digdir/designsystemet-react";
 
@@ -30,6 +34,14 @@ export const LeftColumn = ({ informationModel, language }: Props) => {
           <Paragraph>
             {getTranslateText(informationModel?.description, language)}
           </Paragraph>
+        </InfoCard.Item>
+      )}
+      {informationModel?.version && (
+        <InfoCard.Item
+          title={localization.informationModelForm.fieldLabel.version}
+          data-testid="information-model-version"
+        >
+          <Paragraph>{versionToString(informationModel.version)}</Paragraph>
         </InfoCard.Item>
       )}
     </InfoCard>

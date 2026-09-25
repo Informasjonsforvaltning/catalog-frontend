@@ -133,12 +133,50 @@ const contactPointConfirmValidationSchema = () =>
       },
     );
 
+const isEmptyVersionPart = (value: unknown) =>
+  value === undefined || value === null || value === "";
+
+const versionPartSchema = () =>
+  Yup.number()
+    .transform((_value, originalValue) =>
+      isEmptyVersionPart(originalValue) ? undefined : Number(originalValue),
+    )
+    .integer()
+    .min(0)
+    .nullable()
+    .notRequired();
+
+const versionValidationSchema = () =>
+  Yup.object()
+    .nullable()
+    .notRequired()
+    .shape({
+      major: versionPartSchema(),
+      minor: versionPartSchema(),
+      patch: versionPartSchema(),
+    })
+    .test(
+      "version-complete-or-empty",
+      localization.informationModelForm.validation.version,
+      (value) => {
+        if (!value) {
+          return true;
+        }
+        const parts = [value.major, value.minor, value.patch];
+        const filledCount = parts.filter(
+          (part) => !isEmptyVersionPart(part),
+        ).length;
+        return filledCount === 0 || filledCount === 3;
+      },
+    );
+
 export const draftInformationModelValidationSchema = () =>
   Yup.object().shape({
     title: titleValidationSchema(),
     description: descriptionValidationSchema(),
     contactPoints: contactPointDraftValidationSchema(),
     status: Yup.string().nullable().notRequired(),
+    version: versionValidationSchema(),
   });
 
 export const informationModelValidationSchema = () =>
@@ -147,4 +185,5 @@ export const informationModelValidationSchema = () =>
     description: descriptionValidationSchema(),
     contactPoints: contactPointConfirmValidationSchema(),
     status: Yup.string().nullable().notRequired(),
+    version: versionValidationSchema(),
   });

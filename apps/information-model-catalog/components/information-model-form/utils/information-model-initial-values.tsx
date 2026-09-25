@@ -3,6 +3,7 @@ import {
   InformationModelContactPoint,
   InformationModelToBeCreated,
 } from "@catalog-frontend/types";
+import { normalizeVersion } from "@catalog-frontend/utils";
 import { omitBy, isEmpty } from "lodash";
 
 const contactPointTemplate = (
@@ -23,6 +24,7 @@ export const informationModelTemplate = (
     description: omitBy(informationModel?.description, isEmpty),
     contactPoints: [contactPointTemplate(informationModel?.contactPoints?.[0])],
     status: informationModel?.status || "",
+    version: normalizeVersion(informationModel?.version),
   };
 };
 
@@ -33,5 +35,6 @@ export const informationModelToBeCreatedTemplate =
       description: {},
       contactPoints: [contactPointTemplate()],
       status: "",
+      version: null,
     };
   };

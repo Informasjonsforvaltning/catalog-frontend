@@ -3,7 +3,7 @@ import {
   InformationModel,
   InformationModelToBeCreated,
 } from "@catalog-frontend/types";
-import { removeEmptyValues } from "@catalog-frontend/utils";
+import { normalizeVersion, removeEmptyValues } from "@catalog-frontend/utils";
 import { pick } from "lodash";
 
 /** Fields accepted by catalog-backend InformationModelValues (mutable via JSON Patch). */
@@ -12,11 +12,15 @@ const MUTABLE_INFORMATION_MODEL_FIELDS = [
   "description",
   "contactPoints",
   "status",
+  "version",
 ] as const;
 
 export const toMutableInformationModelValues = (
   model: InformationModel | InformationModelToBeCreated,
-) => removeEmptyValues(pick(model, MUTABLE_INFORMATION_MODEL_FIELDS));
+) => ({
+  ...removeEmptyValues(pick(model, MUTABLE_INFORMATION_MODEL_FIELDS)),
+  version: normalizeVersion(model.version),
+});
 
 export async function fetchInformationModelWithRetry(
   catalogId: string,
