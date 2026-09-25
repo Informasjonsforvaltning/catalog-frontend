@@ -13,7 +13,7 @@ import { ApplicableLegislationModal } from "./applicable-legislation-modal";
 import styles from "../../dataset-form.module.css";
 
 type ApplicableLegislationFormValues = {
-  applicableLegislations?: ApplicableLegislation[];
+  applicableLegislation?: ApplicableLegislation[];
 };
 
 export type ApplicableLegislationTableProps = {
@@ -30,7 +30,8 @@ export const ApplicableLegislationTable = ({
     updatedRef: ApplicableLegislation,
     i: number,
   ) => {
-    setFieldValue(`applicableLegislations[${i}]`, updatedRef);
+    console.log(values.applicableLegislation);
+    setFieldValue(`applicableLegislation[${i}]`, updatedRef);
 
     if (autoSaveStorage) {
       autoSaveStorage.deleteSecondary("applicableLegislation");
@@ -55,8 +56,8 @@ export const ApplicableLegislationTable = ({
             {localization.applicableLegislation.fieldLabel}
           </TitleWithHelpTextAndTag>
         </Fieldset.Legend>
-        {values?.applicableLegislations &&
-          values.applicableLegislations.length > 0 && (
+        {values?.applicableLegislation &&
+          values.applicableLegislation.length > 0 && (
             <div>
               <Table data-size="sm" className={styles.table}>
                 <Table.Head>
@@ -71,8 +72,8 @@ export const ApplicableLegislationTable = ({
                   </Table.Row>
                 </Table.Head>
                 <Table.Body>
-                  {values?.applicableLegislations &&
-                    values.applicableLegislations.map(
+                  {values?.applicableLegislation &&
+                    values.applicableLegislation.map(
                       (applicableLegislation, i) => (
                         <Table.Row key={`applicable-legislation-${i}`}>
                           <Table.Cell>
@@ -99,11 +100,11 @@ export const ApplicableLegislationTable = ({
                               <DeleteButton
                                 onClick={() => {
                                   const newArray = [
-                                    ...(values.applicableLegislations ?? []),
+                                    ...(values.applicableLegislation ?? []),
                                   ];
                                   newArray.splice(i, 1);
                                   setFieldValue(
-                                    "applicableLegislations",
+                                    "applicableLegislation",
                                     newArray,
                                   );
                                 }}
@@ -120,10 +121,10 @@ export const ApplicableLegislationTable = ({
         <ApplicableLegislationModal
           onSuccess={(formValues) =>
             setFieldValue(
-              values.applicableLegislations &&
-                values.applicableLegislations.length > 0
-                ? `applicableLegislations[${values.applicableLegislations.length}]`
-                : "applicableLegislations[0]",
+              values.applicableLegislation &&
+                values.applicableLegislation.length > 0
+                ? `applicableLegislation[${values.applicableLegislation.length}]`
+                : "applicableLegislation[0]",
               formValues,
             )
           }
