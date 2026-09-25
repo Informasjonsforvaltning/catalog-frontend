@@ -5,16 +5,18 @@ import {
   TextareaWithPrefix,
   TitleWithHelpTextAndTag,
 } from "@catalog-frontend/ui";
-import { ReferenceDataCode } from "@catalog-frontend/types";
+import { InformationModel, ReferenceDataCode } from "@catalog-frontend/types";
 import { getTranslateText, localization } from "@catalog-frontend/utils";
 import { Fieldset, Textfield } from "@digdir/designsystemet-react";
-import { Field } from "formik";
+import { Field, useFormikContext } from "formik";
 
 type Props = {
   statuses: ReferenceDataCode[];
 };
 
 export const AboutSection = ({ statuses }: Props) => {
+  const errors = useFormikContext<InformationModel>()?.errors;
+
   return (
     <div>
       <FormikLanguageFieldset
@@ -68,21 +70,20 @@ export const AboutSection = ({ statuses }: Props) => {
 
       <FieldsetDivider />
 
-      <Fieldset data-size="sm">
-        <Fieldset.Legend>
+      <Field
+        as={Textfield}
+        name="homepage"
+        data-size="sm"
+        placeholder="https://"
+        label={
           <TitleWithHelpTextAndTag
             helpText={localization.informationModelForm.helptext.homepage}
           >
             {localization.informationModelForm.fieldLabel.homepage}
           </TitleWithHelpTextAndTag>
-        </Fieldset.Legend>
-        <Field
-          as={Textfield}
-          name="homepage"
-          type="url"
-          placeholder="https://"
-        />
-      </Fieldset>
+        }
+        error={errors?.homepage}
+      />
     </div>
   );
 };
