@@ -1,3 +1,4 @@
+import { Version } from "./concept";
 import { LocalizedStrings } from "./localization";
 
 export interface InformationModelContactPoint {
@@ -23,6 +24,7 @@ export interface InformationModelToBeCreated {
   contactPoints?: InformationModelContactPoint[] | null;
   status?: string | null;
   homepage?: string | null;
+  version?: Version | null;
 }
 
 export type InformationModelsPageSettings = {
