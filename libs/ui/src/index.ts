@@ -69,3 +69,4 @@ export * from "./lib/use-reference-data-search";
 export * from "./lib/use-search-service";
 export * from "./lib/use-warn-if-unsaved-changes";
 export * from "./lib/use-debounce";
+export * from "./lib/version-fieldset";

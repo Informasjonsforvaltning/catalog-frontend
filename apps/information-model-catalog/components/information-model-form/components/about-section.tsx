@@ -4,6 +4,7 @@ import {
   Select,
   TextareaWithPrefix,
   TitleWithHelpTextAndTag,
+  VersionFieldset,
 } from "@catalog-frontend/ui";
 import { InformationModel, ReferenceDataCode } from "@catalog-frontend/types";
 import { getTranslateText, localization } from "@catalog-frontend/utils";
@@ -83,6 +84,14 @@ export const AboutSection = ({ statuses }: Props) => {
           </TitleWithHelpTextAndTag>
         }
         error={errors?.homepage}
+      />
+
+      <FieldsetDivider />
+
+      <VersionFieldset
+        name="version"
+        label={localization.informationModelForm.fieldLabel.version}
+        helpText={localization.informationModelForm.helptext.version}
       />
     </div>
   );
