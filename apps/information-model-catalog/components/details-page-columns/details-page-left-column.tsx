@@ -2,7 +2,7 @@ import { InformationModel } from "@catalog-frontend/types";
 import { InfoCard } from "@catalog-frontend/ui";
 import { localization, getTranslateText } from "@catalog-frontend/utils";
 import { isEmpty } from "lodash";
-import { Paragraph } from "@digdir/designsystemet-react";
+import { Link, Paragraph } from "@digdir/designsystemet-react";
 
 type Props = {
   informationModel: InformationModel;
@@ -37,7 +37,11 @@ export const LeftColumn = ({ informationModel, language }: Props) => {
           title={localization.informationModelForm.fieldLabel.homepage}
           data-testid="information-model-homepage"
         >
-          <Paragraph>{informationModel?.homepage}</Paragraph>
+          <Paragraph>
+            <Link href={informationModel?.homepage ?? undefined}>
+              {informationModel?.homepage}
+            </Link>
+          </Paragraph>
         </InfoCard.Item>
       )}
     </InfoCard>
