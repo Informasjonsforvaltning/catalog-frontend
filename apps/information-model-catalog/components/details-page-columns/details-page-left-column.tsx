@@ -32,6 +32,14 @@ export const LeftColumn = ({ informationModel, language }: Props) => {
           </Paragraph>
         </InfoCard.Item>
       )}
+      {!isEmpty(informationModel?.homepage) && (
+        <InfoCard.Item
+          title={localization.informationModelForm.fieldLabel.homepage}
+          data-testid="information-model-homepage"
+        >
+          <Paragraph>{informationModel?.homepage}</Paragraph>
+        </InfoCard.Item>
+      )}
     </InfoCard>
   );
 };

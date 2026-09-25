@@ -65,6 +65,24 @@ export const AboutSection = ({ statuses }: Props) => {
           ))}
         </Field>
       </Fieldset>
+
+      <FieldsetDivider />
+
+      <Fieldset data-size="sm">
+        <Fieldset.Legend>
+          <TitleWithHelpTextAndTag
+            helpText={localization.informationModelForm.helptext.homepage}
+          >
+            {localization.informationModelForm.fieldLabel.homepage}
+          </TitleWithHelpTextAndTag>
+        </Fieldset.Legend>
+        <Field
+          as={Textfield}
+          name="homepage"
+          type="url"
+          placeholder="https://"
+        />
+      </Fieldset>
     </div>
   );
 };
