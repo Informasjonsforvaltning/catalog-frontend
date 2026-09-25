@@ -4,27 +4,23 @@ import {
 } from "@digdir/designsystemet-react";
 import { forwardRef } from "react";
 
-enum ProductStatusColors {
-  PRODUCT_CONCEPT = "neutral",
-  DEVELOPMENT = "info",
-  PROTOTYPE = "second",
-  MVP = "warning",
-  TESTING = "third",
-  PRODUCTION = "success",
-  PHASED_OUT = "danger",
-}
-
-export type StatusKey = keyof typeof ProductStatusColors;
+export type StatusKey = string;
 
 export type ProductStatusTagProps = {
   statusKey: StatusKey | undefined;
   statusLabel: string;
 } & DSTagProps;
 
-const getColorFromStatusKey = (statusKey: StatusKey | undefined) =>
-  statusKey
-    ? ProductStatusColors[statusKey.toLocaleUpperCase() as StatusKey]
-    : "neutral";
+const getColorFromStatusKey = (statusKey: StatusKey | undefined) => {
+  switch (statusKey?.toLocaleUpperCase()) {
+    case "PRODUCTION":
+      return "success";
+    case "PHASED_OUT":
+      return "danger";
+    default:
+      return "info";
+  }
+};
 
 export const ProductStatusTag = forwardRef<
   HTMLSpanElement,
