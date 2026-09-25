@@ -22,6 +22,7 @@ export interface InformationModelToBeCreated {
   description?: LocalizedStrings | null;
   contactPoints?: InformationModelContactPoint[] | null;
   status?: string | null;
+  homepage?: string | null;
 }
 
 export type InformationModelsPageSettings = {

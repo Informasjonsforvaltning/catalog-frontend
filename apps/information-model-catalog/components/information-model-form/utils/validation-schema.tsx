@@ -133,12 +133,21 @@ const contactPointConfirmValidationSchema = () =>
       },
     );
 
+const homepageValidationSchema = () =>
+  Yup.string()
+    .label(localization.informationModelForm.fieldLabel.homepage)
+    .matches(httpsRegex, localization.validation.invalidProtocol)
+    .url(localization.validation.invalidUrl)
+    .nullable()
+    .notRequired();
+
 export const draftInformationModelValidationSchema = () =>
   Yup.object().shape({
     title: titleValidationSchema(),
     description: descriptionValidationSchema(),
     contactPoints: contactPointDraftValidationSchema(),
     status: Yup.string().nullable().notRequired(),
+    homepage: homepageValidationSchema(),
   });
 
 export const informationModelValidationSchema = () =>
@@ -147,4 +156,5 @@ export const informationModelValidationSchema = () =>
     description: descriptionValidationSchema(),
     contactPoints: contactPointConfirmValidationSchema(),
     status: Yup.string().nullable().notRequired(),
+    homepage: homepageValidationSchema(),
   });

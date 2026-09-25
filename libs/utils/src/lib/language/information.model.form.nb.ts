@@ -6,6 +6,8 @@ export const informationModelFormNb = {
       "Beskrivelsen skal være kortfattet. Det bør fremgå hva informasjonsmodellen handler om, slik at den er enklere å finne og skille fra andre modeller.",
     status:
       "Angi modellens modenhet og utviklingsstadium. Verdiene hentes fra EUs kontrollerte vokabular [Product status](https://op.europa.eu/en/web/eu-vocabularies/concept-scheme/-/resource?uri=http://publications.europa.eu/resource/authority/product-status).",
+    homepage:
+      "Lenke til en nettside med mer informasjon om informasjonsmodellen. Adressen må starte med https://.",
     contactName:
       "Navnet på kontaktpunktet. Typisk en organisasjon eller enhet.",
     contactFields:
@@ -26,6 +28,7 @@ export const informationModelFormNb = {
     title: "Tittel",
     description: "Beskrivelse",
     status: "Modellstatus",
+    homepage: "Hjemmeside",
     informationModelID: "Informasjonsmodell-ID",
     lastModified: "Sist endret",
     contactName: "Navn",
