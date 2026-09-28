@@ -23,6 +23,7 @@ export const informationModelTemplate = (
     description: omitBy(informationModel?.description, isEmpty),
     contactPoints: [contactPointTemplate(informationModel?.contactPoints?.[0])],
     status: informationModel?.status || "",
+    homepage: informationModel?.homepage || "",
   };
 };
 
@@ -33,5 +34,6 @@ export const informationModelToBeCreatedTemplate =
       description: {},
       contactPoints: [contactPointTemplate()],
       status: "",
+      homepage: "",
     };
   };
