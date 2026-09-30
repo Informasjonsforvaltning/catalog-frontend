@@ -68,7 +68,9 @@ export const AccessRightsDetails = ({ dataset, language }: Props) => {
 
   return (
     <>
-      {(dataset?.accessRight || allLegalBases.length > 0) && (
+      {(dataset?.accessRight ||
+        dataset?.applicableLegislation ||
+        allLegalBases.length > 0) && (
         <div className={styles.infoCardItems}>
           {!isEmpty(dataset.accessRight) && (
             <Tag data-size="sm" data-color="info">
@@ -79,45 +81,88 @@ export const AccessRightsDetails = ({ dataset, language }: Props) => {
               }
             </Tag>
           )}
-          {allLegalBases.length > 0 && (
-            <Card>
-              <h4>{localization.datasetForm.fieldLabel.legalBasis}</h4>
-              <Table data-size="sm" className={styles.table}>
-                <Table.Head>
-                  <Table.Row>
-                    <Table.HeaderCell>{localization.title}</Table.HeaderCell>
-                    <Table.HeaderCell>{localization.link}</Table.HeaderCell>
-                    <Table.HeaderCell>{localization.type}</Table.HeaderCell>
-                  </Table.Row>
-                </Table.Head>
-                <Table.Body>
-                  {allLegalBases.map(
-                    (item, i) =>
-                      item?.uriWithLabel && (
-                        <Table.Row key={`${item.type}-tableRow-${i}`}>
-                          <Table.Cell>
-                            {getTranslateText(
-                              item?.uriWithLabel.prefLabel,
-                              language,
-                            )}
-                          </Table.Cell>
-                          <Table.Cell>
-                            <Link href={item?.uriWithLabel.uri}>
-                              {item?.uriWithLabel.uri}
-                            </Link>
-                          </Table.Cell>
-                          <Table.Cell>
-                            {
-                              localization.datasetForm.fieldLabel[
-                                item?.type as keyof typeof localization.datasetForm.fieldLabel
-                              ]
-                            }
-                          </Table.Cell>
-                        </Table.Row>
-                      ),
-                  )}
-                </Table.Body>
-              </Table>
+          {(dataset.applicableLegislation || allLegalBases.length > 0) && (
+            <Card className={styles.infoCardItems}>
+              {dataset.applicableLegislation && (
+                <div>
+                  <h4>{localization.applicableLegislation.fieldLabel}</h4>
+                  <Table data-size="sm" className={styles.table}>
+                    <Table.Head>
+                      <Table.Row>
+                        <Table.HeaderCell>
+                          {localization.title}
+                        </Table.HeaderCell>
+                        <Table.HeaderCell>
+                          {localization.description}
+                        </Table.HeaderCell>
+                      </Table.Row>
+                    </Table.Head>
+                    <Table.Body>
+                      {dataset.applicableLegislation.map(
+                        (item, i) =>
+                          item.title &&
+                          item.description && (
+                            <Table.Row key={`applicable-legislation-${i}`}>
+                              <Table.Cell>
+                                {getTranslateText(item?.title, language)}
+                              </Table.Cell>
+                              <Table.Cell>
+                                {getTranslateText(item?.description, language)}
+                              </Table.Cell>
+                            </Table.Row>
+                          ),
+                      )}
+                    </Table.Body>
+                  </Table>
+                </div>
+              )}
+              {allLegalBases.length > 0 && (
+                <div>
+                  <h4>{localization.datasetForm.fieldLabel.legalBasis}</h4>
+                  <Table
+                    data-size="sm"
+                    data-color="neutral"
+                    className={styles.table}
+                  >
+                    <Table.Head>
+                      <Table.Row>
+                        <Table.HeaderCell>
+                          {localization.title}
+                        </Table.HeaderCell>
+                        <Table.HeaderCell>{localization.link}</Table.HeaderCell>
+                        <Table.HeaderCell>{localization.type}</Table.HeaderCell>
+                      </Table.Row>
+                    </Table.Head>
+                    <Table.Body>
+                      {allLegalBases.map(
+                        (item, i) =>
+                          item?.uriWithLabel && (
+                            <Table.Row key={`${item.type}-tableRow-${i}`}>
+                              <Table.Cell>
+                                {getTranslateText(
+                                  item?.uriWithLabel.prefLabel,
+                                  language,
+                                )}
+                              </Table.Cell>
+                              <Table.Cell>
+                                <Link href={item?.uriWithLabel.uri}>
+                                  {item?.uriWithLabel.uri}
+                                </Link>
+                              </Table.Cell>
+                              <Table.Cell>
+                                {
+                                  localization.datasetForm.fieldLabel[
+                                    item?.type as keyof typeof localization.datasetForm.fieldLabel
+                                  ]
+                                }
+                              </Table.Cell>
+                            </Table.Row>
+                          ),
+                      )}
+                    </Table.Body>
+                  </Table>
+                </div>
+              )}
             </Card>
           )}
         </div>

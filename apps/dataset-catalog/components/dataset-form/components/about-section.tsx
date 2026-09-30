@@ -132,7 +132,7 @@ export const AboutSection = ({
           <FieldsetDivider />
         </>
       )}
-      <AccessRightFields isMobility={isMobility} />
+      <AccessRightFields />
       <FieldsetDivider />
       <FastField
         style={{ width: "fit-content" }}

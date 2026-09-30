@@ -400,9 +400,7 @@ export const DatasetForm = ({
                       "title",
                       "description",
                       "issued",
-                      "legalBasisForRestriction",
-                      "legalBasisForProcessing",
-                      "legalBasisForAccess",
+                      "applicableLegislation",
                       "temporal",
                       "spatial",
                     ])}

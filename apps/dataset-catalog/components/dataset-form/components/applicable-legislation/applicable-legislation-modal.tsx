@@ -136,7 +136,7 @@ export const ApplicableLegislationModal = ({
                     type="button"
                     onClick={() => {
                       setValidateOnChange(false);
-                      //onCancel();
+                      onCancel();
                       modalRef.current?.close();
                     }}
                     disabled={isSubmitting}

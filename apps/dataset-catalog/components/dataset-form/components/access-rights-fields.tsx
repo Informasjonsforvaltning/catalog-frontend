@@ -9,11 +9,7 @@ import { Fieldset, Radio, useRadioGroup } from "@digdir/designsystemet-react";
 import { useFormikContext } from "formik";
 import { ApplicableLegislationTable } from "./applicable-legislation/applicable-legislation-table";
 
-interface Props {
-  isMobility?: boolean;
-}
-
-export const AccessRightFields = ({ isMobility: isMobility }: Props) => {
+export const AccessRightFields = () => {
   const { values, setFieldValue } = useFormikContext<Dataset>();
 
   const { getRadioProps } = useRadioGroup({
