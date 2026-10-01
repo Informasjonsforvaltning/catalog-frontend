@@ -7,6 +7,7 @@ import {
   EditButton,
   FieldsetDivider,
   FormikLanguageFieldset,
+  FormikMultivalueTextfield,
   TitleWithHelpTextAndTag,
 } from "@catalog-frontend/ui";
 import {
@@ -20,6 +21,7 @@ import { useEffect, useRef, useState } from "react";
 import { Formik, FormikProps } from "formik";
 import { isEmpty } from "lodash";
 import styles from "../../dataset-form.module.css";
+import { applicableLegislationSchema } from "../../utils/validation-schema";
 
 type ApplicableLegislationModalProps = {
   type: "new" | "edit";
@@ -77,9 +79,10 @@ export const ApplicableLegislationModal = ({
             setSubmitting(false);
             modalRef.current?.close();
           }}
+          validationSchema={applicableLegislationSchema}
           validateOnChange={validateOnChange}
         >
-          {({ isSubmitting, submitForm, dirty, validateForm }) => {
+          {({ isSubmitting, submitForm, dirty, validateForm, errors }) => {
             return (
               <>
                 <Heading>
@@ -93,12 +96,12 @@ export const ApplicableLegislationModal = ({
                     as={Textfield}
                     legend={
                       <TitleWithHelpTextAndTag
-                        tagTitle={localization.tag.recommended}
-                        tagColor="info"
+                        tagTitle={localization.tag.required}
                       >
                         {localization.applicableLegislation.title}
                       </TitleWithHelpTextAndTag>
                     }
+                    showError
                   />
                   <FieldsetDivider />
                   <FormikLanguageFieldset
@@ -112,6 +115,23 @@ export const ApplicableLegislationModal = ({
                         {localization.applicableLegislation.description}
                       </TitleWithHelpTextAndTag>
                     }
+                  />
+                  <FieldsetDivider />
+                  <FormikMultivalueTextfield
+                    label={
+                      <TitleWithHelpTextAndTag
+                        helpText={
+                          localization.applicableLegislation.references.helpText
+                        }
+                      >
+                        {
+                          localization.applicableLegislation.references
+                            .fieldLabel
+                        }
+                      </TitleWithHelpTextAndTag>
+                    }
+                    name="references"
+                    error={errors.references}
                   />
                 </div>
                 <DialogActions>

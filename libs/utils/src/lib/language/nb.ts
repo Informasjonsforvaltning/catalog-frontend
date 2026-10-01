@@ -698,6 +698,10 @@ ___Merk:__ Maksimal filstørrelse for opplastning er {0} MB. CSV/JSON-filer kan 
       "Lov eller forskrift som påvirker opprettelse eller behandling av datasettet",
     title: "Tittel",
     description: "Beskrivelse",
+    references: {
+      fieldLabel: "Referanse",
+      helpText: "Referanse til en relatert regulativ ressurs",
+    },
   },
 
   uriWithLabel: {

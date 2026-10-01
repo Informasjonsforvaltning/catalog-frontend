@@ -214,6 +214,42 @@ export const dateSchema = Yup.object().shape({
     }),
 });
 
+export const applicableLegislationSchema = Yup.object().shape({
+  title: Yup.object()
+    .shape({
+      nb: Yup.string()
+        .min(3, localization.uriWithLabel.validation.title)
+        .label(`${localization.title} (${localization.language.nb})`)
+        .notRequired(),
+      nn: Yup.string()
+        .min(3, localization.uriWithLabel.validation.title)
+        .label(`${localization.title} (${localization.language.nn})`)
+        .notRequired(),
+      en: Yup.string()
+        .min(3, localization.uriWithLabel.validation.title)
+        .label(`${localization.title} (${localization.language.en})`)
+        .notRequired(),
+    })
+    .test(
+      "title-test",
+      localization.validation.oneLanguageRequired,
+      (title) => {
+        if (!title) {
+          return false;
+        }
+        return !!(title.nb || title.nn || title.en);
+      },
+    ),
+  references: Yup.array()
+    .nullable()
+    .of(
+      Yup.string()
+        .nullable()
+        .matches(httpsRegex, localization.validation.invalidProtocol)
+        .url(localization.validation.invalidUrl),
+    ),
+});
+
 export const draftDatasetSchema = Yup.object().shape({
   title: Yup.object()
     .shape({
@@ -327,9 +363,7 @@ export const confirmedDatasetSchema = draftDatasetSchema.shape({
         .matches(httpsRegex, localization.validation.invalidProtocol)
         .url(localization.validation.invalidUrl),
     ),
-  legalBasisForRestriction: Yup.array().of(uriWithLabelSchema),
-  legalBasisForProcessing: Yup.array().of(uriWithLabelSchema),
-  legalBasisForAccess: Yup.array().of(uriWithLabelSchema),
+  applicableLegislation: Yup.array().of(applicableLegislationSchema),
   conformsTo: Yup.array().of(uriWithLabelSchema),
   informationModelsFromOtherSources: Yup.array().of(uriWithLabelSchema),
   references: Yup.array().of(referenceSchema),

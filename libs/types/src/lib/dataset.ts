@@ -81,6 +81,7 @@ export type Rights = {
 export type ApplicableLegislation = {
   title?: LocalizedStrings;
   description?: LocalizedStrings;
+  references?: string[];
 };
 
 export type Distribution = {
