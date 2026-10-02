@@ -5,23 +5,25 @@ import {
   AddButton,
   DialogActions,
   EditButton,
+  FastFieldWithRef,
   FieldsetDivider,
   FormikLanguageFieldset,
-  FormikMultivalueTextfield,
   TitleWithHelpTextAndTag,
 } from "@catalog-frontend/ui";
 import {
   Button,
   Dialog,
+  Fieldset,
   Heading,
   Textfield,
 } from "@digdir/designsystemet-react";
 import { localization, trimObjectWhitespace } from "@catalog-frontend/utils";
-import { useEffect, useRef, useState } from "react";
-import { Formik, FormikProps } from "formik";
+import { createRef, useEffect, useRef, useState } from "react";
+import { FieldArray, Formik, FormikProps } from "formik";
 import { isEmpty } from "lodash";
 import styles from "../../dataset-form.module.css";
 import { applicableLegislationSchema } from "../../utils/validation-schema";
+import FieldsetWithDelete from "@dataset-catalog/components/fieldset-with-delete";
 
 type ApplicableLegislationModalProps = {
   type: "new" | "edit";
@@ -39,6 +41,15 @@ export const ApplicableLegislationModal = ({
   const modalRef = useRef<HTMLDialogElement>(null);
   const formikRef = useRef<FormikProps<ApplicableLegislation>>(null);
   const [validateOnChange, setValidateOnChange] = useState(false);
+  const [focus, setFocus] = useState<boolean | null>();
+  const referencesRef = createRef<HTMLInputElement | HTMLTextAreaElement>();
+
+  useEffect(() => {
+    if (focus) {
+      referencesRef?.current?.focus();
+      setFocus(false);
+    }
+  }, [focus, referencesRef]);
 
   useEffect(() => {
     const dialog = modalRef.current;
@@ -60,6 +71,7 @@ export const ApplicableLegislationModal = ({
       dialog.removeEventListener("cancel", handleCancel);
     };
   }, [type, template]);
+
   return (
     <Dialog.TriggerContext>
       <Dialog.Trigger asChild>
@@ -81,6 +93,7 @@ export const ApplicableLegislationModal = ({
           }}
           validationSchema={applicableLegislationSchema}
           validateOnChange={validateOnChange}
+          validateOnBlur={validateOnChange}
         >
           {({ isSubmitting, submitForm, dirty, validateForm, errors }) => {
             return (
@@ -117,22 +130,51 @@ export const ApplicableLegislationModal = ({
                     }
                   />
                   <FieldsetDivider />
-                  <FormikMultivalueTextfield
-                    label={
+                  <Fieldset>
+                    <Fieldset.Legend>
                       <TitleWithHelpTextAndTag
-                        helpText={
-                          localization.applicableLegislation.references.helpText
-                        }
+                        helpText={localization.dataServiceForm.helptext.pages}
                       >
-                        {
-                          localization.applicableLegislation.references
-                            .fieldLabel
-                        }
+                        {localization.dataServiceForm.fieldLabel.pages}
                       </TitleWithHelpTextAndTag>
-                    }
-                    name="references"
-                    error={errors.references}
-                  />
+                    </Fieldset.Legend>
+                    <FieldArray name="references">
+                      {(arrayHelpers) => (
+                        <>
+                          {arrayHelpers.form.values.references &&
+                            arrayHelpers.form.values.references.map(
+                              (_: any, index: number) => (
+                                <div
+                                  key={`references-${index}`}
+                                  className={styles.padding}
+                                >
+                                  <FieldsetWithDelete
+                                    onDelete={() => arrayHelpers.remove(index)}
+                                  >
+                                    <FastFieldWithRef
+                                      name={`references[${index}]`}
+                                      as={Textfield}
+                                      data-size="sm"
+                                      ref={referencesRef}
+                                      error={errors?.references?.[index]}
+                                    />
+                                  </FieldsetWithDelete>
+                                </div>
+                              ),
+                            )}
+
+                          <AddButton
+                            onClick={() => {
+                              setFocus(true);
+                              arrayHelpers.push("");
+                            }}
+                          >
+                            {`${localization.dataServiceForm.fieldLabel.pages}`}
+                          </AddButton>
+                        </>
+                      )}
+                    </FieldArray>
+                  </Fieldset>
                 </div>
                 <DialogActions>
                   <Button

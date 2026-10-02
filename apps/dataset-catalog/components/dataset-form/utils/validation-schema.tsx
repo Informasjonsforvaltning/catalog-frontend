@@ -244,7 +244,7 @@ export const applicableLegislationSchema = Yup.object().shape({
     .nullable()
     .of(
       Yup.string()
-        .nullable()
+        .required(localization.validation.deleteFieldIfEmpty)
         .matches(httpsRegex, localization.validation.invalidProtocol)
         .url(localization.validation.invalidUrl),
     ),
