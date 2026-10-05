@@ -133,9 +133,14 @@ export const ApplicableLegislationModal = ({
                   <Fieldset>
                     <Fieldset.Legend>
                       <TitleWithHelpTextAndTag
-                        helpText={localization.dataServiceForm.helptext.pages}
+                        helpText={
+                          localization.applicableLegislation.references.helpText
+                        }
                       >
-                        {localization.dataServiceForm.fieldLabel.pages}
+                        {
+                          localization.applicableLegislation.references
+                            .fieldLabel
+                        }
                       </TitleWithHelpTextAndTag>
                     </Fieldset.Legend>
                     <FieldArray name="references">
@@ -169,7 +174,7 @@ export const ApplicableLegislationModal = ({
                               arrayHelpers.push("");
                             }}
                           >
-                            {`${localization.dataServiceForm.fieldLabel.pages}`}
+                            {`${localization.add} ${localization.applicableLegislation.references.fieldLabel.toLocaleLowerCase()}`}
                           </AddButton>
                         </>
                       )}

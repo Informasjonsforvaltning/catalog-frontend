@@ -68,6 +68,9 @@ export const ApplicableLegislationTable = ({
                     <Table.HeaderCell>
                       {localization.applicableLegislation.description}
                     </Table.HeaderCell>
+                    <Table.HeaderCell>
+                      {localization.applicableLegislation.references.fieldLabel}
+                    </Table.HeaderCell>
                     <Table.HeaderCell aria-label="Actions" />
                   </Table.Row>
                 </Table.Head>
@@ -83,6 +86,9 @@ export const ApplicableLegislationTable = ({
                             {getTranslateText(
                               applicableLegislation?.description,
                             )}
+                          </Table.Cell>
+                          <Table.Cell>
+                            {applicableLegislation.references?.join(", ")}
                           </Table.Cell>
                           <Table.Cell>
                             <div>
