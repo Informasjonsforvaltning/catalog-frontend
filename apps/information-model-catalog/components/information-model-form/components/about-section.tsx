@@ -10,6 +10,7 @@ import { InformationModel, ReferenceDataCode } from "@catalog-frontend/types";
 import { getTranslateText, localization } from "@catalog-frontend/utils";
 import { Fieldset, Textfield } from "@digdir/designsystemet-react";
 import { Field, useFormikContext } from "formik";
+import { CreatorSection } from "./creator-section";
 
 type Props = {
   statuses: ReferenceDataCode[];
@@ -68,6 +69,10 @@ export const AboutSection = ({ statuses }: Props) => {
           ))}
         </Field>
       </Fieldset>
+
+      <FieldsetDivider />
+
+      <CreatorSection />
 
       <FieldsetDivider />
 
