@@ -14,6 +14,7 @@ const MUTABLE_INFORMATION_MODEL_FIELDS = [
   "status",
   "homepage",
   "version",
+  "creator",
 ] as const;
 
 export const toMutableInformationModelValues = (

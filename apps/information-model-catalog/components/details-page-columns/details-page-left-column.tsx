@@ -1,3 +1,5 @@
+"use client";
+
 import { InformationModel } from "@catalog-frontend/types";
 import { InfoCard } from "@catalog-frontend/ui";
 import {
@@ -7,6 +9,7 @@ import {
 } from "@catalog-frontend/utils";
 import { isEmpty } from "lodash";
 import { Link, Paragraph } from "@digdir/designsystemet-react";
+import { useSearchEnheterByOrgNmbs } from "../../hooks/useEnhetsregister";
 
 type Props = {
   informationModel: InformationModel;
@@ -14,6 +17,14 @@ type Props = {
 };
 
 export const LeftColumn = ({ informationModel, language }: Props) => {
+  const { data: creatorEnheter } = useSearchEnheterByOrgNmbs(
+    informationModel?.creator ? [informationModel.creator] : [],
+  );
+  const creatorName =
+    creatorEnheter?.find(
+      (enhet) => enhet.organisasjonsnummer === informationModel?.creator,
+    )?.navn ?? informationModel?.creator;
+
   return (
     <InfoCard data-testid="information-model-left-column">
       {!isEmpty(informationModel?.title) && (
@@ -34,6 +45,14 @@ export const LeftColumn = ({ informationModel, language }: Props) => {
           <Paragraph>
             {getTranslateText(informationModel?.description, language)}
           </Paragraph>
+        </InfoCard.Item>
+      )}
+      {!isEmpty(informationModel?.creator) && (
+        <InfoCard.Item
+          title={localization.informationModelForm.fieldLabel.creator}
+          data-testid="information-model-creator"
+        >
+          <Paragraph>{creatorName}</Paragraph>
         </InfoCard.Item>
       )}
       {!isEmpty(informationModel?.homepage) && (

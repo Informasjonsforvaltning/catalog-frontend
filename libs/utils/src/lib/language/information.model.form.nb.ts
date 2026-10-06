@@ -21,6 +21,8 @@ Versjonsnummeret følger formatet 'major.minor.patch', hvor:
 - __Patch__ økes ved feilrettinger og mindre justeringer.
 
 Eksempel: Versjon 2.1.3 betyr andre hovedversjon, første mindre oppdatering, og tredje feilretting.`,
+    creator:
+      "Produsent brukes når eieren av informasjonsmodellen er en annen enn utgiveren. Velg virksomhet fra Enhetsregisteret.",
   },
   heading: {
     about: "Om informasjonsmodellen",
@@ -37,6 +39,7 @@ Eksempel: Versjon 2.1.3 betyr andre hovedversjon, første mindre oppdatering, og
     status: "Modellstatus",
     homepage: "Hjemmeside",
     version: "Versjonsnummer",
+    creator: "Produsent",
     informationModelID: "Informasjonsmodell-ID",
     lastModified: "Sist endret",
     contactName: "Navn",
@@ -62,6 +65,9 @@ Eksempel: Versjon 2.1.3 betyr andre hovedversjon, første mindre oppdatering, og
       "Minst e-post eller kontaktside må fylles ut for kontaktpunktet.",
     version:
       "Versjonsnummer må fylles ut med major, minor og patch, eller være tomt.",
+  },
+  errors: {
+    creator: "Kunne ikke hente enheter.",
   },
   button: {
     update: "Oppdater",
