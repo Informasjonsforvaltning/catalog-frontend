@@ -162,6 +162,7 @@ export const ApplicableLegislationModal = ({
                                       data-size="sm"
                                       ref={referencesRef}
                                       error={errors?.references?.[index]}
+                                      aria-label={`Referanse ${index}`}
                                     />
                                   </FieldsetWithDelete>
                                 </div>

@@ -28,34 +28,19 @@ const createRandomDataset = async (playwright: any) => {
       en: uniqueString("description_en"),
     },
     accessRight: accessRightPublic.uri,
-    legalBasisForRestriction: [
+    applicableLegislation: [
       {
-        uri: "https://lovdata.no/dokument/NL/lov/2018-06-15-25",
-        prefLabel: {
+        title: {
           nb: "Personvernloven § 8",
           nn: "Personvernloven § 8",
           en: "Personvernloven § 8",
         },
-      },
-    ],
-    legalBasisForProcessing: [
-      {
-        uri: "https://lovdata.no/dokument/NL/lov/2018-06-15-25",
-        prefLabel: {
+        description: {
           nb: "Personvernloven § 8",
           nn: "Personvernloven § 8",
           en: "Personvernloven § 8",
         },
-      },
-    ],
-    legalBasisForAccess: [
-      {
-        uri: "https://lovdata.no/dokument/NL/lov/2018-06-15-25",
-        prefLabel: {
-          nb: "Personvernloven § 8",
-          nn: "Personvernloven § 8",
-          en: "Personvernloven § 8",
-        },
+        references: ["https://lovdata.no/dokument/NL/lov/2018-06-15-25"],
       },
     ],
     approved: false,
@@ -287,21 +272,21 @@ runTestAsAdmin(
       dataset.id,
     );
 
-    // Open a modal dialog (legal restriction)
-    await editPage.clickAddLegalRestriction();
+    // Open a modal dialog (applicable legislation)
+    await editPage.clickAddApplicableLegislation();
 
     // Fill in modal data
     const modalData = {
-      uri: "https://lovdata.no/dokument/NL/lov/test",
-      prefLabel: {
-        nb: uniqueString("legal_nb"),
-        nn: uniqueString("legal_nn"),
-        en: uniqueString("legal_en"),
+      title: {
+        nb: uniqueString("applicable_legislation_nb"),
+        nn: uniqueString("applicable_legislation_nn"),
+        en: uniqueString("applicable_legislation_en"),
       },
+      references: ["https://lovdata.no/dokument/NL/lov/test"],
     };
 
-    await editPage.fillUrlWithLabelModal(
-      "Leg til skjermingshjemmel",
+    await editPage.fillApplicableLegislationModal(
+      "Legg til gjeldende lovgiving",
       modalData,
       ["Bokmål", "Nynorsk", "Engelsk"],
       false,
@@ -315,8 +300,8 @@ runTestAsAdmin(
     await editPage.expectRestoreDialog();
     await editPage.clickRestoreButton();
 
-    // Verify the modal data was restored by checking if the legal restriction was added
-    await expect(page.getByText(modalData.prefLabel.nb)).toBeVisible();
+    // Verify the modal data was restored by checking if the applicable legislation was added
+    await expect(page.getByText(modalData.title.nb)).toBeVisible();
   },
 );
 
@@ -426,46 +411,23 @@ runTestAsAdmin(
     // Fill in required fields
     await editPage.selectAccessRights("public");
 
-    await editPage.clickAddLegalRestriction();
-    await editPage.fillUrlWithLabelModal(
-      "Leg til skjermingshjemmel",
+    await editPage.clickAddApplicableLegislation();
+    await editPage.fillApplicableLegislationModal(
+      "Legg til gjeldende lovgiving",
       {
-        uri: "https://lovdata.no/dokument/NL/lov/1",
-        prefLabel: {
+        title: {
           nb: "Personvernloven § 1",
           nn: "Personvernloven § 1",
           en: "Personvernloven § 1",
         },
-      },
-      ["Bokmål", "Nynorsk", "Engelsk"],
-      false,
-    );
-
-    await editPage.clickAddLegalProcessing();
-    await editPage.fillUrlWithLabelModal(
-      "Legg til behandlingsgrunnlag",
-      {
-        uri: "https://lovdata.no/dokument/NL/lov/2",
-        prefLabel: {
-          nb: "Personvernloven § 2",
-          nn: "Personvernloven § 2",
-          en: "Personvernloven § 2",
+        description: {
+          nb: "Beskrivelse av Personvernloven § 1",
+          nn: "Beskriving av Personvernloven § 1",
+          en: "Description of Personvernloven § 1",
         },
-      },
-      ["Bokmål", "Nynorsk", "Engelsk"],
-      false,
-    );
-
-    await editPage.clickAddLegalAccess();
-    await editPage.fillUrlWithLabelModal(
-      "Legg til utleveringshjemmel",
-      {
-        uri: "https://lovdata.no/dokument/NL/lov/3",
-        prefLabel: {
-          nb: "Personvernloven § 3",
-          nn: "Personvernloven § 3",
-          en: "Personvernloven § 3",
-        },
+        references: [
+          "https://lovdata.no/dokument/TRAKTAT/traktat/1981-01-28-1",
+        ],
       },
       ["Bokmål", "Nynorsk", "Engelsk"],
       false,

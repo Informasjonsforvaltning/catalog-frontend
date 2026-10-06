@@ -16,9 +16,7 @@ export async function createRandomDataset(context: BrowserContext) {
     },
     accessRight:
       "http://publications.europa.eu/resource/authority/access-right/PUBLIC",
-    legalBasisForRestriction: [],
-    legalBasisForProcessing: [],
-    legalBasisForAccess: [],
+    applicableLegislation: [],
     issued: "2024-03-20",
     euDataTheme: [],
     losTheme: [],

@@ -1,8 +1,8 @@
 import { expect, Page, BrowserContext, Locator } from "@playwright/test";
 import type AxeBuilder from "@axe-core/playwright";
 import {
+  ApplicableLegislation,
   Concept,
-  InternalField,
   LocalizedStrings,
   RelationSubtypeEnum,
   RelationTypeEnum,
@@ -606,23 +606,9 @@ export default class DatasetEditPage {
   }
 
   // Legal basis
-  async clickAddLegalRestriction() {
+  async clickAddApplicableLegislation() {
     await this.page
-      .getByRole("button", { name: "Legg til skjermingshjemmel" })
-      .click();
-  }
-
-  // Processing basis
-  async clickAddLegalProcessing() {
-    await this.page
-      .getByRole("button", { name: "Legg til behandlingsgrunnlag" })
-      .click();
-  }
-
-  // Delivery basis
-  async clickAddLegalAccess() {
-    await this.page
-      .getByRole("button", { name: "Legg til utleveringshjemmel" })
+      .getByRole("button", { name: "Legg til gjeldende lovgiving" })
       .click();
   }
 
@@ -641,6 +627,29 @@ export default class DatasetEditPage {
       dialog,
     );
     await dialog.getByLabel("Lenke").fill(value.uri as string);
+    await dialog.getByRole("button", { name: "Legg til" }).click();
+  }
+  async fillApplicableLegislationModal(
+    name: string,
+    value: ApplicableLegislation,
+    open: string[],
+    clear: boolean,
+  ) {
+    const dialog = this.page.getByRole("dialog");
+    await this.fillLanguageField(value.title, "Tittel", open, clear, dialog);
+    await this.fillLanguageField(
+      value.description,
+      "Beskrivelse",
+      open,
+      clear,
+      dialog,
+    );
+    await dialog.getByRole("button", { name: "Legg til referanse" }).click();
+    value?.references?.length
+      ? await dialog
+          .getByLabel("Referanse")
+          .fill(value?.references[0] as string)
+      : undefined;
     await dialog.getByRole("button", { name: "Legg til" }).click();
   }
 

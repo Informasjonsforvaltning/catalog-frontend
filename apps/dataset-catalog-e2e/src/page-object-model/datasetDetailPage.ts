@@ -115,15 +115,7 @@ export default class DatasetDetailPage {
     await expect(this.page.getByText(value)).toBeVisible();
   }
 
-  async expectLegalRestriction(value: string) {
-    await expect(this.page.getByText(value)).toBeVisible();
-  }
-
-  async expectLegalProcessing(value: string) {
-    await expect(this.page.getByText(value)).toBeVisible();
-  }
-
-  async expectLegalAccess(value: string) {
+  async expectApplicableLegislation(value: string) {
     await expect(this.page.getByText(value)).toBeVisible();
   }
 
