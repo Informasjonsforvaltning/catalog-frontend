@@ -136,6 +136,8 @@ export const ApplicableLegislationModal = ({
                         helpText={
                           localization.applicableLegislation.references.helpText
                         }
+                        tagTitle={localization.tag.recommended}
+                        tagColor="info"
                       >
                         {
                           localization.applicableLegislation.references
