@@ -409,6 +409,7 @@ export const DatasetForm = ({
                       referenceDataEnv={referenceDataEnv}
                       isMobility={isMobility}
                       frequencies={frequencies}
+                      autoSaveStorage={autoSaveStorage}
                     />
                   </FormLayout.Section>
 
