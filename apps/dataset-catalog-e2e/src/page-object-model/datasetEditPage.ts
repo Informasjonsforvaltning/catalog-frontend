@@ -605,7 +605,7 @@ export default class DatasetEditPage {
     await expect(radio).toBeChecked();
   }
 
-  // Legal basis
+  // Applicable legislation
   async clickAddApplicableLegislation() {
     await this.page
       .getByRole("button", { name: "Legg til gjeldende lovgiving" })

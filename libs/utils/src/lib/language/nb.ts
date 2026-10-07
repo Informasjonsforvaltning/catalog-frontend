@@ -701,7 +701,7 @@ ___Merk:__ Maksimal filstørrelse for opplastning er {0} MB. CSV/JSON-filer kan 
     description: "Beskrivelse",
     references: {
       fieldLabel: "Referanse",
-      helpText: "Referanse til en relatert regulativ ressurs",
+      helpText: "Referanse til loven eller forskriften",
     },
   },
 
