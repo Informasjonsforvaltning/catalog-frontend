@@ -197,7 +197,9 @@ export const ApplicableLegislationModal = ({
                       });
                     }}
                   >
-                    {type === "new" ? localization.add : localization.update}
+                    {type === "edit"
+                      ? `${localization.edit} ${localization.applicableLegislation.fieldLabel.toLowerCase()}`
+                      : `${localization.add} ${localization.applicableLegislation.fieldLabel.toLowerCase()}`}
                   </Button>
                   <Button
                     variant="secondary"

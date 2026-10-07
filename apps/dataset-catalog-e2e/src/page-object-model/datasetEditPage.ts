@@ -650,7 +650,9 @@ export default class DatasetEditPage {
           .getByLabel("Referanse")
           .fill(value?.references[0] as string)
       : undefined;
-    await dialog.getByRole("button", { name: "Legg til" }).click();
+    await dialog
+      .getByRole("button", { name: "Legg til gjeldende lovgiving" })
+      .click();
   }
 
   // Publication date
