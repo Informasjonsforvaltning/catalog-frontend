@@ -26,6 +26,7 @@ export interface InformationModelToBeCreated {
   homepage?: string | null;
   version?: Version | null;
   creator?: string | null;
+  subjects?: string[] | null;
 }
 
 export type InformationModelsPageSettings = {

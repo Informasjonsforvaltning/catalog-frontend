@@ -1,28 +1,7 @@
 import { getInformationModelById } from "@catalog-frontend/data-access";
-import {
-  InformationModel,
-  InformationModelToBeCreated,
-} from "@catalog-frontend/types";
-import { normalizeVersion, removeEmptyValues } from "@catalog-frontend/utils";
-import { pick } from "lodash";
+import { InformationModel } from "@catalog-frontend/types";
 
-/** Fields accepted by catalog-backend InformationModelValues (mutable via JSON Patch). */
-const MUTABLE_INFORMATION_MODEL_FIELDS = [
-  "title",
-  "description",
-  "contactPoints",
-  "status",
-  "homepage",
-  "version",
-  "creator",
-] as const;
-
-export const toMutableInformationModelValues = (
-  model: InformationModel | InformationModelToBeCreated,
-) => ({
-  ...removeEmptyValues(pick(model, MUTABLE_INFORMATION_MODEL_FIELDS)),
-  version: normalizeVersion(model.version),
-});
+export { toMutableInformationModelValues } from "./to-mutable-information-model-values";
 
 export async function fetchInformationModelWithRetry(
   catalogId: string,

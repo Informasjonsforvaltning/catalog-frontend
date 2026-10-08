@@ -35,6 +35,7 @@ import {
 import styles from "./information-model-form.module.css";
 import { AboutSection } from "./components/about-section";
 import { ContactPointSection } from "./components/contact-point-section";
+import { SubjectsSection } from "./components/subjects-section";
 import {
   informationModelValidationSchema,
   draftInformationModelValidationSchema,
@@ -55,6 +56,7 @@ const getErrorDigest = (error: unknown): string | undefined =>
 type Props = {
   initialValues: InformationModel | InformationModelToBeCreated;
   statuses: ReferenceDataCode[];
+  searchEnv: string;
   autoSaveStorage?: DataStorage<StorageData>;
   autoSave?: boolean;
   autoSaveId?: string;
@@ -71,6 +73,7 @@ type Props = {
 const InformationModelForm = ({
   initialValues,
   statuses,
+  searchEnv,
   autoSaveStorage,
   autoSave = true,
   autoSaveId,
@@ -336,6 +339,7 @@ const InformationModelForm = ({
               "description",
               "status",
               "version",
+              "subjects",
               "contactPoints",
             ].forEach((name) => {
               if (isDirty(name)) {
@@ -386,6 +390,23 @@ const InformationModelForm = ({
                       ])}
                     >
                       <AboutSection statuses={statuses} />
+                    </FormLayout.Section>
+
+                    <FormLayout.Section
+                      id="subjects-section"
+                      title={localization.informationModelForm.heading.subjects}
+                      subtitle={
+                        localization.informationModelForm.subtitle.subjects
+                      }
+                      changed={
+                        markDirty &&
+                        dirtyFields.some((field) =>
+                          ["subjects"].includes(field),
+                        )
+                      }
+                      error={hasError(["subjects"])}
+                    >
+                      <SubjectsSection searchEnv={searchEnv} />
                     </FormLayout.Section>
 
                     <FormLayout.Section

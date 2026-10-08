@@ -23,6 +23,8 @@ interface InformationModelDetailsPageProps {
   informationModelId: string;
   hasWritePermission: boolean;
   statuses: ReferenceDataCode[];
+  searchEnv: string;
+  referenceDataEnv: string;
 }
 
 const InformationModelDetailsPageClient = ({
@@ -31,6 +33,8 @@ const InformationModelDetailsPageClient = ({
   informationModelId,
   hasWritePermission,
   statuses,
+  searchEnv,
+  referenceDataEnv,
 }: InformationModelDetailsPageProps) => {
   const [language, setLanguage] = useState("nb");
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -129,6 +133,8 @@ const InformationModelDetailsPageClient = ({
           <LeftColumn
             informationModel={currentInformationModel}
             language={language}
+            searchEnv={searchEnv}
+            referenceDataEnv={referenceDataEnv}
           />
         </DetailsPageLayout.Left>
         <DetailsPageLayout.Right>
