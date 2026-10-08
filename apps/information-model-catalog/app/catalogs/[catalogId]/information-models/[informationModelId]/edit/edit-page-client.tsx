@@ -17,12 +17,14 @@ type EditPageProps = {
   catalogId: string;
   informationModel: InformationModel;
   statuses: ReferenceDataCode[];
+  searchEnv: string;
 };
 
 export const EditPage = ({
   catalogId,
   informationModel,
   statuses,
+  searchEnv,
 }: EditPageProps) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -87,6 +89,7 @@ export const EditPage = ({
       <InformationModelForm
         initialValues={informationModel}
         statuses={statuses}
+        searchEnv={searchEnv}
         autoSaveStorage={dataStorage}
         autoSaveId={informationModel.id}
         onSubmit={handleUpdate}

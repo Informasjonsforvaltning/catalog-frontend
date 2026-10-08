@@ -23,13 +23,18 @@ Versjonsnummeret følger formatet 'major.minor.patch', hvor:
 Eksempel: Versjon 2.1.3 betyr andre hovedversjon, første mindre oppdatering, og tredje feilretting.`,
     creator:
       "Produsent brukes når eieren av informasjonsmodellen er en annen enn utgiveren. Velg virksomhet fra Enhetsregisteret.",
+    subjects:
+      "Velg begrep registrert i [begrepskatalogen til data.norge](https://data.norge.no/concepts). Ved å henvise til gjennomarbeidede beskrivelser som virksomheten selv er ansvarlig for å vedlikeholde, sikrer vi at det er tydelig hvordan et begrep brukt i informasjonsmodellen skal forstås og at denne forståelsen er riktig og oppdatert.",
   },
   heading: {
     about: "Om informasjonsmodellen",
+    subjects: "Begreper",
     contactPoint: "Kontaktpunkt",
   },
   subtitle: {
     about: "Nøkkelinformasjon om informasjonsmodellen.",
+    subjects:
+      "Begrepsbeskrivelser gir felles og tydelige rammer for å forstå og tolke innholdet i informasjonsmodellen.",
     contactPoint:
       "Informasjon om en organisasjon eller enhet som kan kontaktes for spørsmål eller kommentarer om informasjonsmodellen. Det skal ikke oppgis personlig kontaktinformasjon.",
   },
@@ -40,6 +45,7 @@ Eksempel: Versjon 2.1.3 betyr andre hovedversjon, første mindre oppdatering, og
     homepage: "Hjemmeside",
     version: "Versjonsnummer",
     creator: "Produsent",
+    subjects: "Begreper",
     informationModelID: "Informasjonsmodell-ID",
     lastModified: "Sist endret",
     contactName: "Navn",
