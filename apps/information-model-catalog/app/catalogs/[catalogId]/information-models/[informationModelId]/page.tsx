@@ -69,6 +69,8 @@ const InformationModelDetailsPage = withReadProtectedPage(
             informationModelId={informationModelId}
             hasWritePermission={hasWritePermission}
             statuses={statusesResponse.productStatuses}
+            searchEnv={process.env.FDK_SEARCH_SERVICE_BASE_URI ?? ""}
+            referenceDataEnv={process.env.FDK_BASE_URI ?? ""}
           />
         </div>
       </>

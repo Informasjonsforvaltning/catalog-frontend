@@ -27,6 +27,7 @@ export const informationModelTemplate = (
     homepage: informationModel?.homepage || "",
     version: normalizeVersion(informationModel?.version),
     creator: informationModel?.creator || "",
+    subjects: informationModel?.subjects || [],
   };
 };
 
@@ -40,5 +41,6 @@ export const informationModelToBeCreatedTemplate =
       homepage: "",
       version: null,
       creator: "",
+      subjects: [],
     };
   };
