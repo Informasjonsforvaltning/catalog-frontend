@@ -15,6 +15,7 @@ const MUTABLE_INFORMATION_MODEL_FIELDS = [
   "homepage",
   "version",
   "creator",
+  "subjects",
 ] as const;
 
 export const toMutableInformationModelValues = (
@@ -22,6 +23,7 @@ export const toMutableInformationModelValues = (
 ) => ({
   ...removeEmptyValues(pick(model, MUTABLE_INFORMATION_MODEL_FIELDS)),
   version: normalizeVersion(model.version),
+  subjects: model.subjects ?? [],
 });
 
 export async function fetchInformationModelWithRetry(

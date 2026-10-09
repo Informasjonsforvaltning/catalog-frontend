@@ -18,12 +18,14 @@ type NewInformationModelPageClientProps = {
   catalogId: string;
   initialValues: InformationModelToBeCreated;
   statuses: ReferenceDataCode[];
+  searchEnv: string;
 };
 
 export const NewInformationModelPageClient = ({
   catalogId,
   initialValues,
   statuses,
+  searchEnv,
 }: NewInformationModelPageClientProps) => {
   const router = useRouter();
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
@@ -81,6 +83,7 @@ export const NewInformationModelPageClient = ({
       <InformationModelForm
         initialValues={initialValues}
         statuses={statuses}
+        searchEnv={searchEnv}
         autoSaveStorage={dataStorage}
         onCancel={handleCancel}
         onSubmit={handleCreate}
