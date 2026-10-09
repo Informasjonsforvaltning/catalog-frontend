@@ -95,6 +95,7 @@ export const nb = {
   changed: "Endret",
   created: "Opprettet",
   by: "av",
+  deprecated: "deprekert",
 
   catalogType: {
     admin: "Administrasjonsgrensesnitt",
@@ -690,6 +691,18 @@ ___Merk:__ Maksimal filstørrelse for opplastning er {0} MB. CSV/JSON-filer kan 
     validation: {
       costValueRequiredWhenMissingDoc:
         "Beløp er påkrevd når ingen dokumentasjon er oppgitt.",
+    },
+  },
+
+  applicableLegislation: {
+    fieldLabel: "Gjeldende lovgiving",
+    helptext:
+      "Lov eller forskrift som påvirker opprettelse eller behandling av datasettet",
+    title: "Tittel",
+    description: "Beskrivelse",
+    references: {
+      fieldLabel: "Referanse",
+      helpText: "Referanse til loven eller forskriften",
     },
   },
 

@@ -25,9 +25,7 @@ export const datasetTemplate = (dataset: Dataset): Dataset => {
     title: dataset.title ?? "",
     description: !isEmpty(dataset?.description) ? dataset.description : {},
     accessRight: dataset?.accessRight,
-    legalBasisForAccess: dataset?.legalBasisForAccess ?? [],
-    legalBasisForProcessing: dataset?.legalBasisForProcessing ?? [],
-    legalBasisForRestriction: dataset?.legalBasisForRestriction ?? [],
+    applicableLegislation: dataset?.applicableLegislation ?? [],
     landingPage:
       dataset.landingPage &&
       dataset?.landingPage?.length > 0 &&
@@ -76,9 +74,7 @@ export const datasetToBeCreatedTemplate = (
     approved: false,
     landingPage: [],
     accessRight: undefined,
-    legalBasisForAccess: [],
-    legalBasisForProcessing: [],
-    legalBasisForRestriction: [],
+    applicableLegislation: [],
     euDataTheme: [],
     losTheme: [],
     mobilityTheme: [],

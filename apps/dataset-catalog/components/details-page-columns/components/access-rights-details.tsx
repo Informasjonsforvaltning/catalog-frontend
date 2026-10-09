@@ -1,6 +1,5 @@
 import { Dataset, UriWithLabel } from "@catalog-frontend/types";
 import {
-  accessRightPublic,
   accessRights,
   getTranslateText,
   localization,
@@ -68,7 +67,9 @@ export const AccessRightsDetails = ({ dataset, language }: Props) => {
 
   return (
     <>
-      {(dataset?.accessRight || allLegalBases.length > 0) && (
+      {(dataset?.accessRight ||
+        dataset?.applicableLegislation ||
+        allLegalBases.length > 0) && (
         <div className={styles.infoCardItems}>
           {!isEmpty(dataset.accessRight) && (
             <Tag data-size="sm" data-color="info">
@@ -79,18 +80,48 @@ export const AccessRightsDetails = ({ dataset, language }: Props) => {
               }
             </Tag>
           )}
-          {allLegalBases.length > 0 && (
-            <Card>
-              <h4>{localization.datasetForm.fieldLabel.legalBasis}</h4>
+          {(dataset.applicableLegislation || allLegalBases.length > 0) && (
+            <div className={styles.infoCardItems}>
+              <h4>{localization.applicableLegislation.fieldLabel}</h4>
               <Table data-size="sm" className={styles.table}>
                 <Table.Head>
                   <Table.Row>
                     <Table.HeaderCell>{localization.title}</Table.HeaderCell>
-                    <Table.HeaderCell>{localization.link}</Table.HeaderCell>
-                    <Table.HeaderCell>{localization.type}</Table.HeaderCell>
+                    <Table.HeaderCell>
+                      {`${localization.applicableLegislation.description}/${localization.datasetForm.fieldLabel.type}`}
+                    </Table.HeaderCell>
+                    <Table.HeaderCell>
+                      {`${localization.applicableLegislation.references.fieldLabel}/${localization.link}`}
+                    </Table.HeaderCell>
                   </Table.Row>
                 </Table.Head>
                 <Table.Body>
+                  {dataset.applicableLegislation &&
+                    dataset.applicableLegislation.map(
+                      (item, i) =>
+                        item.title &&
+                        item.description && (
+                          <Table.Row key={`applicable-legislation-${i}`}>
+                            <Table.Cell>
+                              {getTranslateText(item?.title, language)}
+                            </Table.Cell>
+                            <Table.Cell>
+                              {getTranslateText(item?.description, language)}
+                            </Table.Cell>
+                            <Table.Cell>
+                              {item.references &&
+                                item.references.map((reference, index) => (
+                                  <Link
+                                    key={`applicable-legislation-reference-${index}`}
+                                    href={reference}
+                                  >
+                                    {reference}
+                                  </Link>
+                                ))}
+                            </Table.Cell>
+                          </Table.Row>
+                        ),
+                    )}
                   {allLegalBases.map(
                     (item, i) =>
                       item?.uriWithLabel && (
@@ -101,24 +132,26 @@ export const AccessRightsDetails = ({ dataset, language }: Props) => {
                               language,
                             )}
                           </Table.Cell>
-                          <Table.Cell>
-                            <Link href={item?.uriWithLabel.uri}>
-                              {item?.uriWithLabel.uri}
-                            </Link>
-                          </Table.Cell>
+
                           <Table.Cell>
                             {
                               localization.datasetForm.fieldLabel[
                                 item?.type as keyof typeof localization.datasetForm.fieldLabel
                               ]
                             }
+                            {` (${localization.deprecated})`}
+                          </Table.Cell>
+                          <Table.Cell>
+                            <Link href={item?.uriWithLabel.uri}>
+                              {item?.uriWithLabel.uri}
+                            </Link>
                           </Table.Cell>
                         </Table.Row>
                       ),
                   )}
                 </Table.Body>
               </Table>
-            </Card>
+            </div>
           )}
         </div>
       )}

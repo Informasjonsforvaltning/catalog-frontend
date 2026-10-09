@@ -400,9 +400,7 @@ export const DatasetForm = ({
                       "title",
                       "description",
                       "issued",
-                      "legalBasisForRestriction",
-                      "legalBasisForProcessing",
-                      "legalBasisForAccess",
+                      "applicableLegislation",
                       "temporal",
                       "spatial",
                     ])}
@@ -411,6 +409,7 @@ export const DatasetForm = ({
                       referenceDataEnv={referenceDataEnv}
                       isMobility={isMobility}
                       frequencies={frequencies}
+                      autoSaveStorage={autoSaveStorage}
                     />
                   </FormLayout.Section>
 
