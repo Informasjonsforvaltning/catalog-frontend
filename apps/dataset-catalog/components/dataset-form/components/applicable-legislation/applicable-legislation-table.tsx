@@ -26,12 +26,26 @@ export const ApplicableLegislationTable = ({
   const { values, setFieldValue } =
     useFormikContext<ApplicableLegislationFormValues>();
 
+  const onApplicableLegislationChange = (
+    updatedApplicableLegislation: ApplicableLegislation,
+    index: number,
+  ) => {
+    // Save to secondary storage for auto-save
+    if (autoSaveStorage) {
+      autoSaveStorage.setSecondary("applicableLegislation", {
+        values: {
+          applicableLegislation: updatedApplicableLegislation,
+          index,
+        },
+        lastChanged: new Date().toISOString(),
+      });
+    }
+  };
   const handleApplicableLegislationSuccess = (
-    updatedRef: ApplicableLegislation,
+    updatedApplicableLegislation: ApplicableLegislation,
     i: number,
   ) => {
-    console.log(values.applicableLegislation);
-    setFieldValue(`applicableLegislation[${i}]`, updatedRef);
+    setFieldValue(`applicableLegislation[${i}]`, updatedApplicableLegislation);
 
     if (autoSaveStorage) {
       autoSaveStorage.deleteSecondary("applicableLegislation");
@@ -134,9 +148,15 @@ export const ApplicableLegislationTable = ({
               formValues,
             )
           }
+          onChange={(formValues: ApplicableLegislation) => {
+            onApplicableLegislationChange(
+              formValues,
+              values.applicableLegislation?.length ?? 0,
+            );
+          }}
           onCancel={handleApplicableLegislationCancel}
           type="new"
-          template={{ title: {}, description: {} }}
+          template={{ title: {}, description: {}, references: [] }}
         />
       </Fieldset>
     </div>

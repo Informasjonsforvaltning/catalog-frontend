@@ -21,6 +21,7 @@ import {
   StorageData,
   Distribution,
   Reference,
+  ApplicableLegislation,
 } from "@catalog-frontend/types";
 import {
   ConfirmModal,
@@ -371,6 +372,23 @@ export const DatasetForm = ({
               );
               // Delete reference data from secondary storage since it is merged with the main data
               autoSaveStorage?.deleteSecondary("reference");
+            }
+            const restoreApplicableLegislationData =
+              autoSaveStorage?.getSecondary("applicableLegislation");
+            if (
+              restoreApplicableLegislationData &&
+              restoreApplicableLegislationData?.id === datasetId
+            ) {
+              const applicableLegislationValues: {
+                applicableLegislation: ApplicableLegislation;
+                index: number;
+              } = restoreApplicableLegislationData.values;
+              setFieldValue(
+                `applicableLegislation[${applicableLegislationValues.index}]`,
+                applicableLegislationValues.applicableLegislation,
+              );
+              // Delete applicable legislation from secondary storage since it is merged with the main data
+              autoSaveStorage?.deleteSecondary("applicableLegislation");
             }
 
             showSnackbarMessage({

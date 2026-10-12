@@ -26,6 +26,9 @@ export const datasetTemplate = (dataset: Dataset): Dataset => {
     description: !isEmpty(dataset?.description) ? dataset.description : {},
     accessRight: dataset?.accessRight,
     applicableLegislation: dataset?.applicableLegislation ?? [],
+    legalBasisForAccess: dataset?.legalBasisForAccess ?? [],
+    legalBasisForProcessing: dataset?.legalBasisForProcessing ?? [],
+    legalBasisForRestriction: dataset?.legalBasisForRestriction ?? [],
     landingPage:
       dataset.landingPage &&
       dataset?.landingPage?.length > 0 &&

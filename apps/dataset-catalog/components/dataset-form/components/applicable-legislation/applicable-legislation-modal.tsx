@@ -28,6 +28,7 @@ import FieldsetWithDelete from "@dataset-catalog/components/fieldset-with-delete
 type ApplicableLegislationModalProps = {
   type: "new" | "edit";
   onSuccess: (values: ApplicableLegislation) => void;
+  onChange?: (values: ApplicableLegislation) => void;
   onCancel: () => void;
   template: ApplicableLegislation;
 };
@@ -35,6 +36,7 @@ type ApplicableLegislationModalProps = {
 export const ApplicableLegislationModal = ({
   type,
   onSuccess,
+  onChange,
   onCancel,
   template,
 }: ApplicableLegislationModalProps) => {
@@ -62,6 +64,7 @@ export const ApplicableLegislationModal = ({
     const handleCancel = () => {
       formikRef.current?.resetForm();
       setValidateOnChange(false);
+      onCancel;
     };
 
     dialog.addEventListener("close", handleClose);
@@ -95,7 +98,20 @@ export const ApplicableLegislationModal = ({
           validateOnChange={validateOnChange}
           validateOnBlur={validateOnChange}
         >
-          {({ isSubmitting, submitForm, dirty, validateForm, errors }) => {
+          {({
+            isSubmitting,
+            submitForm,
+            values,
+            dirty,
+            validateForm,
+            errors,
+          }) => {
+            // Call onChange whenever values change for autosave
+            useEffect(() => {
+              if (dirty && onChange && modalRef.current?.open) {
+                onChange(values);
+              }
+            }, [values, dirty, onChange]);
             return (
               <>
                 <Heading>
@@ -207,8 +223,6 @@ export const ApplicableLegislationModal = ({
                     variant="secondary"
                     type="button"
                     onClick={() => {
-                      setValidateOnChange(false);
-                      onCancel();
                       modalRef.current?.close();
                     }}
                     disabled={isSubmitting}

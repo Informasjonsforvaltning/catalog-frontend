@@ -99,8 +99,7 @@ export const AccessRightsDetails = ({ dataset, language }: Props) => {
                   {dataset.applicableLegislation &&
                     dataset.applicableLegislation.map(
                       (item, i) =>
-                        item.title &&
-                        item.description && (
+                        item.title && (
                           <Table.Row key={`applicable-legislation-${i}`}>
                             <Table.Cell>
                               {getTranslateText(item?.title, language)}
