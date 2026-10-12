@@ -25,6 +25,7 @@ const baseServerModel = {
   version: null,
   creator: null,
   subjects: null,
+  modified: null,
 } as InformationModel;
 
 const baseFormValues = {
@@ -36,6 +37,7 @@ const baseFormValues = {
   version: null,
   creator: "",
   subjects: [],
+  modified: "",
 } as InformationModelToBeCreated;
 
 describe("toMutableInformationModelValues", () => {
@@ -113,5 +115,33 @@ describe("toMutableInformationModelValues", () => {
       value: { nb: "Ny tittel" },
     });
     expect(diff.some((op) => op.path.startsWith("/title/"))).toBe(false);
+  });
+
+  test("sets modified when a date is entered", () => {
+    const diff = compare(
+      toMutableInformationModelValues(baseServerModel),
+      toMutableInformationModelValues({
+        ...baseFormValues,
+        modified: "2026-03-15",
+      }),
+    );
+
+    expect(diff).toContainEqual({
+      op: "replace",
+      path: "/modified",
+      value: "2026-03-15",
+    });
+  });
+
+  test("removes modified when the date is cleared", () => {
+    const diff = compare(
+      toMutableInformationModelValues({
+        ...baseServerModel,
+        modified: "2026-03-15",
+      }),
+      toMutableInformationModelValues(baseFormValues),
+    );
+
+    expect(diff).toContainEqual({ op: "remove", path: "/modified" });
   });
 });

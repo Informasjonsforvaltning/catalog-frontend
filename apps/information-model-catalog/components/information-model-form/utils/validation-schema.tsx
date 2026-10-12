@@ -1,6 +1,7 @@
 import {
   httpsRegex,
   localization,
+  parseDateTime,
   telephoneNumberRegex,
 } from "@catalog-frontend/utils";
 import * as Yup from "yup";
@@ -178,6 +179,26 @@ const versionValidationSchema = () =>
       },
     );
 
+const modifiedValidationSchema = () =>
+  Yup.mixed()
+    .nullable()
+    .test({
+      test(value) {
+        if (!value) {
+          return true;
+        }
+
+        if (parseDateTime(value)?.isValid) {
+          return true;
+        }
+
+        return this.createError({
+          message: localization.informationModelForm.validation.modified,
+          path: this.path,
+        });
+      },
+    });
+
 export const draftInformationModelValidationSchema = () =>
   Yup.object().shape({
     title: titleValidationSchema(),
@@ -186,6 +207,7 @@ export const draftInformationModelValidationSchema = () =>
     status: Yup.string().nullable().notRequired(),
     homepage: homepageValidationSchema(),
     version: versionValidationSchema(),
+    modified: modifiedValidationSchema(),
   });
 
 export const informationModelValidationSchema = () =>
@@ -196,4 +218,5 @@ export const informationModelValidationSchema = () =>
     status: Yup.string().nullable().notRequired(),
     homepage: homepageValidationSchema(),
     version: versionValidationSchema(),
+    modified: modifiedValidationSchema(),
   });

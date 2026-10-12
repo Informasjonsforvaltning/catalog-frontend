@@ -98,6 +98,24 @@ export const AboutSection = ({ statuses }: Props) => {
         label={localization.informationModelForm.fieldLabel.version}
         helpText={localization.informationModelForm.helptext.version}
       />
+
+      <FieldsetDivider />
+
+      <Field
+        as={Textfield}
+        style={{ width: "fit-content" }}
+        type="date"
+        name="modified"
+        data-size="sm"
+        label={
+          <TitleWithHelpTextAndTag
+            helpText={localization.informationModelForm.helptext.modified}
+          >
+            {localization.informationModelForm.fieldLabel.modified}
+          </TitleWithHelpTextAndTag>
+        }
+        error={errors?.modified}
+      />
     </div>
   );
 };

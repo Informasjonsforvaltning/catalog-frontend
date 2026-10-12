@@ -17,6 +17,7 @@ const MUTABLE_INFORMATION_MODEL_FIELDS = [
   "version",
   "creator",
   "subjects",
+  "modified",
 ] as const;
 
 const emptyToNull = <T>(value: T | null | undefined): T | null =>
