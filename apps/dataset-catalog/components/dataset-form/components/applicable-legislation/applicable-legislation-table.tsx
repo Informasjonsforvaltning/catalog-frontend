@@ -18,10 +18,12 @@ type ApplicableLegislationFormValues = {
 
 export type ApplicableLegislationTableProps = {
   autoSaveStorage?: DataStorage<StorageData>;
+  autoSaveId?: string;
 };
 
 export const ApplicableLegislationTable = ({
   autoSaveStorage,
+  autoSaveId,
 }: ApplicableLegislationTableProps) => {
   const { values, setFieldValue } =
     useFormikContext<ApplicableLegislationFormValues>();
@@ -33,6 +35,7 @@ export const ApplicableLegislationTable = ({
     // Save to secondary storage for auto-save
     if (autoSaveStorage) {
       autoSaveStorage.setSecondary("applicableLegislation", {
+        id: autoSaveId,
         values: {
           applicableLegislation: updatedApplicableLegislation,
           index,

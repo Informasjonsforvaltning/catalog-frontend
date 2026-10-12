@@ -12,9 +12,10 @@ import { ApplicableLegislationTable } from "./applicable-legislation/applicable-
 
 interface Props {
   autoSaveStorage?: DataStorage<StorageData>;
+  autoSaveId?: string;
 }
 
-export const AccessRightFields = ({ autoSaveStorage }: Props) => {
+export const AccessRightFields = ({ autoSaveStorage, autoSaveId }: Props) => {
   const { values, setFieldValue } = useFormikContext<Dataset>();
 
   const { getRadioProps } = useRadioGroup({
@@ -48,7 +49,10 @@ export const AccessRightFields = ({ autoSaveStorage }: Props) => {
           ))}
         </Fieldset>
         <FieldsetDivider />
-        <ApplicableLegislationTable autoSaveStorage={autoSaveStorage} />
+        <ApplicableLegislationTable
+          autoSaveStorage={autoSaveStorage}
+          autoSaveId={autoSaveId}
+        />
       </div>
     </>
   );

@@ -373,6 +373,8 @@ export const DatasetForm = ({
               // Delete reference data from secondary storage since it is merged with the main data
               autoSaveStorage?.deleteSecondary("reference");
             }
+
+            // Handle applicable legislation from secondary storage
             const restoreApplicableLegislationData =
               autoSaveStorage?.getSecondary("applicableLegislation");
             if (
@@ -428,6 +430,7 @@ export const DatasetForm = ({
                       isMobility={isMobility}
                       frequencies={frequencies}
                       autoSaveStorage={autoSaveStorage}
+                      autoSaveId={datasetId?.toString()}
                     />
                   </FormLayout.Section>
 

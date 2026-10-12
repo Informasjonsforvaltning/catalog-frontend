@@ -30,6 +30,7 @@ interface Props {
   isMobility?: boolean;
   frequencies?: ReferenceDataCode[];
   autoSaveStorage?: DataStorage<StorageData>;
+  autoSaveId?: string;
 }
 
 export const AboutSection = ({
@@ -37,6 +38,7 @@ export const AboutSection = ({
   isMobility,
   frequencies,
   autoSaveStorage,
+  autoSaveId,
 }: Props) => {
   const { setFieldValue, errors, values } = useFormikContext<Dataset>();
 
@@ -136,7 +138,10 @@ export const AboutSection = ({
           <FieldsetDivider />
         </>
       )}
-      <AccessRightFields autoSaveStorage={autoSaveStorage} />
+      <AccessRightFields
+        autoSaveStorage={autoSaveStorage}
+        autoSaveId={autoSaveId}
+      />
       <FieldsetDivider />
       <FastField
         style={{ width: "fit-content" }}

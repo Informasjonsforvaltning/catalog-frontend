@@ -35,7 +35,7 @@ export const NewPage = ({
         secondaryKeys: {
           distribution: "datasetFormDistribution",
           reference: "datasetFormReference",
-          applicableLegislation: "applicableLegislation",
+          applicableLegislation: "datasetFormApplicableLegislation",
         },
       }),
     [],
