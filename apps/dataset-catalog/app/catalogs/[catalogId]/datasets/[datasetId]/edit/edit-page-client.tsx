@@ -42,6 +42,7 @@ export const EditPage = ({
         secondaryKeys: {
           distribution: "datasetFormDistribution",
           reference: "datasetFormReference",
+          applicableLegislation: "datasetFormApplicableLegislation",
         },
       }),
     [],

@@ -37,6 +37,7 @@ export const NewPage = ({
     secondaryKeys: {
       distribution: "mobilityDatasetFormDistribution",
       reference: "mobilityDatasetFormReference",
+      applicableLegislation: "datasetFormApplicableLegislation",
     },
   });
 
