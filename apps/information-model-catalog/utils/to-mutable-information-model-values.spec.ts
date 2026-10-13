@@ -25,6 +25,7 @@ const baseServerModel = {
   version: null,
   creator: null,
   subjects: null,
+  issued: null,
   modified: null,
 } as InformationModel;
 
@@ -37,6 +38,7 @@ const baseFormValues = {
   version: null,
   creator: "",
   subjects: [],
+  issued: "",
   modified: "",
 } as InformationModelToBeCreated;
 
@@ -143,5 +145,33 @@ describe("toMutableInformationModelValues", () => {
     );
 
     expect(diff).toContainEqual({ op: "remove", path: "/modified" });
+  });
+
+  test("sets issued when a date is entered", () => {
+    const diff = compare(
+      toMutableInformationModelValues(baseServerModel),
+      toMutableInformationModelValues({
+        ...baseFormValues,
+        issued: "2026-01-10",
+      }),
+    );
+
+    expect(diff).toContainEqual({
+      op: "replace",
+      path: "/issued",
+      value: "2026-01-10",
+    });
+  });
+
+  test("removes issued when the date is cleared", () => {
+    const diff = compare(
+      toMutableInformationModelValues({
+        ...baseServerModel,
+        issued: "2026-01-10",
+      }),
+      toMutableInformationModelValues(baseFormValues),
+    );
+
+    expect(diff).toContainEqual({ op: "remove", path: "/issued" });
   });
 });

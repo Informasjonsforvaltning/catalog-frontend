@@ -17,6 +17,7 @@ const MUTABLE_INFORMATION_MODEL_FIELDS = [
   "version",
   "creator",
   "subjects",
+  "issued",
   "modified",
 ] as const;
 

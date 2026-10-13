@@ -25,6 +25,7 @@ Eksempel: Versjon 2.1.3 betyr andre hovedversjon, første mindre oppdatering, og
       "Produsent brukes når eieren av informasjonsmodellen er en annen enn utgiveren. Velg virksomhet fra Enhetsregisteret.",
     subjects:
       "Velg begrep registrert i [begrepskatalogen til data.norge](https://data.norge.no/concepts). Ved å henvise til gjennomarbeidede beskrivelser som virksomheten selv er ansvarlig for å vedlikeholde, sikrer vi at det er tydelig hvordan et begrep brukt i informasjonsmodellen skal forstås og at denne forståelsen er riktig og oppdatert.",
+    issued: "Dato for når informasjonsmodellen ble utgitt.",
     modified: "Dato for siste endring av informasjonsmodellen.",
   },
   heading: {
@@ -47,6 +48,7 @@ Eksempel: Versjon 2.1.3 betyr andre hovedversjon, første mindre oppdatering, og
     version: "Versjonsnummer",
     creator: "Produsent",
     subjects: "Begreper",
+    issued: "Utgivelsesdato",
     modified: "Endringsdato",
     informationModelID: "Informasjonsmodell-ID",
     lastModified: "Sist endret",
@@ -73,7 +75,7 @@ Eksempel: Versjon 2.1.3 betyr andre hovedversjon, første mindre oppdatering, og
       "Minst e-post eller kontaktside må fylles ut for kontaktpunktet.",
     version:
       "Versjonsnummer må fylles ut med major, minor og patch, eller være tomt.",
-    modified: "Ugyldig dato. Bruk formatet dd.mm.åååå.",
+    date: "Ugyldig dato. Bruk formatet dd.mm.åååå.",
   },
   errors: {
     creator: "Kunne ikke hente enheter.",
