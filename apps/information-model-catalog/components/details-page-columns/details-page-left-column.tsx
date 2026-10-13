@@ -3,6 +3,7 @@
 import { InformationModel } from "@catalog-frontend/types";
 import { InfoCard, useSearchConceptsByUri } from "@catalog-frontend/ui";
 import {
+  formatDateToDDMMYYYY,
   localization,
   getTranslateText,
   versionToString,
@@ -123,6 +124,16 @@ export const LeftColumn = ({
           data-testid="information-model-version"
         >
           <Paragraph>{versionToString(informationModel.version)}</Paragraph>
+        </InfoCard.Item>
+      )}
+      {informationModel?.modified && (
+        <InfoCard.Item
+          title={localization.informationModelForm.fieldLabel.modified}
+          data-testid="information-model-modified"
+        >
+          <Paragraph>
+            {formatDateToDDMMYYYY(informationModel.modified)}
+          </Paragraph>
         </InfoCard.Item>
       )}
     </InfoCard>
