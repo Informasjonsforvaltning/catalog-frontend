@@ -21,6 +21,7 @@ import {
   StorageData,
   Distribution,
   Reference,
+  ApplicableLegislation,
 } from "@catalog-frontend/types";
 import {
   ConfirmModal,
@@ -373,6 +374,25 @@ export const DatasetForm = ({
               autoSaveStorage?.deleteSecondary("reference");
             }
 
+            // Handle applicable legislation from secondary storage
+            const restoreApplicableLegislationData =
+              autoSaveStorage?.getSecondary("applicableLegislation");
+            if (
+              restoreApplicableLegislationData &&
+              restoreApplicableLegislationData?.id === datasetId
+            ) {
+              const applicableLegislationValues: {
+                applicableLegislation: ApplicableLegislation;
+                index: number;
+              } = restoreApplicableLegislationData.values;
+              setFieldValue(
+                `applicableLegislation[${applicableLegislationValues.index}]`,
+                applicableLegislationValues.applicableLegislation,
+              );
+              // Delete applicable legislation from secondary storage since it is merged with the main data
+              autoSaveStorage?.deleteSecondary("applicableLegislation");
+            }
+
             showSnackbarMessage({
               message: localization.snackbar.restoreSuccessful,
               severity: "success",
@@ -400,9 +420,7 @@ export const DatasetForm = ({
                       "title",
                       "description",
                       "issued",
-                      "legalBasisForRestriction",
-                      "legalBasisForProcessing",
-                      "legalBasisForAccess",
+                      "applicableLegislation",
                       "temporal",
                       "spatial",
                     ])}
@@ -411,6 +429,8 @@ export const DatasetForm = ({
                       referenceDataEnv={referenceDataEnv}
                       isMobility={isMobility}
                       frequencies={frequencies}
+                      autoSaveStorage={autoSaveStorage}
+                      autoSaveId={datasetId?.toString()}
                     />
                   </FormLayout.Section>
 

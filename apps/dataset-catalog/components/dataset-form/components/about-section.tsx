@@ -10,6 +10,7 @@ import {
 } from "@catalog-frontend/ui";
 import {
   capitalizeFirstLetter,
+  DataStorage,
   getTranslateText,
   localization,
 } from "@catalog-frontend/utils";
@@ -21,18 +22,23 @@ import {
   ApplicationProfile,
   Dataset,
   ReferenceDataCode,
+  StorageData,
 } from "@catalog-frontend/types";
 
 interface Props {
   referenceDataEnv: string;
   isMobility?: boolean;
   frequencies?: ReferenceDataCode[];
+  autoSaveStorage?: DataStorage<StorageData>;
+  autoSaveId?: string;
 }
 
 export const AboutSection = ({
   referenceDataEnv,
   isMobility,
   frequencies,
+  autoSaveStorage,
+  autoSaveId,
 }: Props) => {
   const { setFieldValue, errors, values } = useFormikContext<Dataset>();
 
@@ -132,7 +138,10 @@ export const AboutSection = ({
           <FieldsetDivider />
         </>
       )}
-      <AccessRightFields isMobility={isMobility} />
+      <AccessRightFields
+        autoSaveStorage={autoSaveStorage}
+        autoSaveId={autoSaveId}
+      />
       <FieldsetDivider />
       <FastField
         style={{ width: "fit-content" }}

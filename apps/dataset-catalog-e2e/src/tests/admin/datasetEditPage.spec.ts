@@ -29,34 +29,19 @@ const createRandomDataset = async (playwright: any) => {
       en: uniqueString("description_en"),
     },
     accessRight: accessRightPublic.uri,
-    legalBasisForRestriction: [
+    applicableLegislation: [
       {
-        uri: "https://lovdata.no/dokument/NL/lov/2018-06-15-25",
-        prefLabel: {
+        title: {
           nb: "Personvernloven § 8",
           nn: "Personvernloven § 8",
           en: "Personvernloven § 8",
         },
-      },
-    ],
-    legalBasisForProcessing: [
-      {
-        uri: "https://lovdata.no/dokument/NL/lov/2018-06-15-25",
-        prefLabel: {
+        description: {
           nb: "Personvernloven § 8",
           nn: "Personvernloven § 8",
           en: "Personvernloven § 8",
         },
-      },
-    ],
-    legalBasisForAccess: [
-      {
-        uri: "https://lovdata.no/dokument/NL/lov/2018-06-15-25",
-        prefLabel: {
-          nb: "Personvernloven § 8",
-          nn: "Personvernloven § 8",
-          en: "Personvernloven § 8",
-        },
+        references: ["https://lovdata.no/dokument/NL/lov/2018-06-15-25"],
       },
     ],
     approved: false,
@@ -135,50 +120,36 @@ runTestAsAdmin(
     // Fill in required fields
     await editPage.selectAccessRights("public");
 
-    await editPage.clickAddLegalRestriction();
-    await editPage.fillUrlWithLabelModal(
-      "Leg til skjermingshjemmel",
-      {
-        uri: "https://lovdata.no/dokument/NL/lov/1",
-        prefLabel: {
-          nb: "Personvernloven § 1",
-          nn: "Personvernloven § 1",
-          en: "Personvernloven § 1",
-        },
-      },
-      ["Bokmål", "Nynorsk", "Engelsk"],
-      false,
-    );
+    // Open a modal dialog (applicable legislation)
+    await editPage.clickAddApplicableLegislation();
 
-    await editPage.clickAddLegalProcessing();
-    await editPage.fillUrlWithLabelModal(
-      "Legg til behandlingsgrunnlag",
-      {
-        uri: "https://lovdata.no/dokument/NL/lov/2",
-        prefLabel: {
-          nb: "Personvernloven § 2",
-          nn: "Personvernloven § 2",
-          en: "Personvernloven § 2",
-        },
+    // Fill in modal data
+    const modalData = {
+      title: {
+        nb: uniqueString("applicable_legislation_nb"),
+        nn: uniqueString("applicable_legislation_nn"),
+        en: uniqueString("applicable_legislation_en"),
       },
-      ["Bokmål", "Nynorsk", "Engelsk"],
-      false,
-    );
+      references: ["https://lovdata.no/dokument/NL/lov/test"],
+    };
 
-    await editPage.clickAddLegalAccess();
-    await editPage.fillUrlWithLabelModal(
-      "Legg til utleveringshjemmel",
-      {
-        uri: "https://lovdata.no/dokument/NL/lov/3",
-        prefLabel: {
-          nb: "Personvernloven § 3",
-          nn: "Personvernloven § 3",
-          en: "Personvernloven § 3",
-        },
-      },
+    await editPage.fillApplicableLegislationModal(
+      "Legg til gjeldende lovgiving",
+      modalData,
       ["Bokmål", "Nynorsk", "Engelsk"],
       false,
     );
+    await editPage.waitForAutoSaveToComplete();
+
+    // Don't close the modal, just refresh the page
+    await page.reload();
+
+    // Wait for restore dialog and click restore
+    await editPage.expectRestoreDialog();
+    await editPage.clickRestoreButton();
+
+    // Verify the modal data was restored by checking if the applicable legislation was added
+    await expect(page.getByText(modalData.title.nb)).toBeVisible();
 
     await editPage.setPublicationDate(new Date().toISOString());
 
@@ -195,9 +166,7 @@ runTestAsAdmin(
     await detailPage.expectTitle(newTitle.nb);
     await detailPage.expectDescription(newDescription.nb);
     await detailPage.expectAccessRights("Allmenn tilgang");
-    await detailPage.expectLegalRestriction("Personvernloven § 1");
-    await detailPage.expectLegalProcessing("Personvernloven § 2");
-    await detailPage.expectLegalAccess("Personvernloven § 3");
+    await detailPage.expectApplicableLegislation("applicable_legislation_nb");
     await detailPage.expectPublicationDate(
       new Date().toISOString().split("T")[0],
     );
@@ -569,9 +538,7 @@ runTestAsAdmin(
       accessRight: accessRightPublic.uri,
       approved: false,
       landingPage: [],
-      legalBasisForAccess: [],
-      legalBasisForProcessing: [],
-      legalBasisForRestriction: [],
+      applicableLegislation: [],
       euDataTheme: [],
       losTheme: [],
       contactPoints: [],

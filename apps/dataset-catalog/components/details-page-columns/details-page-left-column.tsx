@@ -116,6 +116,7 @@ export const LeftColumn = ({
         </InfoCard.Item>
       )}
       {(hasValues(dataset?.accessRight) ||
+        hasValues(dataset?.applicableLegislation) ||
         hasValues(dataset?.legalBasisForAccess) ||
         hasValues(dataset?.legalBasisForRestriction) ||
         hasValues(dataset?.legalBasisForProcessing)) && (
