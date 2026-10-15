@@ -28,6 +28,7 @@ export const informationModelTemplate = (
     version: normalizeVersion(informationModel?.version),
     creator: informationModel?.creator || "",
     subjects: informationModel?.subjects || [],
+    issued: informationModel?.issued || "",
     modified: informationModel?.modified || "",
   };
 };
@@ -43,6 +44,7 @@ export const informationModelToBeCreatedTemplate =
       version: null,
       creator: "",
       subjects: [],
+      issued: "",
       modified: "",
     };
   };

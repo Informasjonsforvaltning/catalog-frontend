@@ -126,6 +126,14 @@ export const LeftColumn = ({
           <Paragraph>{versionToString(informationModel.version)}</Paragraph>
         </InfoCard.Item>
       )}
+      {informationModel?.issued && (
+        <InfoCard.Item
+          title={localization.informationModelForm.fieldLabel.issued}
+          data-testid="information-model-issued"
+        >
+          <Paragraph>{formatDateToDDMMYYYY(informationModel.issued)}</Paragraph>
+        </InfoCard.Item>
+      )}
       {informationModel?.modified && (
         <InfoCard.Item
           title={localization.informationModelForm.fieldLabel.modified}

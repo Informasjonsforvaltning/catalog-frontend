@@ -179,7 +179,7 @@ const versionValidationSchema = () =>
       },
     );
 
-const modifiedValidationSchema = () =>
+const dateValidationSchema = () =>
   Yup.mixed()
     .nullable()
     .test({
@@ -193,7 +193,7 @@ const modifiedValidationSchema = () =>
         }
 
         return this.createError({
-          message: localization.informationModelForm.validation.modified,
+          message: localization.informationModelForm.validation.date,
           path: this.path,
         });
       },
@@ -207,7 +207,8 @@ export const draftInformationModelValidationSchema = () =>
     status: Yup.string().nullable().notRequired(),
     homepage: homepageValidationSchema(),
     version: versionValidationSchema(),
-    modified: modifiedValidationSchema(),
+    issued: dateValidationSchema(),
+    modified: dateValidationSchema(),
   });
 
 export const informationModelValidationSchema = () =>
@@ -218,5 +219,6 @@ export const informationModelValidationSchema = () =>
     status: Yup.string().nullable().notRequired(),
     homepage: homepageValidationSchema(),
     version: versionValidationSchema(),
-    modified: modifiedValidationSchema(),
+    issued: dateValidationSchema(),
+    modified: dateValidationSchema(),
   });
