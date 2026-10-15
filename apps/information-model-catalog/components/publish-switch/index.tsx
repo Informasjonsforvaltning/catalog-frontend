@@ -93,7 +93,7 @@ export const PublishSwitch = ({
 
       {showPublishConfirm && (
         <ConfirmModal
-          title={localization.informationModelForm.alert.confirmPublish}
+          title={localization.informationModelForm.alert.confirmPublishTitle}
           content={localization.informationModelForm.alert.confirmPublish}
           successButtonText={localization.button.publish}
           onSuccess={handleConfirmPublish}
@@ -103,7 +103,7 @@ export const PublishSwitch = ({
 
       {showUnpublishConfirm && (
         <ConfirmModal
-          title={localization.informationModelForm.alert.confirmUnpublish}
+          title={localization.informationModelForm.alert.confirmUnpublishTitle}
           content={localization.informationModelForm.alert.confirmUnpublish}
           successButtonText={localization.button.unpublish}
           onSuccess={handleConfirmUnpublish}

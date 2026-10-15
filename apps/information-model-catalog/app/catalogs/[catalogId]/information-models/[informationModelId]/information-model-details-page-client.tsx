@@ -22,6 +22,7 @@ interface InformationModelDetailsPageProps {
   catalogId: string;
   informationModelId: string;
   hasWritePermission: boolean;
+  isValid: boolean;
   statuses: ReferenceDataCode[];
   searchEnv: string;
   referenceDataEnv: string;
@@ -32,6 +33,7 @@ const InformationModelDetailsPageClient = ({
   catalogId,
   informationModelId,
   hasWritePermission,
+  isValid,
   statuses,
   searchEnv,
   referenceDataEnv,
@@ -142,6 +144,7 @@ const InformationModelDetailsPageClient = ({
             informationModel={currentInformationModel}
             language={language}
             hasWritePermission={hasWritePermission}
+            isValid={isValid}
             onPublishedChange={handlePublishedChange}
           />
         </DetailsPageLayout.Right>

@@ -64,6 +64,13 @@ export const parseDateTime = (value: any) => {
     return dateTime;
   }
 
+  if (typeof value === "string") {
+    dateTime = DateTime.fromISO(value);
+    if (dateTime.isValid) {
+      return dateTime;
+    }
+  }
+
   return null;
 };
 

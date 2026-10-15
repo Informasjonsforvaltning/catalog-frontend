@@ -89,7 +89,13 @@ export const LeftColumn = ({
                 return (
                   <Table.Row key={subjectUri}>
                     <Table.Cell>
-                      <Link href={`${referenceDataEnv}/concepts/${match?.id}`}>
+                      <Link
+                        href={
+                          match?.id
+                            ? `${referenceDataEnv}/concepts/${match.id}`
+                            : subjectUri
+                        }
+                      >
                         {getTranslateText(match?.title, language) || subjectUri}
                       </Link>
                     </Table.Cell>
