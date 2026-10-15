@@ -14,6 +14,8 @@ export const informationModelFormNb = {
       "Kontaktinformasjon for kontaktpunktet. Minst én av e-post eller kontaktside må fylles ut.",
     publish:
       "Publiser informasjonsmodellbeskrivelsen til Data.norge.no. For å publisere må du fylle ut alle påkrevde felt i skjemaet, en beskrivelse kan ikke slettes så lenge den er publisert.",
+    publishValidationError:
+      "Publisering er ikke mulig fordi ett eller flere felt inneholder ugyldige eller manglende verdier. Klikk på [Rediger informasjonsmodellen]({0}) for å åpne skjemaet og se hvilke feil som må rettes for å publisere.",
     version: `
 Versjonsnummeret følger formatet 'major.minor.patch', hvor:
 - __Major__ økes ved store endringer som ikke er bakoverkompatible.
@@ -61,8 +63,10 @@ Eksempel: Versjon 2.1.3 betyr andre hovedversjon, første mindre oppdatering, og
     confirmDeleteTitle: "Bekreft sletting",
     confirmDelete:
       "Er du sikker på at du vil slette informasjonsmodellbeskrivelsen?",
+    confirmPublishTitle: "Bekreft publisering",
     confirmPublish:
       "Er du sikker på at du vil publisere informasjonsmodellbeskrivelsen?",
+    confirmUnpublishTitle: "Bekreft avpublisering",
     confirmUnpublish:
       "Er du sikker på at du vil avpublisere informasjonsmodellbeskrivelsen?",
     ignoreRequired:

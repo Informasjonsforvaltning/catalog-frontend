@@ -86,8 +86,9 @@ const InformationModelForm = ({
 }: Props) => {
   const searchParams = useSearchParams();
   const restoreOnRender = Boolean(searchParams.get("restore"));
+  const validateOnRender = Boolean(searchParams.get("validate"));
   const { catalogId, informationModelId } = useParams();
-  const [validateOnChange, setValidateOnChange] = useState(false);
+  const [validateOnChange, setValidateOnChange] = useState(validateOnRender);
   const [isCanceled, setIsCanceled] = useState(false);
   const [ignoreRequired, setIgnoreRequired] = useState(false);
   const ignoreRequiredNewKey = "informationModelForm.ignoreRequired.new";
@@ -198,6 +199,12 @@ const InformationModelForm = ({
       sessionStorage.setItem(ignoreRequiredKey, String(checked));
     }
   };
+
+  useEffect(() => {
+    if (validateOnRender) {
+      formikRef.current?.validateForm();
+    }
+  }, [validateOnRender]);
 
   useEffect(() => {
     if (showSnackbarSuccessOnInit) {

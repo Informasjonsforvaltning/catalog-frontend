@@ -15,6 +15,7 @@ type Props = {
   informationModel: InformationModel;
   language?: string;
   hasWritePermission: boolean;
+  isValid: boolean;
   onPublishedChange?: (published: boolean) => void;
 };
 
@@ -22,9 +23,11 @@ export const RightColumn = ({
   informationModel,
   language,
   hasWritePermission,
+  isValid,
   onPublishedChange,
 }: Props) => {
   const contactPoint = informationModel?.contactPoints?.[0];
+  const canPublish = isValid || informationModel.published;
 
   return (
     <InfoCard data-testid="information-model-right-column">
@@ -41,13 +44,22 @@ export const RightColumn = ({
         key={`info-data-${localization.publicationState.state}`}
         title={localization.publicationState.state}
         headingColor="light"
-        helpText={localization.informationModelForm.helptext.publish}
-        helpTextSeverity="info"
+        helpText={
+          canPublish
+            ? localization.informationModelForm.helptext.publish
+            : `${localization.formatString(
+                localization.informationModelForm.helptext
+                  .publishValidationError,
+                `/catalogs/${informationModel.catalogId}/information-models/${informationModel.id}/edit?validate=1`,
+              )}`
+        }
+        helpTextSeverity={canPublish ? "info" : "warning"}
+        data-testid="information-model-publication-state"
       >
         <PublishSwitch
           catalogId={informationModel.catalogId}
           informationModel={informationModel}
-          disabled={!hasWritePermission}
+          disabled={!hasWritePermission || !canPublish}
           onPublishedChange={onPublishedChange}
         />
 

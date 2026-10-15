@@ -61,18 +61,29 @@ const descriptionValidationSchema = () =>
       .notRequired(),
   });
 
+const emptyStringToNull = (value: unknown) => (value === "" ? null : value);
+
+const optionalHttpsUrlSchema = () =>
+  Yup.string()
+    .transform(emptyStringToNull)
+    .matches(httpsRegex, localization.validation.invalidProtocol)
+    .url(localization.validation.invalidUrl)
+    .nullable()
+    .notRequired();
+
 const contactPointFieldsSchema = () =>
   Yup.object().shape({
     email: Yup.string()
+      .transform(emptyStringToNull)
       .email(localization.validation.invalidEmail)
+      .nullable()
       .notRequired(),
     telephone: Yup.string()
+      .transform(emptyStringToNull)
       .matches(telephoneNumberRegex, localization.validation.invalidPhone)
+      .nullable()
       .notRequired(),
-    url: Yup.string()
-      .matches(httpsRegex, localization.validation.invalidProtocol)
-      .url(localization.validation.invalidUrl)
-      .notRequired(),
+    url: optionalHttpsUrlSchema(),
   });
 
 const contactPointDraftValidationSchema = () =>
@@ -111,15 +122,16 @@ const contactPointConfirmValidationSchema = () =>
             },
           ),
         email: Yup.string()
+          .transform(emptyStringToNull)
           .email(localization.validation.invalidEmail)
+          .nullable()
           .notRequired(),
         telephone: Yup.string()
+          .transform(emptyStringToNull)
           .matches(telephoneNumberRegex, localization.validation.invalidPhone)
+          .nullable()
           .notRequired(),
-        url: Yup.string()
-          .matches(httpsRegex, localization.validation.invalidProtocol)
-          .url(localization.validation.invalidUrl)
-          .notRequired(),
+        url: optionalHttpsUrlSchema(),
       }),
     )
     .test(
@@ -135,12 +147,9 @@ const contactPointConfirmValidationSchema = () =>
     );
 
 const homepageValidationSchema = () =>
-  Yup.string()
-    .label(localization.informationModelForm.fieldLabel.homepage)
-    .matches(httpsRegex, localization.validation.invalidProtocol)
-    .url(localization.validation.invalidUrl)
-    .nullable()
-    .notRequired();
+  optionalHttpsUrlSchema().label(
+    localization.informationModelForm.fieldLabel.homepage,
+  );
 
 const isEmptyVersionPart = (value: unknown) =>
   value === undefined || value === null || value === "";

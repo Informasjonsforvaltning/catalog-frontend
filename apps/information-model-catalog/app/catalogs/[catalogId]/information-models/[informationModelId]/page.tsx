@@ -14,6 +14,8 @@ import { redirect, RedirectType } from "next/navigation";
 import InformationModelDetailsPageClient from "./information-model-details-page-client";
 import { withReadProtectedPage } from "@information-model-catalog/utils/auth";
 import { fetchInformationModelWithRetry } from "@information-model-catalog/utils/information-model";
+import { informationModelValidationSchema } from "@information-model-catalog/components/information-model-form/utils/validation-schema";
+import { informationModelTemplate } from "@information-model-catalog/components/information-model-form/utils/information-model-initial-values";
 
 const InformationModelDetailsPage = withReadProtectedPage(
   ({ catalogId, informationModelId }) =>
@@ -39,6 +41,10 @@ const InformationModelDetailsPage = withReadProtectedPage(
     const hasWritePermission = hasOrganizationWritePermission(
       session.accessToken,
       catalogId,
+    );
+
+    const isValid = await informationModelValidationSchema().isValid(
+      informationModelTemplate(informationModel),
     );
 
     const breadcrumbList = [
@@ -68,6 +74,7 @@ const InformationModelDetailsPage = withReadProtectedPage(
             catalogId={catalogId}
             informationModelId={informationModelId}
             hasWritePermission={hasWritePermission}
+            isValid={isValid}
             statuses={statusesResponse.productStatuses}
             searchEnv={process.env.FDK_SEARCH_SERVICE_BASE_URI ?? ""}
             referenceDataEnv={process.env.FDK_BASE_URI ?? ""}
