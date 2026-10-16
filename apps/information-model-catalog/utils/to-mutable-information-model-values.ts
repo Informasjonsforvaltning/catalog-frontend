@@ -17,6 +17,7 @@ const MUTABLE_INFORMATION_MODEL_FIELDS = [
   "version",
   "creator",
   "subjects",
+  "relations",
   "issued",
   "modified",
 ] as const;
@@ -71,5 +72,6 @@ export const toMutableInformationModelValues = (
     contactPoints: emptyContactPointsToNull(model.contactPoints),
     version: normalizeVersion(model.version),
     subjects: emptyToNull(model.subjects),
+    relations: emptyToNull(model.relations),
   };
 };

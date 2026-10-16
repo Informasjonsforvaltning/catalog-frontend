@@ -207,6 +207,7 @@ export const nb = {
   },
 
   button: {
+    actions: "Handlinger",
     addDataset: "Legg til ny datasettbeskrivelse",
     addMobilityDataset:
       "Legg til ny datasettbeskrivelse av typen mobility-DCAT-AP",

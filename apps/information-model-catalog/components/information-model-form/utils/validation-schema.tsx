@@ -6,8 +6,11 @@ import {
 } from "@catalog-frontend/utils";
 import * as Yup from "yup";
 import { nb } from "yup-locales";
+import relations from "./relations.json";
 
 Yup.setLocale(nb);
+
+const relationTypeUris = relations.map((relation) => relation.uri);
 
 const titleValidationSchema = () =>
   Yup.object()
@@ -208,6 +211,18 @@ const dateValidationSchema = () =>
       },
     });
 
+export const resourceRelationSchema = Yup.object().shape({
+  type: Yup.string()
+    .oneOf(
+      relationTypeUris,
+      localization.informationModelForm.validation.relation,
+    )
+    .required(localization.informationModelForm.validation.relation),
+  source: Yup.string().required(
+    localization.informationModelForm.validation.relation,
+  ),
+});
+
 export const draftInformationModelValidationSchema = () =>
   Yup.object().shape({
     title: titleValidationSchema(),
@@ -216,6 +231,7 @@ export const draftInformationModelValidationSchema = () =>
     status: Yup.string().nullable().notRequired(),
     homepage: homepageValidationSchema(),
     version: versionValidationSchema(),
+    relations: Yup.array().of(resourceRelationSchema),
     issued: dateValidationSchema(),
     modified: dateValidationSchema(),
   });
@@ -228,6 +244,7 @@ export const informationModelValidationSchema = () =>
     status: Yup.string().nullable().notRequired(),
     homepage: homepageValidationSchema(),
     version: versionValidationSchema(),
+    relations: Yup.array().of(resourceRelationSchema),
     issued: dateValidationSchema(),
     modified: dateValidationSchema(),
   });

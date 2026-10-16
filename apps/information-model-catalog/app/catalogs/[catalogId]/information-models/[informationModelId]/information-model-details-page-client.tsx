@@ -25,7 +25,7 @@ interface InformationModelDetailsPageProps {
   isValid: boolean;
   statuses: ReferenceDataCode[];
   searchEnv: string;
-  referenceDataEnv: string;
+  fdkBaseUri: string;
 }
 
 const InformationModelDetailsPageClient = ({
@@ -36,7 +36,7 @@ const InformationModelDetailsPageClient = ({
   isValid,
   statuses,
   searchEnv,
-  referenceDataEnv,
+  fdkBaseUri,
 }: InformationModelDetailsPageProps) => {
   const [language, setLanguage] = useState("nb");
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -136,7 +136,7 @@ const InformationModelDetailsPageClient = ({
             informationModel={currentInformationModel}
             language={language}
             searchEnv={searchEnv}
-            referenceDataEnv={referenceDataEnv}
+            fdkBaseUri={fdkBaseUri}
           />
         </DetailsPageLayout.Left>
         <DetailsPageLayout.Right>

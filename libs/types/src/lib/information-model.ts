@@ -8,6 +8,11 @@ export interface InformationModelContactPoint {
   url?: string;
 }
 
+export type ResourceRelation = {
+  type?: string;
+  source?: string;
+};
+
 export interface InformationModel extends InformationModelToBeCreated {
   id: string;
   catalogId: string;
@@ -27,6 +32,7 @@ export interface InformationModelToBeCreated {
   version?: Version | null;
   creator?: string | null;
   subjects?: string[] | null;
+  relations?: ResourceRelation[] | null;
   issued?: string | null;
   modified?: string | null;
 }

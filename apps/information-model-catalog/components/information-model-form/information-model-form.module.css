@@ -16,6 +16,32 @@
   gap: 2.5%;
 }
 
+.comboboxOptionTwoColumns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--ds-size-2);
+}
+
+.table {
+  width: 100%;
+  table-layout: fixed;
+}
+
+.table th,
+.table td {
+  word-wrap: break-word;
+  padding-bottom: var(--ds-size-4);
+}
+
+.modalContent {
+  margin: var(--ds-size-8) 0;
+}
+
+.errorBorder {
+  border: 2px solid var(--ds-color-danger-border-default);
+  border-radius: var(--ds-border-radius-md);
+}
+
 .set {
   display: flex;
 }

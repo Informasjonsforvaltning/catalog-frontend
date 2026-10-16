@@ -25,6 +25,7 @@ const baseServerModel = {
   version: null,
   creator: null,
   subjects: null,
+  relations: null,
   issued: null,
   modified: null,
 } as InformationModel;
@@ -38,6 +39,7 @@ const baseFormValues = {
   version: null,
   creator: "",
   subjects: [],
+  relations: [],
   issued: "",
   modified: "",
 } as InformationModelToBeCreated;
@@ -173,5 +175,43 @@ describe("toMutableInformationModelValues", () => {
     );
 
     expect(diff).toContainEqual({ op: "remove", path: "/issued" });
+  });
+
+  test("treats null and empty relations as equal so compare emits no relations op", () => {
+    const diff = compare(
+      toMutableInformationModelValues(baseServerModel),
+      toMutableInformationModelValues(baseFormValues),
+    );
+
+    expect(diff.filter((op) => op.path.startsWith("/relations"))).toEqual([]);
+  });
+
+  test("replaces relations when stored value is null instead of adding into a null array", () => {
+    const formWithRelation = {
+      ...baseFormValues,
+      relations: [
+        {
+          type: "http://purl.org/dc/terms/replaces",
+          source: "https://example.com/information-models/old",
+        },
+      ],
+    };
+
+    const diff = compare(
+      toMutableInformationModelValues(baseServerModel),
+      toMutableInformationModelValues(formWithRelation),
+    );
+
+    expect(diff).toContainEqual({
+      op: "replace",
+      path: "/relations",
+      value: [
+        {
+          type: "http://purl.org/dc/terms/replaces",
+          source: "https://example.com/information-models/old",
+        },
+      ],
+    });
+    expect(diff.some((op) => op.path === "/relations/0")).toBe(false);
   });
 });
