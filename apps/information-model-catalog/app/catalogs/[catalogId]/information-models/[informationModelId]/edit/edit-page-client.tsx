@@ -33,6 +33,9 @@ export const EditPage = ({
 
   const dataStorage = new LocalDataStorage<StorageData>({
     key: "informationModelForm",
+    secondaryKeys: {
+      relation: "informationModelFormRelation",
+    },
   });
 
   const handleUpdate = async (values: InformationModel) => {

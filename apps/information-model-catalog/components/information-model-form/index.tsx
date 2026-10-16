@@ -11,6 +11,7 @@ import {
   InformationModel,
   InformationModelToBeCreated,
   ReferenceDataCode,
+  ResourceRelation,
   StorageData,
 } from "@catalog-frontend/types";
 import {
@@ -36,6 +37,7 @@ import styles from "./information-model-form.module.css";
 import { AboutSection } from "./components/about-section";
 import { ContactPointSection } from "./components/contact-point-section";
 import { SubjectsSection } from "./components/subjects-section";
+import { RelationsSection } from "./components/relations-section";
 import {
   informationModelValidationSchema,
   draftInformationModelValidationSchema,
@@ -290,6 +292,7 @@ const InformationModelForm = ({
           isValidating,
           submitForm,
           setValues,
+          setFieldValue,
           values,
           initialValues: formInitialValues,
         }) => {
@@ -319,6 +322,20 @@ const InformationModelForm = ({
             );
             setValues(restoreValues);
 
+            const restoreRelationData =
+              autoSaveStorage?.getSecondary("relation");
+            if (restoreRelationData && restoreRelationData?.id === autoSaveId) {
+              const relationValues: {
+                relation: ResourceRelation;
+                index: number;
+              } = restoreRelationData.values;
+              setFieldValue(
+                `relations[${relationValues.index}]`,
+                relationValues.relation,
+              );
+              autoSaveStorage?.deleteSecondary("relation");
+            }
+
             showSnackbarMessage({
               message: localization.snackbar.restoreSuccessful,
               severity: "success",
@@ -347,6 +364,7 @@ const InformationModelForm = ({
               "status",
               "version",
               "subjects",
+              "relations",
               "contactPoints",
             ].forEach((name) => {
               if (isDirty(name)) {
@@ -414,6 +432,29 @@ const InformationModelForm = ({
                       error={hasError(["subjects"])}
                     >
                       <SubjectsSection searchEnv={searchEnv} />
+                    </FormLayout.Section>
+
+                    <FormLayout.Section
+                      id="relations-section"
+                      title={
+                        localization.informationModelForm.heading.relations
+                      }
+                      subtitle={
+                        localization.informationModelForm.subtitle.relations
+                      }
+                      changed={
+                        markDirty &&
+                        dirtyFields.some((field) =>
+                          ["relations"].includes(field),
+                        )
+                      }
+                      error={hasError(["relations"])}
+                    >
+                      <RelationsSection
+                        searchEnv={searchEnv}
+                        autoSaveId={autoSaveId}
+                        autoSaveStorage={autoSaveStorage}
+                      />
                     </FormLayout.Section>
 
                     <FormLayout.Section

@@ -35,6 +35,7 @@ jest.mock("@catalog-frontend/utils", () => {
           contactPoints: "contact points required",
           version: "version incomplete",
           date: "invalid date",
+          relation: "relation incomplete",
         },
       },
     },
@@ -43,7 +44,10 @@ jest.mock("@catalog-frontend/utils", () => {
 
 import { InformationModel } from "@catalog-frontend/types";
 import { informationModelTemplate } from "./information-model-initial-values";
-import { informationModelValidationSchema } from "./validation-schema";
+import {
+  informationModelValidationSchema,
+  resourceRelationSchema,
+} from "./validation-schema";
 
 const publishableFromApi = {
   id: "c40dfa35-5753-4db9-a918-2257ee0b32c9",
@@ -100,6 +104,44 @@ describe("informationModelValidationSchema", () => {
       informationModelValidationSchema().isValid(
         informationModelTemplate(invalidHomepage),
       ),
+    ).resolves.toBe(false);
+  });
+});
+
+describe("resourceRelationSchema", () => {
+  test("accepts a valid relation type and source", async () => {
+    await expect(
+      resourceRelationSchema.isValid({
+        type: "http://purl.org/dc/terms/replaces",
+        source: "https://example.com/information-models/old",
+      }),
+    ).resolves.toBe(true);
+  });
+
+  test("rejects an unknown relation type", async () => {
+    await expect(
+      resourceRelationSchema.isValid({
+        type: "http://example.com/unknown-relation",
+        source: "https://example.com/information-models/old",
+      }),
+    ).resolves.toBe(false);
+  });
+
+  test("rejects a missing type", async () => {
+    await expect(
+      resourceRelationSchema.isValid({
+        type: "",
+        source: "https://example.com/information-models/old",
+      }),
+    ).resolves.toBe(false);
+  });
+
+  test("rejects a missing source", async () => {
+    await expect(
+      resourceRelationSchema.isValid({
+        type: "http://purl.org/dc/terms/replaces",
+        source: "",
+      }),
     ).resolves.toBe(false);
   });
 });
