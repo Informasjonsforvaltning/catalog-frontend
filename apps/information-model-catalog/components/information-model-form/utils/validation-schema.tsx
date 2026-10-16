@@ -208,6 +208,15 @@ const dateValidationSchema = () =>
       },
     });
 
+export const resourceRelationSchema = Yup.object().shape({
+  type: Yup.string().required(
+    localization.informationModelForm.validation.relation,
+  ),
+  source: Yup.string().required(
+    localization.informationModelForm.validation.relation,
+  ),
+});
+
 export const draftInformationModelValidationSchema = () =>
   Yup.object().shape({
     title: titleValidationSchema(),
@@ -216,6 +225,7 @@ export const draftInformationModelValidationSchema = () =>
     status: Yup.string().nullable().notRequired(),
     homepage: homepageValidationSchema(),
     version: versionValidationSchema(),
+    relations: Yup.array().of(resourceRelationSchema),
     issued: dateValidationSchema(),
     modified: dateValidationSchema(),
   });
@@ -228,6 +238,7 @@ export const informationModelValidationSchema = () =>
     status: Yup.string().nullable().notRequired(),
     homepage: homepageValidationSchema(),
     version: versionValidationSchema(),
+    relations: Yup.array().of(resourceRelationSchema),
     issued: dateValidationSchema(),
     modified: dateValidationSchema(),
   });

@@ -33,6 +33,9 @@ export const NewInformationModelPageClient = ({
 
   const dataStorage = new LocalDataStorage<StorageData>({
     key: "informationModelForm",
+    secondaryKeys: {
+      relation: "informationModelFormRelation",
+    },
   });
 
   const handleCancel = () => {

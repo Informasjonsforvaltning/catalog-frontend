@@ -1,0 +1,42 @@
+[
+  {
+    "code": "replaces",
+    "uriAsPrefix": "dct:replaces",
+    "label": {
+      "nn": "Erstatter",
+      "nb": "Erstatter",
+      "en": "Replaces"
+    },
+    "uri": "http://purl.org/dc/terms/replaces"
+  },
+  {
+    "code": "isReplacedBy",
+    "uriAsPrefix": "dct:isReplacedBy",
+    "label": {
+      "nn": "Er erstatta av",
+      "nb": "Er erstattet av",
+      "en": "Is replaced by"
+    },
+    "uri": "http://purl.org/dc/terms/isReplacedBy"
+  },
+  {
+    "code": "isPartOf",
+    "uriAsPrefix": "dct:isPartOf",
+    "label": {
+      "nn": "Er del av",
+      "nb": "Er del av",
+      "en": "Is part of"
+    },
+    "uri": "http://purl.org/dc/terms/isPartOf"
+  },
+  {
+    "code": "hasPart",
+    "uriAsPrefix": "dct:hasPart",
+    "label": {
+      "nn": "Har del",
+      "nb": "Har del",
+      "en": "Has part"
+    },
+    "uri": "http://purl.org/dc/terms/hasPart"
+  }
+]

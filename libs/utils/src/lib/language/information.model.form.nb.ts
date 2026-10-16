@@ -27,18 +27,23 @@ Eksempel: Versjon 2.1.3 betyr andre hovedversjon, første mindre oppdatering, og
       "Produsent brukes når eieren av informasjonsmodellen er en annen enn utgiveren. Velg virksomhet fra Enhetsregisteret.",
     subjects:
       "Velg begrep registrert i [begrepskatalogen til data.norge](https://data.norge.no/concepts). Ved å henvise til gjennomarbeidede beskrivelser som virksomheten selv er ansvarlig for å vedlikeholde, sikrer vi at det er tydelig hvordan et begrep brukt i informasjonsmodellen skal forstås og at denne forståelsen er riktig og oppdatert.",
+    relations:
+      "Oppgi hvilken kobling denne informasjonsmodellen har til en annen informasjonsmodell. Velg relasjonstype og søk opp og velg informasjonsmodell fra informasjonsmodellkatalogen på data.norge.no. For eksempel: dersom denne modellen erstatter en eldre modell, oppgir du relasjonen «erstatter» og den eldre modellen.",
     issued: "Dato for når informasjonsmodellen ble utgitt.",
     modified: "Dato for siste endring av informasjonsmodellen.",
   },
   heading: {
     about: "Om informasjonsmodellen",
     subjects: "Begreper",
+    relations: "Relasjoner",
     contactPoint: "Kontaktpunkt",
   },
   subtitle: {
     about: "Nøkkelinformasjon om informasjonsmodellen.",
     subjects:
       "Begrepsbeskrivelser gir felles og tydelige rammer for å forstå og tolke innholdet i informasjonsmodellen.",
+    relations:
+      "Andre informasjonsmodeller som har relevante koblinger til denne informasjonsmodellen.",
     contactPoint:
       "Informasjon om en organisasjon eller enhet som kan kontaktes for spørsmål eller kommentarer om informasjonsmodellen. Det skal ikke oppgis personlig kontaktinformasjon.",
   },
@@ -50,6 +55,10 @@ Eksempel: Versjon 2.1.3 betyr andre hovedversjon, første mindre oppdatering, og
     version: "Versjonsnummer",
     creator: "Produsent",
     subjects: "Begreper",
+    relations: "Relaterte informasjonsmodeller",
+    relationType: "Relasjonstype",
+    informationModel: "Informasjonsmodell",
+    choseRelation: "Velg relasjon",
     issued: "Utgivelsesdato",
     modified: "Endringsdato",
     informationModelID: "Informasjonsmodell-ID",
@@ -80,6 +89,7 @@ Eksempel: Versjon 2.1.3 betyr andre hovedversjon, første mindre oppdatering, og
     version:
       "Versjonsnummer må fylles ut med major, minor og patch, eller være tomt.",
     date: "Ugyldig dato. Bruk formatet dd.mm.åååå.",
+    relation: "Begge verdiene må fylles ut for å legge til en relasjon.",
   },
   errors: {
     creator: "Kunne ikke hente enheter.",

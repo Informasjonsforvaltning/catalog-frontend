@@ -1,16 +1,22 @@
 "use client";
 
-import { InformationModel } from "@catalog-frontend/types";
-import { InfoCard, useSearchConceptsByUri } from "@catalog-frontend/ui";
+import { InformationModel, Search } from "@catalog-frontend/types";
+import {
+  InfoCard,
+  useSearchConceptsByUri,
+  useSearchInformationModelsByUri,
+} from "@catalog-frontend/ui";
 import {
   formatDateToDDMMYYYY,
   localization,
   getTranslateText,
+  validUUID,
   versionToString,
 } from "@catalog-frontend/utils";
-import { isEmpty } from "lodash";
+import { compact, isEmpty } from "lodash";
 import { Link, Paragraph, Table } from "@digdir/designsystemet-react";
 import { useSearchEnheterByOrgNmbs } from "../../hooks/useEnhetsregister";
+import relations from "../information-model-form/utils/relations.json";
 import styles from "./details-columns.module.css";
 
 type Props = {
@@ -38,6 +44,30 @@ export const LeftColumn = ({
     searchEnv,
     informationModel?.subjects ?? [],
   );
+
+  const relationUris =
+    informationModel?.relations
+      ?.map((relation) => relation?.source)
+      .filter((uri): uri is string => Boolean(uri)) ?? [];
+
+  const { data: relatedInformationModels } = useSearchInformationModelsByUri(
+    searchEnv,
+    relationUris,
+  );
+
+  const getDataNorgeUri = (
+    id: string | undefined,
+    resourceType: Search.ResourceType,
+  ) => {
+    return validUUID(id)
+      ? `${referenceDataEnv}/${resourceType}/${id}`
+      : "/not-found";
+  };
+
+  const getRelationTypeLabel = (typeUri: string | undefined) => {
+    const match = relations.find((rel) => rel.uri === typeUri);
+    return match?.label ? getTranslateText(match.label, language) : typeUri;
+  };
 
   return (
     <InfoCard data-testid="information-model-left-column">
@@ -112,6 +142,62 @@ export const LeftColumn = ({
           </Table>
         </InfoCard.Item>
       )}
+      {informationModel?.relations &&
+        compact(informationModel.relations).length > 0 && (
+          <InfoCard.Item
+            title={localization.informationModelForm.fieldLabel.relations}
+            data-testid="information-model-relations"
+          >
+            <Table data-size="sm" className={styles.table}>
+              <Table.Head>
+                <Table.Row>
+                  <Table.HeaderCell>
+                    {localization.informationModelForm.fieldLabel.relationType}
+                  </Table.HeaderCell>
+                  <Table.HeaderCell>
+                    {
+                      localization.informationModelForm.fieldLabel
+                        .informationModel
+                    }
+                  </Table.HeaderCell>
+                  <Table.HeaderCell>{localization.publisher}</Table.HeaderCell>
+                </Table.Row>
+              </Table.Head>
+              <Table.Body>
+                {informationModel.relations.map((relation, index) => {
+                  const match = relatedInformationModels?.find(
+                    (item) => item?.uri === relation?.source,
+                  );
+                  return (
+                    <Table.Row key={`relations-${index}`}>
+                      <Table.Cell>
+                        {getRelationTypeLabel(relation?.type)}
+                      </Table.Cell>
+                      <Table.Cell>
+                        <Link
+                          href={
+                            match?.id
+                              ? getDataNorgeUri(match.id, "information-models")
+                              : (relation?.source ?? undefined)
+                          }
+                        >
+                          {getTranslateText(match?.title, language) ||
+                            relation?.source}
+                        </Link>
+                      </Table.Cell>
+                      <Table.Cell>
+                        {getTranslateText(
+                          match?.organization?.prefLabel,
+                          language,
+                        )}
+                      </Table.Cell>
+                    </Table.Row>
+                  );
+                })}
+              </Table.Body>
+            </Table>
+          </InfoCard.Item>
+        )}
       {!isEmpty(informationModel?.homepage) && (
         <InfoCard.Item
           title={localization.informationModelForm.fieldLabel.homepage}
