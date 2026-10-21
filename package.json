@@ -130,7 +130,7 @@
     "@ardatan/relay-compiler/immutable": "^4.3.9",
     "postcss": "^8.5.18",
     "yaml": "^2.8.3",
-    "follow-redirects": "^1.15.12",
+    "follow-redirects": "^1.16.1",
     "tmp": "^0.2.6",
     "qs": "^6.16.0",
     "ws": "^8.20.1",
