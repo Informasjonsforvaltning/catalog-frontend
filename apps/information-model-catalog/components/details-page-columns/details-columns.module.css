@@ -35,3 +35,14 @@
 .greyFont {
   color: var(--ds-color-neutral-text-subtle);
 }
+
+.urlCell {
+  max-width: 12rem;
+}
+
+.urlLink {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

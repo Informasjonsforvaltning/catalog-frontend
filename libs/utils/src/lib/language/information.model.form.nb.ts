@@ -29,6 +29,15 @@ Eksempel: Versjon 2.1.3 betyr andre hovedversjon, første mindre oppdatering, og
       "Velg begrep registrert i [begrepskatalogen til data.norge](https://data.norge.no/concepts). Ved å henvise til gjennomarbeidede beskrivelser som virksomheten selv er ansvarlig for å vedlikeholde, sikrer vi at det er tydelig hvordan et begrep brukt i informasjonsmodellen skal forstås og at denne forståelsen er riktig og oppdatert.",
     relations:
       "Oppgi hvilken kobling denne informasjonsmodellen har til en annen informasjonsmodell. Velg relasjonstype og søk opp og velg informasjonsmodell fra informasjonsmodellkatalogen på data.norge.no. For eksempel: dersom denne modellen erstatter en eldre modell, oppgir du relasjonen «erstatter» og den eldre modellen.",
+    hasFormat:
+      "Dokumenter som representerer informasjonsmodellen, for eksempel en maskinlesbar eller visuell representasjon. Du kan legge til flere dokumenter.",
+    hasFormatTitle:
+      "Kortfattet navn på dokumentet. Navnet skal kunne stå alene og gi mening. Oppgi tittelen på bokmål, nynorsk og/eller engelsk.",
+    hasFormatLanguage:
+      "Språket dokumentet er skrevet på. Verdiene hentes fra EUs kontrollerte vokabular [language](https://op.europa.eu/en/web/eu-vocabularies/concept-scheme/-/resource?uri=http://publications.europa.eu/resource/authority/language).",
+    hasFormatFormat:
+      "Filtypen til dokumentet. Verdiene hentes fra EUs kontrollerte vokabular [file type](https://op.europa.eu/en/web/eu-vocabularies/concept-scheme/-/resource?uri=http://publications.europa.eu/resource/authority/file-type).",
+    hasFormatSeeAlso: "Lenke til dokumentet. Adressen må starte med https://.",
     issued: "Dato for når informasjonsmodellen ble utgitt.",
     modified: "Dato for siste endring av informasjonsmodellen.",
   },
@@ -36,6 +45,7 @@ Eksempel: Versjon 2.1.3 betyr andre hovedversjon, første mindre oppdatering, og
     about: "Om informasjonsmodellen",
     subjects: "Begreper",
     relations: "Relasjoner",
+    hasFormat: "Dokumenter som representerer modellen",
     contactPoint: "Kontaktpunkt",
   },
   subtitle: {
@@ -44,6 +54,8 @@ Eksempel: Versjon 2.1.3 betyr andre hovedversjon, første mindre oppdatering, og
       "Begrepsbeskrivelser gir felles og tydelige rammer for å forstå og tolke innholdet i informasjonsmodellen.",
     relations:
       "Andre informasjonsmodeller som har relevante koblinger til denne informasjonsmodellen.",
+    hasFormat:
+      "Maskinlesbare eller visuelle representasjoner av informasjonsmodellen, slik at andre kan finne og bruke dem.",
     contactPoint:
       "Informasjon om en organisasjon eller enhet som kan kontaktes for spørsmål eller kommentarer om informasjonsmodellen. Det skal ikke oppgis personlig kontaktinformasjon.",
   },
@@ -59,6 +71,12 @@ Eksempel: Versjon 2.1.3 betyr andre hovedversjon, første mindre oppdatering, og
     relationType: "Relasjonstype",
     informationModel: "Informasjonsmodell",
     choseRelation: "Velg relasjon",
+    hasFormat: "Dokumenter",
+    hasFormatTitle: "Tittel",
+    hasFormatLanguage: "Språk",
+    hasFormatFormat: "Format",
+    hasFormatSeeAlso: "URL",
+    document: "Dokument",
     issued: "Utgivelsesdato",
     modified: "Endringsdato",
     informationModelID: "Informasjonsmodell-ID",

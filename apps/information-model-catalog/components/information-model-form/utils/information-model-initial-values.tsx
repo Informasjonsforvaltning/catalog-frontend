@@ -2,6 +2,7 @@ import {
   InformationModel,
   InformationModelContactPoint,
   InformationModelToBeCreated,
+  ModelDocument,
 } from "@catalog-frontend/types";
 import { normalizeVersion } from "@catalog-frontend/utils";
 import { omitBy, isEmpty } from "lodash";
@@ -13,6 +14,15 @@ const contactPointTemplate = (
   email: contactPoint?.email || undefined,
   telephone: contactPoint?.telephone || undefined,
   url: contactPoint?.url || undefined,
+});
+
+export const modelDocumentTemplate = (
+  document?: ModelDocument | null,
+): ModelDocument => ({
+  title: omitBy(document?.title, isEmpty),
+  language: document?.language || "",
+  format: document?.format || "",
+  seeAlso: document?.seeAlso || "",
 });
 
 export const informationModelTemplate = (
@@ -29,6 +39,7 @@ export const informationModelTemplate = (
     creator: informationModel?.creator || "",
     subjects: informationModel?.subjects || [],
     relations: informationModel?.relations || [],
+    hasFormat: (informationModel?.hasFormat ?? []).map(modelDocumentTemplate),
     issued: informationModel?.issued || "",
     modified: informationModel?.modified || "",
   };
@@ -46,6 +57,7 @@ export const informationModelToBeCreatedTemplate =
       creator: "",
       subjects: [],
       relations: [],
+      hasFormat: [],
       issued: "",
       modified: "",
     };

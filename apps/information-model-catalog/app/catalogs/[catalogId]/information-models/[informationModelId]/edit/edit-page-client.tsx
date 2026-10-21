@@ -18,6 +18,7 @@ type EditPageProps = {
   informationModel: InformationModel;
   statuses: ReferenceDataCode[];
   searchEnv: string;
+  referenceDataEnv: string;
 };
 
 export const EditPage = ({
@@ -25,6 +26,7 @@ export const EditPage = ({
   informationModel,
   statuses,
   searchEnv,
+  referenceDataEnv,
 }: EditPageProps) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -35,6 +37,7 @@ export const EditPage = ({
     key: "informationModelForm",
     secondaryKeys: {
       relation: "informationModelFormRelation",
+      hasFormat: "informationModelFormHasFormat",
     },
   });
 
@@ -93,6 +96,7 @@ export const EditPage = ({
         initialValues={informationModel}
         statuses={statuses}
         searchEnv={searchEnv}
+        referenceDataEnv={referenceDataEnv}
         autoSaveStorage={dataStorage}
         autoSaveId={informationModel.id}
         onSubmit={handleUpdate}

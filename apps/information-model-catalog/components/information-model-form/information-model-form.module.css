@@ -72,3 +72,14 @@
   height: 24px;
   margin: 0 var(--ds-size-2);
 }
+
+.urlCell {
+  max-width: 12rem;
+}
+
+.urlLink {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

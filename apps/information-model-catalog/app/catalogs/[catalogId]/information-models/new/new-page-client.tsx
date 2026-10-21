@@ -19,6 +19,7 @@ type NewInformationModelPageClientProps = {
   initialValues: InformationModelToBeCreated;
   statuses: ReferenceDataCode[];
   searchEnv: string;
+  referenceDataEnv: string;
 };
 
 export const NewInformationModelPageClient = ({
@@ -26,6 +27,7 @@ export const NewInformationModelPageClient = ({
   initialValues,
   statuses,
   searchEnv,
+  referenceDataEnv,
 }: NewInformationModelPageClientProps) => {
   const router = useRouter();
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
@@ -35,6 +37,7 @@ export const NewInformationModelPageClient = ({
     key: "informationModelForm",
     secondaryKeys: {
       relation: "informationModelFormRelation",
+      hasFormat: "informationModelFormHasFormat",
     },
   });
 
@@ -87,6 +90,7 @@ export const NewInformationModelPageClient = ({
         initialValues={initialValues}
         statuses={statuses}
         searchEnv={searchEnv}
+        referenceDataEnv={referenceDataEnv}
         autoSaveStorage={dataStorage}
         onCancel={handleCancel}
         onSubmit={handleCreate}

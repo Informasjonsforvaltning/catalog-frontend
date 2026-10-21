@@ -13,6 +13,13 @@ export type ResourceRelation = {
   source?: string;
 };
 
+export type ModelDocument = {
+  title?: LocalizedStrings;
+  language?: string | null;
+  format?: string | null;
+  seeAlso?: string | null;
+};
+
 export interface InformationModel extends InformationModelToBeCreated {
   id: string;
   catalogId: string;
@@ -33,6 +40,7 @@ export interface InformationModelToBeCreated {
   creator?: string | null;
   subjects?: string[] | null;
   relations?: ResourceRelation[] | null;
+  hasFormat?: ModelDocument[] | null;
   issued?: string | null;
   modified?: string | null;
 }

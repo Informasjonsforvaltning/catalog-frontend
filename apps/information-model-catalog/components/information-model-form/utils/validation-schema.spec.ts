@@ -29,6 +29,7 @@ jest.mock("@catalog-frontend/utils", () => {
           description: "description",
           homepage: "homepage",
           contactName: "contact name",
+          hasFormatSeeAlso: "url",
         },
         validation: {
           description: "description too short",
@@ -45,7 +46,9 @@ jest.mock("@catalog-frontend/utils", () => {
 import { InformationModel } from "@catalog-frontend/types";
 import { informationModelTemplate } from "./information-model-initial-values";
 import {
+  draftInformationModelValidationSchema,
   informationModelValidationSchema,
+  modelDocumentSchema,
   resourceRelationSchema,
 } from "./validation-schema";
 
@@ -142,6 +145,74 @@ describe("resourceRelationSchema", () => {
         type: "http://purl.org/dc/terms/replaces",
         source: "",
       }),
+    ).resolves.toBe(false);
+  });
+});
+
+describe("modelDocumentSchema", () => {
+  test("accepts a document with https seeAlso", async () => {
+    await expect(
+      modelDocumentSchema.isValid({
+        title: { nb: "PNG-visning" },
+        language:
+          "http://publications.europa.eu/resource/authority/language/NOB",
+        format:
+          "http://publications.europa.eu/resource/authority/file-type/PNG",
+        seeAlso: "https://example.com/models/model-1.png",
+      }),
+    ).resolves.toBe(true);
+  });
+
+  test("accepts a document without seeAlso", async () => {
+    await expect(
+      modelDocumentSchema.isValid({
+        title: { nb: "PNG-visning" },
+        language: "",
+        format: "",
+        seeAlso: "",
+      }),
+    ).resolves.toBe(true);
+  });
+
+  test("rejects a seeAlso that does not use https", async () => {
+    await expect(
+      modelDocumentSchema.isValid({
+        title: { nb: "PNG-visning" },
+        seeAlso: "http://example.com/models/model-1.png",
+      }),
+    ).resolves.toBe(false);
+  });
+
+  test("rejects an invalid seeAlso url", async () => {
+    await expect(
+      modelDocumentSchema.isValid({
+        title: { nb: "PNG-visning" },
+        seeAlso: "https://",
+      }),
+    ).resolves.toBe(false);
+  });
+});
+
+describe("hasFormat seeAlso https requirement", () => {
+  const modelWithHttpSeeAlso = informationModelTemplate({
+    ...publishableFromApi,
+    hasFormat: [
+      {
+        title: { nb: "PNG-visning" },
+        seeAlso: "http://example.com/models/model-1.png",
+      },
+    ],
+  } as InformationModel);
+
+  test("draft schema rejects http seeAlso", async () => {
+    await expect(
+      draftInformationModelValidationSchema().isValid(modelWithHttpSeeAlso),
+    ).resolves.toBe(false);
+  });
+
+  test("confirm schema rejects http seeAlso", async () => {
+    await expect(
+      informationModelValidationSchema().isValid(modelWithHttpSeeAlso),
     ).resolves.toBe(false);
   });
 });
