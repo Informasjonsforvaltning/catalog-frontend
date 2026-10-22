@@ -22,7 +22,7 @@ import { useMemo } from "react";
 import { modelDocumentTemplate } from "../../utils/information-model-initial-values";
 import { get } from "lodash";
 import styles from "../../information-model-form.module.css";
-import { HasFormatSecondaryValues } from "../../../../utils/has-format-secondary";
+import { FormatSecondaryValues } from "../../../../utils/has-format-secondary";
 import { HasFormatFieldModal } from "./has-format-modal";
 import { resolveLabel } from "./has-format-helpers";
 
@@ -75,7 +75,7 @@ export const HasFormatSection = ({
     referenceDataEnv,
   );
 
-  const setHasFormatSecondary = (payload: HasFormatSecondaryValues) => {
+  const setFormatSecondary = (payload: FormatSecondaryValues) => {
     if (autoSaveStorage && autoSaveId) {
       autoSaveStorage.setSecondary("hasFormat", {
         id: autoSaveId,
@@ -89,7 +89,7 @@ export const HasFormatSection = ({
     updatedDocument: ModelDocument,
     index: number,
   ) => {
-    setHasFormatSecondary({
+    setFormatSecondary({
       document: updatedDocument,
       index,
     });
@@ -214,7 +214,7 @@ export const HasFormatSection = ({
           onCancel={handleDocumentCancel}
           onChange={(updatedItem: ModelDocument) => {
             const newIndex = values.hasFormat?.length ?? 0;
-            setHasFormatSecondary({
+            setFormatSecondary({
               document: updatedItem,
               index: newIndex,
             });

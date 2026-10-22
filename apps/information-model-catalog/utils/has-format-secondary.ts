@@ -1,13 +1,13 @@
 import { ModelDocument } from "@catalog-frontend/types";
 
-export type HasFormatSecondaryValues = {
+export type FormatSecondaryValues = {
   document: ModelDocument;
   index: number;
 };
 
-export const isHasFormatSecondaryValues = (
+export const isFormatSecondaryValues = (
   values: unknown,
-): values is HasFormatSecondaryValues => {
+): values is FormatSecondaryValues => {
   if (values == null || typeof values !== "object") {
     return false;
   }

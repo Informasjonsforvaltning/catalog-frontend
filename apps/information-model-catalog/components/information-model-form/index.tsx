@@ -45,7 +45,7 @@ import {
 } from "./utils/validation-schema";
 import { informationModelTemplate } from "./utils/information-model-initial-values";
 import { DataStorage } from "@catalog-frontend/utils";
-import { isHasFormatSecondaryValues } from "../../utils/has-format-secondary";
+import { isFormatSecondaryValues } from "../../utils/has-format-secondary";
 import { get, isEmpty, isEqual } from "lodash";
 import classNames from "classnames";
 
@@ -345,7 +345,7 @@ const InformationModelForm = ({
             if (
               restoreHasFormatData &&
               restoreHasFormatData?.id === autoSaveId &&
-              isHasFormatSecondaryValues(restoreHasFormatData.values)
+              isFormatSecondaryValues(restoreHasFormatData.values)
             ) {
               setFieldValue(
                 `hasFormat[${restoreHasFormatData.values.index}]`,
