@@ -3,6 +3,7 @@ import {
   InformationModelContactPoint,
   InformationModelToBeCreated,
   LocalizedStrings,
+  ModelDocument,
 } from "@catalog-frontend/types";
 import { normalizeVersion, removeEmptyValues } from "@catalog-frontend/utils";
 import { isEmpty, pick } from "lodash";
@@ -18,12 +19,17 @@ const MUTABLE_INFORMATION_MODEL_FIELDS = [
   "creator",
   "subjects",
   "relations",
+  "hasFormat",
   "issued",
   "modified",
 ] as const;
 
 const emptyToNull = <T>(value: T | null | undefined): T | null =>
   value == null || isEmpty(value) ? null : value;
+
+const emptyStringToUndefined = (
+  value: string | null | undefined,
+): string | undefined => (value == null || value === "" ? undefined : value);
 
 const emptyLocalizedToNull = (
   value: LocalizedStrings | null | undefined,
@@ -58,6 +64,29 @@ const emptyContactPointsToNull = (
   return meaningful.length > 0 ? meaningful : null;
 };
 
+const isBlankModelDocument = (document: ModelDocument) =>
+  emptyLocalizedToNull(document.title) == null &&
+  !document.language &&
+  !document.format &&
+  !document.seeAlso;
+
+const emptyHasFormatToNull = (
+  documents: ModelDocument[] | null | undefined,
+): ModelDocument[] | null => {
+  if (documents == null || documents.length === 0) {
+    return null;
+  }
+  const meaningful = documents
+    .filter((document) => !isBlankModelDocument(document))
+    .map((document) => ({
+      title: emptyLocalizedToNull(document.title) ?? undefined,
+      language: emptyStringToUndefined(document.language),
+      format: emptyStringToUndefined(document.format),
+      seeAlso: emptyStringToUndefined(document.seeAlso),
+    }));
+  return meaningful.length > 0 ? meaningful : null;
+};
+
 export const toMutableInformationModelValues = (
   model: InformationModel | InformationModelToBeCreated,
 ) => {
@@ -73,5 +102,6 @@ export const toMutableInformationModelValues = (
     version: normalizeVersion(model.version),
     subjects: emptyToNull(model.subjects),
     relations: emptyToNull(model.relations),
+    hasFormat: emptyHasFormatToNull(model.hasFormat),
   };
 };

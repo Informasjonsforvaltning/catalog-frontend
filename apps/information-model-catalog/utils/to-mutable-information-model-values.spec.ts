@@ -26,6 +26,7 @@ const baseServerModel = {
   creator: null,
   subjects: null,
   relations: null,
+  hasFormat: null,
   issued: null,
   modified: null,
 } as InformationModel;
@@ -40,6 +41,7 @@ const baseFormValues = {
   creator: "",
   subjects: [],
   relations: [],
+  hasFormat: [],
   issued: "",
   modified: "",
 } as InformationModelToBeCreated;
@@ -213,5 +215,51 @@ describe("toMutableInformationModelValues", () => {
       ],
     });
     expect(diff.some((op) => op.path === "/relations/0")).toBe(false);
+  });
+
+  test("treats null and empty hasFormat as equal so compare emits no hasFormat op", () => {
+    const diff = compare(
+      toMutableInformationModelValues(baseServerModel),
+      toMutableInformationModelValues(baseFormValues),
+    );
+
+    expect(diff.filter((op) => op.path.startsWith("/hasFormat"))).toEqual([]);
+  });
+
+  test("replaces hasFormat when stored value is null instead of adding into a null array", () => {
+    const formWithHasFormat = {
+      ...baseFormValues,
+      hasFormat: [
+        {
+          title: { nb: "PNG-visning" },
+          language:
+            "http://publications.europa.eu/resource/authority/language/NOB",
+          format:
+            "http://publications.europa.eu/resource/authority/file-type/PNG",
+          seeAlso: "https://example.com/models/model-1.png",
+        },
+      ],
+    };
+
+    const diff = compare(
+      toMutableInformationModelValues(baseServerModel),
+      toMutableInformationModelValues(formWithHasFormat),
+    );
+
+    expect(diff).toContainEqual({
+      op: "replace",
+      path: "/hasFormat",
+      value: [
+        {
+          title: { nb: "PNG-visning" },
+          language:
+            "http://publications.europa.eu/resource/authority/language/NOB",
+          format:
+            "http://publications.europa.eu/resource/authority/file-type/PNG",
+          seeAlso: "https://example.com/models/model-1.png",
+        },
+      ],
+    });
+    expect(diff.some((op) => op.path === "/hasFormat/0")).toBe(false);
   });
 });

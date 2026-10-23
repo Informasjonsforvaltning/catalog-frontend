@@ -1,11 +1,7 @@
 "use client";
 
 import { ReferenceDataCode } from "@catalog-frontend/types";
-import {
-  capitalizeFirstLetter,
-  getTranslateText,
-  localization,
-} from "@catalog-frontend/utils";
+import { localization } from "@catalog-frontend/utils";
 import { useFormikContext } from "formik";
 import { useMemo, useState } from "react";
 import { SearchSuggestionSelect } from "../search-suggestion-select";
@@ -14,54 +10,17 @@ import {
   useSearchLanguage,
   useSearchLanguageByUri,
 } from "../use-reference-data-search";
+import { compareLanguages, getTranslatedLabel } from "./language-sort";
+
+export {
+  LANGUAGE_CODE_SORT_ORDER,
+  compareLanguages,
+  getTranslatedLabel,
+} from "./language-sort";
 
 interface Props {
   referenceDataEnv: string;
 }
-
-const LANGUAGE_CODE_SORT_ORDER: string[] = [
-  "NOR",
-  "NOB",
-  "NNO",
-  "SMI",
-  "SME",
-  "SMJ",
-  "SMA",
-  "ENG",
-  "SWE",
-  "DAN",
-  "POL",
-  "ARA",
-  "SOM",
-  "UKR",
-  "LIT",
-  "FIN",
-  "DEU",
-  "FRA",
-  "SPA",
-] as const;
-
-const languageCodeSortIndex = new Map(
-  LANGUAGE_CODE_SORT_ORDER.map((code, index) => [code, index]),
-);
-
-const getTranslatedLabel = (item: ReferenceDataCode) =>
-  item.label
-    ? capitalizeFirstLetter(getTranslateText(item.label), false)
-    : (item.uri ?? "");
-
-const compareLanguages = (a: ReferenceDataCode, b: ReferenceDataCode) => {
-  const indexA = a.code ? languageCodeSortIndex.get(a.code) : undefined;
-  const indexB = b.code ? languageCodeSortIndex.get(b.code) : undefined;
-
-  if (indexA !== undefined && indexB !== undefined) {
-    return indexA - indexB;
-  }
-  if (indexA !== undefined) return -1;
-  if (indexB !== undefined) return 1;
-
-  return getTranslatedLabel(a).localeCompare(getTranslatedLabel(b), "nb");
-};
 
 type LanguageFormValues = {
   language?: string[];

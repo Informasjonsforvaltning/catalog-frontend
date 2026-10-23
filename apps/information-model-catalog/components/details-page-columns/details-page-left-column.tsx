@@ -1,12 +1,19 @@
 "use client";
 
-import { InformationModel, Search } from "@catalog-frontend/types";
+import {
+  InformationModel,
+  ReferenceDataCode,
+  Search,
+} from "@catalog-frontend/types";
 import {
   InfoCard,
   useSearchConceptsByUri,
+  useSearchFileTypeByUri,
   useSearchInformationModelsByUri,
+  useSearchLanguageByUri,
 } from "@catalog-frontend/ui";
 import {
+  capitalizeFirstLetter,
   formatDateToDDMMYYYY,
   localization,
   getTranslateText,
@@ -58,6 +65,51 @@ export const LeftColumn = ({
     searchEnv,
     relationUris,
   );
+
+  const hasFormatLanguageUris = useMemo(
+    () =>
+      informationModel?.hasFormat
+        ?.map((document) => document?.language)
+        .filter((uri): uri is string => Boolean(uri)) ?? [],
+    [informationModel?.hasFormat],
+  );
+
+  const hasFormatFormatUris = useMemo(
+    () =>
+      informationModel?.hasFormat
+        ?.map((document) => document?.format)
+        .filter((uri): uri is string => Boolean(uri)) ?? [],
+    [informationModel?.hasFormat],
+  );
+
+  const { data: hasFormatLanguages } = useSearchLanguageByUri(
+    hasFormatLanguageUris,
+    fdkBaseUri,
+  );
+  const { data: hasFormatFormats } = useSearchFileTypeByUri(
+    hasFormatFormatUris,
+    fdkBaseUri,
+  );
+
+  const hasFormatDocuments = useMemo(
+    () => compact(informationModel?.hasFormat),
+    [informationModel?.hasFormat],
+  );
+
+  const resolveReferenceDataLabel = (
+    uri: string | null | undefined,
+    items: ReferenceDataCode[] | undefined,
+  ) => {
+    if (!uri) return undefined;
+    const match = items?.find((item) => item.uri === uri);
+    if (!match?.label) {
+      return uri;
+    }
+    return capitalizeFirstLetter(
+      getTranslateText(match.label, language),
+      false,
+    );
+  };
 
   const getDataNorgeUri = (
     id: string | undefined,
@@ -196,6 +248,71 @@ export const LeftColumn = ({
             </Table>
           </InfoCard.Item>
         )}
+      {hasFormatDocuments.length > 0 && (
+        <InfoCard.Item
+          title={localization.informationModelForm.fieldLabel.hasFormat}
+          data-testid="information-model-has-format"
+        >
+          <Table data-size="sm" className={styles.table}>
+            <Table.Head>
+              <Table.Row>
+                <Table.HeaderCell>
+                  {localization.informationModelForm.fieldLabel.hasFormatTitle}
+                </Table.HeaderCell>
+                <Table.HeaderCell>
+                  {
+                    localization.informationModelForm.fieldLabel
+                      .hasFormatLanguage
+                  }
+                </Table.HeaderCell>
+                <Table.HeaderCell>
+                  {localization.informationModelForm.fieldLabel.hasFormatFormat}
+                </Table.HeaderCell>
+                <Table.HeaderCell>
+                  {
+                    localization.informationModelForm.fieldLabel
+                      .hasFormatSeeAlso
+                  }
+                </Table.HeaderCell>
+              </Table.Row>
+            </Table.Head>
+            <Table.Body>
+              {hasFormatDocuments.map((document, index) => (
+                <Table.Row key={`hasFormat-${index}`}>
+                  <Table.Cell>
+                    {getTranslateText(document?.title, language) || "—"}
+                  </Table.Cell>
+                  <Table.Cell>
+                    {resolveReferenceDataLabel(
+                      document?.language,
+                      hasFormatLanguages,
+                    ) || "—"}
+                  </Table.Cell>
+                  <Table.Cell>
+                    {resolveReferenceDataLabel(
+                      document?.format,
+                      hasFormatFormats,
+                    ) || "—"}
+                  </Table.Cell>
+                  <Table.Cell className={styles.urlCell}>
+                    {document?.seeAlso ? (
+                      <Link
+                        className={styles.urlLink}
+                        href={document.seeAlso}
+                        title={document.seeAlso}
+                      >
+                        {document.seeAlso}
+                      </Link>
+                    ) : (
+                      "—"
+                    )}
+                  </Table.Cell>
+                </Table.Row>
+              ))}
+            </Table.Body>
+          </Table>
+        </InfoCard.Item>
+      )}
       {!isEmpty(informationModel?.homepage) && (
         <InfoCard.Item
           title={localization.informationModelForm.fieldLabel.homepage}

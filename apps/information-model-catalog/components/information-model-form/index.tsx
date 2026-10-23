@@ -38,12 +38,14 @@ import { AboutSection } from "./components/about-section";
 import { ContactPointSection } from "./components/contact-point-section";
 import { SubjectsSection } from "./components/subjects-section";
 import { RelationsSection } from "./components/relations-section";
+import { HasFormatSection } from "./components/has-format-section";
 import {
   informationModelValidationSchema,
   draftInformationModelValidationSchema,
 } from "./utils/validation-schema";
 import { informationModelTemplate } from "./utils/information-model-initial-values";
 import { DataStorage } from "@catalog-frontend/utils";
+import { isFormatSecondaryValues } from "../../utils/has-format-secondary";
 import { get, isEmpty, isEqual } from "lodash";
 import classNames from "classnames";
 
@@ -59,6 +61,7 @@ type Props = {
   initialValues: InformationModel | InformationModelToBeCreated;
   statuses: ReferenceDataCode[];
   searchEnv: string;
+  referenceDataEnv: string;
   autoSaveStorage?: DataStorage<StorageData>;
   autoSave?: boolean;
   autoSaveId?: string;
@@ -76,6 +79,7 @@ const InformationModelForm = ({
   initialValues,
   statuses,
   searchEnv,
+  referenceDataEnv,
   autoSaveStorage,
   autoSave = true,
   autoSaveId,
@@ -336,6 +340,20 @@ const InformationModelForm = ({
               autoSaveStorage?.deleteSecondary("relation");
             }
 
+            const restoreHasFormatData =
+              autoSaveStorage?.getSecondary("hasFormat");
+            if (
+              restoreHasFormatData &&
+              restoreHasFormatData?.id === autoSaveId &&
+              isFormatSecondaryValues(restoreHasFormatData.values)
+            ) {
+              setFieldValue(
+                `hasFormat[${restoreHasFormatData.values.index}]`,
+                restoreHasFormatData.values.document,
+              );
+              autoSaveStorage?.deleteSecondary("hasFormat");
+            }
+
             showSnackbarMessage({
               message: localization.snackbar.restoreSuccessful,
               severity: "success",
@@ -365,6 +383,7 @@ const InformationModelForm = ({
               "version",
               "subjects",
               "relations",
+              "hasFormat",
               "contactPoints",
             ].forEach((name) => {
               if (isDirty(name)) {
@@ -452,6 +471,29 @@ const InformationModelForm = ({
                     >
                       <RelationsSection
                         searchEnv={searchEnv}
+                        autoSaveId={autoSaveId}
+                        autoSaveStorage={autoSaveStorage}
+                      />
+                    </FormLayout.Section>
+
+                    <FormLayout.Section
+                      id="has-format-section"
+                      title={
+                        localization.informationModelForm.heading.hasFormat
+                      }
+                      subtitle={
+                        localization.informationModelForm.subtitle.hasFormat
+                      }
+                      changed={
+                        markDirty &&
+                        dirtyFields.some((field) =>
+                          ["hasFormat"].includes(field),
+                        )
+                      }
+                      error={hasError(["hasFormat"])}
+                    >
+                      <HasFormatSection
+                        referenceDataEnv={referenceDataEnv}
                         autoSaveId={autoSaveId}
                         autoSaveStorage={autoSaveStorage}
                       />

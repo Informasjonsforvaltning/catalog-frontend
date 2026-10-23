@@ -223,6 +223,27 @@ export const resourceRelationSchema = Yup.object().shape({
   ),
 });
 
+const seeAlsoValidationSchema = () =>
+  optionalHttpsUrlSchema().label(
+    localization.informationModelForm.fieldLabel.hasFormatSeeAlso,
+  );
+
+// https-only for seeAlso is intentional for both draft and confirm (behov#1061).
+// Existing http:// values are rejected until the user updates them.
+export const modelDocumentSchema = Yup.object().shape({
+  title: Yup.object()
+    .shape({
+      nb: Yup.string().notRequired(),
+      nn: Yup.string().notRequired(),
+      en: Yup.string().notRequired(),
+    })
+    .nullable()
+    .notRequired(),
+  language: Yup.string().nullable().notRequired(),
+  format: Yup.string().nullable().notRequired(),
+  seeAlso: seeAlsoValidationSchema(),
+});
+
 export const draftInformationModelValidationSchema = () =>
   Yup.object().shape({
     title: titleValidationSchema(),
@@ -232,6 +253,7 @@ export const draftInformationModelValidationSchema = () =>
     homepage: homepageValidationSchema(),
     version: versionValidationSchema(),
     relations: Yup.array().of(resourceRelationSchema),
+    hasFormat: Yup.array().of(modelDocumentSchema),
     issued: dateValidationSchema(),
     modified: dateValidationSchema(),
   });
@@ -245,6 +267,7 @@ export const informationModelValidationSchema = () =>
     homepage: homepageValidationSchema(),
     version: versionValidationSchema(),
     relations: Yup.array().of(resourceRelationSchema),
+    hasFormat: Yup.array().of(modelDocumentSchema),
     issued: dateValidationSchema(),
     modified: dateValidationSchema(),
   });
