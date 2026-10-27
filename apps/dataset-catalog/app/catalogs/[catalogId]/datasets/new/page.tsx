@@ -8,6 +8,7 @@ import {
   getCurrencies,
   getDatasetTypes,
   getDataThemes,
+  getDistributionStatuses,
   getFrequencies,
   getLicences,
   getLosThemes,
@@ -33,6 +34,7 @@ const NewDatasetPage = withWriteProtectedPage(
       provenanceStatementsResponse,
       frequenciesResponse,
       licenseResponse,
+      distributionStatusResponse,
       currenciesResponse,
     ] = await Promise.all([
       getLosThemes(),
@@ -41,6 +43,7 @@ const NewDatasetPage = withWriteProtectedPage(
       getProvenanceStatements(),
       getFrequencies(),
       getLicences(),
+      getDistributionStatuses(),
       getCurrencies(),
     ]);
 
@@ -51,6 +54,7 @@ const NewDatasetPage = withWriteProtectedPage(
       provenanceStatements: provenanceStatementsResponse.provenanceStatements,
       frequencies: frequenciesResponse.frequencies,
       openLicenses: licenseResponse.licences,
+      distributionStatuses: distributionStatusResponse.distributionStatuses,
       currencies: currenciesResponse.currencies,
     };
 

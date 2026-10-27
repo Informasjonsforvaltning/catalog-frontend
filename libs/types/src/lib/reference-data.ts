@@ -55,6 +55,7 @@ export interface ReferenceData {
   openLicenses: ReferenceDataCode[];
   mobilityRights: ReferenceDataCode[];
   mobilityDataStandards: ReferenceDataCode[];
+  distributionStatuses: ReferenceDataCode[];
   currencies: ReferenceDataCode[];
 }
 

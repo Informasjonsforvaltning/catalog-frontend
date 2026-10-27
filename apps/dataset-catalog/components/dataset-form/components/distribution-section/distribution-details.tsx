@@ -18,6 +18,7 @@ interface Props {
   selectedDataServices: SearchObject[];
   selectedMediaTypes: ReferenceDataCode[];
   openLicenses: ReferenceDataCode[];
+  distributionStatuses: ReferenceDataCode[];
   distribution: Distribution;
   language?: string;
 }
@@ -27,6 +28,7 @@ export const DistributionDetails = ({
   selectedMediaTypes,
   distribution,
   openLicenses,
+  distributionStatuses,
   language,
 }: Props) => {
   return (
@@ -145,6 +147,23 @@ export const DistributionDetails = ({
                 </Paragraph>
               </div>
             </>
+          )}
+
+          {distribution.status && (
+            <div className={styles.field}>
+              <Heading
+                level={5}
+                data-size="2xs"
+              >{`${localization.datasetForm.fieldLabel.distributionStatus}:`}</Heading>
+              <Paragraph data-size="sm">
+                {getTranslateText(
+                  distributionStatuses.find(
+                    (status) => status.uri === distribution.status,
+                  )?.label,
+                  language,
+                ) || distribution.status}
+              </Paragraph>
+            </div>
           )}
 
           {!isEmpty(distribution?.conformsTo) && (
