@@ -120,6 +120,7 @@ export const DatasetForm = ({
     openLicenses,
     mobilityDataStandards,
     mobilityRights,
+    distributionStatuses,
     frequencies,
   } = referenceData;
 
@@ -468,6 +469,7 @@ export const DatasetForm = ({
                       isMobility={isMobility}
                       mobilityDataStandards={mobilityDataStandards}
                       mobilityRights={mobilityRights}
+                      distributionStatuses={distributionStatuses}
                     />
                   </FormLayout.Section>
 

@@ -87,6 +87,7 @@ type Props = {
   isMobility?: boolean;
   mobilityDataStandards?: ReferenceDataCode[];
   mobilityRights?: ReferenceDataCode[];
+  distributionStatuses?: ReferenceDataCode[];
 };
 
 export const DistributionModal = ({
@@ -104,6 +105,7 @@ export const DistributionModal = ({
   isMobility,
   mobilityDataStandards,
   mobilityRights,
+  distributionStatuses,
 }: Props) => {
   const [selectedFileTypeUris, setSelectedFileTypeUris] = useState(
     initialValues?.format ?? [],
@@ -991,6 +993,49 @@ export const DistributionModal = ({
                           ]}
                           placeholder={`${localization.search.search}...`}
                           value={values.license || undefined}
+                        />
+                      </Fieldset>
+                      <FieldsetDivider />
+                      <Fieldset data-size="sm">
+                        <Fieldset.Legend>
+                          <TitleWithHelpTextAndTag
+                            tagTitle={localization.tag.recommended}
+                            tagColor="info"
+                            helpText={
+                              localization.datasetForm.helptext
+                                .distributionStatus
+                            }
+                          >
+                            {
+                              localization.datasetForm.fieldLabel
+                                .distributionStatus
+                            }
+                          </TitleWithHelpTextAndTag>
+                        </Fieldset.Legend>
+                        <SingleSuggestionSelect
+                          emptyMessage={localization.search.noHits}
+                          onValueChange={(value) =>
+                            setFieldValue("status", value ?? "")
+                          }
+                          options={[
+                            ...(values?.status &&
+                            !distributionStatuses?.some(
+                              (s) => s.uri === values.status,
+                            )
+                              ? [
+                                  {
+                                    value: values.status,
+                                    label: values.status,
+                                  },
+                                ]
+                              : []),
+                            ...(distributionStatuses ?? []).map((status) => ({
+                              value: status.uri,
+                              label: getTranslateText(status.label),
+                            })),
+                          ]}
+                          placeholder={`${localization.search.search}...`}
+                          value={values.status || undefined}
                         />
                       </Fieldset>
                       <FieldsetDivider />

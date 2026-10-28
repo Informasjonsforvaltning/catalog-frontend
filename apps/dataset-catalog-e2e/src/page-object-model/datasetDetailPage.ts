@@ -158,6 +158,10 @@ export default class DatasetDetailPage {
     await expect(this.page.getByText(license).first()).toBeVisible();
   }
 
+  async expectDistributionStatus(status: string) {
+    await expect(this.page.getByText(status, { exact: true })).toBeVisible();
+  }
+
   async expectDistributionFormat(format: string) {
     const label = this.page.getByRole("heading", { name: "Format" });
     await expect(label).toBeVisible();

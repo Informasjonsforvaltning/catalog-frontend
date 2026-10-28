@@ -34,6 +34,7 @@ type Props = {
   language?: string;
   mobilityDataStandard?: ReferenceDataCode;
   rights?: ReferenceDataCode;
+  status?: ReferenceDataCode;
 };
 
 export const DistributionDetailsCard = ({
@@ -44,6 +45,7 @@ export const DistributionDetailsCard = ({
   language,
   mobilityDataStandard,
   rights,
+  status,
 }: Props) => {
   const { data: formats } = useSearchFileTypeByUri(
     distribution.format,
@@ -120,6 +122,16 @@ export const DistributionDetailsCard = ({
             </Heading>
             <Paragraph data-size="sm">
               {getTranslateText(rights.label, language)}
+            </Paragraph>
+          </div>
+        )}
+        {distribution.status && (
+          <div>
+            <Heading level={5} data-size="2xs">
+              {localization.datasetForm.fieldLabel.distributionStatus}
+            </Heading>
+            <Paragraph data-size="sm">
+              {getTranslateText(status?.label, language) || distribution.status}
             </Paragraph>
           </div>
         )}

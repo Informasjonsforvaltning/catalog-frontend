@@ -131,6 +131,7 @@ export const distributionTemplate = (dist: Distribution | undefined) => {
         accessURL: [""],
         format: [],
         license: "",
+        status: "",
         conformsTo: [],
         page: [],
         accessServices: [],

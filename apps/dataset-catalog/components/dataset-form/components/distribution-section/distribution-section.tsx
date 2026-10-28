@@ -53,6 +53,7 @@ type Props = {
   isMobility?: boolean;
   mobilityDataStandards?: ReferenceDataCode[];
   mobilityRights?: ReferenceDataCode[];
+  distributionStatuses?: ReferenceDataCode[];
 };
 
 export const DistributionSection = ({
@@ -64,6 +65,7 @@ export const DistributionSection = ({
   isMobility,
   mobilityDataStandards,
   mobilityRights,
+  distributionStatuses,
 }: Props) => {
   const { values, errors, setFieldValue } = useFormikContext<Dataset>();
   const [expandedIndexDistribution, setExpandedIndexDistribution] = useState<
@@ -235,6 +237,7 @@ export const DistributionSection = ({
       !isEmpty(distribution.mediaType) ||
       !isEmpty(distribution.accessServices) ||
       distribution.license ||
+      distribution.status ||
       !isEmpty(distribution.description) ||
       !isEmpty(distribution.page) ||
       !isEmpty(distribution?.conformsTo)
@@ -289,6 +292,7 @@ export const DistributionSection = ({
                         openLicenses={openLicenses}
                         mobilityDataStandards={mobilityDataStandards}
                         mobilityRights={mobilityRights}
+                        distributionStatuses={distributionStatuses}
                         distributionType="distribution"
                         onSuccess={(updatedDist) => {
                           handleDistributionSuccess(
@@ -401,6 +405,7 @@ export const DistributionSection = ({
                       selectedMediaTypes={selectedMediaTypes ?? []}
                       distribution={item}
                       openLicenses={openLicenses}
+                      distributionStatuses={distributionStatuses ?? []}
                     />
                   )}
                   {get(errors, "distribution[" + index + "]") && (
@@ -441,6 +446,7 @@ export const DistributionSection = ({
             openLicenses={openLicenses}
             mobilityDataStandards={mobilityDataStandards}
             mobilityRights={mobilityRights}
+            distributionStatuses={distributionStatuses}
             initialAccessServices={[]}
             initialValues={{
               title: {},
@@ -452,6 +458,7 @@ export const DistributionSection = ({
               conformsTo: [],
               accessServices: [],
               license: "",
+              status: "",
               rights: { type: "" },
               mobilityDataStandard: "",
             }}
@@ -507,6 +514,7 @@ export const DistributionSection = ({
                           openLicenses={openLicenses}
                           mobilityDataStandards={mobilityDataStandards}
                           mobilityRights={mobilityRights}
+                          distributionStatuses={distributionStatuses}
                           onSuccess={(updatedDist: Distribution) => {
                             handleDistributionSuccess(
                               updatedDist,
@@ -596,6 +604,7 @@ export const DistributionSection = ({
                         selectedMediaTypes={selectedMediaTypes ?? []}
                         distribution={item}
                         openLicenses={openLicenses}
+                        distributionStatuses={distributionStatuses ?? []}
                       />
                     )}
                     {get(errors, "sample[" + index + "]") && (
@@ -634,6 +643,7 @@ export const DistributionSection = ({
             openLicenses={openLicenses}
             mobilityDataStandards={mobilityDataStandards}
             mobilityRights={mobilityRights}
+            distributionStatuses={distributionStatuses}
             initialAccessServices={[]}
             isMobility={isMobility}
             initialValues={{
@@ -646,6 +656,7 @@ export const DistributionSection = ({
               conformsTo: [],
               accessServices: [],
               license: "",
+              status: "",
             }}
           />
         </div>

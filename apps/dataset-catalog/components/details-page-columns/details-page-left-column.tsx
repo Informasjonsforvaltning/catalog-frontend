@@ -208,6 +208,9 @@ export const LeftColumn = ({
                     (mobilityRights) =>
                       mobilityRights?.uri === dist.rights?.type,
                   )}
+                  status={referenceData.distributionStatuses.find(
+                    (status) => status.uri === dist.status,
+                  )}
                 />
               ))}
           </div>
@@ -233,6 +236,9 @@ export const LeftColumn = ({
                   rights={referenceData.mobilityRights.find(
                     (mobilityRights) =>
                       mobilityRights?.uri === dist.rights?.type,
+                  )}
+                  status={referenceData.distributionStatuses.find(
+                    (status) => status.uri === dist.status,
                   )}
                 />
               ))}

@@ -97,6 +97,7 @@ export type Distribution = {
   accessServices?: string[];
   mobilityDataStandard?: string;
   rights?: Rights;
+  status?: string;
 };
 
 type DatasetContactPoint = {

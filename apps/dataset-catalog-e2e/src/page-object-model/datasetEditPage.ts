@@ -782,6 +782,7 @@ export default class DatasetEditPage {
     description: LocalizedStrings;
     accessUrl: string;
     license: string;
+    status?: string;
     format: string;
   }) {
     const dialog = this.page.getByRole("dialog");
@@ -809,6 +810,16 @@ export default class DatasetEditPage {
       .getByRole("option", { name: data.license, exact: true })
       .click();
     await dialog.getByLabel("Lenke").click();
+    if (data.status) {
+      await dialog
+        .getByRole("group", { name: "Status" })
+        .getByRole("combobox")
+        .click();
+      await dialog
+        .getByRole("option", { name: data.status, exact: true })
+        .click();
+      await dialog.getByLabel("Lenke").click();
+    }
     await dialog
       .getByRole("group", { name: "Format" })
       .getByRole("combobox")

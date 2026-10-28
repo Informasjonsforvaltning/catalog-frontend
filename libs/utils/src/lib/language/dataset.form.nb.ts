@@ -101,6 +101,8 @@ Dersom man velger en åpen lisens, vil datasettet bli merket med "Åpne data".`,
     mobilityTheme:
       "Velg ett eller flere mobility-relaterte tema som beskriver innholdet i datasettet. Listen er fra [EUs liste over mobility-tema](https://w3id.org/mobilitydcat-ap/mobility-theme).",
     distributionRights: "Betingelser for tilgang og bruk av distribusjonen.",
+    distributionStatus:
+      "Status for distribusjonen. Velges fra [EUs kontrollerte vokabular for Distribution status](https://op.europa.eu/en/web/eu-vocabularies/concept-scheme/-/resource?uri=http://publications.europa.eu/resource/authority/distribution-status).",
     mobilityDataStandard:
       "Standard for distribusjonen av datasettet. Velges fra [EUs kontrollerte vokabular for Mobility Data Standard.](https://w3id.org/mobilitydcat-ap/mobility-data-standard)",
     applicationProfileMobilityDcat:
@@ -194,6 +196,7 @@ Dersom man velger en åpen lisens, vil datasettet bli merket med "Åpne data".`,
     description: "Beskrivelse",
     mobilityTheme: "Mobility-tema",
     distributionRights: "Rettigheter for bruk",
+    distributionStatus: "Status",
     mobilityDataStandard: "Mobility-standard",
   },
   placeholder: {
