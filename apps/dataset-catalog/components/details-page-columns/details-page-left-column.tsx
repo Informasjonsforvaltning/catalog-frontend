@@ -40,6 +40,8 @@ import { TemporalDetails } from "./components/temporal-details";
 import TagList from "../tag-list";
 import { compact, get, isEmpty } from "lodash";
 import { MarkdownComponent } from "@catalog-frontend/ui";
+import { getQualityAnnotationsForDisplay } from "./components/get-quality-annotations";
+import { QualityAnnotationDetails } from "./components/quality-annotation-details";
 
 type Props = {
   dataset: Dataset;
@@ -91,6 +93,12 @@ export const LeftColumn = ({
   const { data: languages } = useSearchLanguageByUri(
     dataset?.language,
     referenceDataEnv,
+  );
+
+  const qualityAnnotations = getQualityAnnotationsForDisplay(
+    dataset,
+    referenceData.qualityDimensions,
+    language,
   );
 
   const hasValues = (values: any | any[] | undefined | null): boolean => {
@@ -314,26 +322,12 @@ export const LeftColumn = ({
         </InfoCard.Item>
       )}
 
-      {(hasValues(dataset?.frequency) ||
-        hasValues(dataset?.currentness?.hasBody)) && (
+      {hasValues(dataset?.frequency) && (
         <InfoCard.Item title={localization.datasetForm.fieldLabel.frequency}>
-          <div className={styles.infoCardItems}>
-            <ReferenceDataTags
-              values={dataset.frequency}
-              data={referenceData.frequencies}
-            />
-
-            {hasValues(dataset?.currentness?.hasBody) && (
-              <div>
-                <Heading level={3} data-size="2xs">
-                  {localization.datasetForm.fieldLabel.currentness}
-                </Heading>
-                <Paragraph data-size="sm">
-                  {getTranslateText(dataset?.currentness?.hasBody, language)}
-                </Paragraph>
-              </div>
-            )}
-          </div>
+          <ReferenceDataTags
+            values={dataset.frequency}
+            data={referenceData.frequencies}
+          />
         </InfoCard.Item>
       )}
 
@@ -343,35 +337,14 @@ export const LeftColumn = ({
         </InfoCard.Item>
       )}
 
-      {hasValues(dataset?.relevance?.hasBody) && (
-        <InfoCard.Item title={localization.datasetForm.fieldLabel.relevance}>
-          <Paragraph data-size="sm">
-            {getTranslateText(dataset?.relevance?.hasBody, language)}{" "}
-          </Paragraph>
-        </InfoCard.Item>
-      )}
-
-      {hasValues(dataset?.completeness?.hasBody) && (
-        <InfoCard.Item title={localization.datasetForm.fieldLabel.completeness}>
-          <Paragraph data-size="sm">
-            {getTranslateText(dataset?.completeness?.hasBody, language)}{" "}
-          </Paragraph>
-        </InfoCard.Item>
-      )}
-
-      {hasValues(dataset?.accuracy?.hasBody) && (
-        <InfoCard.Item title={localization.datasetForm.fieldLabel.accuracy}>
-          <Paragraph data-size="sm">
-            {getTranslateText(dataset?.accuracy?.hasBody, language)}{" "}
-          </Paragraph>
-        </InfoCard.Item>
-      )}
-
-      {hasValues(dataset?.availability?.hasBody) && (
-        <InfoCard.Item title={localization.datasetForm.fieldLabel.availability}>
-          <Paragraph data-size="sm">
-            {getTranslateText(dataset?.availability?.hasBody, language)}{" "}
-          </Paragraph>
+      {!isEmpty(qualityAnnotations) && (
+        <InfoCard.Item
+          title={localization.datasetForm.fieldLabel.qualityAnnotations}
+        >
+          <QualityAnnotationDetails
+            qualityAnnotations={qualityAnnotations}
+            language={language}
+          />
         </InfoCard.Item>
       )}
       {hasValues(dataset?.qualifiedAttributions) && (

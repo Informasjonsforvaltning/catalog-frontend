@@ -8,6 +8,7 @@ import {
 } from "@digdir/designsystemet-react";
 import {
   ComponentRef,
+  CSSProperties,
   ReactNode,
   Ref,
   useCallback,
@@ -23,6 +24,22 @@ export type SuggestionSelectOption = {
   value: string;
   label: string;
   description?: string;
+  indentLevel?: number;
+};
+
+const OPTION_CHECKMARK_SIZE = "var(--dsc-suggestion-option-checkmark-size)";
+const OPTION_INDENT_STEP = "var(--ds-size-3)";
+
+export const getSuggestionOptionIndentStyle = (
+  indentLevel?: number,
+): CSSProperties | undefined => {
+  if (!indentLevel) {
+    return undefined;
+  }
+
+  return {
+    paddingInlineStart: `calc(${OPTION_CHECKMARK_SIZE} + ${OPTION_INDENT_STEP} * ${indentLevel})`,
+  };
 };
 
 export type SingleSuggestionSelectProps = {
@@ -156,6 +173,7 @@ export const SingleSuggestionSelect = ({
             key={option.value}
             value={option.value}
             label={option.label}
+            style={getSuggestionOptionIndentStyle(option.indentLevel)}
           >
             {option.description ? (
               <div>

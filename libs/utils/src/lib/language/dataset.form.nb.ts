@@ -75,6 +75,12 @@ Dersom man velger en åpen lisens, vil datasettet bli merket med "Åpne data".`,
       "En aktør som har en eller annen form for ansvar for datasettet, men som ikke er en utgiver eller produsent. Dette kan for eksempel være en distributør.",
     relevance:
       "Dersom det er bruksområder datasettet er spesielt egnet for eller ikke egnet for, bør det oppgis her.",
+    qualityAnnotations:
+      "Kvalitetsmerknad (dqv:hasQualityAnnotation) som beskriver datasettets kvalitet. Velg en eller flere kvalitetsdimensjoner fra det kontrollerte vokabularet og beskriv kvaliteten i fritekst.",
+    inDimension:
+      "Kvalitetsdimensjon(er) merknaden gjelder for, valgt fra Digdirs kvalitetsdimensjonsvokabular.",
+    qualityAnnotationBody:
+      "Fritekstbeskrivelse av datasettets kvalitet for de valgte dimensjonene.",
     conformsTo:
       "Lenke til en standard, spesifikasjon eller et etablert skjema som datasettet er i samsvar med.",
     references:
@@ -182,6 +188,10 @@ Dersom man velger en åpen lisens, vil datasettet bli merket med "Åpne data".`,
     availability: "Tilgjengelighet",
     qualifiedAttributions: "Annen ansvarlig aktør",
     relevance: "Relevans",
+    qualityAnnotations: "Kvalitetsmerknad",
+    inDimension: "Kvalitetsdimensjon",
+    qualityAnnotationBody: "Beskrivelse",
+    partOfDimension: "Del av",
     references: "Relaterte datasett",
     inSeries: "Relasjon til datasettserie",
     relatedResources: "Relaterte ressurser",
@@ -255,6 +265,7 @@ Dersom man velger en åpen lisens, vil datasettet bli merket med "Åpne data".`,
     addDataset: "Legg til datasett",
     addDatasetSeries: "Legg til datasettserie",
     addMobilitytDataset: "Legg til mobility-datasett",
+    addQualityAnnotation: "Legg til kvalitetsmerknad",
   },
   datasetTypeModal: {
     title: "Legg til datasett",
