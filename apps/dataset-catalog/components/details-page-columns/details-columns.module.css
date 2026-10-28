@@ -45,3 +45,20 @@
   width: 100%;
   table-layout: fixed;
 }
+
+.annotationList {
+  display: flex;
+  flex-direction: column;
+}
+
+.annotationItem {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-size-2);
+}
+
+.dimensionTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ds-size-2);
+}

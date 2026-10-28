@@ -13,6 +13,7 @@ import {
   getLicences,
   getLosThemes,
   getProvenanceStatements,
+  getQualityDimensions,
 } from "@catalog-frontend/data-access";
 import { datasetToBeCreatedTemplate } from "@dataset-catalog/components/dataset-form/utils/dataset-initial-values";
 import { NewPage } from "./new-page-client";
@@ -36,6 +37,7 @@ const NewDatasetPage = withWriteProtectedPage(
       licenseResponse,
       distributionStatusResponse,
       currenciesResponse,
+      qualityDimensionsResponse,
     ] = await Promise.all([
       getLosThemes(),
       getDataThemes(),
@@ -45,6 +47,7 @@ const NewDatasetPage = withWriteProtectedPage(
       getLicences(),
       getDistributionStatuses(),
       getCurrencies(),
+      getQualityDimensions(),
     ]);
 
     const referenceData = {
@@ -56,6 +59,7 @@ const NewDatasetPage = withWriteProtectedPage(
       openLicenses: licenseResponse.licences,
       distributionStatuses: distributionStatusResponse.distributionStatuses,
       currencies: currenciesResponse.currencies,
+      qualityDimensions: qualityDimensionsResponse.qualityDimensions,
     };
 
     const breadcrumbList = [

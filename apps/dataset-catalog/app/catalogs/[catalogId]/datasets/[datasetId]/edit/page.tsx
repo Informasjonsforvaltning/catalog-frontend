@@ -20,6 +20,7 @@ import {
   getMobilityDataStandards,
   getMobilityRights,
   getDistributionStatuses,
+  getQualityDimensions,
 } from "@catalog-frontend/data-access";
 import { getDatasetById } from "@dataset-catalog/app/actions/actions";
 import { EditPage } from "./edit-page-client";
@@ -51,6 +52,7 @@ const EditDatasetPage = withWriteProtectedPage(
       mobilityRightsResponse,
       distributionStatusResponse,
       currenciesResponse,
+      qualityDimensionsResponse,
     ] = await Promise.all([
       getLosThemes(),
       getDataThemes(),
@@ -63,6 +65,7 @@ const EditDatasetPage = withWriteProtectedPage(
       getMobilityRights(),
       getDistributionStatuses(),
       getCurrencies(),
+      getQualityDimensions(),
     ]);
 
     const referenceData = {
@@ -77,6 +80,7 @@ const EditDatasetPage = withWriteProtectedPage(
       mobilityRights: mobilityRightsResponse.mobilityConditions,
       distributionStatuses: distributionStatusResponse.distributionStatuses,
       currencies: currenciesResponse.currencies,
+      qualityDimensions: qualityDimensionsResponse.qualityDimensions,
     };
 
     const breadcrumbList: BreadcrumbType[] = [
