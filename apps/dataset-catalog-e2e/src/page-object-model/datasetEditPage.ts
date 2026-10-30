@@ -783,6 +783,7 @@ export default class DatasetEditPage {
     accessUrl: string;
     license: string;
     status?: string;
+    reuserGuidelines?: string;
     format: string;
   }) {
     const dialog = this.page.getByRole("dialog");
@@ -833,6 +834,14 @@ export default class DatasetEditPage {
       .click();
     await this.page.waitForTimeout(100);
     await dialog.getByLabel("Lenke").click();
+    if (data.reuserGuidelines) {
+      await dialog
+        .getByRole("button", { name: "Legg til rettigheter for bruk" })
+        .click();
+      await dialog
+        .getByRole("textbox", { name: "Rettigheter for bruk" })
+        .fill(data.reuserGuidelines);
+    }
     await dialog.getByRole("button", { name: "Legg til", exact: true }).click();
   }
 

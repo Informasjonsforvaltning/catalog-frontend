@@ -76,6 +76,7 @@ export type DatasetSeries = {
 
 export type Rights = {
   type?: string;
+  reuserGuidelines?: string[];
 };
 
 export type ApplicableLegislation = {

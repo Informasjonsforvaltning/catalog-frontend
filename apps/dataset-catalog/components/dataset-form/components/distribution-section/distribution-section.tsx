@@ -240,6 +240,7 @@ export const DistributionSection = ({
       distribution.status ||
       !isEmpty(distribution.description) ||
       !isEmpty(distribution.page) ||
+      !isEmpty(distribution.rights?.reuserGuidelines) ||
       !isEmpty(distribution?.conformsTo)
     ) {
       return true;

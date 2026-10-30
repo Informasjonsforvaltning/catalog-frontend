@@ -493,6 +493,78 @@ export const DistributionModal = ({
       hideToggleButton: true,
     },
     {
+      name: "rights.reuserGuidelines",
+      getValue: (values: Distribution) => values?.rights?.reuserGuidelines,
+      render: (props: any) => (
+        <FieldArray name="rights.reuserGuidelines">
+          {(arrayHelpers) => (
+            <>
+              {(arrayHelpers.form.values.rights?.reuserGuidelines || []).map(
+                (_: string, index: number) => (
+                  <React.Fragment key={`reuserGuidelines-${index}`}>
+                    <div className={styles["padding-bottom-4"]}>
+                      <FieldsetWithDelete
+                        onDelete={() => arrayHelpers.remove(index)}
+                      >
+                        <FastFieldWithRef
+                          name={`rights.reuserGuidelines[${index}]`}
+                          ref={(
+                            el: HTMLInputElement | HTMLTextAreaElement | null,
+                          ) =>
+                            props.setInputRef(
+                              `rights.reuserGuidelines[${index}]`,
+                              el,
+                            )
+                          }
+                          label={
+                            index === 0 ? (
+                              <TitleWithHelpTextAndTag
+                                helpText={
+                                  localization.datasetForm.helptext
+                                    .reuserGuidelines
+                                }
+                              >
+                                {
+                                  localization.datasetForm.fieldLabel
+                                    .reuserGuidelines
+                                }
+                              </TitleWithHelpTextAndTag>
+                            ) : (
+                              ""
+                            )
+                          }
+                          as={Textfield}
+                          data-size="sm"
+                          error={getIn(
+                            props.errors,
+                            `rights.reuserGuidelines[${index}]`,
+                          )}
+                        />
+                      </FieldsetWithDelete>
+                    </div>
+                  </React.Fragment>
+                ),
+              )}
+              <AddButton
+                onClick={() => {
+                  arrayHelpers.push("");
+                  const count =
+                    arrayHelpers.form.values.rights?.reuserGuidelines?.length ??
+                    0;
+                  props.setFocus(`rights.reuserGuidelines[${count}]`);
+                }}
+              >
+                {`${localization.add} ${localization.datasetForm.fieldLabel.reuserGuidelines.toLowerCase()}`}
+              </AddButton>
+              {props.showDivider && <FieldsetDivider />}
+            </>
+          )}
+        </FieldArray>
+      ),
+      hasDeleteButton: false,
+      hideToggleButton: true,
+    },
+    {
       name: "conformsTo",
       addValue: [{ prefLabel: { nb: "", nn: "" }, uri: "" }],
       shouldShow: ({ distributionType }: any) =>
