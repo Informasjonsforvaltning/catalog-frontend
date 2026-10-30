@@ -23,6 +23,7 @@ import {
   getMobilityRights,
   getMobilityThemes,
   getProvenanceStatements,
+  getQualityDimensions,
 } from "@catalog-frontend/data-access";
 import DatasetDetailsPageClient from "./dataset-details-page-client";
 import { withReadProtectedPage } from "@dataset-catalog/utils/auth";
@@ -67,6 +68,7 @@ const DatasetDetailPage = withReadProtectedPage(
       mobilityRightsResponse,
       distributionStatusResponse,
       currenciesResponse,
+      qualityDimensionsResponse,
     ] = await Promise.all([
       getLosThemes(),
       getDataThemes(),
@@ -79,6 +81,7 @@ const DatasetDetailPage = withReadProtectedPage(
       getMobilityRights(),
       getDistributionStatuses(),
       getCurrencies(),
+      getQualityDimensions(),
     ]);
 
     const referenceData = {
@@ -93,6 +96,7 @@ const DatasetDetailPage = withReadProtectedPage(
       mobilityRights: mobilityRightsResponse.mobilityConditions,
       distributionStatuses: distributionStatusResponse.distributionStatuses,
       currencies: currenciesResponse.currencies,
+      qualityDimensions: qualityDimensionsResponse.qualityDimensions,
     };
 
     const datasetSeries = await getAllDatasetSeries(

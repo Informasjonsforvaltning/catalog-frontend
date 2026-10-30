@@ -50,6 +50,9 @@ export const datasetTemplate = (dataset: Dataset): Dataset => {
     completeness: { hasBody: dataset.completeness?.hasBody },
     accuracy: { hasBody: dataset?.accuracy?.hasBody },
     availability: { hasBody: dataset.availability?.hasBody },
+    qualityAnnotations: !isEmpty(dataset?.qualityAnnotations)
+      ? dataset.qualityAnnotations
+      : undefined,
     spatial: dataset.spatial,
     temporal: dataset.temporal ?? [],
     issued: dataset.issued ?? "",
@@ -93,6 +96,7 @@ export const datasetToBeCreatedTemplate = (
     completeness: undefined,
     accuracy: undefined,
     availability: undefined,
+    qualityAnnotations: undefined,
     spatial: [],
     temporal: [],
     issued: "",

@@ -1,0 +1,42 @@
+.fieldContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-size-2);
+}
+
+.annotationContent {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--ds-size-2);
+}
+
+.annotationBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-size-2);
+  flex: 1;
+}
+
+.dimensionTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ds-size-2);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+}
+
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  margin: var(--ds-size-4) 0;
+  padding: var(--ds-size-6);
+  border: 1px solid var(--ds-color-neutral-border-subtle);
+  border-radius: var(--ds-border-radius-md);
+  gap: var(--ds-size-4);
+}

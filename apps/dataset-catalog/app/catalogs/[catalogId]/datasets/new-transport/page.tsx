@@ -16,6 +16,7 @@ import {
   getMobilityDataStandards,
   getMobilityRights,
   getDistributionStatuses,
+  getQualityDimensions,
 } from "@catalog-frontend/data-access";
 import { datasetToBeCreatedTemplate } from "@dataset-catalog/components/dataset-form/utils/dataset-initial-values";
 import { NewPage } from "./new-page-client";
@@ -41,6 +42,7 @@ const NewTransportDatasetPage = withWriteProtectedPage(
       mobilityRightsResponse,
       distributionStatusResponse,
       currenciesResponse,
+      qualityDimensionsResponse,
     ] = await Promise.all([
       getLosThemes(),
       getDataThemes(),
@@ -53,6 +55,7 @@ const NewTransportDatasetPage = withWriteProtectedPage(
       getMobilityRights(),
       getDistributionStatuses(),
       getCurrencies(),
+      getQualityDimensions(),
     ]);
     const referenceData = {
       losThemes: losThemesResponse.losNodes,
@@ -66,6 +69,7 @@ const NewTransportDatasetPage = withWriteProtectedPage(
       mobilityRights: mobilityRightsResponse.mobilityConditions,
       distributionStatuses: distributionStatusResponse.distributionStatuses,
       currencies: currenciesResponse.currencies,
+      qualityDimensions: qualityDimensionsResponse.qualityDimensions,
     };
 
     const breadcrumbList: BreadcrumbType[] = [

@@ -20,7 +20,11 @@ import {
 } from "@catalog-frontend/utils";
 import { Fieldset, Textfield } from "@digdir/designsystemet-react";
 import { FieldArray, useFormikContext } from "formik";
-import { Dataset, ReferenceDataCode } from "@catalog-frontend/types";
+import {
+  Dataset,
+  QualityDimension,
+  ReferenceDataCode,
+} from "@catalog-frontend/types";
 import styles from "./details.module.css";
 import { QualifiedAttributionsSection } from "../qualified-attributions-section";
 import FieldsetWithDelete from "../../../fieldset-with-delete";
@@ -28,12 +32,20 @@ import { ToggleFieldButton } from "../toggle-field-button";
 import { useLayoutEffect, useMemo, useRef, useState } from "react";
 import { isArray, isEmpty, isNil, isObject } from "lodash";
 import React from "react";
+import {
+  emptyQualityAnnotation,
+  LEGACY_QUALITY_DIMENSIONS,
+  LEGACY_QUALITY_FIELD_NAMES,
+  QualityAnnotationsEditor,
+  QualityAnnotationsModal,
+} from "./components/quality-annotations";
 
 type Props = {
   datasetTypes: ReferenceDataCode[];
   provenanceStatements: ReferenceDataCode[];
   frequencies: ReferenceDataCode[];
   currencies?: ReferenceDataCode[];
+  qualityDimensions?: QualityDimension[];
   isMobility?: boolean;
 };
 
@@ -132,100 +144,48 @@ const FIELD_CONFIG = [
     ),
     hasDeleteButton: true,
   },
-  {
-    name: "currentness.hasBody",
-    getValue: (values: Dataset) => values?.currentness?.hasBody,
+  ...LEGACY_QUALITY_DIMENSIONS.map((field) => ({
+    name: `${field}.hasBody`,
+    getValue: (values: Dataset) => values?.[field]?.hasBody,
     addValue: { nb: "", nn: "" },
     render: (props: any) => (
       <FormikLanguageFieldset
         as={TextareaWithPrefix}
-        name="currentness.hasBody"
+        name={`${field}.hasBody`}
         ref={props.ref}
         legend={
           <TitleWithHelpTextAndTag
-            helpText={localization.datasetForm.helptext.currentness}
+            helpText={localization.datasetForm.helptext[field]}
           >
-            {localization.datasetForm.fieldLabel.currentness}
+            {localization.datasetForm.fieldLabel[field]}
           </TitleWithHelpTextAndTag>
         }
       />
     ),
-  },
+  })),
   {
-    name: "relevance.hasBody",
-    getValue: (values: Dataset) => values?.relevance?.hasBody,
-    addValue: { nb: "", nn: "" },
-    render: (props: any) => (
-      <FormikLanguageFieldset
-        as={TextareaWithPrefix}
-        name="relevance.hasBody"
-        ref={props.ref}
-        legend={
-          <TitleWithHelpTextAndTag
-            helpText={localization.datasetForm.helptext.relevance}
-          >
-            {localization.datasetForm.fieldLabel.relevance}
-          </TitleWithHelpTextAndTag>
-        }
-      />
-    ),
-  },
-  {
-    name: "completeness.hasBody",
-    getValue: (values: Dataset) => values?.completeness?.hasBody,
-    addValue: { nb: "", nn: "" },
-    render: (props: any) => (
-      <FormikLanguageFieldset
-        as={TextareaWithPrefix}
-        name="completeness.hasBody"
-        ref={props.ref}
-        legend={
-          <TitleWithHelpTextAndTag
-            helpText={localization.datasetForm.helptext.completeness}
-          >
-            {localization.datasetForm.fieldLabel.completeness}
-          </TitleWithHelpTextAndTag>
-        }
-      />
-    ),
-  },
-  {
-    name: "accuracy.hasBody",
-    getValue: (values: Dataset) => values?.accuracy?.hasBody,
-    addValue: { nb: "", nn: "" },
-    render: (props: any) => (
-      <FormikLanguageFieldset
-        as={TextareaWithPrefix}
-        name="accuracy.hasBody"
-        ref={props.ref}
-        legend={
-          <TitleWithHelpTextAndTag
-            helpText={localization.datasetForm.helptext.accuracy}
-          >
-            {localization.datasetForm.fieldLabel.accuracy}
-          </TitleWithHelpTextAndTag>
-        }
-      />
-    ),
-  },
-  {
-    name: "availability.hasBody",
-    getValue: (values: Dataset) => values?.availability?.hasBody,
-    addValue: { nb: "", nn: "" },
-    render: (props: any) => (
-      <FormikLanguageFieldset
-        as={TextareaWithPrefix}
-        name="availability.hasBody"
-        ref={props.ref}
-        legend={
-          <TitleWithHelpTextAndTag
-            helpText={localization.datasetForm.helptext.availability}
-          >
-            {localization.datasetForm.fieldLabel.availability}
-          </TitleWithHelpTextAndTag>
-        }
-      />
-    ),
+    name: "qualityAnnotations",
+    getValue: (values: Dataset) => values?.qualityAnnotations,
+    render: (props: any) =>
+      isEmpty(props.values?.qualityAnnotations) ? (
+        <QualityAnnotationsModal
+          template={emptyQualityAnnotation()}
+          type="new"
+          qualityDimensions={props.qualityDimensions}
+          onSuccess={(formValues) =>
+            props.setFieldValue("qualityAnnotations[0]", formValues)
+          }
+        />
+      ) : (
+        <>
+          <QualityAnnotationsEditor
+            qualityDimensions={props.qualityDimensions}
+          />
+          {props.showDivider && <FieldsetDivider />}
+        </>
+      ),
+    hasDeleteButton: false,
+    hideToggleButton: true,
   },
   {
     name: "qualifiedAttributions",
@@ -351,6 +311,7 @@ export const MinimizedDetailFields = ({
   provenanceStatements,
   frequencies,
   currencies,
+  qualityDimensions,
   isMobility,
 }: Props) => {
   const { setFieldValue, errors, values } = useFormikContext<Dataset>();
@@ -445,6 +406,7 @@ export const MinimizedDetailFields = ({
           provenanceSuggestionOptions,
           frequencySuggestionOptions,
           currencies,
+          qualityDimensions,
         })}
       </div>
     ) : (
@@ -467,6 +429,7 @@ export const MinimizedDetailFields = ({
           provenanceSuggestionOptions,
           frequencySuggestionOptions,
           currencies,
+          qualityDimensions,
         })}
       </ToggleFieldButton>
     );
@@ -476,9 +439,12 @@ export const MinimizedDetailFields = ({
     ? FIELD_CONFIG.filter((f) => f.name !== "frequency")
     : FIELD_CONFIG;
 
-  // Split fields into expanded and minimized
+  // Split fields into expanded and minimized.
+  // Legacy quality fields are never offered as add-buttons.
   const expandedFields = fieldsList.filter((f) => isExpanded(f));
-  const minimizedFields = fieldsList.filter((f) => !isExpanded(f));
+  const minimizedFields = fieldsList.filter(
+    (f) => !isExpanded(f) && !LEGACY_QUALITY_FIELD_NAMES.has(f.name),
+  );
 
   return (
     <div>
