@@ -563,6 +563,7 @@ export const DistributionModal = ({
       ),
       hasDeleteButton: false,
       hideToggleButton: true,
+      hideForMobility: true,
     },
     {
       name: "conformsTo",
@@ -747,8 +748,11 @@ export const DistributionModal = ({
             };
 
             // Split fields into expanded and minimized
-            const expandedFields = FIELD_CONFIG.filter((f) => isExpanded(f));
-            const minimizedFields = FIELD_CONFIG.filter((f) => !isExpanded(f));
+            const fields = FIELD_CONFIG.filter(
+              (f) => !(isMobility && "hideForMobility" in f),
+            );
+            const expandedFields = fields.filter((f) => isExpanded(f));
+            const minimizedFields = fields.filter((f) => !isExpanded(f));
 
             return (
               <>

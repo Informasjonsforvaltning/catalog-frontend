@@ -120,7 +120,6 @@ export const rightsSchema = Yup.object().shape({
   type: Yup.string().required(
     localization.datasetForm.validation.mobilityRights,
   ),
-  reuserGuidelines: reuserGuidelinesSchema,
 });
 
 export const mobilityDistributionSectionSchema = Yup.object().shape({
