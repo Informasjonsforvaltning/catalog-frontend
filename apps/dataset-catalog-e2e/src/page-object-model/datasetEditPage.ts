@@ -836,10 +836,10 @@ export default class DatasetEditPage {
     await dialog.getByLabel("Lenke").click();
     if (data.reuserGuidelines) {
       await dialog
-        .getByRole("button", { name: "Legg til rettigheter for bruk" })
+        .getByRole("button", { name: "Legg til retningslinjer for gjenbruk" })
         .click();
       await dialog
-        .getByRole("textbox", { name: "Rettigheter for bruk" })
+        .getByRole("textbox", { name: "Retningslinjer for gjenbruk" })
         .fill(data.reuserGuidelines);
     }
     await dialog.getByRole("button", { name: "Legg til", exact: true }).click();
