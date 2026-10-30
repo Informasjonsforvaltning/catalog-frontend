@@ -40,6 +40,11 @@ spec:
                 secretKeyRef:
                   name: commonurl
                   key: CATALOG_ADMIN_SERVICE_BASE_URI
+            - name: CATALOG_ADMIN_SERVICE_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: commonurl
+                  key: CATALOG_ADMIN_SERVICE_HOST
             - name: CATALOG_ADMIN_BASE_URI
               valueFrom:
                 secretKeyRef:
@@ -49,7 +54,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: commonurl
-                  key: ORGANIZATION_CATALOG_BASE_URI
+                  key: ORGANIZATION_CATALOG_HOST
             - name: REFERENCE_DATA_BASE_URI
               valueFrom:
                 secretKeyRef:

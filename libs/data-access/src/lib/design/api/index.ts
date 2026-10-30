@@ -1,7 +1,7 @@
 import { Operation } from "fast-json-patch";
 import { validateOrganizationNumber } from "@catalog-frontend/utils";
 
-const path = `${process.env.CATALOG_ADMIN_SERVICE_BASE_URI}`;
+const path = `${process.env.CATALOG_ADMIN_SERVICE_HOST ?? process.env.CATALOG_ADMIN_SERVICE_BASE_URI}`;
 
 const apiGetCall = async (resource: string, accessToken: string) => {
   const options = {

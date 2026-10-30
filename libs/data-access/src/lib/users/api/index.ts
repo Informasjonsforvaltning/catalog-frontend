@@ -6,7 +6,7 @@ import {
   validateAndEncodeUrlSafe,
 } from "@catalog-frontend/utils";
 
-const path = `${process.env.CATALOG_ADMIN_SERVICE_BASE_URI}`;
+const path = `${process.env.CATALOG_ADMIN_SERVICE_HOST ?? process.env.CATALOG_ADMIN_SERVICE_BASE_URI}`;
 
 export const getUsers = async (catalogId: string, accessToken: string) => {
   validateOrganizationNumber(catalogId, "getUsers");

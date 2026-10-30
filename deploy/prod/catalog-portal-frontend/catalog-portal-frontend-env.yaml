@@ -39,7 +39,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: commonurl
-                  key: ORGANIZATION_CATALOG_BASE_URI
+                  key: ORGANIZATION_CATALOG_HOST
             - name: ADMIN_GUI_BASE_URI
               valueFrom:
                 secretKeyRef:
