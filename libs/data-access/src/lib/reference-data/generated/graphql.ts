@@ -341,6 +341,8 @@ export type PublisherType = {
 export type QualityDimension = {
   __typename?: "QualityDimension";
   code?: Maybe<Scalars["String"]["output"]>;
+  hasParts?: Maybe<Array<Scalars["String"]["output"]>>;
+  isPartOf?: Maybe<Scalars["String"]["output"]>;
   label?: Maybe<LocalizedStrings>;
   uri: Scalars["ID"]["output"];
 };

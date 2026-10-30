@@ -17,6 +17,7 @@ import {
 } from "react";
 import { localization } from "@catalog-frontend/utils";
 import {
+  getSuggestionOptionIndentStyle,
   SuggestionSelectOption,
   useSuggestionMounted,
 } from "../single-suggestion-select";
@@ -112,6 +113,7 @@ export const MultiSuggestionSelect = ({
             key={option.value}
             value={option.value}
             label={option.label}
+            style={getSuggestionOptionIndentStyle(option.indentLevel)}
           >
             {option.description ? (
               <div>

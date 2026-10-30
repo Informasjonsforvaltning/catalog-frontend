@@ -3,6 +3,7 @@ import {
   Licence,
   LosTheme,
   MobilityTheme,
+  QualityDimension,
   ReferenceDataCode,
 } from "@catalog-frontend/types";
 import {
@@ -212,6 +213,20 @@ export const getCurrencies = async (): Promise<{
   currencies: ReferenceDataCode[];
 }> => {
   const resource = `${process.env.FDK_BASE_URI}/reference-data/eu/currencies`;
+  const options = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "GET",
+  };
+  const response = await fetch(resource, options);
+  return response.json();
+};
+
+export const getQualityDimensions = async (): Promise<{
+  qualityDimensions: QualityDimension[];
+}> => {
+  const resource = `${process.env.FDK_BASE_URI}/reference-data/digdir/quality-dimensions`;
   const options = {
     headers: {
       "Content-Type": "application/json",

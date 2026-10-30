@@ -36,6 +36,7 @@ export type DatasetToBeCreated = {
   completeness?: { hasBody?: LocalizedStrings };
   availability?: { hasBody?: LocalizedStrings };
   accuracy?: { hasBody?: LocalizedStrings };
+  qualityAnnotations?: QualityAnnotation[];
   conformsTo?: UriWithLabel[];
   spatial?: string[];
   temporal?: DateRange[];
@@ -51,6 +52,11 @@ export type DatasetToBeCreated = {
   distribution?: Distribution[];
   contactPoints: DatasetContactPoint[];
   costs?: Cost[];
+};
+
+export type QualityAnnotation = {
+  inDimension?: string[];
+  hasBody?: LocalizedStrings;
 };
 
 export type UriWithLabel = {

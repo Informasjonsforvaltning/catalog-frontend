@@ -45,6 +45,14 @@ export interface MobilityTheme {
   label?: LocalizedStrings;
 }
 
+export interface QualityDimension {
+  uri: string;
+  code?: string;
+  label?: LocalizedStrings;
+  hasParts?: string[];
+  isPartOf?: string | null;
+}
+
 export interface ReferenceData {
   losThemes: LosTheme[];
   dataThemes: DataTheme[];
@@ -57,6 +65,7 @@ export interface ReferenceData {
   mobilityDataStandards: ReferenceDataCode[];
   distributionStatuses: ReferenceDataCode[];
   currencies: ReferenceDataCode[];
+  qualityDimensions: QualityDimension[];
 }
 
 export interface DataServiceReferenceData {
