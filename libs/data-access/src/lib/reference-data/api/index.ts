@@ -15,7 +15,7 @@ import {
 export const getDatasetTypes = async (): Promise<{
   datasetTypes: ReferenceDataCode[];
 }> => {
-  const path = `${process.env.FDK_BASE_URI}/reference-data/eu/dataset-types`;
+  const path = `${process.env.REFERENCE_DATA_BASE_URI}/reference-data/eu/dataset-types`;
   const options = {
     headers: {
       "Content-Type": "application/json",
@@ -29,7 +29,7 @@ export const getDatasetTypes = async (): Promise<{
 export const getDistributionStatuses = async (): Promise<{
   distributionStatuses: ReferenceDataCode[];
 }> => {
-  const path = `${process.env.FDK_BASE_URI}/reference-data/eu/distribution-statuses`;
+  const path = `${process.env.REFERENCE_DATA_BASE_URI}/reference-data/eu/distribution-statuses`;
   const options = {
     headers: {
       "Content-Type": "application/json",
@@ -44,7 +44,7 @@ export const getDistributionStatuses = async (): Promise<{
 export const getProductStatuses = async (): Promise<{
   productStatuses: ReferenceDataCode[];
 }> => {
-  const path = `${process.env.FDK_BASE_URI}/reference-data/eu/product-statuses`;
+  const path = `${process.env.REFERENCE_DATA_BASE_URI}/reference-data/eu/product-statuses`;
   const options = {
     headers: {
       "Content-Type": "application/json",
@@ -59,7 +59,7 @@ export const getProductStatuses = async (): Promise<{
 export const getLosThemes = async (): Promise<{
   losNodes: LosTheme[];
 }> => {
-  const resource = `${process.env.FDK_BASE_URI}/reference-data/los/themes-and-words`;
+  const resource = `${process.env.REFERENCE_DATA_BASE_URI}/reference-data/los/themes-and-words`;
   const options = {
     headers: {
       "Content-Type": "application/json",
@@ -71,7 +71,7 @@ export const getLosThemes = async (): Promise<{
 };
 
 export const getDataThemes = async (): Promise<{ dataThemes: DataTheme[] }> => {
-  const resource = `${process.env.FDK_BASE_URI}/reference-data/eu/data-themes`;
+  const resource = `${process.env.REFERENCE_DATA_BASE_URI}/reference-data/eu/data-themes`;
   const options = {
     headers: {
       "Content-Type": "application/json",
@@ -85,7 +85,7 @@ export const getDataThemes = async (): Promise<{ dataThemes: DataTheme[] }> => {
 export const getMobilityThemes = async (): Promise<{
   mobilityThemes: MobilityTheme[];
 }> => {
-  const resource = `${process.env.FDK_BASE_URI}/reference-data/mobility/themes`;
+  const resource = `${process.env.REFERENCE_DATA_BASE_URI}/reference-data/mobility/themes`;
   const options = {
     headers: {
       "Content-Type": "application/json",
@@ -99,7 +99,7 @@ export const getMobilityThemes = async (): Promise<{
 export const getMobilityDataStandards = async (): Promise<{
   mobilityDataStandards: ReferenceDataCode[];
 }> => {
-  const resource = `${process.env.FDK_BASE_URI}/reference-data/mobility/data-standards`;
+  const resource = `${process.env.REFERENCE_DATA_BASE_URI}/reference-data/mobility/data-standards`;
   const options = {
     headers: {
       "Content-Type": "application/json",
@@ -113,7 +113,7 @@ export const getMobilityDataStandards = async (): Promise<{
 export const getMobilityRights = async (): Promise<{
   mobilityConditions: ReferenceDataCode[];
 }> => {
-  const resource = `${process.env.FDK_BASE_URI}/reference-data/mobility/conditions-for-access-and-usage`;
+  const resource = `${process.env.REFERENCE_DATA_BASE_URI}/reference-data/mobility/conditions-for-access-and-usage`;
   const options = {
     headers: {
       "Content-Type": "application/json",
@@ -127,7 +127,7 @@ export const getMobilityRights = async (): Promise<{
 export const getFrequencies = async (): Promise<{
   frequencies: ReferenceDataCode[];
 }> => {
-  const resource = `${process.env.FDK_BASE_URI}/reference-data/eu/frequencies`;
+  const resource = `${process.env.REFERENCE_DATA_BASE_URI}/reference-data/eu/frequencies`;
   const options = {
     headers: {
       "Content-Type": "application/json",
@@ -141,7 +141,7 @@ export const getFrequencies = async (): Promise<{
 export const getOpenLicenses = async (): Promise<{
   openLicenses: ReferenceDataCode[];
 }> => {
-  const resource = `${process.env.FDK_BASE_URI}/reference-data/open-licenses`;
+  const resource = `${process.env.REFERENCE_DATA_BASE_URI}/reference-data/open-licenses`;
   const options = {
     headers: {
       "Content-Type": "application/json",
@@ -155,7 +155,7 @@ export const getOpenLicenses = async (): Promise<{
 export const getLicences = async (): Promise<{
   licences: Licence[];
 }> => {
-  const resource = `${process.env.FDK_BASE_URI}/reference-data/eu/licences`;
+  const resource = `${process.env.REFERENCE_DATA_BASE_URI}/reference-data/eu/licences`;
   const options = {
     headers: {
       "Content-Type": "application/json",
@@ -170,7 +170,7 @@ export const getLicences = async (): Promise<{
 export const getProvenanceStatements = async (): Promise<{
   provenanceStatements: ReferenceDataCode[];
 }> => {
-  const resource = `${process.env.FDK_BASE_URI}/reference-data/provenance-statements`;
+  const resource = `${process.env.REFERENCE_DATA_BASE_URI}/reference-data/provenance-statements`;
   const options = {
     headers: {
       "Content-Type": "application/json",
@@ -184,7 +184,7 @@ export const getProvenanceStatements = async (): Promise<{
 export const getAccessRights = async (): Promise<{
   accessRights: ReferenceDataCode[];
 }> => {
-  const resource = `${process.env.FDK_BASE_URI}/reference-data/eu/access-rights`;
+  const resource = `${process.env.REFERENCE_DATA_BASE_URI}/reference-data/eu/access-rights`;
   const options = {
     headers: {
       "Content-Type": "application/json",
@@ -198,7 +198,7 @@ export const getAccessRights = async (): Promise<{
 export const getPlannedAvailabilities = async (): Promise<{
   plannedAvailabilities: ReferenceDataCode[];
 }> => {
-  const resource = `${process.env.FDK_BASE_URI}/reference-data/eu/planned-availabilities`;
+  const resource = `${process.env.REFERENCE_DATA_BASE_URI}/reference-data/eu/planned-availabilities`;
   const options = {
     headers: {
       "Content-Type": "application/json",
@@ -212,7 +212,7 @@ export const getPlannedAvailabilities = async (): Promise<{
 export const getCurrencies = async (): Promise<{
   currencies: ReferenceDataCode[];
 }> => {
-  const resource = `${process.env.FDK_BASE_URI}/reference-data/eu/currencies`;
+  const resource = `${process.env.REFERENCE_DATA_BASE_URI}/reference-data/eu/currencies`;
   const options = {
     headers: {
       "Content-Type": "application/json",
@@ -240,7 +240,7 @@ export const getQualityDimensions = async (): Promise<{
 export const getMainActivities = async (): Promise<{
   mainActivities: ReferenceDataCode[];
 }> => {
-  const resource = `${process.env.FDK_BASE_URI}/reference-data/eu/main-activities`;
+  const resource = `${process.env.REFERENCE_DATA_BASE_URI}/reference-data/eu/main-activities`;
   const options = {
     headers: {
       "Content-Type": "application/json",
