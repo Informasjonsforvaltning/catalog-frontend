@@ -82,6 +82,12 @@ const contactPointConfirmValidationSchema = Yup.array()
     },
   );
 
+const reuserGuidelinesSchema = Yup.array().of(
+  Yup.string()
+    .matches(httpsRegex, localization.validation.invalidProtocol)
+    .url(localization.validation.invalidUrl),
+);
+
 export const distributionSectionSchema = Yup.object().shape({
   accessURL: Yup.array()
     .of(
@@ -105,6 +111,9 @@ export const distributionSectionSchema = Yup.object().shape({
       .matches(httpsRegex, localization.validation.invalidProtocol)
       .url(localization.validation.invalidUrl),
   ),
+  rights: Yup.object().shape({
+    reuserGuidelines: reuserGuidelinesSchema,
+  }),
 });
 
 export const rightsSchema = Yup.object().shape({
