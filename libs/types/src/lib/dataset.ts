@@ -37,7 +37,7 @@ export type DatasetToBeCreated = {
   availability?: { hasBody?: LocalizedStrings };
   accuracy?: { hasBody?: LocalizedStrings };
   qualityAnnotations?: QualityAnnotation[];
-  conformsTo?: UriWithLabel[];
+  conformsTo?: Standard[];
   spatial?: string[];
   temporal?: DateRange[];
   issued?: string;
@@ -62,6 +62,11 @@ export type QualityAnnotation = {
 export type UriWithLabel = {
   uri?: string;
   prefLabel?: LocalizedStrings;
+};
+
+export type Standard = {
+  prefLabel?: LocalizedStrings;
+  seeAlso?: string[];
 };
 
 export type DateRange = {
@@ -99,7 +104,7 @@ export type Distribution = {
   format?: string[];
   mediaType?: string[];
   license?: string;
-  conformsTo?: UriWithLabel[];
+  conformsTo?: Standard[];
   page?: string[];
   accessServices?: string[];
   mobilityDataStandard?: string;

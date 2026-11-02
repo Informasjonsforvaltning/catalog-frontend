@@ -4,7 +4,7 @@ import {
   FastFieldWithRef,
   FieldsetDivider,
   TitleWithHelpTextAndTag,
-  UriWithLabelFieldsetTable,
+  StandardFieldsetTable,
 } from "@catalog-frontend/ui";
 import { localization } from "@catalog-frontend/utils";
 import { Fieldset, Textfield } from "@digdir/designsystemet-react";
@@ -86,7 +86,7 @@ export const DocumentationSection = () => {
 
       <FieldsetDivider />
 
-      <UriWithLabelFieldsetTable
+      <StandardFieldsetTable
         fieldName="conformsTo"
         itemLabel={localization.dataServiceForm.fieldLabel.conformsTo}
         errors={errors?.conformsTo}

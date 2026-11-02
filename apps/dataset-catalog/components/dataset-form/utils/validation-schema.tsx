@@ -5,7 +5,11 @@ import {
   parseFlexibleDate,
   telephoneNumberRegex,
 } from "@catalog-frontend/utils";
-import { costValidationSchema, uriWithLabelSchema } from "@catalog-frontend/ui";
+import {
+  costValidationSchema,
+  standardSchema,
+  uriWithLabelSchema,
+} from "@catalog-frontend/ui";
 import * as Yup from "yup";
 
 const contactPointDraftValidationSchema = Yup.array().of(
@@ -105,7 +109,7 @@ export const distributionSectionSchema = Yup.object().shape({
         .matches(httpsRegex, localization.validation.invalidProtocol)
         .url(localization.validation.invalidUrl),
     ),
-  conformsTo: Yup.array().of(uriWithLabelSchema),
+  conformsTo: Yup.array().of(standardSchema),
   page: Yup.array().of(
     Yup.string()
       .matches(httpsRegex, localization.validation.invalidProtocol)
@@ -146,7 +150,7 @@ export const mobilityDistributionSectionSchema = Yup.object().shape({
         .matches(httpsRegex, localization.validation.invalidProtocol)
         .url(localization.validation.invalidUrl),
     ),
-  conformsTo: Yup.array().of(uriWithLabelSchema),
+  conformsTo: Yup.array().of(standardSchema),
   page: Yup.array().of(
     Yup.string()
       .matches(httpsRegex, localization.validation.invalidProtocol)
@@ -373,7 +377,7 @@ export const confirmedDatasetSchema = draftDatasetSchema.shape({
         .url(localization.validation.invalidUrl),
     ),
   applicableLegislation: Yup.array().of(applicableLegislationSchema),
-  conformsTo: Yup.array().of(uriWithLabelSchema),
+  conformsTo: Yup.array().of(standardSchema),
   informationModelsFromOtherSources: Yup.array().of(uriWithLabelSchema),
   references: Yup.array().of(referenceSchema),
   relations: Yup.array().of(uriWithLabelSchema),
@@ -465,7 +469,7 @@ export const confirmedMobilityDatasetSchema = draftDatasetSchema.shape({
         .matches(httpsRegex, localization.validation.invalidProtocol)
         .url(localization.validation.invalidUrl),
     ),
-  conformsTo: Yup.array().of(uriWithLabelSchema),
+  conformsTo: Yup.array().of(standardSchema),
   informationModelsFromOtherSources: Yup.array().of(uriWithLabelSchema),
   references: Yup.array().of(referenceSchema),
   relations: Yup.array().of(uriWithLabelSchema),

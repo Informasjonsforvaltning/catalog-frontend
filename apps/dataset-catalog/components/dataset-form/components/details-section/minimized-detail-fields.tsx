@@ -11,7 +11,7 @@ import {
   SingleSuggestionSelect,
   TextareaWithPrefix,
   TitleWithHelpTextAndTag,
-  UriWithLabelFieldsetTable,
+  StandardFieldsetTable,
 } from "@catalog-frontend/ui";
 import {
   capitalizeFirstLetter,
@@ -284,7 +284,7 @@ const FIELD_CONFIG = [
     name: "conformsTo",
     getValue: (values: Dataset) => values?.conformsTo,
     render: (props: any) => (
-      <UriWithLabelFieldsetTable
+      <StandardFieldsetTable
         fieldName="conformsTo"
         itemLabel={localization.datasetForm.fieldLabel.conformsTo}
         errors={props.errors.conformsTo}

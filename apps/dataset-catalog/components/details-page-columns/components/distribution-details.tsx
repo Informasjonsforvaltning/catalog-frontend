@@ -307,13 +307,20 @@ export const DistributionDetailsCard = ({
                     </Table.Row>
                   </Table.Head>
                   <TableBody>
-                    {distribution.conformsTo?.map((conform) => (
-                      <Table.Row key={`conformsTo-${conform.uri}`}>
+                    {distribution.conformsTo?.map((conform, index) => (
+                      <Table.Row key={`conformsTo-${index}`}>
                         <Table.Cell>
                           {getTranslateText(conform.prefLabel, language)}
                         </Table.Cell>
                         <Table.Cell>
-                          <Link href={conform.uri}>{conform.uri}</Link>
+                          {conform.seeAlso?.map((url, urlIndex) => (
+                            <Paragraph
+                              data-size="sm"
+                              key={`conformsTo-${index}-${urlIndex}`}
+                            >
+                              <Link href={url}>{url}</Link>
+                            </Paragraph>
+                          ))}
                         </Table.Cell>
                       </Table.Row>
                     ))}

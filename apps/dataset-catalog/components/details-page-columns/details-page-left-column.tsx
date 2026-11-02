@@ -2,6 +2,7 @@ import {
   CostList,
   InfoCard,
   ReferenceDataTags,
+  StandardTable,
   UriWithLabelTable,
   useSearchConceptsByUri,
   useSearchDatasetsByUri,
@@ -333,7 +334,7 @@ export const LeftColumn = ({
 
       {!isEmpty(dataset?.conformsTo) && (
         <InfoCard.Item title={localization.datasetForm.fieldLabel.conformsTo}>
-          <UriWithLabelTable values={dataset?.conformsTo} language={language} />
+          <StandardTable values={dataset?.conformsTo} language={language} />
         </InfoCard.Item>
       )}
 
