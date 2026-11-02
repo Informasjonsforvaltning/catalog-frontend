@@ -194,6 +194,22 @@ export const DistributionDetails = ({
             </div>
           )}
 
+          {!isEmpty(distribution.rights?.reuserGuidelines) && (
+            <div className={styles.field}>
+              <Heading
+                level={5}
+                data-size="2xs"
+              >{`${localization.datasetForm.fieldLabel.reuserGuidelines}:`}</Heading>
+              {distribution.rights?.reuserGuidelines?.map(
+                (url: string, index: number) => (
+                  <Paragraph key={`reuserGuidelines-${index}`} data-size="sm">
+                    {url}
+                  </Paragraph>
+                ),
+              )}
+            </div>
+          )}
+
           {distribution?.page && !isEmpty(distribution.page) && (
             <div className={styles.field}>
               <Heading

@@ -76,7 +76,8 @@ export const DistributionDetailsCard = ({
     !(distribution?.accessServices && distribution.accessServices.length > 0) &&
     isEmpty(distribution?.license) &&
     isEmpty(distribution?.conformsTo) &&
-    !(distribution?.page && !isEmpty(distribution.page[0]))
+    !(distribution?.page && !isEmpty(distribution.page[0])) &&
+    isEmpty(distribution.rights?.reuserGuidelines)
   );
 
   return (
@@ -318,6 +319,19 @@ export const DistributionDetailsCard = ({
                     ))}
                   </TableBody>
                 </Table>
+              </div>
+            )}
+
+            {!isEmpty(distribution.rights?.reuserGuidelines) && (
+              <div className={styles.distributionField}>
+                <Heading level={5} data-size="2xs">
+                  {localization.datasetForm.fieldLabel.reuserGuidelines}
+                </Heading>
+                {distribution.rights?.reuserGuidelines?.map((url, index) => (
+                  <Paragraph data-size="sm" key={`reuserGuidelines-${index}`}>
+                    <Link href={url}>{url}</Link>
+                  </Paragraph>
+                ))}
               </div>
             )}
 

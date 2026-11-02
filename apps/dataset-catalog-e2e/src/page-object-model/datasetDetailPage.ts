@@ -158,6 +158,10 @@ export default class DatasetDetailPage {
     await expect(this.page.getByText(license).first()).toBeVisible();
   }
 
+  async expectDistributionReuserGuidelines(url: string) {
+    await expect(this.page.getByRole("link", { name: url })).toBeVisible();
+  }
+
   async expectDistributionStatus(status: string) {
     await expect(this.page.getByText(status, { exact: true })).toBeVisible();
   }

@@ -227,6 +227,7 @@ runTestAsAdmin(
       accessUrl: "https://example.com/access-url",
       license: "Norwegian Licence for Open Government Data (NLOD) 2.0",
       status: "ferdigstilt",
+      reuserGuidelines: "https://example.com/reuser-guidelines",
       format: "CSV",
     });
 
@@ -246,6 +247,9 @@ runTestAsAdmin(
       "Norwegian Licence for Open Government Data (NLOD) 2.0",
     );
     await detailPage.expectDistributionStatus("ferdigstilt");
+    await detailPage.expectDistributionReuserGuidelines(
+      "https://example.com/reuser-guidelines",
+    );
     await detailPage.expectDistributionFormat("CSV");
   },
 );
