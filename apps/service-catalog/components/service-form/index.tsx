@@ -68,7 +68,6 @@ interface ServiceFormProps {
   mainActivities?: ReferenceDataCode[];
   onCancel?: () => void;
   onSubmit?: (values: Service) => Promise<Service | undefined>;
-  referenceDataEnv: string;
   searchEnv: string;
   showSnackbarSuccessOnInit?: boolean;
   statuses: ReferenceDataCode[];
@@ -109,7 +108,6 @@ export const ServiceForm = (props: ServiceFormProps) => {
     mainActivities,
     onCancel,
     onSubmit,
-    referenceDataEnv,
     searchEnv,
     showSnackbarSuccessOnInit,
     statuses,
@@ -491,9 +489,7 @@ export const ServiceForm = (props: ServiceFormProps) => {
                             {localization.serviceForm.fieldLabel.spatial}
                           </TitleWithHelpTextAndTag>
                         </Fieldset.Legend>
-                        <SpatialSuggestionSelect
-                          referenceDataEnv={referenceDataEnv}
-                        />
+                        <SpatialSuggestionSelect />
                       </Fieldset>
                       <FieldsetDivider />
                       <Fieldset data-size="sm">
@@ -578,7 +574,6 @@ export const ServiceForm = (props: ServiceFormProps) => {
                       </TitleWithHelpTextAndTag>
                       <ProducesField
                         errors={errors.produces}
-                        referenceDataEnv={referenceDataEnv}
                         searchEnv={searchEnv}
                         validationSchema={producesSchema}
                       />
@@ -604,7 +599,6 @@ export const ServiceForm = (props: ServiceFormProps) => {
                       </TitleWithHelpTextAndTag>
                       <EvidenceField
                         errors={errors.evidence}
-                        referenceDataEnv={referenceDataEnv}
                         searchEnv={searchEnv}
                         validationSchema={evidenceSchema}
                       />

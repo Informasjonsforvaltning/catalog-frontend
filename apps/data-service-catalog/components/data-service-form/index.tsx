@@ -62,7 +62,6 @@ type Props = {
   initialValues: DataService | DataServiceToBeCreated;
   searchEnv: string; // Environment variable to search service
   referenceData: DataServiceReferenceData;
-  referenceDataEnv: string; // Environment variable to reference data
   autoSaveStorage?: DataStorage<StorageData>;
   autoSave?: boolean;
   autoSaveId?: string;
@@ -78,7 +77,6 @@ const DataServiceForm = ({
   initialValues,
   searchEnv,
   referenceData,
-  referenceDataEnv,
   autoSaveStorage,
   autoSave = true,
   autoSaveId,
@@ -437,7 +435,7 @@ const DataServiceForm = ({
                       }
                       error={hasError(["formats"])}
                     >
-                      <FormatSection referenceDataEnv={referenceDataEnv} />
+                      <FormatSection />
                     </FormLayout.Section>
 
                     <FormLayout.Section

@@ -61,7 +61,6 @@ export default async function EditServicePage({
         currencies={currenciesResponse.currencies}
         losThemes={losThemesResponse.losNodes}
         mainActivities={mainActivities.mainActivities}
-        referenceDataEnv={process.env.FDK_BASE_URI || ""}
         searchEnv={process.env.FDK_SEARCH_SERVICE_BASE_URI || ""}
         service={service}
         statuses={statusesResponse.statuses}

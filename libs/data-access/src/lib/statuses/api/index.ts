@@ -3,7 +3,7 @@ import { ReferenceDataCode } from "@catalog-frontend/types";
 export const getAdmsStatuses = async (): Promise<{
   statuses: ReferenceDataCode[];
 }> => {
-  const path = `${process.env.FDK_BASE_URI}/reference-data/adms/statuses`;
+  const path = `${process.env.REFERENCE_DATA_BASE_URI}/reference-data/adms/statuses`;
   const options = {
     headers: {
       "Content-Type": "application/json",
@@ -17,7 +17,7 @@ export const getAdmsStatuses = async (): Promise<{
 export const getConceptStatuses = async (): Promise<{
   conceptStatuses: ReferenceDataCode[];
 }> => {
-  const path = `${process.env.FDK_BASE_URI}/reference-data/eu/concept-statuses`;
+  const path = `${process.env.REFERENCE_DATA_BASE_URI}/reference-data/eu/concept-statuses`;
   const options = {
     headers: {
       "Content-Type": "application/json",

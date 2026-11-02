@@ -14,10 +14,6 @@ import {
   useSearchLocationsByUri,
 } from "../use-reference-data-search";
 
-interface Props {
-  referenceDataEnv: string;
-}
-
 const getLocationType = (subType: string): string => {
   if (subType.includes("KOMMUNE")) return localization.spatial.municipality;
   if (subType.includes("FYLKE")) return localization.spatial.county;
@@ -33,18 +29,13 @@ const getDescription = (item: ReferenceDataCode | undefined) =>
       : (item.code ?? "")
     : "";
 
-export const SpatialSuggestionSelect = ({ referenceDataEnv }: Props) => {
+export const SpatialSuggestionSelect = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const debouncedSearchTerm = useDebounce(searchTerm);
-  const { data: searchHits, isFetching } = useSearchGeoNamesAndEULocations(
-    debouncedSearchTerm,
-    referenceDataEnv,
-  );
+  const { data: searchHits, isFetching } =
+    useSearchGeoNamesAndEULocations(debouncedSearchTerm);
   const { values, errors, setFieldValue } = useFormikContext<Dataset>();
-  const { data: selectedValues } = useSearchLocationsByUri(
-    values.spatial,
-    referenceDataEnv,
-  );
+  const { data: selectedValues } = useSearchLocationsByUri(values.spatial);
 
   const locationOptions = useMemo(
     () => [

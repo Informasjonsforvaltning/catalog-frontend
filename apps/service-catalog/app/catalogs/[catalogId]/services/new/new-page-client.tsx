@@ -18,14 +18,12 @@ import { serviceTemplate } from "@service-catalog/components/service-form/servic
 type NewPageProps = {
   currencies?: ReferenceDataCode[];
   losThemes: LosTheme[];
-  referenceDataEnv: string;
   searchEnv: string;
   statuses: ReferenceDataCode[];
 };
 
 export const NewPage = (props: NewPageProps) => {
-  const { currencies, losThemes, referenceDataEnv, searchEnv, statuses } =
-    props;
+  const { currencies, losThemes, searchEnv, statuses } = props;
   const router = useRouter();
   const { catalogId } = useParams<{ catalogId: string }>();
   const serviceIdRef = useRef<string | undefined>(undefined); // Ref to store the service id
@@ -89,7 +87,6 @@ export const NewPage = (props: NewPageProps) => {
         onCancel={handleCancel}
         onSubmit={handleCreate}
         initialValues={serviceTemplate(undefined)}
-        referenceDataEnv={referenceDataEnv}
         searchEnv={searchEnv}
         statuses={statuses}
         type="services"

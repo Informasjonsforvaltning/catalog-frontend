@@ -27,14 +27,12 @@ type HasFormatFormFieldsProps = {
     value: ModelDocument[keyof ModelDocument],
   ) => void;
   values: ModelDocument;
-  referenceDataEnv: string;
 };
 
 export const HasFormatFormFields = ({
   errors,
   setFieldValue,
   values,
-  referenceDataEnv,
 }: HasFormatFormFieldsProps) => {
   const [languageSearchQuery, setLanguageSearchQuery] = useState("");
   const [formatSearchQuery, setFormatSearchQuery] = useState("");
@@ -42,20 +40,14 @@ export const HasFormatFormFields = ({
   const debouncedFormatSearch = useDebounce(formatSearchQuery);
 
   const { data: languageSearchHits, isFetching: searchingLanguages } =
-    useSearchLanguage(debouncedLanguageSearch, referenceDataEnv);
+    useSearchLanguage(debouncedLanguageSearch);
   const { data: selectedLanguages, isLoading: loadingSelectedLanguages } =
-    useSearchLanguageByUri(
-      values.language ? [values.language] : [],
-      referenceDataEnv,
-    );
+    useSearchLanguageByUri(values.language ? [values.language] : []);
 
   const { data: formatSearchHits, isFetching: searchingFormats } =
-    useSearchFileTypes(debouncedFormatSearch, referenceDataEnv);
+    useSearchFileTypes(debouncedFormatSearch);
   const { data: selectedFormats, isLoading: loadingSelectedFormats } =
-    useSearchFileTypeByUri(
-      values.format ? [values.format] : [],
-      referenceDataEnv,
-    );
+    useSearchFileTypeByUri(values.format ? [values.format] : []);
 
   const languageOptions = useMemo(() => {
     const sortedSearchHits = [...(languageSearchHits ?? [])].sort(

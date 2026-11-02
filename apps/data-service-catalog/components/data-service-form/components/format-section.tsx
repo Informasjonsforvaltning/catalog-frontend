@@ -10,21 +10,15 @@ import { Fieldset } from "@digdir/designsystemet-react";
 import { useFormikContext } from "formik";
 import { useState } from "react";
 
-type Props = {
-  referenceDataEnv: string;
-};
-
-export const FormatSection = ({ referenceDataEnv }: Props) => {
+export const FormatSection = () => {
   const { setFieldValue, values } = useFormikContext<DataService>();
   const [searchQueryFileTypes, setSearchQueryFileTypes] = useState<string>("");
 
-  const { data: fileTypes, isLoading: searchingFileTypes } = useSearchFileTypes(
-    searchQueryFileTypes,
-    referenceDataEnv,
-  );
+  const { data: fileTypes, isLoading: searchingFileTypes } =
+    useSearchFileTypes(searchQueryFileTypes);
 
   const { data: selectedFileTypes, isLoading: loadingSelectedFileTypes } =
-    useSearchFileTypeByUri(values?.formats ?? [], referenceDataEnv);
+    useSearchFileTypeByUri(values?.formats ?? []);
 
   return (
     <div>

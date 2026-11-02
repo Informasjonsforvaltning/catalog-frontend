@@ -14,7 +14,6 @@ type EditPageProps = {
   dataService: DataService;
   searchEnv: string;
   referenceData: any;
-  referenceDataEnv: string;
 };
 
 export const EditPage = ({
@@ -22,7 +21,6 @@ export const EditPage = ({
   dataService,
   searchEnv,
   referenceData,
-  referenceDataEnv,
 }: EditPageProps) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -90,7 +88,6 @@ export const EditPage = ({
         initialValues={dataService}
         searchEnv={searchEnv}
         referenceData={referenceData}
-        referenceDataEnv={referenceDataEnv}
         autoSaveStorage={dataStorage}
         autoSaveId={dataService.id}
         onSubmit={handleUpdate}

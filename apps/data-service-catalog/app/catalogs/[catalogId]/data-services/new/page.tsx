@@ -21,7 +21,6 @@ const NewDataServicePage = withWriteProtectedPage(
   async ({ catalogId }) => {
     const initialValues = dataServiceToBeCreatedTemplate();
     const searchEnv = process.env.FDK_SEARCH_SERVICE_BASE_URI ?? "";
-    const referenceDataEnv = process.env.FDK_BASE_URI ?? "";
 
     const [
       licenseResponse,
@@ -71,7 +70,6 @@ const NewDataServicePage = withWriteProtectedPage(
           initialValues={initialValues}
           searchEnv={searchEnv}
           referenceData={referenceData}
-          referenceDataEnv={referenceDataEnv}
         />
       </>
     );

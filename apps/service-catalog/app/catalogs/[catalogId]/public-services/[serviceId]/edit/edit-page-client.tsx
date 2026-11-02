@@ -27,7 +27,6 @@ type EditPageProps = {
   currencies?: ReferenceDataCode[];
   losThemes: LosTheme[];
   mainActivities: ReferenceDataCode[];
-  referenceDataEnv: string;
   searchEnv: string;
   service: Service;
   statuses: ReferenceDataCode[];
@@ -38,7 +37,6 @@ export const EditPage = (props: EditPageProps) => {
     currencies,
     losThemes,
     mainActivities,
-    referenceDataEnv,
     searchEnv,
     service,
     statuses,
@@ -118,7 +116,6 @@ export const EditPage = (props: EditPageProps) => {
         onCancel={handleCancel}
         onSubmit={handleUpdate}
         initialValues={serviceTemplate(service)}
-        referenceDataEnv={referenceDataEnv}
         searchEnv={searchEnv}
         statuses={statuses}
         showSnackbarSuccessOnInit={showSnackbar}

@@ -49,7 +49,6 @@ export default async function NewServicePage(props: {
       <NewPage
         currencies={currenciesResponse.currencies}
         losThemes={losThemesResponse.losNodes}
-        referenceDataEnv={process.env.FDK_BASE_URI || ""}
         searchEnv={process.env.FDK_SEARCH_SERVICE_BASE_URI || ""}
         statuses={statusesResponse.statuses}
       />

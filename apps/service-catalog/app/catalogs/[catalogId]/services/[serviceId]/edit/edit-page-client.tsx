@@ -26,21 +26,13 @@ import { useEffect, useState } from "react";
 type EditPageProps = {
   currencies?: ReferenceDataCode[];
   losThemes: LosTheme[];
-  referenceDataEnv: string;
   searchEnv: string;
   service: Service;
   statuses: ReferenceDataCode[];
 };
 
 export const EditPage = (props: EditPageProps) => {
-  const {
-    currencies,
-    losThemes,
-    referenceDataEnv,
-    searchEnv,
-    service,
-    statuses,
-  } = props;
+  const { currencies, losThemes, searchEnv, service, statuses } = props;
   const router = useRouter();
   const { catalogId, serviceId } = useParams<{
     catalogId: string;
@@ -116,7 +108,6 @@ export const EditPage = (props: EditPageProps) => {
         onCancel={handleCancel}
         onSubmit={handleUpdate}
         initialValues={serviceTemplate(service)}
-        referenceDataEnv={referenceDataEnv}
         searchEnv={searchEnv}
         statuses={statuses}
         showSnackbarSuccessOnInit={showSnackbar}

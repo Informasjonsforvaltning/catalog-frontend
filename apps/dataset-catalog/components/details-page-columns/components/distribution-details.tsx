@@ -47,17 +47,13 @@ export const DistributionDetailsCard = ({
   rights,
   status,
 }: Props) => {
-  const { data: formats } = useSearchFileTypeByUri(
-    distribution.format,
-    referenceDataEnv,
-  );
+  const { data: formats } = useSearchFileTypeByUri(distribution.format);
   const { data: selectedDataServices } = useSearchDataServiceByUri(
     searchEnv,
     distribution?.accessServices ?? [],
   );
   const { data: selectedMediaTypes } = useSearchMediaTypeByUri(
     distribution?.mediaType ?? [],
-    referenceDataEnv,
   );
 
   const getDataNorgeUri = (

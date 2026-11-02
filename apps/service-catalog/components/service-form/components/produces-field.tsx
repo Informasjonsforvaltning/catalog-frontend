@@ -50,13 +50,11 @@ interface Props {
   errors?:
     | string
     | Array<{ title: LocalizedStrings; description: LocalizedStrings }>;
-  referenceDataEnv: string;
   searchEnv: string;
   validationSchema: typeof producesSchema;
 }
 
 interface ModalProps {
-  referenceDataEnv: string;
   searchEnv: string;
   validationSchema: typeof producesSchema;
   onCancel: () => void;
@@ -66,11 +64,7 @@ interface ModalProps {
   type: "new" | "edit";
 }
 
-const LanguageFieldset = ({
-  referenceDataEnv,
-}: {
-  referenceDataEnv: string;
-}) => (
+const LanguageFieldset = () => (
   <Fieldset data-size="sm">
     <Fieldset.Legend>
       <TitleWithHelpTextAndTag
@@ -81,7 +75,7 @@ const LanguageFieldset = ({
         {localization.serviceForm.fieldLabel.language}
       </TitleWithHelpTextAndTag>
     </Fieldset.Legend>
-    <LanguageSuggestion referenceDataEnv={referenceDataEnv} />
+    <LanguageSuggestion />
   </Fieldset>
 );
 
@@ -249,16 +243,14 @@ const hasNoFieldValues = (values: Output) => {
 };
 
 export const ProducesField = (props: Props) => {
-  const { errors, referenceDataEnv, searchEnv, validationSchema } = props;
+  const { errors, searchEnv, validationSchema } = props;
   const { values, setFieldValue } = useFormikContext<Service>();
   const [snapshot, setSnapshot] = useState<Output[]>(values.produces ?? []);
   const producesLanguageUris = [
     ...new Set((values.produces ?? []).flatMap((item) => item.language ?? [])),
   ];
-  const { data: producesLanguages } = useSearchLanguageByUri(
-    producesLanguageUris,
-    referenceDataEnv,
-  );
+  const { data: producesLanguages } =
+    useSearchLanguageByUri(producesLanguageUris);
   const producesDatasetUris = [
     ...new Set((values.produces ?? []).flatMap((item) => item.isPartOf ?? [])),
   ];
@@ -291,7 +283,6 @@ export const ProducesField = (props: Props) => {
 
                 <div className={styles.buttons}>
                   <FieldModal
-                    referenceDataEnv={referenceDataEnv}
                     searchEnv={searchEnv}
                     validationSchema={validationSchema}
                     template={item}
@@ -382,7 +373,6 @@ export const ProducesField = (props: Props) => {
           ))}
 
           <FieldModal
-            referenceDataEnv={referenceDataEnv}
             searchEnv={searchEnv}
             validationSchema={validationSchema}
             template={{
@@ -418,7 +408,6 @@ export const ProducesField = (props: Props) => {
 
 const FieldModal = (props: ModalProps) => {
   const {
-    referenceDataEnv,
     searchEnv,
     template,
     type,
@@ -486,7 +475,7 @@ const FieldModal = (props: ModalProps) => {
                   />
 
                   <FieldsetDivider />
-                  <LanguageFieldset referenceDataEnv={referenceDataEnv} />
+                  <LanguageFieldset />
 
                   <FieldsetDivider />
                   <DatasetFieldset searchEnv={searchEnv} />

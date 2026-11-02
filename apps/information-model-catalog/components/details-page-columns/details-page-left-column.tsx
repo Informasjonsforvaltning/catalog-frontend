@@ -84,12 +84,9 @@ export const LeftColumn = ({
 
   const { data: hasFormatLanguages } = useSearchLanguageByUri(
     hasFormatLanguageUris,
-    fdkBaseUri,
   );
-  const { data: hasFormatFormats } = useSearchFileTypeByUri(
-    hasFormatFormatUris,
-    fdkBaseUri,
-  );
+  const { data: hasFormatFormats } =
+    useSearchFileTypeByUri(hasFormatFormatUris);
 
   const hasFormatDocuments = useMemo(
     () => compact(informationModel?.hasFormat),

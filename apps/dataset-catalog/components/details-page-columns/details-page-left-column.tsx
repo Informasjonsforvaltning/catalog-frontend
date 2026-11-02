@@ -61,10 +61,7 @@ export const LeftColumn = ({
   language,
 }: Props) => {
   const keywordLanguages: ISOLanguage[] = ["nb", "nn", "en"];
-  const { data: spatial } = useSearchLocationsByUri(
-    dataset?.spatial,
-    referenceDataEnv,
-  );
+  const { data: spatial } = useSearchLocationsByUri(dataset?.spatial);
   const { data: qualifiedAttributions } = useSearchEnheterByOrgNmbs(
     dataset?.qualifiedAttributions,
   );
@@ -90,10 +87,7 @@ export const LeftColumn = ({
     dataset?.informationModelsFromFDK ?? [],
   );
 
-  const { data: languages } = useSearchLanguageByUri(
-    dataset?.language,
-    referenceDataEnv,
-  );
+  const { data: languages } = useSearchLanguageByUri(dataset?.language);
 
   const qualityAnnotations = getQualityAnnotationsForDisplay(
     dataset,

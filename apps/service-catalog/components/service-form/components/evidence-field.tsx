@@ -45,13 +45,11 @@ interface Props {
   errors?:
     | string
     | Array<{ title: LocalizedStrings; description: LocalizedStrings }>;
-  referenceDataEnv: string;
   searchEnv: string;
   validationSchema: typeof evidenceSchema;
 }
 
 interface ModalProps {
-  referenceDataEnv: string;
   searchEnv: string;
   validationSchema: typeof evidenceSchema;
   onCancel: () => void;
@@ -61,11 +59,7 @@ interface ModalProps {
   type: "new" | "edit";
 }
 
-const LanguageFieldset = ({
-  referenceDataEnv,
-}: {
-  referenceDataEnv: string;
-}) => (
+const LanguageFieldset = () => (
   <Fieldset data-size="sm">
     <Fieldset.Legend>
       <TitleWithHelpTextAndTag
@@ -76,7 +70,7 @@ const LanguageFieldset = ({
         {localization.serviceForm.fieldLabel.language}
       </TitleWithHelpTextAndTag>
     </Fieldset.Legend>
-    <LanguageSuggestion referenceDataEnv={referenceDataEnv} />
+    <LanguageSuggestion />
   </Fieldset>
 );
 
@@ -216,7 +210,7 @@ const hasNoFieldValues = (values: Evidence) => {
 };
 
 export const EvidenceField = (props: Props) => {
-  const { errors, referenceDataEnv, searchEnv, validationSchema } = props;
+  const { errors, searchEnv, validationSchema } = props;
   const { values, setFieldValue } = useFormikContext<Service>();
   const [snapshot, setSnapshot] = useState<Evidence[]>(values.evidence ?? []);
   const evidenceDatasetUris = [
@@ -229,10 +223,8 @@ export const EvidenceField = (props: Props) => {
     searchEnv,
     evidenceDatasetUris,
   );
-  const { data: evidenceLanguages } = useSearchLanguageByUri(
-    evidenceLanguageUris,
-    referenceDataEnv,
-  );
+  const { data: evidenceLanguages } =
+    useSearchLanguageByUri(evidenceLanguageUris);
 
   return (
     <FieldArray
@@ -258,7 +250,6 @@ export const EvidenceField = (props: Props) => {
 
                 <div className={styles.buttons}>
                   <FieldModal
-                    referenceDataEnv={referenceDataEnv}
                     searchEnv={searchEnv}
                     validationSchema={validationSchema}
                     template={item}
@@ -353,7 +344,6 @@ export const EvidenceField = (props: Props) => {
           ))}
 
           <FieldModal
-            referenceDataEnv={referenceDataEnv}
             searchEnv={searchEnv}
             validationSchema={validationSchema}
             template={{
@@ -389,7 +379,6 @@ export const EvidenceField = (props: Props) => {
 
 const FieldModal = (props: ModalProps) => {
   const {
-    referenceDataEnv,
     searchEnv,
     template,
     type,
@@ -469,7 +458,7 @@ const FieldModal = (props: ModalProps) => {
                   />
 
                   <FieldsetDivider />
-                  <LanguageFieldset referenceDataEnv={referenceDataEnv} />
+                  <LanguageFieldset />
 
                   <FieldsetDivider />
                   <DatasetFieldset searchEnv={searchEnv} />

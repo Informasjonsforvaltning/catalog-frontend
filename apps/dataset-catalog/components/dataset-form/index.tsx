@@ -60,7 +60,6 @@ type Props = {
   autoSaveStorage: DataStorage<StorageData>;
   submitType: "create" | "update";
   searchEnv: string; // Environment variable to search service
-  referenceDataEnv: string; // Environment variable to reference data
   referenceData: ReferenceData;
   onCancel?: () => void;
   onSubmit?: (values: Dataset) => Promise<Dataset | undefined>;
@@ -97,7 +96,6 @@ export const DatasetForm = ({
   autoSaveStorage,
   referenceData,
   searchEnv,
-  referenceDataEnv,
   showSnackbarSuccessOnInit,
   afterSubmit,
   onSubmit,
@@ -427,7 +425,6 @@ export const DatasetForm = ({
                     ])}
                   >
                     <AboutSection
-                      referenceDataEnv={referenceDataEnv}
                       isMobility={isMobility}
                       frequencies={frequencies}
                       autoSaveStorage={autoSaveStorage}
@@ -461,7 +458,6 @@ export const DatasetForm = ({
                     error={hasError(["distribution", "sample"])}
                   >
                     <DistributionSection
-                      referenceDataEnv={referenceDataEnv}
                       searchEnv={searchEnv}
                       openLicenses={openLicenses}
                       autoSaveId={datasetId?.toString()}
@@ -485,7 +481,6 @@ export const DatasetForm = ({
                     ])}
                   >
                     <DetailsSection
-                      referenceDataEnv={referenceDataEnv}
                       referenceData={referenceData}
                       isMobility={isMobility}
                     />

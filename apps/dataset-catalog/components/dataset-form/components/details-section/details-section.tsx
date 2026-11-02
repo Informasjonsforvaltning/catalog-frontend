@@ -5,16 +5,11 @@ import { RecommendedDetailFields } from "./recommended-detail-fields";
 import { MinimizedDetailFields } from "./minimized-detail-fields";
 
 type Props = {
-  referenceDataEnv: string;
   referenceData: ReferenceData;
   isMobility?: boolean;
 };
 
-export const DetailsSection = ({
-  referenceDataEnv,
-  referenceData,
-  isMobility,
-}: Props) => {
+export const DetailsSection = ({ referenceData, isMobility }: Props) => {
   const {
     datasetTypes,
     provenanceStatements,
@@ -24,10 +19,7 @@ export const DetailsSection = ({
   } = referenceData;
   return (
     <div>
-      <RecommendedDetailFields
-        referenceDataEnv={referenceDataEnv}
-        isMobility={isMobility}
-      />
+      <RecommendedDetailFields isMobility={isMobility} />
       <MinimizedDetailFields
         datasetTypes={datasetTypes}
         provenanceStatements={provenanceStatements}

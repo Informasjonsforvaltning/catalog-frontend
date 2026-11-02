@@ -74,7 +74,6 @@ const nonEmptyValues = (values: string[] | null | undefined): string[] =>
 
 type Props = {
   trigger: ReactNode;
-  referenceDataEnv: string;
   searchEnv: string;
   openLicenses?: ReferenceDataCode[];
   onSuccess: (values: Distribution) => void;
@@ -91,7 +90,6 @@ type Props = {
 };
 
 export const DistributionModal = ({
-  referenceDataEnv,
   searchEnv,
   openLicenses,
   onSuccess,
@@ -152,15 +150,13 @@ export const DistributionModal = ({
   };
 
   const { data: mediaTypes, isLoading: searchingMediaTypes } =
-    useSearchMediaTypes(searchQueryMediaTypes, referenceDataEnv);
-  const { data: fileTypes, isLoading: searchingFileTypes } = useSearchFileTypes(
-    searchQueryFileTypes,
-    referenceDataEnv,
-  );
+    useSearchMediaTypes(searchQueryMediaTypes);
+  const { data: fileTypes, isLoading: searchingFileTypes } =
+    useSearchFileTypes(searchQueryFileTypes);
   const { data: selectedMediaTypes, isLoading: loadingSelectedMediaTypes } =
-    useSearchMediaTypeByUri(selectedMediaTypeUris, referenceDataEnv);
+    useSearchMediaTypeByUri(selectedMediaTypeUris);
   const { data: selectedFileTypes, isLoading: loadingSelectedFileTypes } =
-    useSearchFileTypeByUri(selectedFileTypeUris, referenceDataEnv);
+    useSearchFileTypeByUri(selectedFileTypeUris);
   const { data: dataServices, isFetching: searchingDataServices } =
     useSearchDataServiceSuggestions(
       searchEnv,

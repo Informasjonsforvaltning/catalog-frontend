@@ -6,21 +6,14 @@ import {
 import { ReferenceDataCode } from "@catalog-frontend/types";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 
-export const useSearchGeoNamesAndEULocations = (
-  searchQuery: string,
-  envVariable: string,
-) => {
+export const useSearchGeoNamesAndEULocations = (searchQuery: string) => {
   return useQuery({
     queryKey: ["LOCATIONS", searchQuery],
     queryFn: async () => {
-      const data: ReferenceDataCode[] = await searchReferenceData(
-        searchQuery,
-        envVariable,
-        [
-          ReferenceDataGraphql.SearchAlternative.GeoNames,
-          ReferenceDataGraphql.SearchAlternative.EuLocations,
-        ],
-      );
+      const data: ReferenceDataCode[] = await searchReferenceData(searchQuery, [
+        ReferenceDataGraphql.SearchAlternative.GeoNames,
+        ReferenceDataGraphql.SearchAlternative.EuLocations,
+      ]);
       return data;
     },
     enabled: !!searchQuery,
@@ -28,10 +21,7 @@ export const useSearchGeoNamesAndEULocations = (
   });
 };
 
-export const useSearchLocationsByUri = (
-  uriList: string[] | undefined,
-  envVariable: string,
-) => {
+export const useSearchLocationsByUri = (uriList: string[] | undefined) => {
   return useQuery({
     queryKey: ["LOCATIONS", uriList],
     queryFn: async () => {
@@ -41,7 +31,6 @@ export const useSearchLocationsByUri = (
 
       const data: ReferenceDataCode[] = await searchReferenceDataByUri(
         uriList,
-        envVariable,
         [
           ReferenceDataGraphql.SearchAlternative.AdministrativeEnheter,
           ReferenceDataGraphql.SearchAlternative.GeoNames,
@@ -54,18 +43,13 @@ export const useSearchLocationsByUri = (
   });
 };
 
-export const useSearchMediaTypes = (
-  searchQuery: string,
-  envVariable: string,
-) => {
+export const useSearchMediaTypes = (searchQuery: string) => {
   return useQuery({
     queryKey: ["IANA_TYPES", "searchQuery", searchQuery],
     queryFn: async () => {
-      const data: ReferenceDataCode[] = await searchReferenceData(
-        searchQuery,
-        envVariable,
-        [ReferenceDataGraphql.SearchAlternative.IanaMediaTypes],
-      );
+      const data: ReferenceDataCode[] = await searchReferenceData(searchQuery, [
+        ReferenceDataGraphql.SearchAlternative.IanaMediaTypes,
+      ]);
       return data;
     },
     enabled: !!searchQuery,
@@ -73,10 +57,7 @@ export const useSearchMediaTypes = (
   });
 };
 
-export const useSearchMediaTypeByUri = (
-  uriList: string[] | undefined,
-  envVariable: string,
-) => {
+export const useSearchMediaTypeByUri = (uriList: string[] | undefined) => {
   return useQuery({
     queryKey: ["IANA_TYPES", "uriList", uriList],
     queryFn: async () => {
@@ -86,7 +67,6 @@ export const useSearchMediaTypeByUri = (
 
       const data: ReferenceDataCode[] = await searchReferenceDataByUri(
         uriList,
-        envVariable,
         [ReferenceDataGraphql.SearchAlternative.IanaMediaTypes],
       );
       return data;
@@ -95,14 +75,11 @@ export const useSearchMediaTypeByUri = (
   });
 };
 
-export const useSearchFileTypes = (
-  searchQuery: string,
-  envVariable: string,
-) => {
+export const useSearchFileTypes = (searchQuery: string) => {
   return useQuery({
     queryKey: ["FileTypes", "searchQuery", searchQuery],
     queryFn: async () => {
-      return await searchReferenceData(searchQuery, envVariable, [
+      return await searchReferenceData(searchQuery, [
         ReferenceDataGraphql.SearchAlternative.EuFileTypes,
       ]);
     },
@@ -111,10 +88,7 @@ export const useSearchFileTypes = (
   });
 };
 
-export const useSearchFileTypeByUri = (
-  uriList: string[] | undefined,
-  envVariable: string,
-) => {
+export const useSearchFileTypeByUri = (uriList: string[] | undefined) => {
   return useQuery({
     queryKey: ["FileTypes", "uriList", uriList],
     queryFn: async () => {
@@ -122,7 +96,7 @@ export const useSearchFileTypeByUri = (
         return [];
       }
 
-      return await searchReferenceDataByUri(uriList, envVariable, [
+      return await searchReferenceDataByUri(uriList, [
         ReferenceDataGraphql.SearchAlternative.EuFileTypes,
       ]);
     },
@@ -130,15 +104,13 @@ export const useSearchFileTypeByUri = (
   });
 };
 
-export const useSearchLanguage = (searchQuery: string, envVariable: string) => {
+export const useSearchLanguage = (searchQuery: string) => {
   return useQuery({
     queryKey: ["LANGUAGES", "searchQuery", searchQuery],
     queryFn: async () => {
-      const data: ReferenceDataCode[] = await searchReferenceData(
-        searchQuery,
-        envVariable,
-        [ReferenceDataGraphql.SearchAlternative.EuLanguages],
-      );
+      const data: ReferenceDataCode[] = await searchReferenceData(searchQuery, [
+        ReferenceDataGraphql.SearchAlternative.EuLanguages,
+      ]);
       return data;
     },
     enabled: !!searchQuery,
@@ -146,10 +118,7 @@ export const useSearchLanguage = (searchQuery: string, envVariable: string) => {
   });
 };
 
-export const useSearchLanguageByUri = (
-  uriList: string[] | undefined,
-  envVariable: string,
-) => {
+export const useSearchLanguageByUri = (uriList: string[] | undefined) => {
   return useQuery({
     queryKey: ["LANGUAGES", "uriList", uriList],
     queryFn: async () => {
@@ -159,7 +128,6 @@ export const useSearchLanguageByUri = (
 
       const data: ReferenceDataCode[] = await searchReferenceDataByUri(
         uriList,
-        envVariable,
         [ReferenceDataGraphql.SearchAlternative.EuLanguages],
       );
       return data;

@@ -97,7 +97,6 @@ const NewTransportDatasetPage = withWriteProtectedPage(
           catalogId={catalogId}
           dataset={dataset}
           referenceData={referenceData}
-          referenceDataEnv={process.env.FDK_BASE_URI ?? ""}
           searchEnv={process.env.FDK_SEARCH_SERVICE_BASE_URI ?? ""}
         />
       </>

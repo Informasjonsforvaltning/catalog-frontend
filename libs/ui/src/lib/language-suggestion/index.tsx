@@ -18,27 +18,18 @@ export {
   getTranslatedLabel,
 } from "./language-sort";
 
-interface Props {
-  referenceDataEnv: string;
-}
-
 type LanguageFormValues = {
   language?: string[];
 };
 
-export const LanguageSuggestion = ({ referenceDataEnv }: Props) => {
+export const LanguageSuggestion = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const debouncedSearchTerm = useDebounce(searchTerm);
-  const { data: searchHits, isFetching } = useSearchLanguage(
-    debouncedSearchTerm,
-    referenceDataEnv,
-  );
+  const { data: searchHits, isFetching } =
+    useSearchLanguage(debouncedSearchTerm);
   const { values, errors, setFieldValue } =
     useFormikContext<LanguageFormValues>();
-  const { data: selectedValues } = useSearchLanguageByUri(
-    values.language,
-    referenceDataEnv,
-  );
+  const { data: selectedValues } = useSearchLanguageByUri(values.language);
 
   const sortedSearchHits = useMemo(
     () => [...(searchHits ?? [])].sort(compareLanguages),

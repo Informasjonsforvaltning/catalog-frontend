@@ -14,7 +14,6 @@ type NewDataServicePageClientProps = {
   initialValues: any;
   searchEnv: string;
   referenceData: any;
-  referenceDataEnv: string;
 };
 
 export const NewDataServicePageClient = ({
@@ -22,7 +21,6 @@ export const NewDataServicePageClient = ({
   initialValues,
   searchEnv,
   referenceData,
-  referenceDataEnv,
 }: NewDataServicePageClientProps) => {
   const router = useRouter();
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
@@ -84,7 +82,6 @@ export const NewDataServicePageClient = ({
         initialValues={initialValues}
         searchEnv={searchEnv}
         referenceData={referenceData}
-        referenceDataEnv={referenceDataEnv}
         autoSaveStorage={dataStorage}
         onCancel={handleCancel}
         onSubmit={handleCreate}
