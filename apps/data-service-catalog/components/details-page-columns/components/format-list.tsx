@@ -5,19 +5,11 @@ import { useSearchFileTypeByUri } from "@catalog-frontend/ui";
 
 type Props = {
   formatURIs: string[] | undefined;
-  referenceDataEnv: string;
   language: string;
 };
 
-export const FormatList = ({
-  formatURIs,
-  referenceDataEnv,
-  language,
-}: Props) => {
-  const { data: fileTypes } = useSearchFileTypeByUri(
-    formatURIs || [],
-    referenceDataEnv,
-  );
+export const FormatList = ({ formatURIs, language }: Props) => {
+  const { data: fileTypes } = useSearchFileTypeByUri(formatURIs || []);
 
   const matchFileType = (uri: string) => fileTypes?.find((s) => s.uri === uri);
 

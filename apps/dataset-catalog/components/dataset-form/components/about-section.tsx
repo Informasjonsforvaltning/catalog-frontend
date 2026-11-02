@@ -26,7 +26,6 @@ import {
 } from "@catalog-frontend/types";
 
 interface Props {
-  referenceDataEnv: string;
   isMobility?: boolean;
   frequencies?: ReferenceDataCode[];
   autoSaveStorage?: DataStorage<StorageData>;
@@ -34,7 +33,6 @@ interface Props {
 }
 
 export const AboutSection = ({
-  referenceDataEnv,
   isMobility,
   frequencies,
   autoSaveStorage,
@@ -115,7 +113,7 @@ export const AboutSection = ({
                 {localization.datasetForm.fieldLabel.spatial}
               </TitleWithHelpTextAndTag>
             </Fieldset.Legend>
-            <SpatialSuggestionSelect referenceDataEnv={referenceDataEnv} />
+            <SpatialSuggestionSelect />
           </Fieldset>
           <FieldsetDivider />
           <SingleSuggestionSelect

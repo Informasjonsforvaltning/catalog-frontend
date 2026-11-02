@@ -54,7 +54,6 @@ export default async function NewPublicServicePage({
         currencies={currenciesResponse.currencies}
         losThemes={losThemesResponse.losNodes}
         mainActivities={mainActivitiesResponse.mainActivities}
-        referenceDataEnv={process.env.FDK_BASE_URI || ""}
         searchEnv={process.env.FDK_SEARCH_SERVICE_BASE_URI || ""}
         statuses={statusesResponse.statuses}
       />

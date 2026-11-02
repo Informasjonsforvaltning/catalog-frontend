@@ -46,7 +46,6 @@ const EditDataServicePage = withReadProtectedPage(
       catalogId,
     );
 
-    const referenceDataEnv = process.env.FDK_BASE_URI ?? "";
     const searchEnv = process.env.FDK_SEARCH_SERVICE_BASE_URI ?? "";
 
     const [
@@ -99,7 +98,6 @@ const EditDataServicePage = withReadProtectedPage(
             dataServiceId={dataServiceId}
             hasWritePermission={hasWritePermission}
             referenceData={referenceData}
-            referenceDataEnv={referenceDataEnv}
             searchEnv={searchEnv}
           />
         </div>

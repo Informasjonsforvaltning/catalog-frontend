@@ -46,10 +46,7 @@ export const BasicServiceFormInfoCardItems = (props: Props) => {
 
   const losThemesByUri = new Map(losThemes?.map((theme) => [theme.uri, theme]));
 
-  const { data: spatial } = useSearchLocationsByUri(
-    service.spatial,
-    referenceDataEnv,
-  );
+  const { data: spatial } = useSearchLocationsByUri(service.spatial);
 
   const { data: concepts } = useSearchConceptsByUri(
     searchEnv,
@@ -65,17 +62,13 @@ export const BasicServiceFormInfoCardItems = (props: Props) => {
     searchEnv,
     evidenceDatasetUris,
   );
-  const { data: evidenceLanguages } = useSearchLanguageByUri(
-    evidenceLanguageUris,
-    referenceDataEnv,
-  );
+  const { data: evidenceLanguages } =
+    useSearchLanguageByUri(evidenceLanguageUris);
   const producesLanguageUris = [
     ...new Set((service.produces ?? []).flatMap((item) => item.language ?? [])),
   ];
-  const { data: producesLanguages } = useSearchLanguageByUri(
-    producesLanguageUris,
-    referenceDataEnv,
-  );
+  const { data: producesLanguages } =
+    useSearchLanguageByUri(producesLanguageUris);
   const producesDatasetUris = [
     ...new Set((service.produces ?? []).flatMap((item) => item.isPartOf ?? [])),
   ];

@@ -6,11 +6,6 @@ import {
   QualityDimension,
   ReferenceDataCode,
 } from "@catalog-frontend/types";
-import {
-  FindByUrIsRequestQueryVariables,
-  SearchAlternative,
-  SearchQueryVariables,
-} from "../generated/graphql";
 
 export const getDatasetTypes = async (): Promise<{
   datasetTypes: ReferenceDataCode[];
@@ -226,7 +221,7 @@ export const getCurrencies = async (): Promise<{
 export const getQualityDimensions = async (): Promise<{
   qualityDimensions: QualityDimension[];
 }> => {
-  const resource = `${process.env.FDK_BASE_URI}/reference-data/digdir/quality-dimensions`;
+  const resource = `${process.env.REFERENCE_DATA_BASE_URI}/reference-data/digdir/quality-dimensions`;
   const options = {
     headers: {
       "Content-Type": "application/json",
@@ -249,96 +244,4 @@ export const getMainActivities = async (): Promise<{
   };
   const response = await fetch(resource, options);
   return response.json();
-};
-
-export const searchReferenceData = async (
-  searchQuery: string,
-  envVariable: string,
-  types: SearchAlternative[],
-) => {
-  const resource = `${envVariable}/reference-data/graphql`;
-
-  const body = JSON.stringify({
-    query: `
-      query Search($req: SearchRequest!) {
-        search(req: $req) {
-          uri
-          code
-          label {
-            nb
-            en
-            nn
-            no
-          }
-          type
-          subType
-        }
-      }
-    `,
-    variables: {
-      req: {
-        query: searchQuery,
-        types: types,
-      },
-    } as SearchQueryVariables,
-  });
-
-  const options = {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body,
-  };
-  const res = await fetch(resource, options);
-  const json = await res.json();
-  const data: ReferenceDataCode[] = json.data.search;
-  return data;
-};
-
-export const searchReferenceDataByUri = async (
-  uriList: string[],
-  envVariable: string,
-  types: SearchAlternative[],
-) => {
-  const resource = `${envVariable}/reference-data/graphql`;
-
-  const body = JSON.stringify({
-    query: `
-      query FindByURIsRequest($req: FindByURIsRequest!) {
-        findByURIs(req: $req) {
-          uri
-          code
-          label {
-            nb
-            en
-            nn
-            no
-          }
-          type
-          subType
-        }
-      }
-    `,
-    variables: {
-      req: {
-        uris: uriList,
-        types: types,
-      },
-    } as FindByUrIsRequestQueryVariables,
-  });
-
-  const options = {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body,
-  };
-
-  const res = await fetch(resource, options);
-  const json = await res.json();
-  const data: ReferenceDataCode[] = json.data.findByURIs;
-
-  return data;
 };

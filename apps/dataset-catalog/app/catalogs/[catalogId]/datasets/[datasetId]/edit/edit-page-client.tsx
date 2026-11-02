@@ -19,14 +19,12 @@ import { useEffect, useMemo, useState } from "react";
 type EditPageProps = {
   dataset: Dataset;
   searchEnv: string;
-  referenceDataEnv: string;
   referenceData: any;
 };
 
 export const EditPage = ({
   dataset,
   searchEnv,
-  referenceDataEnv,
   referenceData,
 }: EditPageProps) => {
   const [showSnackbar, setShowSnackbar] = useState(false);
@@ -120,7 +118,6 @@ export const EditPage = ({
         initialValues={dataset}
         submitType="update"
         searchEnv={searchEnv}
-        referenceDataEnv={referenceDataEnv}
         referenceData={referenceData}
         onSubmit={handleUpdate}
         onCancel={handleCancel}

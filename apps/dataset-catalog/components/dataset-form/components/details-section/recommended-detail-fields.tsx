@@ -10,14 +10,10 @@ import { Fieldset } from "@digdir/designsystemet-react";
 import { TemporalModal } from "./temporal-modal";
 
 interface Props {
-  referenceDataEnv: string;
   isMobility?: boolean;
 }
 
-export const RecommendedDetailFields = ({
-  referenceDataEnv,
-  isMobility,
-}: Props) => {
+export const RecommendedDetailFields = ({ isMobility }: Props) => {
   return (
     <>
       <Fieldset data-size="sm">
@@ -30,7 +26,7 @@ export const RecommendedDetailFields = ({
             {localization.datasetForm.fieldLabel.language}
           </TitleWithHelpTextAndTag>
         </Fieldset.Legend>
-        <LanguageSuggestion referenceDataEnv={referenceDataEnv} />
+        <LanguageSuggestion />
       </Fieldset>
 
       <FieldsetDivider />
@@ -46,7 +42,7 @@ export const RecommendedDetailFields = ({
                 {localization.datasetForm.fieldLabel.spatial}
               </TitleWithHelpTextAndTag>
             </Fieldset.Legend>
-            <SpatialSuggestionSelect referenceDataEnv={referenceDataEnv} />
+            <SpatialSuggestionSelect />
           </Fieldset>
           <FieldsetDivider />
         </>

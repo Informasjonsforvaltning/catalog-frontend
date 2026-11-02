@@ -27,16 +27,11 @@ import { HasFormatFieldModal } from "./has-format-modal";
 import { resolveLabel } from "./has-format-helpers";
 
 type Props = {
-  referenceDataEnv: string;
   autoSaveId?: string;
   autoSaveStorage?: DataStorage<StorageData>;
 };
 
-export const HasFormatSection = ({
-  referenceDataEnv,
-  autoSaveId,
-  autoSaveStorage,
-}: Props) => {
+export const HasFormatSection = ({ autoSaveId, autoSaveStorage }: Props) => {
   const { values, errors, setFieldValue } =
     useFormikContext<InformationModel>();
 
@@ -66,14 +61,8 @@ export const HasFormatSection = ({
     [documentsWithIndex],
   );
 
-  const { data: selectedLanguages } = useSearchLanguageByUri(
-    languageUris,
-    referenceDataEnv,
-  );
-  const { data: selectedFormats } = useSearchFileTypeByUri(
-    formatUris,
-    referenceDataEnv,
-  );
+  const { data: selectedLanguages } = useSearchLanguageByUri(languageUris);
+  const { data: selectedFormats } = useSearchFileTypeByUri(formatUris);
 
   const setFormatSecondary = (payload: FormatSecondaryValues) => {
     if (autoSaveStorage && autoSaveId) {
@@ -173,7 +162,6 @@ export const HasFormatSection = ({
                   <Table.Cell>
                     <div className={styles.set}>
                       <HasFormatFieldModal
-                        referenceDataEnv={referenceDataEnv}
                         template={document}
                         type="edit"
                         onSuccess={(updatedItem: ModelDocument) => {
@@ -201,7 +189,6 @@ export const HasFormatSection = ({
       )}
       <div>
         <HasFormatFieldModal
-          referenceDataEnv={referenceDataEnv}
           template={modelDocumentTemplate()}
           type="new"
           onSuccess={(updatedItem: ModelDocument) => {

@@ -17,7 +17,6 @@ type NewPageProps = {
   catalogId: string;
   dataset: DatasetToBeCreated;
   searchEnv: string;
-  referenceDataEnv: string;
   referenceData: ReferenceData;
 };
 
@@ -25,7 +24,6 @@ export const NewPage = ({
   catalogId,
   dataset,
   searchEnv,
-  referenceDataEnv,
   referenceData,
 }: NewPageProps) => {
   const datasetIdRef = useRef<string | undefined>(undefined); // Ref to store the dataset id
@@ -95,7 +93,6 @@ export const NewPage = ({
         initialValues={dataset}
         submitType="create"
         searchEnv={searchEnv}
-        referenceDataEnv={referenceDataEnv}
         referenceData={referenceData}
         onSubmit={handleCreate}
         onCancel={handleCancel}

@@ -65,7 +65,6 @@ const EditInformationModelPage = withWriteProtectedPage(
           informationModel={informationModel}
           statuses={statusesResponse.productStatuses}
           searchEnv={process.env.FDK_SEARCH_SERVICE_BASE_URI ?? ""}
-          referenceDataEnv={process.env.FDK_BASE_URI ?? ""}
         />
       </>
     );

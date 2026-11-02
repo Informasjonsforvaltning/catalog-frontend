@@ -61,7 +61,6 @@ type Props = {
   initialValues: InformationModel | InformationModelToBeCreated;
   statuses: ReferenceDataCode[];
   searchEnv: string;
-  referenceDataEnv: string;
   autoSaveStorage?: DataStorage<StorageData>;
   autoSave?: boolean;
   autoSaveId?: string;
@@ -79,7 +78,6 @@ const InformationModelForm = ({
   initialValues,
   statuses,
   searchEnv,
-  referenceDataEnv,
   autoSaveStorage,
   autoSave = true,
   autoSaveId,
@@ -493,7 +491,6 @@ const InformationModelForm = ({
                       error={hasError(["hasFormat"])}
                     >
                       <HasFormatSection
-                        referenceDataEnv={referenceDataEnv}
                         autoSaveId={autoSaveId}
                         autoSaveStorage={autoSaveStorage}
                       />

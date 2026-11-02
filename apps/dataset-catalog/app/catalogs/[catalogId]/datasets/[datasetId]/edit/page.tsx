@@ -33,7 +33,6 @@ const EditDatasetPage = withWriteProtectedPage(
     `/catalogs/${catalogId}/datasets/${datasetId}/edit`,
   async ({ catalogId, datasetId }) => {
     const searchEnv = process.env.FDK_SEARCH_SERVICE_BASE_URI ?? "";
-    const referenceDataEnv = process.env.FDK_BASE_URI ?? "";
 
     if (!datasetId || !validUUID(datasetId)) {
       return redirect("/catalogs/notfound", RedirectType.replace);
@@ -112,7 +111,6 @@ const EditDatasetPage = withWriteProtectedPage(
           <EditPage
             dataset={dataset}
             referenceData={referenceData}
-            referenceDataEnv={referenceDataEnv}
             searchEnv={searchEnv}
           />
         </Suspense>

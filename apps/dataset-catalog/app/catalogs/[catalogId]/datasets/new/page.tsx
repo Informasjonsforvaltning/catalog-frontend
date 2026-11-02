@@ -26,7 +26,6 @@ const NewDatasetPage = withWriteProtectedPage(
   async ({ catalogId }) => {
     const dataset = datasetToBeCreatedTemplate(ApplicationProfile.DCATAPNO);
     const searchEnv = process.env.FDK_SEARCH_SERVICE_BASE_URI ?? "";
-    const referenceDataEnv = process.env.FDK_BASE_URI ?? "";
 
     const [
       losThemesResponse,
@@ -88,7 +87,6 @@ const NewDatasetPage = withWriteProtectedPage(
             catalogId={catalogId}
             dataset={dataset}
             referenceData={referenceData}
-            referenceDataEnv={referenceDataEnv}
             searchEnv={searchEnv}
           />
         </Suspense>

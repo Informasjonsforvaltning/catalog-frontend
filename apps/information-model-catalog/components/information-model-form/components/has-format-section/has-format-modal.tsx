@@ -14,7 +14,6 @@ import { HasFormatFormFields } from "./has-format-form-fields";
 import { hasNoFieldValues } from "./has-format-helpers";
 
 type ModalProps = {
-  referenceDataEnv: string;
   type: "new" | "edit";
   onSuccess: (values: ModelDocument) => void;
   onCancel: () => void;
@@ -35,7 +34,6 @@ type HasFormatModalContentProps = {
   ) => void;
   onChange: (values: ModelDocument) => void;
   modalRef: RefObject<HTMLDialogElement | null>;
-  referenceDataEnv: string;
 };
 
 const HasFormatModalContent = ({
@@ -48,7 +46,6 @@ const HasFormatModalContent = ({
   setFieldValue,
   onChange,
   modalRef,
-  referenceDataEnv,
 }: HasFormatModalContentProps) => {
   useEffect(() => {
     if (dirty && modalRef.current?.open) {
@@ -69,7 +66,6 @@ const HasFormatModalContent = ({
           errors={errors}
           setFieldValue={setFieldValue}
           values={values}
-          referenceDataEnv={referenceDataEnv}
         />
       </div>
 
@@ -102,7 +98,6 @@ export const HasFormatFieldModal = ({
   onSuccess,
   onCancel,
   onChange,
-  referenceDataEnv,
 }: ModalProps) => {
   const [submitted, setSubmitted] = useState(false);
   const modalRef = useRef<HTMLDialogElement>(null);
@@ -153,7 +148,6 @@ export const HasFormatFieldModal = ({
                 setFieldValue={formikProps.setFieldValue}
                 onChange={onChange}
                 modalRef={modalRef}
-                referenceDataEnv={referenceDataEnv}
               />
             )}
           </Formik>

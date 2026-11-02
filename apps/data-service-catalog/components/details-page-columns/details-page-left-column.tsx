@@ -17,7 +17,6 @@ type Props = {
   dataService: DataService;
   referenceData: DataServiceReferenceData;
   language: string;
-  referenceDataEnv: string;
   searchEnv: string;
 };
 
@@ -27,7 +26,6 @@ export const LeftColumn = ({
   dataService,
   referenceData,
   language,
-  referenceDataEnv,
   searchEnv,
 }: Props) => {
   const allKeywords = keywordLanguages
@@ -55,11 +53,7 @@ export const LeftColumn = ({
           title={localization.dataServiceForm.fieldLabel.format}
           data-testid="data-service-formats"
         >
-          <FormatList
-            formatURIs={dataService.formats}
-            referenceDataEnv={referenceDataEnv}
-            language={language}
-          />
+          <FormatList formatURIs={dataService.formats} language={language} />
         </InfoCard.Item>
       )}
 

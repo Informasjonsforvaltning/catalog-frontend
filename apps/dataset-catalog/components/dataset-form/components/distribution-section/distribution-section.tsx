@@ -45,7 +45,6 @@ import {
 } from "@catalog-frontend/data-access";
 
 type Props = {
-  referenceDataEnv: string;
   searchEnv: string;
   openLicenses: ReferenceDataCode[];
   autoSaveId?: string;
@@ -57,7 +56,6 @@ type Props = {
 };
 
 export const DistributionSection = ({
-  referenceDataEnv,
   searchEnv,
   openLicenses,
   autoSaveId,
@@ -197,7 +195,6 @@ export const DistributionSection = ({
       if (selectedMediaTypeUris && !isEmpty(selectedMediaTypeUris)) {
         const data: ReferenceDataCode[] = await searchReferenceDataByUri(
           selectedMediaTypeUris,
-          referenceDataEnv,
           [ReferenceDataGraphql.SearchAlternative.IanaMediaTypes],
         );
         setSelectedMediaTypes(data);
@@ -212,7 +209,6 @@ export const DistributionSection = ({
       if (selectedFileTypeUris && !isEmpty(selectedFileTypeUris)) {
         const data: ReferenceDataCode[] = await searchReferenceDataByUri(
           selectedFileTypeUris,
-          referenceDataEnv,
           [ReferenceDataGraphql.SearchAlternative.EuFileTypes],
         );
         setSelectedFileTypes(data);
@@ -287,7 +283,6 @@ export const DistributionSection = ({
                         type="edit"
                         initialValues={{ ...item }}
                         initialAccessServices={selectedDataServices ?? []}
-                        referenceDataEnv={referenceDataEnv}
                         searchEnv={searchEnv}
                         openLicenses={openLicenses}
                         mobilityDataStandards={mobilityDataStandards}
@@ -441,7 +436,6 @@ export const DistributionSection = ({
                 values.distribution?.length ?? 0,
               );
             }}
-            referenceDataEnv={referenceDataEnv}
             searchEnv={searchEnv}
             openLicenses={openLicenses}
             mobilityDataStandards={mobilityDataStandards}
@@ -509,7 +503,6 @@ export const DistributionSection = ({
                           initialValues={{ ...item }}
                           initialAccessServices={selectedDataServices ?? []}
                           distributionType="sample"
-                          referenceDataEnv={referenceDataEnv}
                           searchEnv={searchEnv}
                           openLicenses={openLicenses}
                           mobilityDataStandards={mobilityDataStandards}
@@ -638,7 +631,6 @@ export const DistributionSection = ({
                 values.sample?.length ?? 0,
               );
             }}
-            referenceDataEnv={referenceDataEnv}
             searchEnv={searchEnv}
             openLicenses={openLicenses}
             mobilityDataStandards={mobilityDataStandards}
