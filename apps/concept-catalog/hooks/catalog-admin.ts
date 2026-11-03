@@ -8,7 +8,7 @@ export const useGetCatalogDesign = (catalogId: string) => {
   const { data: session } = useSession();
   const accessToken = session?.accessToken ?? "";
 
-  return useQuery<Design>({
+  return useQuery<Design | null>({
     queryKey: ["getCatalogDesign", catalogId],
     queryFn: async () => {
       if (!validOrganizationNumber(catalogId)) {
@@ -18,6 +18,10 @@ export const useGetCatalogDesign = (catalogId: string) => {
       const result = await getCatalogDesign(catalogId, accessToken);
 
       if (!result.ok) {
+        // Many catalogs never set a custom design; the service answers 404 for those.
+        if (result.status === 404) {
+          return null;
+        }
         throw new Error(
           result.status === 401
             ? "Unauthorized"
