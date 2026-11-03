@@ -88,10 +88,10 @@ export const AccessRightsDetails = ({ dataset, language }: Props) => {
                   <Table.Row>
                     <Table.HeaderCell>{localization.title}</Table.HeaderCell>
                     <Table.HeaderCell>
-                      {`${localization.applicableLegislation.description}/${localization.datasetForm.fieldLabel.type}`}
+                      {`${localization.applicableLegislation.description}`}
                     </Table.HeaderCell>
                     <Table.HeaderCell>
-                      {`${localization.applicableLegislation.references.fieldLabel}/${localization.link}`}
+                      {`${localization.applicableLegislation.references.fieldLabel}`}
                     </Table.HeaderCell>
                   </Table.Row>
                 </Table.Head>
@@ -138,7 +138,6 @@ export const AccessRightsDetails = ({ dataset, language }: Props) => {
                                 item?.type as keyof typeof localization.datasetForm.fieldLabel
                               ]
                             }
-                            {` (${localization.deprecated})`}
                           </Table.Cell>
                           <Table.Cell>
                             <Link href={item?.uriWithLabel.uri}>

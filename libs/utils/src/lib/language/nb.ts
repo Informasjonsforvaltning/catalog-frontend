@@ -95,7 +95,6 @@ export const nb = {
   changed: "Endret",
   created: "Opprettet",
   by: "av",
-  deprecated: "deprekert",
 
   catalogType: {
     admin: "Administrasjonsgrensesnitt",
