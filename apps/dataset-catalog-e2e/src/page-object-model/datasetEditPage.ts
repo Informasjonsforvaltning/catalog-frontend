@@ -856,8 +856,14 @@ export default class DatasetEditPage {
     });
     await languageOption.waitFor({ state: "visible", timeout: 10000 });
     await languageOption.click();
-    await this.page.waitForTimeout(100);
-    await searchInput.press("Escape");
+    // A single Escape does not always close the list in Firefox, and the open
+    // list then covers the fields below it. Retry until it is actually closed.
+    await expect(async () => {
+      await searchInput.press("Escape");
+      await expect(searchInput).not.toHaveAttribute("aria-expanded", "true", {
+        timeout: 1000,
+      });
+    }).toPass({ timeout: 10000 });
   }
 
   async selectCoverageArea(value: string) {
