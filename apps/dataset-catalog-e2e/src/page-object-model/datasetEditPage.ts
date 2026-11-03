@@ -858,9 +858,11 @@ export default class DatasetEditPage {
     await languageOption.click();
     // A single Escape does not always close the list in Firefox, and the open
     // list then covers the fields below it. Retry until it is actually closed.
+    // aria-expanded on the input is always "true" on desktop, so check the
+    // listbox itself, which gets the hidden attribute when it closes.
     await expect(async () => {
       await searchInput.press("Escape");
-      await expect(searchInput).not.toHaveAttribute("aria-expanded", "true", {
+      await expect(languageGroup.getByRole("listbox")).toBeHidden({
         timeout: 1000,
       });
     }).toPass({ timeout: 10000 });
