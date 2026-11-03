@@ -1,7 +1,7 @@
 import { Operation } from "fast-json-patch";
 import { validateOrganizationNumber } from "@catalog-frontend/utils";
 
-const path = `${process.env.CATALOG_ADMIN_SERVICE_HOST ?? process.env.CATALOG_ADMIN_SERVICE_BASE_URI}`;
+const path = `${process.env.CATALOG_ADMIN_SERVICE_BASE_URI}`;
 
 const apiGetCall = async (resource: string, accessToken: string) => {
   const options = {
@@ -14,13 +14,9 @@ const apiGetCall = async (resource: string, accessToken: string) => {
   return await fetch(resource, options);
 };
 
-export const getDesign = async (
-  catalogId: string,
-  accessToken: string,
-  envVariable?: string,
-) => {
+export const getDesign = async (catalogId: string, accessToken: string) => {
   validateOrganizationNumber(catalogId, "getDesign");
-  return apiGetCall(`${envVariable ?? path}/${catalogId}/design`, accessToken);
+  return apiGetCall(`${path}/${catalogId}/design`, accessToken);
 };
 
 export const getDesignLogo = async (catalogId: string, accessToken: string) => {

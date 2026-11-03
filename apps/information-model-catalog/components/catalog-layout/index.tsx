@@ -10,7 +10,6 @@ interface CatalogLayoutProps {
   children: ReactNode;
   className?: string;
   catalogAdminUrl?: string;
-  catalogAdminServiceUrl?: string;
   fdkRegistrationBaseUrl?: string;
   adminGuiBaseUrl?: string;
   fdkCommunityBaseUrl?: string;
@@ -21,16 +20,12 @@ export const CatalogLayout = ({
   children,
   className,
   catalogAdminUrl,
-  catalogAdminServiceUrl,
   fdkRegistrationBaseUrl,
   adminGuiBaseUrl,
   fdkBaseUrl,
 }: CatalogLayoutProps) => {
   const { catalogId } = useParams();
-  const { data: design } = useGetCatalogDesign(
-    catalogId?.toString() ?? "",
-    catalogAdminServiceUrl,
-  );
+  const { data: design } = useGetCatalogDesign(catalogId?.toString() ?? "");
 
   return (
     <Layout

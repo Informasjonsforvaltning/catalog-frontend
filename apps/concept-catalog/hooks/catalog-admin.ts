@@ -1,13 +1,10 @@
-import { getDesign } from "@catalog-frontend/data-access";
+import { getCatalogDesign } from "@catalog-frontend/data-access";
 import { Design } from "@catalog-frontend/types";
 import { validOrganizationNumber } from "@catalog-frontend/utils";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 
-export const useGetCatalogDesign = (
-  catalogId: string,
-  adminEnvVariable?: string,
-) => {
+export const useGetCatalogDesign = (catalogId: string) => {
   const { data: session } = useSession();
   const accessToken = session?.accessToken ?? "";
 
@@ -18,17 +15,17 @@ export const useGetCatalogDesign = (
         throw new Error("Invalid catalog ID");
       }
 
-      const response = await getDesign(
-        catalogId,
-        accessToken,
-        adminEnvVariable,
-      );
+      const result = await getCatalogDesign(catalogId, accessToken);
 
-      if (response.status === 401) {
-        throw new Error("Unauthorized");
+      if (!result.ok) {
+        throw new Error(
+          result.status === 401
+            ? "Unauthorized"
+            : `Failed to get catalog design: ${result.status}`,
+        );
       }
 
-      return response.json();
+      return result.design;
     },
     enabled: !!accessToken && !!catalogId,
   });
