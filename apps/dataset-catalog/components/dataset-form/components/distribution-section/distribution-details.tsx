@@ -181,12 +181,21 @@ export const DistributionDetails = ({
                   </Table.Row>
                 </Table.Head>
                 <TableBody>
-                  {distribution.conformsTo?.map((conform) => (
-                    <Table.Row key={`conformsTo-${conform.uri}`}>
+                  {distribution.conformsTo?.map((conform, index) => (
+                    <Table.Row key={`conformsTo-${index}`}>
                       <Table.Cell>
                         {getTranslateText(conform.prefLabel, language)}
                       </Table.Cell>
-                      <Table.Cell>{conform.uri}</Table.Cell>
+                      <Table.Cell>
+                        {conform.seeAlso?.map((url, urlIndex) => (
+                          <Paragraph
+                            data-size="sm"
+                            key={`conformsTo-${index}-${urlIndex}`}
+                          >
+                            {url}
+                          </Paragraph>
+                        ))}
+                      </Table.Cell>
                     </Table.Row>
                   ))}
                 </TableBody>

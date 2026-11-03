@@ -1,6 +1,6 @@
 import { Cost } from "./cost";
 import { LocalizedStrings } from "./localization";
-import { UriWithLabel } from "./dataset";
+import { Standard } from "./dataset";
 
 export interface DataService extends DataServiceToBeCreated {
   id: string;
@@ -27,7 +27,7 @@ export interface DataServiceToBeCreated {
   contactPoint?: DataServiceContactPoint;
   availability?: string;
   costs?: Cost[];
-  conformsTo?: UriWithLabel[];
+  conformsTo?: Standard[];
 }
 
 type DataServiceContactPoint = {

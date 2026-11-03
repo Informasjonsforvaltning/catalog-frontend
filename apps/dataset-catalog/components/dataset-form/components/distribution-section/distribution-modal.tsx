@@ -209,6 +209,12 @@ export const DistributionModal = ({
         (value: string) => !isEmpty(value),
       );
     }
+    if (trimmedValues.conformsTo) {
+      trimmedValues.conformsTo = trimmedValues.conformsTo.map((standard) => ({
+        ...standard,
+        seeAlso: standard.seeAlso?.filter((url) => !isEmpty(url)),
+      }));
+    }
     onSuccess(trimmedValues);
     setSubmitting(false);
     resetForm();
@@ -563,7 +569,7 @@ export const DistributionModal = ({
     },
     {
       name: "conformsTo",
-      addValue: [{ prefLabel: { nb: "", nn: "" }, uri: "" }],
+      addValue: [{ prefLabel: { nb: "", nn: "" }, seeAlso: [""] }],
       shouldShow: ({ distributionType }: any) =>
         distributionType === "distribution",
       render: ({ errors }: any) => (
@@ -600,13 +606,37 @@ export const DistributionModal = ({
                           ) => setInputRef("conformsTo", el)}
                         />
                       </div>
-                      <FastField
-                        data-size="sm"
-                        as={Textfield}
-                        label={localization.link}
-                        name={`conformsTo[${i}].uri`}
-                        error={errors?.conformsTo?.[i]?.uri}
-                      />
+                      <FieldArray name={`conformsTo[${i}].seeAlso`}>
+                        {(linkHelpers) => (
+                          <>
+                            {form.values.conformsTo?.[i]?.seeAlso?.map(
+                              (_: string, linkIndex: number) => (
+                                <FieldsetWithDelete
+                                  key={`conformsTo-${i}-seeAlso-${linkIndex}`}
+                                  onDelete={() => linkHelpers.remove(linkIndex)}
+                                >
+                                  <FastField
+                                    data-size="sm"
+                                    as={Textfield}
+                                    label={
+                                      linkIndex === 0 ? localization.link : ""
+                                    }
+                                    aria-label={`${localization.link} ${linkIndex + 1}`}
+                                    name={`conformsTo[${i}].seeAlso[${linkIndex}]`}
+                                    error={getIn(
+                                      errors,
+                                      `conformsTo[${i}].seeAlso[${linkIndex}]`,
+                                    )}
+                                  />
+                                </FieldsetWithDelete>
+                              ),
+                            )}
+                            <AddButton onClick={() => linkHelpers.push("")}>
+                              {`${localization.add} ${localization.link.toLowerCase()}`}
+                            </AddButton>
+                          </>
+                        )}
+                      </FieldArray>
                     </Card>
                     <div>
                       <DeleteButton onClick={() => remove(i)} />
@@ -615,7 +645,7 @@ export const DistributionModal = ({
                 ))}
                 <AddButton
                   onClick={() => {
-                    push({ prefLabel: { nb: "", nn: "" }, uri: "" });
+                    push({ prefLabel: { nb: "", nn: "" }, seeAlso: [""] });
                     setFocus("conformsTo");
                   }}
                 >
