@@ -1,6 +1,7 @@
 export * from "./lib/data-service/api";
 export * from "./lib/information-model/api";
 export * from "./lib/design/api";
+export * from "./lib/design/api/get-catalog-design";
 export * from "./lib/catalog-comments/api";
 export * from "./lib/catalog-concept-history/api";
 export * from "./lib/catalog-history/api";

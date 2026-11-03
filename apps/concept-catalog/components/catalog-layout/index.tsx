@@ -14,7 +14,6 @@ interface CatalogLayoutProps {
   adminGuiBaseUrl?: string;
   fdkCommunityBaseUrl?: string;
   fdkBaseUrl?: string;
-  catalogAdminServiceUrl?: string;
 }
 
 export const CatalogLayout = ({
@@ -24,13 +23,9 @@ export const CatalogLayout = ({
   fdkRegistrationBaseUrl,
   adminGuiBaseUrl,
   fdkBaseUrl,
-  catalogAdminServiceUrl,
 }: CatalogLayoutProps) => {
   const { catalogId } = useParams();
-  const { data: design } = useGetCatalogDesign(
-    catalogId?.toString() ?? "",
-    catalogAdminServiceUrl,
-  );
+  const { data: design } = useGetCatalogDesign(catalogId?.toString() ?? "");
 
   return (
     <Layout
