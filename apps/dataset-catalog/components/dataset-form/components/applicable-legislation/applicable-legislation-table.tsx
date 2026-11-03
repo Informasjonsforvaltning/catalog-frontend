@@ -2,7 +2,11 @@
 
 import { ApplicableLegislation, StorageData } from "@catalog-frontend/types";
 import { DeleteButton, TitleWithHelpTextAndTag } from "@catalog-frontend/ui";
-import { Fieldset, Table } from "@digdir/designsystemet-react";
+import {
+  Fieldset,
+  Table,
+  ValidationMessage,
+} from "@digdir/designsystemet-react";
 import {
   DataStorage,
   getTranslateText,
@@ -11,9 +15,10 @@ import {
 import { useFormikContext } from "formik";
 import { ApplicableLegislationModal } from "./applicable-legislation-modal";
 import styles from "../../dataset-form.module.css";
+import { get } from "lodash";
 
 type ApplicableLegislationFormValues = {
-  applicableLegislation?: ApplicableLegislation[];
+  applicableLegislation: ApplicableLegislation[];
 };
 
 export type ApplicableLegislationTableProps = {
@@ -25,7 +30,7 @@ export const ApplicableLegislationTable = ({
   autoSaveStorage,
   autoSaveId,
 }: ApplicableLegislationTableProps) => {
-  const { values, setFieldValue } =
+  const { values, setFieldValue, errors } =
     useFormikContext<ApplicableLegislationFormValues>();
 
   const onApplicableLegislationChange = (
@@ -89,6 +94,9 @@ export const ApplicableLegislationTable = ({
                       {localization.applicableLegislation.references.fieldLabel}
                     </Table.HeaderCell>
                     <Table.HeaderCell aria-label="Actions" />
+                    {errors.applicableLegislation && (
+                      <Table.HeaderCell aria-label="Errors" />
+                    )}
                   </Table.Row>
                 </Table.Head>
                 <Table.Body>
@@ -134,6 +142,18 @@ export const ApplicableLegislationTable = ({
                               />
                             </div>
                           </Table.Cell>
+                          {errors.applicableLegislation && (
+                            <Table.Cell>
+                              {get(
+                                errors,
+                                "applicableLegislation[" + i + "]",
+                              ) && (
+                                <ValidationMessage data-size="sm">
+                                  {localization.validation.legislationError}
+                                </ValidationMessage>
+                              )}
+                            </Table.Cell>
+                          )}
                         </Table.Row>
                       ),
                     )}

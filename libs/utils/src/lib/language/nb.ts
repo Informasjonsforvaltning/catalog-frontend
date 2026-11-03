@@ -591,6 +591,7 @@ ___Merk:__ Maksimal filstørrelse for opplastning er {0} MB. CSV/JSON-filer kan 
     accessURLRequired: "Tilgangslenke må fylles ut.",
     endpointURLRequired: "Endepunkt må fylles ut.",
     oneLanguageRequired: "Må fylles ut for minst ett språk.",
+    legislationError: "Lovgivingen inneholder feil.",
     deleteFieldIfEmpty: "Slett feltet hvis det ikke skal ha innhold.",
     minOneField: "Minst ett felt skal fylles ut.",
     formError: "Skjemaet inneholder feil. Sjekk feltene i rødt.",
