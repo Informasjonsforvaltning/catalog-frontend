@@ -2,6 +2,7 @@
 
 import {
   Fieldset,
+  FieldsetProps,
   Card,
   ValidationMessage,
 } from "@digdir/designsystemet-react";
@@ -18,12 +19,13 @@ type OptionalFieldsFieldsetProps = {
   legend?: ReactNode;
   availableFields: { valuePath: string; label: string; legend?: ReactNode }[];
   errorPath?: string;
-};
+} & Omit<FieldsetProps, "children">;
 
 export const FormikOptionalFieldsFieldset = ({
   legend,
   availableFields,
   errorPath,
+  ...fieldsetProps
 }: OptionalFieldsFieldsetProps) => {
   const { errors, getFieldMeta, setFieldValue } =
     useFormikContext<Record<string, LocalizedStrings>>();
@@ -69,7 +71,7 @@ export const FormikOptionalFieldsFieldset = ({
   }, [focus, fieldRefs]);
 
   return (
-    <Fieldset data-size="sm">
+    <Fieldset data-size="sm" {...fieldsetProps}>
       {legend && (
         <Fieldset.Legend className={styles.legend}>{legend}</Fieldset.Legend>
       )}

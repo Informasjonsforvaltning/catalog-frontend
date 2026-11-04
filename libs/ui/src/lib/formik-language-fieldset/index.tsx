@@ -4,6 +4,7 @@ import { ReactNode, Ref, useEffect, useRef, useState } from "react";
 import { getTranslateText, localization } from "@catalog-frontend/utils";
 import {
   Fieldset,
+  FieldsetProps,
   Paragraph,
   Textfield,
   ValidationMessage,
@@ -29,7 +30,7 @@ type LanuguageFieldsetProps = {
   multiple?: boolean;
   readOnly?: boolean;
   showError?: boolean;
-};
+} & Omit<FieldsetProps, "children" | "ref">;
 
 const allowedLanguages = Object.freeze<ISOLanguage[]>(["nb", "nn", "en"]);
 
@@ -42,6 +43,7 @@ export const FormikLanguageFieldset = ({
   multiple = false,
   readOnly = false,
   showError = true,
+  ...fieldsetProps
 }: LanuguageFieldsetProps) => {
   const { errors, getFieldMeta, setFieldValue } =
     useFormikContext<Record<string, LocalizedStrings>>();
@@ -124,7 +126,7 @@ export const FormikLanguageFieldset = ({
   }, [focus]);
 
   return (
-    <Fieldset data-size="sm">
+    <Fieldset data-size="sm" {...fieldsetProps}>
       {legend && <Fieldset.Legend>{legend}</Fieldset.Legend>}
       {visibleLanguageFields.map((lang) =>
         multiple ? (
