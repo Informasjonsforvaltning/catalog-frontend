@@ -856,11 +856,37 @@ export default class DatasetEditPage {
     });
     await languageOption.waitFor({ state: "visible", timeout: 10000 });
     await languageOption.click();
-    await this.page.waitForTimeout(100);
-    await searchInput.press("Escape");
+    // The selected language shows up as a chip (<data>) once the selection has
+    // rendered. u-combobox then moves focus back to the input after ~100ms,
+    // which reopens the list, so only close it after the chip is there.
+    await expect(
+      languageGroup
+        .locator("data")
+        .filter({ hasText: new RegExp(language, "i") }),
+    ).toBeVisible({ timeout: 10000 });
+    await this.closeOpenLists();
+  }
+
+  /**
+   * Closes any open suggestion list. An open list covers the fields below it
+   * and makes clicks on them time out. aria-expanded on the input is always
+   * "true" on desktop, and the selected chips are also a listbox, so neither
+   * says whether the list is open. Check the <u-datalist> element itself,
+   * which is hidden when closed. The list must also stay closed for longer
+   * than u-combobox's 100ms refocus delay, since that refocus reopens it.
+   */
+  private async closeOpenLists() {
+    const openLists = this.page.locator("u-datalist").filter({ visible: true });
+    await expect(async () => {
+      await this.page.keyboard.press("Escape");
+      await expect(openLists).toHaveCount(0, { timeout: 1000 });
+      await this.page.waitForTimeout(300);
+      expect(await openLists.count()).toBe(0);
+    }).toPass({ timeout: 10000 });
   }
 
   async selectCoverageArea(value: string) {
+    await this.closeOpenLists();
     await this.page
       .getByRole("group", { name: "Dekningsområde" })
       .getByRole("combobox")
