@@ -25,6 +25,7 @@ export const ContactPointSection = () => {
     <>
       <FormikLanguageFieldset
         name="contactPoints[0].name"
+        data-testid="information-model-contact-name-fieldset"
         as={Textfield}
         legend={
           <TitleWithHelpTextAndTag
@@ -36,6 +37,7 @@ export const ContactPointSection = () => {
         }
       />
       <FormikOptionalFieldsFieldset
+        data-testid="information-model-contact-fields-fieldset"
         legend={
           <TitleWithHelpTextAndTag
             helpText={localization.informationModelForm.helptext.contactFields}

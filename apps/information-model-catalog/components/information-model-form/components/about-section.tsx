@@ -23,6 +23,7 @@ export const AboutSection = ({ statuses }: Props) => {
     <div>
       <FormikLanguageFieldset
         name="title"
+        data-testid="information-model-title-fieldset"
         as={Textfield}
         legend={
           <TitleWithHelpTextAndTag
@@ -38,6 +39,7 @@ export const AboutSection = ({ statuses }: Props) => {
 
       <FormikLanguageFieldset
         name="description"
+        data-testid="information-model-description-fieldset"
         as={TextareaWithPrefix}
         legend={
           <TitleWithHelpTextAndTag
@@ -60,7 +62,11 @@ export const AboutSection = ({ statuses }: Props) => {
             {localization.informationModelForm.fieldLabel.status}
           </TitleWithHelpTextAndTag>
         </Fieldset.Legend>
-        <Field as={Select} name="status">
+        <Field
+          as={Select}
+          name="status"
+          aria-label={localization.informationModelForm.fieldLabel.status}
+        >
           <option value="">{localization.informationModelForm.noStatus}</option>
           {statuses.map((status) => (
             <option key={status.code} value={status.uri}>

@@ -228,6 +228,7 @@ const InformationModelsPageClient = ({
               />
               <Select
                 data-size="sm"
+                aria-label={localization.search.sort}
                 onChange={(e) => setSortValue(e.target.value)}
                 value={sortValue}
               >

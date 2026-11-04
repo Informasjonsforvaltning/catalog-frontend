@@ -1,0 +1,9 @@
+{
+  "name": "information-model-catalog-e2e",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/information-model-catalog-e2e/src",
+  "projectType": "application",
+  "tags": [],
+  "implicitDependencies": ["information-model-catalog"],
+  "targets": {}
+}
