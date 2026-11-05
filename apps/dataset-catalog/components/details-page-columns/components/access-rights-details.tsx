@@ -117,6 +117,7 @@ export const AccessRightsDetails = ({
                               {getTranslateText(item?.description, language)}
                               {item.type && (
                                 <div>
+                                  {localization.applicableLegislation.type}:{" "}
                                   {getTranslateText(
                                     legalResourceTypes?.find(
                                       (legalResourceType) =>
