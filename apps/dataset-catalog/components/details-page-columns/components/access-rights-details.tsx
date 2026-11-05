@@ -1,4 +1,8 @@
-import { Dataset, UriWithLabel } from "@catalog-frontend/types";
+import {
+  Dataset,
+  ReferenceDataCode,
+  UriWithLabel,
+} from "@catalog-frontend/types";
 import {
   accessRights,
   getTranslateText,
@@ -12,6 +16,7 @@ import { identity, isEmpty, pickBy, trim } from "lodash";
 type Props = {
   dataset: Dataset;
   language?: string;
+  legalResourceTypes?: ReferenceDataCode[];
 };
 
 const hasNoFieldValues = (values: UriWithLabel) => {
@@ -22,7 +27,11 @@ const hasNoFieldValues = (values: UriWithLabel) => {
   );
 };
 
-export const AccessRightsDetails = ({ dataset, language }: Props) => {
+export const AccessRightsDetails = ({
+  dataset,
+  language,
+  legalResourceTypes,
+}: Props) => {
   const allLegalBases = useMemo(
     () => [
       ...(dataset.legalBasisForRestriction ?? [])
@@ -106,6 +115,18 @@ export const AccessRightsDetails = ({ dataset, language }: Props) => {
                             </Table.Cell>
                             <Table.Cell>
                               {getTranslateText(item?.description, language)}
+                              {item.type && (
+                                <div>
+                                  {localization.applicableLegislation.type}:{" "}
+                                  {getTranslateText(
+                                    legalResourceTypes?.find(
+                                      (legalResourceType) =>
+                                        legalResourceType.uri === item.type,
+                                    )?.label,
+                                    language,
+                                  ) || item.type}
+                                </div>
+                              )}
                             </Table.Cell>
                             <Table.Cell>
                               {item.references &&

@@ -1,6 +1,10 @@
 "use client";
 
-import { ApplicableLegislation, StorageData } from "@catalog-frontend/types";
+import {
+  ApplicableLegislation,
+  ReferenceDataCode,
+  StorageData,
+} from "@catalog-frontend/types";
 import { DeleteButton, TitleWithHelpTextAndTag } from "@catalog-frontend/ui";
 import { Fieldset, Table } from "@digdir/designsystemet-react";
 import {
@@ -17,11 +21,13 @@ type ApplicableLegislationFormValues = {
 };
 
 export type ApplicableLegislationTableProps = {
+  legalResourceTypes?: ReferenceDataCode[];
   autoSaveStorage?: DataStorage<StorageData>;
   autoSaveId?: string;
 };
 
 export const ApplicableLegislationTable = ({
+  legalResourceTypes,
   autoSaveStorage,
   autoSaveId,
 }: ApplicableLegislationTableProps) => {
@@ -83,6 +89,9 @@ export const ApplicableLegislationTable = ({
                       {localization.applicableLegislation.title}
                     </Table.HeaderCell>
                     <Table.HeaderCell>
+                      {localization.applicableLegislation.type}
+                    </Table.HeaderCell>
+                    <Table.HeaderCell>
                       {localization.applicableLegislation.description}
                     </Table.HeaderCell>
                     <Table.HeaderCell>
@@ -101,6 +110,15 @@ export const ApplicableLegislationTable = ({
                           </Table.Cell>
                           <Table.Cell>
                             {getTranslateText(
+                              legalResourceTypes?.find(
+                                (legalResourceType) =>
+                                  legalResourceType.uri ===
+                                  applicableLegislation.type,
+                              )?.label,
+                            ) || applicableLegislation.type}
+                          </Table.Cell>
+                          <Table.Cell>
+                            {getTranslateText(
                               applicableLegislation?.description,
                             )}
                           </Table.Cell>
@@ -111,6 +129,7 @@ export const ApplicableLegislationTable = ({
                             <div>
                               <ApplicableLegislationModal
                                 template={applicableLegislation}
+                                legalResourceTypes={legalResourceTypes}
                                 type="edit"
                                 onSuccess={(updatedItem) =>
                                   handleApplicableLegislationSuccess(
@@ -160,6 +179,7 @@ export const ApplicableLegislationTable = ({
           onCancel={handleApplicableLegislationCancel}
           type="new"
           template={{ title: {}, description: {}, references: [] }}
+          legalResourceTypes={legalResourceTypes}
         />
       </Fieldset>
     </div>

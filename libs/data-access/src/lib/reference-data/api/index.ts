@@ -36,6 +36,20 @@ export const getDistributionStatuses = async (): Promise<{
   return response.json();
 };
 
+export const getLegalResourceTypes = async (): Promise<{
+  legalResourceTypes: ReferenceDataCode[];
+}> => {
+  const path = `${process.env.REFERENCE_DATA_BASE_URI}/reference-data/digdir/legal-resource-types`;
+  const options = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "GET",
+  };
+  const response = await fetch(path, options);
+  return response.json();
+};
+
 export const getProductStatuses = async (): Promise<{
   productStatuses: ReferenceDataCode[];
 }> => {

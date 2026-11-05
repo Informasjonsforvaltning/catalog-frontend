@@ -9,6 +9,7 @@ import {
   getDatasetTypes,
   getDataThemes,
   getDistributionStatuses,
+  getLegalResourceTypes,
   getFrequencies,
   getLicences,
   getLosThemes,
@@ -35,6 +36,7 @@ const NewDatasetPage = withWriteProtectedPage(
       frequenciesResponse,
       licenseResponse,
       distributionStatusResponse,
+      legalResourceTypeResponse,
       currenciesResponse,
       qualityDimensionsResponse,
     ] = await Promise.all([
@@ -45,6 +47,7 @@ const NewDatasetPage = withWriteProtectedPage(
       getFrequencies(),
       getLicences(),
       getDistributionStatuses(),
+      getLegalResourceTypes(),
       getCurrencies(),
       getQualityDimensions(),
     ]);
@@ -57,6 +60,7 @@ const NewDatasetPage = withWriteProtectedPage(
       frequencies: frequenciesResponse.frequencies,
       openLicenses: licenseResponse.licences,
       distributionStatuses: distributionStatusResponse.distributionStatuses,
+      legalResourceTypes: legalResourceTypeResponse.legalResourceTypes,
       currencies: currenciesResponse.currencies,
       qualityDimensions: qualityDimensionsResponse.qualityDimensions,
     };

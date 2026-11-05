@@ -124,7 +124,11 @@ export const LeftColumn = ({
         hasValues(dataset?.legalBasisForRestriction) ||
         hasValues(dataset?.legalBasisForProcessing)) && (
         <InfoCard.Item title={localization.access} className={styles.access}>
-          <AccessRightsDetails dataset={dataset} language={language} />
+          <AccessRightsDetails
+            dataset={dataset}
+            language={language}
+            legalResourceTypes={referenceData.legalResourceTypes}
+          />
         </InfoCard.Item>
       )}
 
