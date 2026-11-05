@@ -1,4 +1,8 @@
-import { Dataset, StorageData } from "@catalog-frontend/types";
+import {
+  Dataset,
+  ReferenceDataCode,
+  StorageData,
+} from "@catalog-frontend/types";
 import { FieldsetDivider, TitleWithHelpTextAndTag } from "@catalog-frontend/ui";
 import {
   accessRights,
@@ -11,11 +15,16 @@ import { useFormikContext } from "formik";
 import { ApplicableLegislationTable } from "./applicable-legislation/applicable-legislation-table";
 
 interface Props {
+  legalResourceTypes?: ReferenceDataCode[];
   autoSaveStorage?: DataStorage<StorageData>;
   autoSaveId?: string;
 }
 
-export const AccessRightFields = ({ autoSaveStorage, autoSaveId }: Props) => {
+export const AccessRightFields = ({
+  legalResourceTypes,
+  autoSaveStorage,
+  autoSaveId,
+}: Props) => {
   const { values, setFieldValue } = useFormikContext<Dataset>();
 
   const { getRadioProps } = useRadioGroup({
@@ -50,6 +59,7 @@ export const AccessRightFields = ({ autoSaveStorage, autoSaveId }: Props) => {
         </Fieldset>
         <FieldsetDivider />
         <ApplicableLegislationTable
+          legalResourceTypes={legalResourceTypes}
           autoSaveStorage={autoSaveStorage}
           autoSaveId={autoSaveId}
         />

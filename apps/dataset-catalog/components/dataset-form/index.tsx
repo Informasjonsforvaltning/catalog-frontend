@@ -119,6 +119,7 @@ export const DatasetForm = ({
     mobilityDataStandards,
     mobilityRights,
     distributionStatuses,
+    legalResourceTypes,
     frequencies,
   } = referenceData;
 
@@ -427,6 +428,7 @@ export const DatasetForm = ({
                     <AboutSection
                       isMobility={isMobility}
                       frequencies={frequencies}
+                      legalResourceTypes={legalResourceTypes}
                       autoSaveStorage={autoSaveStorage}
                       autoSaveId={datasetId?.toString()}
                     />

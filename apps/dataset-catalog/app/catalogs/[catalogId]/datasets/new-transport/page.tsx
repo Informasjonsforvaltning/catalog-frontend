@@ -16,6 +16,7 @@ import {
   getMobilityDataStandards,
   getMobilityRights,
   getDistributionStatuses,
+  getLegalResourceTypes,
   getQualityDimensions,
 } from "@catalog-frontend/data-access";
 import { datasetToBeCreatedTemplate } from "@dataset-catalog/components/dataset-form/utils/dataset-initial-values";
@@ -41,6 +42,7 @@ const NewTransportDatasetPage = withWriteProtectedPage(
       mobilityDataStandardResponse,
       mobilityRightsResponse,
       distributionStatusResponse,
+      legalResourceTypeResponse,
       currenciesResponse,
       qualityDimensionsResponse,
     ] = await Promise.all([
@@ -54,6 +56,7 @@ const NewTransportDatasetPage = withWriteProtectedPage(
       getMobilityDataStandards(),
       getMobilityRights(),
       getDistributionStatuses(),
+      getLegalResourceTypes(),
       getCurrencies(),
       getQualityDimensions(),
     ]);
@@ -68,6 +71,7 @@ const NewTransportDatasetPage = withWriteProtectedPage(
       mobilityDataStandards: mobilityDataStandardResponse.mobilityDataStandards,
       mobilityRights: mobilityRightsResponse.mobilityConditions,
       distributionStatuses: distributionStatusResponse.distributionStatuses,
+      legalResourceTypes: legalResourceTypeResponse.legalResourceTypes,
       currencies: currenciesResponse.currencies,
       qualityDimensions: qualityDimensionsResponse.qualityDimensions,
     };

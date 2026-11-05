@@ -28,6 +28,7 @@ import {
 interface Props {
   isMobility?: boolean;
   frequencies?: ReferenceDataCode[];
+  legalResourceTypes?: ReferenceDataCode[];
   autoSaveStorage?: DataStorage<StorageData>;
   autoSaveId?: string;
 }
@@ -35,6 +36,7 @@ interface Props {
 export const AboutSection = ({
   isMobility,
   frequencies,
+  legalResourceTypes,
   autoSaveStorage,
   autoSaveId,
 }: Props) => {
@@ -137,6 +139,7 @@ export const AboutSection = ({
         </>
       )}
       <AccessRightFields
+        legalResourceTypes={legalResourceTypes}
         autoSaveStorage={autoSaveStorage}
         autoSaveId={autoSaveId}
       />

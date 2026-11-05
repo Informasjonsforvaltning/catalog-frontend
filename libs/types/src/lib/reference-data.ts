@@ -64,6 +64,7 @@ export interface ReferenceData {
   mobilityRights: ReferenceDataCode[];
   mobilityDataStandards: ReferenceDataCode[];
   distributionStatuses: ReferenceDataCode[];
+  legalResourceTypes: ReferenceDataCode[];
   currencies: ReferenceDataCode[];
   qualityDimensions: QualityDimension[];
 }

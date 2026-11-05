@@ -1,6 +1,9 @@
 "use client";
 
-import { ApplicableLegislation } from "@catalog-frontend/types";
+import {
+  ApplicableLegislation,
+  ReferenceDataCode,
+} from "@catalog-frontend/types";
 import {
   AddButton,
   DialogActions,
@@ -8,6 +11,7 @@ import {
   FastFieldWithRef,
   FieldsetDivider,
   FormikLanguageFieldset,
+  SingleSuggestionSelect,
   TitleWithHelpTextAndTag,
 } from "@catalog-frontend/ui";
 import {
@@ -17,7 +21,11 @@ import {
   Heading,
   Textfield,
 } from "@digdir/designsystemet-react";
-import { localization, trimObjectWhitespace } from "@catalog-frontend/utils";
+import {
+  getTranslateText,
+  localization,
+  trimObjectWhitespace,
+} from "@catalog-frontend/utils";
 import { createRef, useEffect, useRef, useState } from "react";
 import { FieldArray, Formik, FormikProps } from "formik";
 import { isEmpty } from "lodash";
@@ -31,6 +39,7 @@ type ApplicableLegislationModalProps = {
   onChange?: (values: ApplicableLegislation) => void;
   onCancel: () => void;
   template: ApplicableLegislation;
+  legalResourceTypes?: ReferenceDataCode[];
 };
 
 export const ApplicableLegislationModal = ({
@@ -39,6 +48,7 @@ export const ApplicableLegislationModal = ({
   onChange,
   onCancel,
   template,
+  legalResourceTypes,
 }: ApplicableLegislationModalProps) => {
   const modalRef = useRef<HTMLDialogElement>(null);
   const formikRef = useRef<FormikProps<ApplicableLegislation>>(null);
@@ -105,6 +115,7 @@ export const ApplicableLegislationModal = ({
             dirty,
             validateForm,
             errors,
+            setFieldValue,
           }) => {
             // Call onChange whenever values change for autosave
             useEffect(() => {
@@ -132,6 +143,40 @@ export const ApplicableLegislationModal = ({
                     }
                     showError
                   />
+                  <FieldsetDivider />
+                  <Fieldset data-size="sm">
+                    <Fieldset.Legend>
+                      <TitleWithHelpTextAndTag
+                        tagTitle={localization.tag.recommended}
+                        tagColor="info"
+                      >
+                        {localization.applicableLegislation.type}
+                      </TitleWithHelpTextAndTag>
+                    </Fieldset.Legend>
+                    <SingleSuggestionSelect
+                      emptyMessage={localization.search.noHits}
+                      onValueChange={(value) =>
+                        setFieldValue("type", value ?? "")
+                      }
+                      options={[
+                        ...(values?.type &&
+                        !legalResourceTypes?.some(
+                          (legalResourceType) =>
+                            legalResourceType.uri === values.type,
+                        )
+                          ? [{ value: values.type, label: values.type }]
+                          : []),
+                        ...(legalResourceTypes ?? []).map(
+                          (legalResourceType) => ({
+                            value: legalResourceType.uri,
+                            label: getTranslateText(legalResourceType.label),
+                          }),
+                        ),
+                      ]}
+                      placeholder={`${localization.search.search}...`}
+                      value={values.type || undefined}
+                    />
+                  </Fieldset>
                   <FieldsetDivider />
                   <FormikLanguageFieldset
                     name="description"

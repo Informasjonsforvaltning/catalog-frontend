@@ -16,6 +16,7 @@ import {
   getDatasetTypes,
   getDataThemes,
   getDistributionStatuses,
+  getLegalResourceTypes,
   getFrequencies,
   getLicences,
   getLosThemes,
@@ -67,6 +68,7 @@ const DatasetDetailPage = withReadProtectedPage(
       mobilityDataStandardResponse,
       mobilityRightsResponse,
       distributionStatusResponse,
+      legalResourceTypeResponse,
       currenciesResponse,
       qualityDimensionsResponse,
     ] = await Promise.all([
@@ -80,6 +82,7 @@ const DatasetDetailPage = withReadProtectedPage(
       getMobilityDataStandards(),
       getMobilityRights(),
       getDistributionStatuses(),
+      getLegalResourceTypes(),
       getCurrencies(),
       getQualityDimensions(),
     ]);
@@ -95,6 +98,7 @@ const DatasetDetailPage = withReadProtectedPage(
       mobilityDataStandards: mobilityDataStandardResponse.mobilityDataStandards,
       mobilityRights: mobilityRightsResponse.mobilityConditions,
       distributionStatuses: distributionStatusResponse.distributionStatuses,
+      legalResourceTypes: legalResourceTypeResponse.legalResourceTypes,
       currencies: currenciesResponse.currencies,
       qualityDimensions: qualityDimensionsResponse.qualityDimensions,
     };

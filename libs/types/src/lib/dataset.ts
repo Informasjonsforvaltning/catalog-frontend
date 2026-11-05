@@ -94,6 +94,7 @@ export type ApplicableLegislation = {
   title?: LocalizedStrings;
   description?: LocalizedStrings;
   references?: string[];
+  type?: string;
 };
 
 export type Distribution = {
