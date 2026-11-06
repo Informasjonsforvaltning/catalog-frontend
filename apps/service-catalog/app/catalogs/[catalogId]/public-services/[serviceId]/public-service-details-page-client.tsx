@@ -21,7 +21,7 @@ interface PublicServiceDetailsPageProps {
   hasWritePermission: boolean;
   losThemes: LosTheme[];
   mainActivities: ReferenceDataCode[];
-  referenceDataEnv: string;
+  fdkBaseURI: string;
   searchEnv: string;
   service: Service;
   serviceId: string;
@@ -33,7 +33,7 @@ const PublicServiceDetailsPageClient = ({
   hasWritePermission,
   losThemes,
   mainActivities,
-  referenceDataEnv,
+  fdkBaseURI,
   searchEnv,
   service,
   serviceId,
@@ -68,7 +68,7 @@ const PublicServiceDetailsPageClient = ({
           losThemes={losThemes}
           mainActivities={mainActivities}
           searchEnv={searchEnv}
-          referenceDataEnv={referenceDataEnv}
+          fdkBaseURI={fdkBaseURI}
           service={service}
         />
       </DetailsPageLayout.Left>

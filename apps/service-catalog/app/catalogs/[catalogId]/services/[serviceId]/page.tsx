@@ -65,7 +65,7 @@ export default async function ServiceDetailsPage({
         catalogId={catalogId}
         hasWritePermission={hasWritePermission}
         losThemes={losThemesResponse.losNodes}
-        referenceDataEnv={process.env.FDK_BASE_URI ?? ""}
+        fdkBaseURI={process.env.FDK_BASE_URI ?? ""}
         searchEnv={process.env.FDK_SEARCH_SERVICE_BASE_URI ?? ""}
         service={service}
         serviceId={serviceId}
