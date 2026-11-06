@@ -29,7 +29,7 @@ type Props = {
   language: string;
   losThemes?: LosTheme[];
   mainActivities?: ReferenceDataCode[];
-  referenceDataEnv: string;
+  fdkBaseURI: string;
   searchEnv: string;
   service: Service;
 };
@@ -39,7 +39,7 @@ export const BasicServiceFormInfoCardItems = (props: Props) => {
     language,
     losThemes,
     mainActivities,
-    referenceDataEnv,
+    fdkBaseURI,
     searchEnv,
     service,
   } = props;
@@ -271,7 +271,7 @@ export const BasicServiceFormInfoCardItems = (props: Props) => {
                 return (
                   <Table.Row key={concept}>
                     <Table.Cell>
-                      <Link href={`${referenceDataEnv}/concepts/${match?.id}`}>
+                      <Link href={`${fdkBaseURI}/concepts/${match?.id}`}>
                         {getTranslateText(match?.title, language) || concept}
                       </Link>
                     </Table.Cell>

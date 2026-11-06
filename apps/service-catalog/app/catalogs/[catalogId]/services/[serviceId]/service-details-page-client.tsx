@@ -21,7 +21,7 @@ interface ServiceDetailsPageProps {
   catalogId: string;
   hasWritePermission: boolean;
   losThemes: LosTheme[];
-  referenceDataEnv: string;
+  fdkBaseURI: string;
   searchEnv: string;
   service: Service;
   serviceId: string;
@@ -32,7 +32,7 @@ const ServiceDetailsPageClient = ({
   catalogId,
   hasWritePermission,
   losThemes,
-  referenceDataEnv,
+  fdkBaseURI,
   searchEnv,
   service,
   serviceId,
@@ -65,7 +65,7 @@ const ServiceDetailsPageClient = ({
         <BasicServiceFormInfoCardItems
           language={language}
           losThemes={losThemes}
-          referenceDataEnv={referenceDataEnv}
+          fdkBaseURI={fdkBaseURI}
           searchEnv={searchEnv}
           service={service}
         />
