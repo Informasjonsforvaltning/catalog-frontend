@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import { isEmpty } from "lodash";
 import { LosTheme, ReferenceDataCode, Service } from "@catalog-frontend/types";
 import {
@@ -132,16 +133,27 @@ export const BasicServiceFormInfoCardItems = (props: Props) => {
                     {localization.serviceForm.fieldLabel.producesDataset}
                   </Heading>
                   <Paragraph data-size="sm">
-                    {produce.isPartOf
-                      ?.map((uri) => {
-                        const datasetMatch = producesDatasets?.find(
-                          (dataset) => dataset.uri === uri,
-                        );
-                        return (
-                          getTranslateText(datasetMatch?.title, language) || uri
-                        );
-                      })
-                      .join(", ")}
+                    {produce.isPartOf?.map((uri, index) => {
+                      const datasetMatch = producesDatasets?.find(
+                        (dataset) => dataset.uri === uri,
+                      );
+                      const label =
+                        getTranslateText(datasetMatch?.title, language) || uri;
+                      return (
+                        <Fragment key={uri}>
+                          {index > 0 && ", "}
+                          {datasetMatch ? (
+                            <Link
+                              href={`${fdkBaseURI}/datasets/${datasetMatch.id}`}
+                            >
+                              {label}
+                            </Link>
+                          ) : (
+                            label
+                          )}
+                        </Fragment>
+                      );
+                    })}
                   </Paragraph>
                 </>
               )}
