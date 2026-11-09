@@ -67,44 +67,48 @@ export const UriWithLabelFieldsetTable = ({
         name={fieldName}
         render={(arrayHelpers) => (
           <div className={errors ? styles.errorBorder : undefined}>
-            <Table data-size="sm" className={styles.table}>
-              {showHead && (
-                <Table.Head>
-                  <Table.Row>
-                    <Table.HeaderCell>{localization.title}</Table.HeaderCell>
-                    <Table.HeaderCell>{localization.link}</Table.HeaderCell>
-                    <Table.HeaderCell aria-label="Actions" />
-                  </Table.Row>
-                </Table.Head>
-              )}
-              <Table.Body>
-                {fieldValues?.map((item, index) => (
-                  <Table.Row key={`${fieldName}-tableRow-${index}`}>
-                    <Table.Cell>{getTranslateText(item?.prefLabel)}</Table.Cell>
-                    <Table.Cell>{item?.uri}</Table.Cell>
-                    <Table.Cell>
-                      <span className={styles.set}>
-                        <FieldModal
-                          itemLabel={itemLabel}
-                          template={item}
-                          type="edit"
-                          onSuccess={(updatedItem: UriWithLabel) =>
-                            arrayHelpers.replace(index, updatedItem)
-                          }
-                        />
-                        <DeleteButton
-                          onClick={() => {
-                            const newArray = [...(fieldValues ?? [])];
-                            newArray.splice(index, 1);
-                            setFieldValue(fieldName, newArray);
-                          }}
-                        />
-                      </span>
-                    </Table.Cell>
-                  </Table.Row>
-                ))}
-              </Table.Body>
-            </Table>
+            {fieldValues && fieldValues.length !== 0 && (
+              <Table data-size="sm" className={styles.table}>
+                {showHead && (
+                  <Table.Head>
+                    <Table.Row>
+                      <Table.HeaderCell>{localization.title}</Table.HeaderCell>
+                      <Table.HeaderCell>{localization.link}</Table.HeaderCell>
+                      <Table.HeaderCell aria-label="Actions" />
+                    </Table.Row>
+                  </Table.Head>
+                )}
+                <Table.Body>
+                  {fieldValues?.map((item, index) => (
+                    <Table.Row key={`${fieldName}-tableRow-${index}`}>
+                      <Table.Cell>
+                        {getTranslateText(item?.prefLabel)}
+                      </Table.Cell>
+                      <Table.Cell>{item?.uri}</Table.Cell>
+                      <Table.Cell>
+                        <span className={styles.set}>
+                          <FieldModal
+                            itemLabel={itemLabel}
+                            template={item}
+                            type="edit"
+                            onSuccess={(updatedItem: UriWithLabel) =>
+                              arrayHelpers.replace(index, updatedItem)
+                            }
+                          />
+                          <DeleteButton
+                            onClick={() => {
+                              const newArray = [...(fieldValues ?? [])];
+                              newArray.splice(index, 1);
+                              setFieldValue(fieldName, newArray);
+                            }}
+                          />
+                        </span>
+                      </Table.Cell>
+                    </Table.Row>
+                  ))}
+                </Table.Body>
+              </Table>
+            )}
             <div>
               <FieldModal
                 itemLabel={itemLabel}
