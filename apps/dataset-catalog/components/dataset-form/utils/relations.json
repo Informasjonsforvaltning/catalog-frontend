@@ -1,23 +1,23 @@
 [
   {
     "code": "hasVersion",
-    "uriAsPrefix": "dct:hasVersion",
+    "uriAsPrefix": "dcat:hasVersion",
     "label": {
       "nn": "Har versjon",
       "nb": "Har versjon",
       "en": "Has version"
     },
-    "uri": "http://purl.org/dc/terms/hasVersion"
+    "uri": "http://www.w3.org/ns/dcat#hasVersion"
   },
   {
     "code": "isVersionOf",
-    "uriAsPrefix": "dct:isVersionOf",
+    "uriAsPrefix": "dcat:isVersionOf",
     "label": {
       "nn": "Er versjon av",
       "nb": "Er versjon av",
       "en": "Is version of"
     },
-    "uri": "http://purl.org/dc/terms/isVersionOf"
+    "uri": "http://www.w3.org/ns/dcat#isVersionOf"
   },
   {
     "code": "isPartOf",
