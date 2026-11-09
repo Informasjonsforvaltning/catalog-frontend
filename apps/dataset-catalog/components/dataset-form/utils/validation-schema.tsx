@@ -7,6 +7,7 @@ import {
 } from "@catalog-frontend/utils";
 import { costValidationSchema, uriWithLabelSchema } from "@catalog-frontend/ui";
 import * as Yup from "yup";
+import { isEmpty } from "lodash";
 
 const contactPointDraftValidationSchema = Yup.array().of(
   Yup.object().shape({
@@ -223,9 +224,9 @@ export const dateSchema = Yup.object().shape({
     }),
 });
 
-export const applicableLegislationSchema = Yup.object().shape({
-  title: Yup.object()
-    .shape({
+export const applicableLegislationSchema = Yup.object().shape(
+  {
+    title: Yup.object().shape({
       nb: Yup.string()
         .min(3, localization.uriWithLabel.validation.title)
         .label(`${localization.title} (${localization.language.nb})`)
@@ -238,26 +239,27 @@ export const applicableLegislationSchema = Yup.object().shape({
         .min(3, localization.uriWithLabel.validation.title)
         .label(`${localization.title} (${localization.language.en})`)
         .notRequired(),
-    })
-    .test(
-      "title-test",
-      localization.validation.oneLanguageRequired,
-      (title) => {
-        if (!title) {
-          return false;
-        }
-        return !!(title.nb || title.nn || title.en);
-      },
-    ),
-  references: Yup.array()
-    .nullable()
-    .of(
-      Yup.string()
-        .required(localization.validation.deleteFieldIfEmpty)
-        .matches(httpsRegex, localization.validation.invalidProtocol)
-        .url(localization.validation.invalidUrl),
-    ),
-});
+    }),
+    references: Yup.array()
+      .nullable()
+      .of(
+        Yup.string()
+          .required(localization.validation.deleteFieldIfEmpty)
+          .matches(httpsRegex, localization.validation.invalidProtocol)
+          .url(localization.validation.invalidUrl),
+      )
+      .when("title", {
+        is: (title: unknown) => isEmpty(title),
+        then: (referencesSchema) =>
+          referencesSchema.min(
+            1,
+            localization.applicableLegislation.validation,
+          ),
+        otherwise: (valueSchema) => valueSchema.notRequired().nullable(),
+      }),
+  },
+  [["title", "references"]],
+);
 
 export const draftDatasetSchema = Yup.object().shape({
   title: Yup.object()

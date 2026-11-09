@@ -705,6 +705,7 @@ ___Merk:__ Maksimal filstørrelse for opplastning er {0} MB. CSV/JSON-filer kan 
       fieldLabel: "Referanse",
       helpText: "Referanse til loven eller forskriften",
     },
+    validation: "Enten tittel eller referanse må fylles inn",
   },
 
   uriWithLabel: {

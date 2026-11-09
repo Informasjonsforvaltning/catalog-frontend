@@ -16,11 +16,12 @@ import {
   Fieldset,
   Heading,
   Textfield,
+  ValidationMessage,
 } from "@digdir/designsystemet-react";
 import { localization, trimObjectWhitespace } from "@catalog-frontend/utils";
 import { createRef, useEffect, useRef, useState } from "react";
 import { FieldArray, Formik, FormikProps } from "formik";
-import { isEmpty } from "lodash";
+import { get, isEmpty } from "lodash";
 import styles from "../../dataset-form.module.css";
 import { applicableLegislationSchema } from "../../utils/validation-schema";
 import FieldsetWithDelete from "@dataset-catalog/components/fieldset-with-delete";
@@ -112,6 +113,7 @@ export const ApplicableLegislationModal = ({
                 onChange(values);
               }
             }, [values, dirty, onChange]);
+            const referencesError = get(errors, "references");
             return (
               <>
                 <Heading>
@@ -125,7 +127,8 @@ export const ApplicableLegislationModal = ({
                     as={Textfield}
                     legend={
                       <TitleWithHelpTextAndTag
-                        tagTitle={localization.tag.required}
+                        tagTitle={localization.tag.recommended}
+                        tagColor="info"
                       >
                         {localization.applicableLegislation.title}
                       </TitleWithHelpTextAndTag>
@@ -199,6 +202,9 @@ export const ApplicableLegislationModal = ({
                       )}
                     </FieldArray>
                   </Fieldset>
+                  {typeof referencesError === "string" && (
+                    <ValidationMessage>{referencesError}</ValidationMessage>
+                  )}
                 </div>
                 <DialogActions>
                   <Button
