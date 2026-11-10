@@ -41,6 +41,7 @@ export const evidenceTemplate = (evidence: Evidence): Evidence => {
     language: evidence.language ?? [],
     relatedDocumentation: evidence.relatedDocumentation ?? [],
     dataset: evidence.dataset ?? [],
+    validityDuration: evidence.validityDuration,
   };
 };
 

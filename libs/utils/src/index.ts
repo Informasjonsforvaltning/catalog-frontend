@@ -7,6 +7,7 @@ export * from "./lib/auth/routes";
 export * from "./lib/code-list";
 export * from "./lib/concept";
 export * from "./lib/date/format";
+export * from "./lib/duration/duration";
 export * from "./lib/functions";
 export * from "./lib/language/localization";
 export * from "./lib/language/translateText";

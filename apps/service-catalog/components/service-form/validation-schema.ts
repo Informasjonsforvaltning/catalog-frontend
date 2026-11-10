@@ -1,5 +1,6 @@
 import {
   httpsRegex,
+  isoDurationRegex,
   localization,
   telephoneNumberRegex,
 } from "@catalog-frontend/utils";
@@ -72,6 +73,12 @@ export const evidenceSchema = Yup.object().shape({
     )
     .notRequired(),
   dataset: Yup.array().of(Yup.string()).notRequired(),
+  validityDuration: Yup.string()
+    .matches(
+      isoDurationRegex,
+      localization.serviceForm.validation.validityDuration,
+    )
+    .notRequired(),
 });
 
 export const producesSchema = Yup.object().shape({

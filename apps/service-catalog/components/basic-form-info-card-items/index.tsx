@@ -20,6 +20,7 @@ import {
 } from "@catalog-frontend/ui";
 import {
   capitalizeFirstLetter,
+  formatIsoDuration,
   getTranslateText,
   localization,
 } from "@catalog-frontend/utils";
@@ -246,6 +247,17 @@ export const BasicServiceFormInfoCardItems = (props: Props) => {
                       })
                       .filter(Boolean)
                       .join(", ")}
+                  </Paragraph>
+                </>
+              )}
+
+              {item.validityDuration && (
+                <>
+                  <Heading data-size="2xs" level={5}>
+                    {localization.serviceForm.fieldLabel.validityDuration}
+                  </Heading>
+                  <Paragraph data-size="sm">
+                    {formatIsoDuration(item.validityDuration)}
                   </Paragraph>
                 </>
               )}

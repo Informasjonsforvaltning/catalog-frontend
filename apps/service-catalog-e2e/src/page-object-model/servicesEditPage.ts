@@ -13,6 +13,10 @@ export default class ServicesEditPage {
   readonly contactCategoryGroup: Locator;
   readonly contactInfoGroup: Locator;
   readonly homepageInput: Locator;
+  readonly evidenceSection: Locator;
+  readonly dialog: Locator;
+  readonly validityDurationAmount: Locator;
+  readonly validityDurationUnit: Locator;
   readonly saveButton: Locator;
   readonly successSnackbar: Locator;
   readonly errorSnackbar: Locator;
@@ -39,6 +43,15 @@ export default class ServicesEditPage {
       name: "Kontaktinformasjon Hjelp til utfylling Må fylles ut",
     });
     this.homepageInput = page.getByRole("textbox", { name: "Hjemmeside" });
+    this.evidenceSection = page.locator("#evidence-section");
+    // Closed <dialog> elements are hidden, so this only matches the open one.
+    this.dialog = page.getByRole("dialog");
+    this.validityDurationAmount = this.dialog.getByRole("textbox", {
+      name: "Antall",
+    });
+    this.validityDurationUnit = this.dialog.getByRole("combobox", {
+      name: "Enhet",
+    });
     // exact: true so this does not match the "Lagrer" spinner
     this.saveButton = page.getByRole("button", { name: "Lagre", exact: true });
     this.successSnackbar = page.getByText("Endringene ble lagret.");
@@ -93,6 +106,30 @@ export default class ServicesEditPage {
 
   async fillHomepage(homepage: string) {
     await this.homepageInput.fill(homepage);
+  }
+
+  // Evidence (Dokumentasjonskrav)
+  async openEvidenceEdit(index = 0) {
+    await this.evidenceSection
+      .getByRole("button", { name: "Rediger" })
+      .nth(index)
+      .click();
+    await expect(this.dialog).toBeVisible();
+  }
+
+  async fillValidityDuration(amount: string, unitLabel: string) {
+    await this.validityDurationAmount.fill(amount);
+    await this.validityDurationUnit.selectOption({ label: unitLabel });
+  }
+
+  async submitEvidenceDialog() {
+    await this.dialog.getByRole("button", { name: "Oppdater" }).click();
+    await expect(this.dialog).toBeHidden();
+  }
+
+  async cancelEvidenceDialog() {
+    await this.dialog.getByRole("button", { name: "Avbryt" }).click();
+    await expect(this.dialog).toBeHidden();
   }
 
   // Edit page can exceed the 5s expect timeout after detail → edit.

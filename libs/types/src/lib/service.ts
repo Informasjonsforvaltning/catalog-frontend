@@ -38,6 +38,7 @@ export interface Evidence {
   language?: string[];
   relatedDocumentation?: string[];
   dataset?: string[];
+  validityDuration?: string;
 }
 
 export interface ContactPoint {
