@@ -26,6 +26,9 @@ export const serviceFormNb = {
     subject: "Begrep",
     telephone: "Telefon",
     title: "Tittel",
+    validityDuration: "Gyldighetsperiode",
+    validityDurationAmount: "Antall",
+    validityDurationUnit: "Enhet",
   },
   helptext: {
     category: "Brukes til å oppgi navnet til kontaktpunktet.",
@@ -60,6 +63,8 @@ export const serviceFormNb = {
     subject:
       "Velg begrep registrert i [begrepskatalogen til data.norge](https://data.norge.no/concepts). Ved å henvise til gjennomarbeidede beskrivelser som virksomheten selv er ansvarlig for å vedlikeholde, sikrer vi at det er tydelig hvordan et begrep brukt i tjenesten skal forstås og at denne forståelsen er riktig og oppdatert.",
     title: "Navnet skal være kortfattet, kunne stå alene og gi mening.",
+    validityDuration:
+      "Hvor lenge dokumentasjonen er gyldig fra den er utstedt, for eksempel 6 måneder eller 10 år.",
   },
   section: {
     about: {
@@ -91,5 +96,9 @@ export const serviceFormNb = {
     description: "Beskrivelsen må være minst 5 karakterer lang.",
     name: "Navnet må være minst 3 karakterer lang.",
     title: "Tittelen må være minst 3 karakterer lang.",
+    validityDuration:
+      "Gyldighetsperioden må være et positivt heltall med en enhet.",
+    validityDurationUnsupported:
+      "Lagret gyldighetsperiode ({0}) har et format som ikke støttes. Velg en ny verdi for å erstatte den.",
   },
 };

@@ -1,4 +1,4 @@
-import { expect, runTestAsAdmin } from "../../fixtures/basePage";
+import { expect, runTestAsAdmin, test } from "../../fixtures/basePage";
 import ServicesEditPage from "../../page-object-model/servicesEditPage";
 import ServiceDetailPage from "../../page-object-model/serviceDetailPage";
 import {
@@ -112,6 +112,66 @@ runTestAsAdmin(
     await detailPage.goto(catalogId(), service as string);
     await detailPage.expectText(newCategory.nb);
     await detailPage.expectText(newEmail);
+
+    await deleteService(apiRequestContext, service as string);
+  },
+);
+
+runTestAsAdmin(
+  "should edit evidence validity duration and reset it on cancel",
+  async ({ page, context, playwright, accessibilityBuilder }) => {
+    const apiRequestContext = await playwright.request.newContext({
+      storageState: adminAuthFile,
+    });
+    const service = await createService(
+      apiRequestContext,
+      getRandomService("evidence_duration"),
+    );
+
+    const editPage = new ServicesEditPage(page, context, accessibilityBuilder);
+    const detailPage = new ServiceDetailPage(
+      page,
+      context,
+      accessibilityBuilder,
+    );
+
+    await editPage.goto(catalogId(), service as string);
+    await editPage.expectFormReady();
+
+    await test.step("set duration on existing evidence", async () => {
+      await editPage.openEvidenceEdit();
+      await expect(editPage.validityDurationAmount).toHaveValue("");
+      await editPage.fillValidityDuration("6", "måneder");
+      await editPage.submitEvidenceDialog();
+      await expect(
+        editPage.evidenceSection.getByText("6 måneder", { exact: true }),
+      ).toBeVisible();
+    });
+
+    await test.step("cancelled change is not shown on reopen", async () => {
+      await editPage.openEvidenceEdit();
+      await expect(editPage.validityDurationAmount).toHaveValue("6");
+      await editPage.validityDurationAmount.fill("12");
+      await editPage.cancelEvidenceDialog();
+
+      await editPage.openEvidenceEdit();
+      await expect(editPage.validityDurationAmount).toHaveValue("6");
+      await expect(editPage.validityDurationUnit).toHaveValue("M");
+      await editPage.cancelEvidenceDialog();
+    });
+
+    await test.step("amount accepts digits only", async () => {
+      await editPage.openEvidenceEdit();
+      await editPage.validityDurationAmount.fill("a0b9");
+      await expect(editPage.validityDurationAmount).toHaveValue("9");
+      await editPage.cancelEvidenceDialog();
+    });
+
+    await editPage.clickSave();
+    await editPage.expectSaveSuccessful();
+
+    await detailPage.goto(catalogId(), service as string);
+    await expect(page.getByText("6 måneder", { exact: true })).toBeVisible();
 
     await deleteService(apiRequestContext, service as string);
   },

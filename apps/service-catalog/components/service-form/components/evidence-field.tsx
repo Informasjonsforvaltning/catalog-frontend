@@ -21,8 +21,15 @@ import {
 import cn from "classnames";
 import {
   capitalizeFirstLetter,
+  DurationUnit,
+  durationUnits,
+  formatDurationUnit,
+  formatIsoDuration,
   getTranslateText,
+  isDurationUnit,
   localization,
+  parseIsoDuration,
+  toIsoDuration,
   trimObjectWhitespace,
 } from "@catalog-frontend/utils";
 import {
@@ -31,6 +38,7 @@ import {
   Fieldset,
   Heading,
   Paragraph,
+  Select,
   Textfield,
   ValidationMessage,
   Dialog,
@@ -202,6 +210,89 @@ const DatasetFieldset = ({ searchEnv }: { searchEnv: string }) => {
   );
 };
 
+const sanitizeDurationAmount = (raw: string): string =>
+  raw.replace(/\D/g, "").replace(/^0+/, "");
+
+const ValidityDurationFieldset = () => {
+  const { values, errors, setFieldValue } = useFormikContext<Evidence>();
+  const storedValue = values.validityDuration;
+  const parsed = parseIsoDuration(storedValue);
+  const [pendingUnit, setPendingUnit] = useState<DurationUnit>("M");
+  const amount = parsed ? String(parsed.amount) : "";
+  const unit = parsed?.unit ?? pendingUnit;
+  const fieldError = getIn(errors, "validityDuration");
+  const errorMessage = typeof fieldError === "string" ? fieldError : undefined;
+  const isUnsupported = Boolean(storedValue) && !parsed;
+
+  const onAmountChange = (raw: string) => {
+    const clean = sanitizeDurationAmount(raw);
+    setFieldValue(
+      "validityDuration",
+      clean === "" ? undefined : toIsoDuration(clean, unit),
+    );
+  };
+
+  const onUnitChange = (nextUnit: DurationUnit) => {
+    setPendingUnit(nextUnit);
+    if (amount !== "") {
+      setFieldValue("validityDuration", toIsoDuration(amount, nextUnit));
+    }
+  };
+
+  return (
+    <Fieldset data-size="sm">
+      <Fieldset.Legend>
+        <TitleWithHelpTextAndTag
+          helpText={localization.serviceForm.helptext.validityDuration}
+        >
+          {localization.serviceForm.fieldLabel.validityDuration}
+        </TitleWithHelpTextAndTag>
+      </Fieldset.Legend>
+      <div className={cn(styles.flex, styles.gap2)}>
+        <Textfield
+          type="text"
+          inputMode="numeric"
+          data-size="sm"
+          aria-label={
+            localization.serviceForm.fieldLabel.validityDurationAmount
+          }
+          value={amount}
+          onChange={(event) => onAmountChange(event.target.value)}
+          error={isUnsupported ? undefined : errorMessage}
+        />
+        <Select
+          data-size="sm"
+          aria-label={localization.serviceForm.fieldLabel.validityDurationUnit}
+          value={unit}
+          onChange={(event) => {
+            const nextUnit = event.target.value;
+            if (isDurationUnit(nextUnit)) onUnitChange(nextUnit);
+          }}
+        >
+          {durationUnits.map((option) => (
+            <option key={option} value={option}>
+              {formatDurationUnit(parsed?.amount ?? 0, option)}
+            </option>
+          ))}
+        </Select>
+      </div>
+      {isUnsupported && (
+        <ValidationMessage
+          data-color={errorMessage ? "danger" : "warning"}
+          data-size="sm"
+        >
+          {String(
+            localization.formatString(
+              localization.serviceForm.validation.validityDurationUnsupported,
+              storedValue ?? "",
+            ),
+          )}
+        </ValidationMessage>
+      )}
+    </Fieldset>
+  );
+};
+
 const hasNoFieldValues = (values: Evidence) => {
   if (!values) return true;
   return (
@@ -327,6 +418,16 @@ export const EvidenceField = (props: Props) => {
                           : uri;
                       })
                       .join(", ")}
+                  </Paragraph>
+                </div>
+              )}
+              {item.validityDuration && (
+                <div>
+                  <Heading data-size="2xs" level={3}>
+                    {localization.serviceForm.fieldLabel.validityDuration}
+                  </Heading>
+                  <Paragraph data-size="sm">
+                    {formatIsoDuration(item.validityDuration)}
                   </Paragraph>
                 </div>
               )}
@@ -462,6 +563,9 @@ const FieldModal = (props: ModalProps) => {
 
                   <FieldsetDivider />
                   <DatasetFieldset searchEnv={searchEnv} />
+
+                  <FieldsetDivider />
+                  <ValidityDurationFieldset />
 
                   <FieldsetDivider />
                   <FieldArray name="relatedDocumentation">

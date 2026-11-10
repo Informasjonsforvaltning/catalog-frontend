@@ -597,6 +597,15 @@ ___Merk:__ Maksimal filstørrelse for opplastning er {0} MB. CSV/JSON-filer kan 
     unsavedChanges: "Du har ulagrede endringer",
   },
 
+  duration: {
+    unit: {
+      H: { singular: "time", plural: "timer" },
+      D: { singular: "dag", plural: "dager" },
+      M: { singular: "måned", plural: "måneder" },
+      Y: { singular: "år", plural: "år" },
+    },
+  },
+
   serviceCatalog: {
     confirmPublish: "Er du sikker på at du vil publisere tjenesten?",
     confirmUnpublish: "Er du sikker på at du vil avpublisere tjenesten?",
