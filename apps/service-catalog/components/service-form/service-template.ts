@@ -41,6 +41,7 @@ export const evidenceTemplate = (evidence: Evidence): Evidence => {
     language: evidence.language ?? [],
     relatedDocumentation: evidence.relatedDocumentation ?? [],
     dataset: evidence.dataset ?? [],
+    type: evidence.type ?? [],
     validityDuration: evidence.validityDuration,
   };
 };
@@ -73,6 +74,7 @@ export const emptyEvidence: Evidence[] = [
     language: [],
     relatedDocumentation: [],
     dataset: [],
+    type: [],
   },
 ];
 

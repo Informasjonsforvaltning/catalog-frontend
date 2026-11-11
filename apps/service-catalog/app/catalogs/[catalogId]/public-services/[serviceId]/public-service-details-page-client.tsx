@@ -18,6 +18,7 @@ import styles from "./public-service-details-page.module.css";
 
 interface PublicServiceDetailsPageProps {
   catalogId: string;
+  evidenceTypes?: ReferenceDataCode[];
   hasWritePermission: boolean;
   losThemes: LosTheme[];
   mainActivities: ReferenceDataCode[];
@@ -30,6 +31,7 @@ interface PublicServiceDetailsPageProps {
 
 const PublicServiceDetailsPageClient = ({
   catalogId,
+  evidenceTypes,
   hasWritePermission,
   losThemes,
   mainActivities,
@@ -64,6 +66,7 @@ const PublicServiceDetailsPageClient = ({
     >
       <DetailsPageLayout.Left>
         <BasicServiceFormInfoCardItems
+          evidenceTypes={evidenceTypes}
           language={language}
           losThemes={losThemes}
           mainActivities={mainActivities}

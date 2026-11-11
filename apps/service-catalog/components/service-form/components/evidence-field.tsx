@@ -1,6 +1,11 @@
 "use client";
 
-import { Evidence, LocalizedStrings, Service } from "@catalog-frontend/types";
+import {
+  Evidence,
+  LocalizedStrings,
+  ReferenceDataCode,
+  Service,
+} from "@catalog-frontend/types";
 import {
   AddButton,
   DeleteButton,
@@ -9,6 +14,8 @@ import {
   FieldsetDivider,
   FormikLanguageFieldset,
   LanguageSuggestion,
+  MultiSuggestionSelect,
+  ReferenceDataTags,
   SearchSuggestionSelect,
   SuggestionSelectOption,
   TextareaWithPrefix,
@@ -53,11 +60,13 @@ interface Props {
   errors?:
     | string
     | Array<{ title: LocalizedStrings; description: LocalizedStrings }>;
+  evidenceTypes?: ReferenceDataCode[];
   searchEnv: string;
   validationSchema: typeof evidenceSchema;
 }
 
 interface ModalProps {
+  evidenceTypes?: ReferenceDataCode[];
   searchEnv: string;
   validationSchema: typeof evidenceSchema;
   onCancel: () => void;
@@ -210,6 +219,42 @@ const DatasetFieldset = ({ searchEnv }: { searchEnv: string }) => {
   );
 };
 
+const EvidenceTypeFieldset = ({
+  evidenceTypes,
+}: {
+  evidenceTypes?: ReferenceDataCode[];
+}) => {
+  const { values, setFieldValue } = useFormikContext<Evidence>();
+
+  const evidenceTypeOptions = useMemo(
+    () =>
+      evidenceTypes?.map((item) => ({
+        value: item.uri,
+        label: capitalizeFirstLetter(getTranslateText(item.label)),
+      })) ?? [],
+    [evidenceTypes],
+  );
+
+  return (
+    <MultiSuggestionSelect
+      emptyMessage={localization.search.noHits}
+      fieldsetLegend={
+        <TitleWithHelpTextAndTag
+          helpText={localization.serviceForm.helptext.evidenceType}
+        >
+          {localization.serviceForm.fieldLabel.evidenceType}
+        </TitleWithHelpTextAndTag>
+      }
+      onSelectedChange={(selectedValues) =>
+        setFieldValue("type", selectedValues)
+      }
+      options={evidenceTypeOptions}
+      placeholder={`${localization.search.search}...`}
+      selectedValues={values.type}
+    />
+  );
+};
+
 const sanitizeDurationAmount = (raw: string): string =>
   raw.replace(/\D/g, "").replace(/^0+/, "");
 
@@ -301,7 +346,7 @@ const hasNoFieldValues = (values: Evidence) => {
 };
 
 export const EvidenceField = (props: Props) => {
-  const { errors, searchEnv, validationSchema } = props;
+  const { errors, evidenceTypes, searchEnv, validationSchema } = props;
   const { values, setFieldValue } = useFormikContext<Service>();
   const [snapshot, setSnapshot] = useState<Evidence[]>(values.evidence ?? []);
   const evidenceDatasetUris = [
@@ -341,6 +386,7 @@ export const EvidenceField = (props: Props) => {
 
                 <div className={styles.buttons}>
                   <FieldModal
+                    evidenceTypes={evidenceTypes}
                     searchEnv={searchEnv}
                     validationSchema={validationSchema}
                     template={item}
@@ -377,6 +423,14 @@ export const EvidenceField = (props: Props) => {
                   </ValidationMessage>
                 )}
               </div>
+              {!isEmpty(item.type) && (
+                <div>
+                  <Heading data-size="2xs" level={3}>
+                    {localization.serviceForm.fieldLabel.evidenceType}
+                  </Heading>
+                  <ReferenceDataTags values={item.type} data={evidenceTypes} />
+                </div>
+              )}
               {!isEmpty(item.language) && (
                 <div>
                   <Heading data-size="2xs" level={3}>
@@ -445,6 +499,7 @@ export const EvidenceField = (props: Props) => {
           ))}
 
           <FieldModal
+            evidenceTypes={evidenceTypes}
             searchEnv={searchEnv}
             validationSchema={validationSchema}
             template={{
@@ -454,6 +509,7 @@ export const EvidenceField = (props: Props) => {
               identifier: "",
               relatedDocumentation: [],
               dataset: [],
+              type: [],
             }}
             type="new"
             onSuccess={() => setSnapshot([...(values.evidence ?? [])])}
@@ -480,6 +536,7 @@ export const EvidenceField = (props: Props) => {
 
 const FieldModal = (props: ModalProps) => {
   const {
+    evidenceTypes,
     searchEnv,
     template,
     type,
@@ -557,6 +614,9 @@ const FieldModal = (props: ModalProps) => {
                       </TitleWithHelpTextAndTag>
                     }
                   />
+
+                  <FieldsetDivider />
+                  <EvidenceTypeFieldset evidenceTypes={evidenceTypes} />
 
                   <FieldsetDivider />
                   <LanguageFieldset />

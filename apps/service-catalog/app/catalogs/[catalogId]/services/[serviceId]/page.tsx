@@ -1,5 +1,6 @@
 import {
   getAdmsStatuses,
+  getEvidenceTypes,
   getLosThemes,
   getOrganization,
 } from "@catalog-frontend/data-access";
@@ -36,9 +37,17 @@ export default async function ServiceDetailsPage({
     catalogId,
   );
 
-  const [organization, statusesResponse, losThemesResponse] = await Promise.all(
-    [getOrganization(catalogId), getAdmsStatuses(), getLosThemes()],
-  );
+  const [
+    organization,
+    statusesResponse,
+    losThemesResponse,
+    evidenceTypesResponse,
+  ] = await Promise.all([
+    getOrganization(catalogId),
+    getAdmsStatuses(),
+    getLosThemes(),
+    getEvidenceTypes(),
+  ]);
 
   const breadcrumbList: BreadcrumbType[] = [
     {
@@ -63,6 +72,7 @@ export default async function ServiceDetailsPage({
       />
       <ServiceDetailsPageClient
         catalogId={catalogId}
+        evidenceTypes={evidenceTypesResponse.evidenceTypes}
         hasWritePermission={hasWritePermission}
         losThemes={losThemesResponse.losNodes}
         fdkBaseURI={process.env.FDK_BASE_URI ?? ""}

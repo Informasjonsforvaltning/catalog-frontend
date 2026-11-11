@@ -1,6 +1,7 @@
 import {
   getAdmsStatuses,
   getCurrencies,
+  getEvidenceTypes,
   getLosThemes,
   getMainActivities,
   getOrganization,
@@ -23,6 +24,7 @@ export default async function EditServicePage({
     mainActivities,
     losThemesResponse,
     currenciesResponse,
+    evidenceTypesResponse,
   ] = await Promise.all([
     getPublicServiceById(catalogId, serviceId),
     getOrganization(catalogId),
@@ -30,6 +32,7 @@ export default async function EditServicePage({
     getMainActivities(),
     getLosThemes(),
     getCurrencies(),
+    getEvidenceTypes(),
   ]);
 
   const breadcrumbList = [
@@ -59,6 +62,7 @@ export default async function EditServicePage({
       />
       <EditPage
         currencies={currenciesResponse.currencies}
+        evidenceTypes={evidenceTypesResponse.evidenceTypes}
         losThemes={losThemesResponse.losNodes}
         mainActivities={mainActivities.mainActivities}
         searchEnv={process.env.FDK_SEARCH_SERVICE_BASE_URI || ""}

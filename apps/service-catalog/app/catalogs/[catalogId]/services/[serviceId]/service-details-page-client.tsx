@@ -19,6 +19,7 @@ import styles from "./service-details-page.module.css";
 
 interface ServiceDetailsPageProps {
   catalogId: string;
+  evidenceTypes?: ReferenceDataCode[];
   hasWritePermission: boolean;
   losThemes: LosTheme[];
   fdkBaseURI: string;
@@ -30,6 +31,7 @@ interface ServiceDetailsPageProps {
 
 const ServiceDetailsPageClient = ({
   catalogId,
+  evidenceTypes,
   hasWritePermission,
   losThemes,
   fdkBaseURI,
@@ -63,6 +65,7 @@ const ServiceDetailsPageClient = ({
     >
       <DetailsPageLayout.Left>
         <BasicServiceFormInfoCardItems
+          evidenceTypes={evidenceTypes}
           language={language}
           losThemes={losThemes}
           fdkBaseURI={fdkBaseURI}

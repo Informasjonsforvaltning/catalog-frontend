@@ -259,3 +259,17 @@ export const getMainActivities = async (): Promise<{
   const response = await fetch(resource, options);
   return response.json();
 };
+
+export const getEvidenceTypes = async (): Promise<{
+  evidenceTypes: ReferenceDataCode[];
+}> => {
+  const resource = `${process.env.REFERENCE_DATA_BASE_URI}/reference-data/digdir/evidence-types`;
+  const options = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "GET",
+  };
+  const response = await fetch(resource, options);
+  return response.json();
+};

@@ -12,6 +12,7 @@ export const serviceFormNb = {
     dataset: "Datasett",
     email: "E-post",
     evidence: "Dokumentasjonskrav",
+    evidenceType: "Dokumentasjonstype",
     homepage: "Hjemmeside",
     ignoreRequired: "Ignorer påkrevde felt",
     language: "Språk",
@@ -43,6 +44,8 @@ export const serviceFormNb = {
     dataset: "Velg datasett som beskriver dokumentasjonen som kreves.",
     evidence:
       "Brukes til å spesifisere type dokumentasjon som er påkrevd av tjenesten.",
+    evidenceType:
+      "Type dokumentasjon. Dette kan velges blant det kontrollerte vokabularet [Dokumentasjonstype](https://data.norge.no/vocabulary/evidence-type).",
     homepage:
       "Lenke til en nettside som gir tilgang til tjenesten og/eller tilleggsinformasjon.",
     ignoreRequired:

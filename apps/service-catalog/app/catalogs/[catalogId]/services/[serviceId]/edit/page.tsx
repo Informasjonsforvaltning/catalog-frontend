@@ -1,6 +1,7 @@
 import {
   getAdmsStatuses,
   getCurrencies,
+  getEvidenceTypes,
   getLosThemes,
   getOrganization,
 } from "@catalog-frontend/data-access";
@@ -21,12 +22,14 @@ export default async function EditServicePage({
     statusesResponse,
     losThemesResponse,
     currenciesResponse,
+    evidenceTypesResponse,
   ] = await Promise.all([
     getServiceById(catalogId, serviceId),
     getOrganization(catalogId),
     getAdmsStatuses(),
     getLosThemes(),
     getCurrencies(),
+    getEvidenceTypes(),
   ]);
 
   const breadcrumbList: BreadcrumbType[] = [
@@ -56,6 +59,7 @@ export default async function EditServicePage({
       />
       <EditPage
         currencies={currenciesResponse.currencies}
+        evidenceTypes={evidenceTypesResponse.evidenceTypes}
         losThemes={losThemesResponse.losNodes}
         searchEnv={process.env.FDK_SEARCH_SERVICE_BASE_URI || ""}
         service={service}

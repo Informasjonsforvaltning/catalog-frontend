@@ -25,6 +25,7 @@ import { useEffect, useState } from "react";
 
 type EditPageProps = {
   currencies?: ReferenceDataCode[];
+  evidenceTypes?: ReferenceDataCode[];
   losThemes: LosTheme[];
   mainActivities: ReferenceDataCode[];
   searchEnv: string;
@@ -35,6 +36,7 @@ type EditPageProps = {
 export const EditPage = (props: EditPageProps) => {
   const {
     currencies,
+    evidenceTypes,
     losThemes,
     mainActivities,
     searchEnv,
@@ -111,6 +113,7 @@ export const EditPage = (props: EditPageProps) => {
       <ServiceForm
         autoSaveStorage={dataStorage}
         currencies={currencies}
+        evidenceTypes={evidenceTypes}
         losThemes={losThemes}
         mainActivities={mainActivities}
         onCancel={handleCancel}
