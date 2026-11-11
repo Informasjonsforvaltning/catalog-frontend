@@ -213,16 +213,27 @@ export const BasicServiceFormInfoCardItems = (props: Props) => {
                     {localization.serviceForm.fieldLabel.dataset}
                   </Heading>
                   <Paragraph data-size="sm">
-                    {item.dataset
-                      ?.map((uri) => {
-                        const datasetMatch = datasets?.find(
-                          (dataset) => dataset.uri === uri,
-                        );
-                        return (
-                          getTranslateText(datasetMatch?.title, language) || uri
-                        );
-                      })
-                      .join(", ")}
+                    {item.dataset?.map((uri, index) => {
+                      const datasetMatch = datasets?.find(
+                        (dataset) => dataset.uri === uri,
+                      );
+                      const label =
+                        getTranslateText(datasetMatch?.title, language) || uri;
+                      return (
+                        <Fragment key={uri}>
+                          {index > 0 && ", "}
+                          {datasetMatch ? (
+                            <Link
+                              href={`${fdkBaseURI}/datasets/${datasetMatch.id}`}
+                            >
+                              {label}
+                            </Link>
+                          ) : (
+                            label
+                          )}
+                        </Fragment>
+                      );
+                    })}
                   </Paragraph>
                 </>
               )}
