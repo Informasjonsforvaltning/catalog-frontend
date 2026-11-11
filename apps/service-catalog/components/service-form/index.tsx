@@ -63,6 +63,7 @@ interface ServiceFormProps {
   afterSubmit?: () => void;
   autoSaveStorage: DataStorage<StorageData>;
   currencies?: ReferenceDataCode[];
+  evidenceTypes?: ReferenceDataCode[];
   initialValues: ServiceToBeCreated;
   losThemes: LosTheme[];
   mainActivities?: ReferenceDataCode[];
@@ -103,6 +104,7 @@ export const ServiceForm = (props: ServiceFormProps) => {
     afterSubmit,
     autoSaveStorage,
     currencies,
+    evidenceTypes,
     initialValues,
     losThemes,
     mainActivities,
@@ -599,6 +601,7 @@ export const ServiceForm = (props: ServiceFormProps) => {
                       </TitleWithHelpTextAndTag>
                       <EvidenceField
                         errors={errors.evidence}
+                        evidenceTypes={evidenceTypes}
                         searchEnv={searchEnv}
                         validationSchema={evidenceSchema}
                       />

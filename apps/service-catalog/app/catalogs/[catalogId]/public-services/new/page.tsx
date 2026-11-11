@@ -2,6 +2,7 @@ import { Breadcrumbs, PageBanner } from "@catalog-frontend/ui";
 import {
   getAdmsStatuses,
   getCurrencies,
+  getEvidenceTypes,
   getLosThemes,
   getMainActivities,
   getOrganization,
@@ -21,12 +22,14 @@ export default async function NewPublicServicePage({
     mainActivitiesResponse,
     losThemesResponse,
     currenciesResponse,
+    evidenceTypesResponse,
   ] = await Promise.all([
     getOrganization(catalogId),
     getAdmsStatuses(),
     getMainActivities(),
     getLosThemes(),
     getCurrencies(),
+    getEvidenceTypes(),
   ]);
 
   const breadcrumbList = [
@@ -52,6 +55,7 @@ export default async function NewPublicServicePage({
       />
       <NewPage
         currencies={currenciesResponse.currencies}
+        evidenceTypes={evidenceTypesResponse.evidenceTypes}
         losThemes={losThemesResponse.losNodes}
         mainActivities={mainActivitiesResponse.mainActivities}
         searchEnv={process.env.FDK_SEARCH_SERVICE_BASE_URI || ""}

@@ -2,6 +2,7 @@ import { Breadcrumbs, BreadcrumbType, PageBanner } from "@catalog-frontend/ui";
 import {
   getAdmsStatuses,
   getCurrencies,
+  getEvidenceTypes,
   getLosThemes,
   getOrganization,
 } from "@catalog-frontend/data-access";
@@ -18,11 +19,13 @@ export default async function NewServicePage(props: {
     statusesResponse,
     losThemesResponse,
     currenciesResponse,
+    evidenceTypesResponse,
   ] = await Promise.all([
     getOrganization(catalogId),
     getAdmsStatuses(),
     getLosThemes(),
     getCurrencies(),
+    getEvidenceTypes(),
   ]);
 
   const breadcrumbList: BreadcrumbType[] = [
@@ -48,6 +51,7 @@ export default async function NewServicePage(props: {
       />
       <NewPage
         currencies={currenciesResponse.currencies}
+        evidenceTypes={evidenceTypesResponse.evidenceTypes}
         losThemes={losThemesResponse.losNodes}
         searchEnv={process.env.FDK_SEARCH_SERVICE_BASE_URI || ""}
         statuses={statusesResponse.statuses}

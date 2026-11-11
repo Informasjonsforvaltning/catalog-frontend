@@ -17,6 +17,7 @@ import { createPublicService } from "@service-catalog/app/actions/public-service
 
 type NewPageProps = {
   currencies?: ReferenceDataCode[];
+  evidenceTypes?: ReferenceDataCode[];
   losThemes: LosTheme[];
   mainActivities: ReferenceDataCode[];
   searchEnv: string;
@@ -24,7 +25,14 @@ type NewPageProps = {
 };
 
 export const NewPage = (props: NewPageProps) => {
-  const { currencies, losThemes, mainActivities, searchEnv, statuses } = props;
+  const {
+    currencies,
+    evidenceTypes,
+    losThemes,
+    mainActivities,
+    searchEnv,
+    statuses,
+  } = props;
   const router = useRouter();
   const { catalogId } = useParams<{ catalogId: string }>();
   const serviceIdRef = useRef<string | undefined>(undefined); // Ref to store the service id
@@ -84,6 +92,7 @@ export const NewPage = (props: NewPageProps) => {
         afterSubmit={handleAfterSubmit}
         autoSaveStorage={dataStorage}
         currencies={currencies}
+        evidenceTypes={evidenceTypes}
         losThemes={losThemes}
         mainActivities={mainActivities}
         onCancel={handleCancel}

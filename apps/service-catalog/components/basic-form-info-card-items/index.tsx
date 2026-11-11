@@ -28,6 +28,7 @@ import styles from "./basic-form-info-card-items.module.css";
 import { serviceOutputTypeLabel } from "../service-form/service-output-types";
 
 type Props = {
+  evidenceTypes?: ReferenceDataCode[];
   language: string;
   losThemes?: LosTheme[];
   mainActivities?: ReferenceDataCode[];
@@ -38,6 +39,7 @@ type Props = {
 
 export const BasicServiceFormInfoCardItems = (props: Props) => {
   const {
+    evidenceTypes,
     language,
     losThemes,
     mainActivities,
@@ -195,6 +197,15 @@ export const BasicServiceFormInfoCardItems = (props: Props) => {
               <Paragraph>
                 {getTranslateText(item.description, language)}
               </Paragraph>
+
+              {!isEmpty(item.type) && (
+                <>
+                  <Heading data-size="2xs" level={5}>
+                    {localization.serviceForm.fieldLabel.evidenceType}
+                  </Heading>
+                  <ReferenceDataTags values={item.type} data={evidenceTypes} />
+                </>
+              )}
 
               {!isEmpty(item.relatedDocumentation) && (
                 <>
