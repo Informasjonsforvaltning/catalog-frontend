@@ -38,7 +38,7 @@ export interface Evidence {
   language?: string[];
   relatedDocumentation?: string[];
   dataset?: string[];
-  type?: string[];
+  type?: string;
   validityDuration?: string;
 }
 

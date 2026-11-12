@@ -14,9 +14,9 @@ import {
   FieldsetDivider,
   FormikLanguageFieldset,
   LanguageSuggestion,
-  MultiSuggestionSelect,
   ReferenceDataTags,
   SearchSuggestionSelect,
+  SingleSuggestionSelect,
   SuggestionSelectOption,
   TextareaWithPrefix,
   TitleWithHelpTextAndTag,
@@ -236,7 +236,7 @@ const EvidenceTypeFieldset = ({
   );
 
   return (
-    <MultiSuggestionSelect
+    <SingleSuggestionSelect
       emptyMessage={localization.search.noHits}
       fieldsetLegend={
         <TitleWithHelpTextAndTag
@@ -245,12 +245,10 @@ const EvidenceTypeFieldset = ({
           {localization.serviceForm.fieldLabel.evidenceType}
         </TitleWithHelpTextAndTag>
       }
-      onSelectedChange={(selectedValues) =>
-        setFieldValue("type", selectedValues)
-      }
+      onValueChange={(value) => setFieldValue("type", value)}
       options={evidenceTypeOptions}
       placeholder={`${localization.search.search}...`}
-      selectedValues={values.type}
+      value={values.type}
     />
   );
 };
@@ -509,7 +507,6 @@ export const EvidenceField = (props: Props) => {
               identifier: "",
               relatedDocumentation: [],
               dataset: [],
-              type: [],
             }}
             type="new"
             onSuccess={() => setSnapshot([...(values.evidence ?? [])])}
