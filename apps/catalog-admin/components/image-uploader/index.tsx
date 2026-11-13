@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { TrashIcon, UploadIcon } from "@navikt/aksel-icons";
 import { localization, validateImageFile } from "@catalog-frontend/utils";
 import { useDeleteLogo, useGetLogo, useUpdateLogo } from "../../hooks/design";
@@ -21,13 +21,25 @@ export function ImageUploader({ catalogId }: { catalogId: string }) {
   const updateLogo = useUpdateLogo(catalogId);
   const deleteLogo = useDeleteLogo(catalogId);
 
-  const onImageChange = async (event) => {
+  const onImageChange = async (event: ChangeEvent) => {
+    if (!(event.target instanceof HTMLInputElement)) {
+      return;
+    }
     const file = event.target.files?.[0];
     if (file && (await validateImageFile(file))) {
-      setImage(URL.createObjectURL(file));
+      const previewUrl = URL.createObjectURL(file);
+      setImage(previewUrl);
       setFileName(file.name);
 
-      updateLogo.mutate(file);
+      updateLogo.mutate(file, {
+        onError: () => {
+          // Remove local preview
+          URL.revokeObjectURL(previewUrl);
+          setImage(null);
+          setFileName(dbFileName);
+          alert(localization.alert.updateFailed);
+        },
+      });
     }
   };
 
@@ -39,17 +51,21 @@ export function ImageUploader({ catalogId }: { catalogId: string }) {
     setFileName(dbFileName);
   }, [dbFileName, dbLogo]);
 
-  const handleDeleteLogo = () => {
-    if (window.confirm("Er du sikker på at du ønsker å slette logoen?")) {
-      deleteLogo.mutate();
-    }
+  const clearImage = () => {
+    setFileName(null);
+    setImage(null);
   };
 
   const resetImage = () => {
-    setFileName(null);
-    setImage(null);
-    if (dbLogo) {
-      handleDeleteLogo();
+    if (!dbLogo) {
+      clearImage();
+      return;
+    }
+    if (window.confirm("Er du sikker på at du ønsker å slette logoen?")) {
+      deleteLogo.mutate(undefined, {
+        onSuccess: clearImage,
+        onError: () => alert(localization.alert.deleteFailed),
+      });
     }
   };
 

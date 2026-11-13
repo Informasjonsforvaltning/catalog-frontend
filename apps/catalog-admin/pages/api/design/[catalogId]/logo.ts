@@ -59,21 +59,30 @@ export default async function handler(
     return;
   }
 
-  new Promise((resolve, reject) => {
-    req.url = `${catalogId}/design/logo`;
+  try {
+    await new Promise((resolve, reject) => {
+      req.url = `${catalogId}/design/logo`;
 
-    const proxy: httpProxy = httpProxy.createProxy();
-    proxy.once("error", reject);
-    proxy.on("proxyRes", resolve);
-    proxy.web(req, res, {
-      target: `${process.env.CATALOG_ADMIN_SERVICE_BASE_URI}`,
-      changeOrigin: true,
-      autoRewrite: true,
-      protocolRewrite: "https",
-      headers: {
-        cookie: "",
-        authorization: `Bearer ${session.accessToken}`,
-      },
+      const proxy: httpProxy = httpProxy.createProxy();
+      proxy.once("error", reject);
+      proxy.once("proxyRes", resolve);
+      proxy.web(req, res, {
+        target: `${process.env.CATALOG_ADMIN_SERVICE_BASE_URI}`,
+        changeOrigin: true,
+        autoRewrite: true,
+        protocolRewrite: "https",
+        headers: {
+          cookie: "",
+          authorization: `Bearer ${session.accessToken}`,
+        },
+      });
     });
-  });
+  } catch (error) {
+    console.error("Failed to proxy design logo request", error);
+    if (!res.headersSent) {
+      res.status(502).send("Failed to proxy design logo request");
+    } else {
+      res.end();
+    }
+  }
 }

@@ -110,7 +110,7 @@ export const useUpdateLogo = (catalogId: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (file: any) => {
+    mutationFn: async (file: File) => {
       if (!validOrganizationNumber(catalogId)) {
         return Promise.reject("Invalid organization number");
       }
@@ -121,6 +121,11 @@ export const useUpdateLogo = (catalogId: string) => {
         method: "POST",
         body: formData,
       });
+
+      if (!res.ok) {
+        console.error("Failed to upload logo", res.status, res.statusText);
+        throw new Error("Failed to upload logo");
+      }
       return res;
     },
 
@@ -144,6 +149,15 @@ export const useDeleteLogo = (catalogId: string) => {
         method: "DELETE",
         cache: "no-store",
       });
+
+      if (!response.ok) {
+        console.error(
+          "Failed to delete logo",
+          response.status,
+          response.statusText,
+        );
+        throw new Error("Failed to delete logo");
+      }
       return response;
     },
     onSuccess: () => {
