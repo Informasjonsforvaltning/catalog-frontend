@@ -1,10 +1,15 @@
 import {
+  deleteDesignLogo,
   getDesign,
   getDesignLogo,
   patchDesign,
+  postDesignLogo,
 } from "@catalog-frontend/data-access";
 import { withValidSessionForApi } from "@catalog-frontend/utils";
 import { NextRequest } from "next/server";
+
+const isLogoPath = (slug: string[] | undefined): slug is string[] =>
+  slug?.length === 2 && slug[1] === "logo";
 
 export const GET = async (
   req: NextRequest,
@@ -26,15 +31,13 @@ export const GET = async (
       } catch (error) {
         return new Response("Failed to get design logo", { status: 500 });
       }
-    } else if (
-      slug?.length === 3 &&
-      slug[1] === "design" &&
-      slug[2] === "logo"
-    ) {
+    } else if (isLogoPath(slug)) {
       try {
         const response = await getDesignLogo(slug[0], session.accessToken);
         if (response.status !== 200) {
-          throw new Error();
+          return new Response("Failed to get design logo", {
+            status: response.status,
+          });
         }
         const headers = {
           "Content-Type":
@@ -84,6 +87,75 @@ export const PATCH = async (
       });
     } catch (error) {
       return new Response("Failed to update design", { status: 500 });
+    }
+  });
+};
+
+export const POST = async (
+  req: NextRequest,
+  props: { params: Promise<{ slug: string[] }> },
+) => {
+  const params = await props.params;
+  return await withValidSessionForApi(async (session) => {
+    const { slug } = params;
+    if (!isLogoPath(slug)) {
+      return new Response("Not found", { status: 404 });
+    }
+    let logo: FormDataEntryValue | null;
+    try {
+      logo = (await req.formData()).get("logo");
+    } catch (error) {
+      return new Response("Invalid form data", { status: 400 });
+    }
+    if (!(logo instanceof File)) {
+      return new Response("Missing logo file", { status: 400 });
+    }
+    try {
+      const response = await postDesignLogo(slug[0], session.accessToken, logo);
+      if (!response.ok) {
+        console.error(
+          "Failed to upload design logo",
+          response.status,
+          response.statusText,
+        );
+        return new Response("Failed to upload design logo", {
+          status: response.status,
+        });
+      }
+      return new Response(null, { status: response.status });
+    } catch (error) {
+      console.error("Failed to upload design logo", error);
+      return new Response("Failed to upload design logo", { status: 500 });
+    }
+  });
+};
+
+export const DELETE = async (
+  req: NextRequest,
+  props: { params: Promise<{ slug: string[] }> },
+) => {
+  const params = await props.params;
+  return await withValidSessionForApi(async (session) => {
+    const { slug } = params;
+    if (!isLogoPath(slug)) {
+      return new Response("Not found", { status: 404 });
+    }
+    try {
+      const response = await deleteDesignLogo(slug[0], session.accessToken);
+      if (!response.ok) {
+        console.error(
+          "Failed to delete design logo",
+          response.status,
+          response.statusText,
+        );
+        return new Response("Failed to delete design logo", {
+          status: response.status,
+        });
+      }
+      return new Response(null, { status: response.status });
+    } catch (error) {
+      console.error("Failed to delete design logo", error);
+      return new Response("Failed to delete design logo", { status: 500 });
     }
   });
 };
