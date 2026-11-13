@@ -92,7 +92,7 @@ export const patchDesign = async (
 export const postDesignLogo = async (
   catalogId: string,
   accessToken: string,
-  logo: any,
+  logo: Blob,
 ) => {
   validateOrganizationNumber(catalogId, "postDesignLogo");
 
