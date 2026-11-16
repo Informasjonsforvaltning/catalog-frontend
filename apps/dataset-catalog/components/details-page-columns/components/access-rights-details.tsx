@@ -89,7 +89,9 @@ export const AccessRightsDetails = ({
               }
             </Tag>
           )}
-          {(dataset.applicableLegislation || allLegalBases.length > 0) && (
+          {((dataset.applicableLegislation &&
+            dataset.applicableLegislation.length > 0) ||
+            allLegalBases.length > 0) && (
             <div className={styles.infoCardItems}>
               <h4>{localization.applicableLegislation.fieldLabel}</h4>
               <Table data-size="sm" className={styles.table}>
