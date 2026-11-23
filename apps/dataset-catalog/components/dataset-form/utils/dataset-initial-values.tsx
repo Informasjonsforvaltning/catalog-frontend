@@ -35,6 +35,12 @@ export const datasetTemplate = (dataset: Dataset): Dataset => {
       dataset.landingPage.every((page) => page !== undefined)
         ? dataset.landingPage
         : [],
+    page:
+      dataset.page &&
+      dataset.page.length > 0 &&
+      dataset.page.every((page) => page !== undefined)
+        ? dataset.page
+        : [],
     euDataTheme: dataset.euDataTheme ?? [],
     losTheme: dataset.losTheme ?? [],
     mobilityTheme: dataset.mobilityTheme ?? [],
@@ -79,6 +85,7 @@ export const datasetToBeCreatedTemplate = (
     description: {},
     approved: false,
     landingPage: [],
+    page: [],
     accessRight: undefined,
     applicableLegislation: [],
     euDataTheme: [],

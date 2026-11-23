@@ -281,6 +281,67 @@ const FIELD_CONFIG = [
     hideToggleButton: true,
   },
   {
+    name: "page",
+    getValue: (values: Dataset) => values?.page,
+    render: (props: any) => (
+      <FieldArray name="page">
+        {(arrayHelpers) => (
+          <>
+            {(arrayHelpers.form.values.page || []).map(
+              (_: any, index: number, array: string[]) => (
+                <React.Fragment key={`page-${index}`}>
+                  <div className={styles.padding}>
+                    <FieldsetWithDelete
+                      onDelete={() => arrayHelpers.remove(index)}
+                    >
+                      <FastFieldWithRef
+                        name={`page[${index}]`}
+                        ref={(
+                          el: HTMLInputElement | HTMLTextAreaElement | null,
+                        ) => props.setInputRef(`page[${index}]`, el)}
+                        label={
+                          index === 0 ? (
+                            <TitleWithHelpTextAndTag
+                              helpText={
+                                localization.datasetForm.helptext.datasetPage
+                              }
+                            >
+                              {localization.datasetForm.fieldLabel.datasetPage}
+                            </TitleWithHelpTextAndTag>
+                          ) : (
+                            ""
+                          )
+                        }
+                        as={Textfield}
+                        data-size="sm"
+                        error={props.errors?.page?.[index]}
+                      />
+                    </FieldsetWithDelete>
+                  </div>
+                </React.Fragment>
+              ),
+            )}
+            <AddButton
+              onClick={() => {
+                arrayHelpers.push("");
+                props.setFocus(
+                  arrayHelpers.form.values.page
+                    ? `page[${arrayHelpers.form.values.page.length}]`
+                    : "page[0]",
+                );
+              }}
+            >
+              {`${localization.add} ${localization.datasetForm.fieldLabel.datasetPage.toLowerCase()}`}
+            </AddButton>
+            {props.showDivider && <FieldsetDivider />}
+          </>
+        )}
+      </FieldArray>
+    ),
+    hasDeleteButton: false,
+    hideToggleButton: true,
+  },
+  {
     name: "conformsTo",
     getValue: (values: Dataset) => values?.conformsTo,
     render: (props: any) => (

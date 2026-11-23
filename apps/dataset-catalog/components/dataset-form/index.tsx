@@ -477,6 +477,7 @@ export const DatasetForm = ({
                     subtitle={localization.datasetForm.subtitle.details}
                     error={hasError([
                       "landingPage",
+                      "page",
                       "conformsTo",
                       "costs",
                       "qualityAnnotations",
