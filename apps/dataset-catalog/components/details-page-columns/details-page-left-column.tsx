@@ -289,6 +289,16 @@ export const LeftColumn = ({
         </InfoCard.Item>
       )}
 
+      {dataset?.page && !isEmpty(dataset?.page[0]) && (
+        <InfoCard.Item title={localization.datasetForm.fieldLabel.datasetPage}>
+          {dataset?.page.map((page: string, index: number) => (
+            <Paragraph data-size="sm" key={`page-${index}`}>
+              <Link href={page}>{page}</Link>
+            </Paragraph>
+          ))}
+        </InfoCard.Item>
+      )}
+
       {dataset?.temporal && !isEmpty(dataset?.temporal) && (
         <InfoCard.Item title={localization.datasetForm.fieldLabel.temporal}>
           <TemporalDetails temporal={dataset?.temporal} />

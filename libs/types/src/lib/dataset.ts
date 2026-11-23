@@ -22,6 +22,7 @@ export type DatasetToBeCreated = {
   legalBasisForRestriction?: UriWithLabel[];
   applicableLegislation?: ApplicableLegislation[];
   landingPage?: string[];
+  page?: string[];
   euDataTheme?: string[];
   losTheme?: string[];
   mobilityTheme?: string[];

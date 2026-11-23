@@ -378,6 +378,14 @@ export const confirmedDatasetSchema = draftDatasetSchema.shape({
         .matches(httpsRegex, localization.validation.invalidProtocol)
         .url(localization.validation.invalidUrl),
     ),
+  page: Yup.array()
+    .nullable()
+    .of(
+      Yup.string()
+        .nonNullable(localization.validation.deleteFieldIfEmpty)
+        .matches(httpsRegex, localization.validation.invalidProtocol)
+        .url(localization.validation.invalidUrl),
+    ),
   applicableLegislation: Yup.array().of(applicableLegislationSchema),
   conformsTo: Yup.array().of(standardSchema),
   informationModelsFromOtherSources: Yup.array().of(uriWithLabelSchema),
@@ -464,6 +472,14 @@ export const confirmedMobilityDatasetSchema = draftDatasetSchema.shape({
     .min(1, localization.datasetForm.validation.distribution)
     .required(localization.datasetForm.validation.distribution),
   landingPage: Yup.array()
+    .nullable()
+    .of(
+      Yup.string()
+        .nonNullable(localization.validation.deleteFieldIfEmpty)
+        .matches(httpsRegex, localization.validation.invalidProtocol)
+        .url(localization.validation.invalidUrl),
+    ),
+  page: Yup.array()
     .nullable()
     .of(
       Yup.string()

@@ -58,6 +58,8 @@ Dersom man velger en åpen lisens, vil datasettet bli merket med "Åpne data".`,
     lastUpdated: "Dato for siste oppdatering av innholdet i datasettet.",
     landingPage:
       "Lenke til en nettside som gir tilgang til datasettet, dets distribusjoner og/eller tilleggsinformasjon.",
+    datasetPage:
+      "Lenke til en side eller et dokument som beskriver datasettet, for eksempel brukerveiledninger i PDF, andre nettsider eller lignende.",
     type: "Datasettets spesifikke type. Dette kan velges blant EU's kontrollerte vokabular [dataset type](https://op.europa.eu/en/web/eu-vocabularies/concept-scheme/-/resource?uri=http://publications.europa.eu/resource/authority/dataset-type).",
     provenance:
       "Endringer i eierskap eller forvaltning av datasettet, dersom dette har betydning for autentisitet, integritet og fortolkning.",
@@ -179,6 +181,7 @@ Dersom man velger en åpen lisens, vil datasettet bli merket med "Åpne data".`,
     temporal: "Tidsrom",
     lastUpdated: "Sist oppdatert",
     landingPage: "Landingsside",
+    datasetPage: "Dokumentasjon",
     type: "Type",
     title: "Tittel",
     provenance: "Eierskapshistorikk",
