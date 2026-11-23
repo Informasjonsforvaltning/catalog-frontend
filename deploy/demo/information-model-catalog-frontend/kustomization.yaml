@@ -4,7 +4,6 @@ kind: Kustomization
 namespace: demo
 resources:
   - ../../base/information-model-catalog-frontend
-  - information-model-catalog-frontend-ingress.yaml
 
 patchesStrategicMerge:
   - information-model-catalog-frontend-env.yaml

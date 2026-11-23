@@ -4,7 +4,6 @@ kind: Kustomization
 namespace: demo
 resources:
   - ../../base/dataset-catalog-frontend
-  - dataset-catalog-frontend-ingress.yaml
 
 patchesStrategicMerge:
   - dataset-catalog-frontend-env.yaml
