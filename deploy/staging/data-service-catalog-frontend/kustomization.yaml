@@ -4,7 +4,6 @@ kind: Kustomization
 namespace: staging
 resources:
   - ../../base/data-service-catalog-frontend
-  - data-service-catalog-frontend-ingress.yaml
 
 patchesStrategicMerge:
   - data-service-catalog-frontend-env.yaml

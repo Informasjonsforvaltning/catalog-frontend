@@ -4,7 +4,6 @@ kind: Kustomization
 namespace: demo
 resources:
   - ../../base/service-catalog-frontend
-  - service-catalog-frontend-ingress.yaml
 
 patchesStrategicMerge:
   - service-catalog-frontend-env.yaml
