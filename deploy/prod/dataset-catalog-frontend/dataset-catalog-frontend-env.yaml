@@ -59,7 +59,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: commonurl
-                  key: FDK_BASE_URI
+                  key: FDK_DATA_NORGE_BASE_URI
             - name: DATASET_CATALOG_FRONTEND
               valueFrom:
                 secretKeyRef:

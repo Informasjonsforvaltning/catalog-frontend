@@ -49,7 +49,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: commonurl
-                  key: FDK_BASE_URI
+                  key: FDK_DATA_NORGE_BASE_URI
             - name: CATALOG_PORTAL_BASE_URI
               valueFrom:
                 secretKeyRef:
