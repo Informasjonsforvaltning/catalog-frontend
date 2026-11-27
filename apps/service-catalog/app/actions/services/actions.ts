@@ -116,7 +116,7 @@ export async function updateService(
   catalogId: string,
   oldService: Service,
   values: Service,
-): Promise<void> {
+): Promise<Service> {
   const updatedService = removeEmptyValues(values);
 
   const updatedServiceMerged = {
@@ -137,17 +137,17 @@ export async function updateService(
   const diff = compare(oldService, updatedServiceMerged);
 
   if (diff.length === 0) {
-    return;
+    return oldService;
   }
 
-  let success = false;
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
   }
 
+  let response: Response;
   try {
-    const response = await update(
+    response = await update(
       catalogId,
       oldService.id,
       diff,
@@ -156,15 +156,14 @@ export async function updateService(
     if (response.status !== 200) {
       throw new Error(`${response.statusText}`);
     }
-    success = true;
   } catch (error) {
     throw new Error(localization.alert.fail);
-  } finally {
-    if (success) {
-      updateTag("service");
-      updateTag("services");
-    }
   }
+
+  updateTag("service");
+  updateTag("services");
+
+  return await response.json();
 }
 
 export async function publishService(

@@ -9,10 +9,7 @@ import {
 import { Button, ButtonBar, ConfirmModal } from "@catalog-frontend/ui";
 import { LocalDataStorage, localization } from "@catalog-frontend/utils";
 import { ArrowLeftIcon } from "@navikt/aksel-icons";
-import {
-  getServiceById,
-  updateService,
-} from "@service-catalog/app/actions/services/actions";
+import { updateService } from "@service-catalog/app/actions/services/actions";
 import ServiceForm from "@service-catalog/components/service-form";
 import { serviceTemplate } from "@service-catalog/components/service-form/service-template";
 import {
@@ -21,7 +18,7 @@ import {
   useRouter,
   useSearchParams,
 } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type EditPageProps = {
   currencies?: ReferenceDataCode[];
@@ -61,9 +58,16 @@ export const EditPage = (props: EditPageProps) => {
     router.push(`/catalogs/${service.catalogId}/services/${service.id}`);
   };
 
+  const lastSavedRef = useRef(service);
+
   const handleUpdate = async (values: Service) => {
-    await updateService(catalogId, service, values);
-    return getServiceById(catalogId, serviceId);
+    const updated = await updateService(
+      catalogId,
+      lastSavedRef.current,
+      values,
+    );
+    lastSavedRef.current = updated;
+    return updated;
   };
 
   useEffect(() => {
