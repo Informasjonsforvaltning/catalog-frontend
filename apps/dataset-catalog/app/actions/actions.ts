@@ -5,6 +5,8 @@ import {
   getAllDatasets as getAll,
   getById,
   postDataset,
+  publishDataset as publish,
+  unpublishDataset as unpublish,
   updateDataset as update,
 } from "@catalog-frontend/data-access";
 import { Dataset, DatasetToBeCreated } from "@catalog-frontend/types";
@@ -116,9 +118,12 @@ export async function updateDataset(
   initialDataset: Dataset,
   values: Dataset,
 ): Promise<Dataset> {
-  const updatedDataset = removeEmptyValues(values);
+  const { published: _initialPublished, ...initialWithoutPublished } =
+    initialDataset;
+  const { published: _published, ...updatedDataset } =
+    removeEmptyValues(values);
 
-  const diff = compare(initialDataset, updatedDataset);
+  const diff = compare(initialWithoutPublished, updatedDataset);
 
   if (diff.length === 0) {
     return initialDataset;
@@ -153,27 +158,15 @@ export async function updateDataset(
 
 export async function publishDataset(
   catalogId: string,
-  initialDataset: Dataset,
-  values: Dataset,
+  datasetId: string,
 ): Promise<void> {
-  const diff = compare(initialDataset, values);
-
-  if (diff.length === 0) {
-    return;
-  }
-
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
   }
 
   try {
-    const response = await update(
-      catalogId,
-      initialDataset.id,
-      diff,
-      session.accessToken,
-    );
+    const response = await publish(catalogId, datasetId, session.accessToken);
     if (response.status !== 200) {
       throw new Error(`${response.status} ${response.statusText}`);
     }
@@ -183,4 +176,32 @@ export async function publishDataset(
   }
 
   updateTag("dataset");
+  updateTag("datasets");
+}
+
+export async function unpublishDataset(
+  catalogId: string,
+  dataset: Dataset,
+): Promise<void> {
+  const session = await getValidSession();
+  if (!session) {
+    return redirectToSignIn();
+  }
+
+  try {
+    const response = await unpublish(
+      catalogId,
+      dataset.id,
+      session.accessToken,
+    );
+    if (response.status !== 200) {
+      throw new Error(`${response.status} ${response.statusText}`);
+    }
+  } catch (error) {
+    console.error(`${localization.alert.fail} ${error}`);
+    throw new Error("Noe gikk galt, prøv igjen...");
+  } finally {
+    updateTag("dataset");
+    updateTag("datasets");
+  }
 }
