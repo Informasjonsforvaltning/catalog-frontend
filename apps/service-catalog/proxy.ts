@@ -6,9 +6,9 @@ import {
   hasOrganizationWritePermission,
   hasSystemAdminPermission,
   validateOidcUserSession,
-} from "../../libs/utils/src/lib/auth/token";
-import { validUUID } from "../../libs/utils/src/lib/validation/uuid";
-import { validOrganizationNumber } from "../../libs/utils/src/lib/validation/organization-number";
+} from "@catalog-frontend/utils";
+import { validUUID } from "@catalog-frontend/utils";
+import { validOrganizationNumber } from "@catalog-frontend/utils";
 
 export const config = {
   matcher: "/catalogs/:path*",
@@ -16,6 +16,10 @@ export const config = {
 
 export const proxy = withAuth(
   async function middleware(req: NextRequestWithAuth) {
+    if (req.headers.has("next-action")) {
+      return;
+    }
+
     const accessToken = req.nextauth.token?.access_token;
 
     const pathname = req.nextUrl.pathname;
@@ -31,23 +35,16 @@ export const proxy = withAuth(
     ];
 
     if (catalogId && !validOrganizationNumber(catalogId)) {
-      return NextResponse.rewrite(
-        new URL("/notfound", process.env.NEXTAUTH_URL),
-      );
+      return NextResponse.rewrite(new URL("/notfound", req.url));
     }
 
     if (serviceId && !validUUID(serviceId)) {
-      return NextResponse.rewrite(
-        new URL("/notfound", process.env.NEXTAUTH_URL),
-      );
+      return NextResponse.rewrite(new URL("/notfound", req.url));
     }
 
     if ((await validateOidcUserSession(accessToken)) !== true) {
       return NextResponse.rewrite(
-        new URL(
-          `/auth/signin?callbackUrl=${req.nextUrl.pathname}`,
-          process.env.NEXTAUTH_URL,
-        ),
+        new URL(`/auth/signin?callbackUrl=${req.nextUrl.pathname}`, req.url),
       );
     }
 
@@ -60,7 +57,7 @@ export const proxy = withAuth(
       )
     ) {
       return NextResponse.rewrite(
-        new URL(`/catalogs/${catalogId}/no-access`, process.env.NEXTAUTH_URL),
+        new URL(`/catalogs/${catalogId}/no-access`, req.url),
       );
     }
 
@@ -71,7 +68,7 @@ export const proxy = withAuth(
       writePermissionsRoutes.includes(pathname)
     ) {
       return NextResponse.rewrite(
-        new URL(`/catalogs/${catalogId}/no-access`, process.env.NEXTAUTH_URL),
+        new URL(`/catalogs/${catalogId}/no-access`, req.url),
       );
     }
   },

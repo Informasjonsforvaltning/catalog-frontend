@@ -16,6 +16,10 @@ export const config = {
 
 export const proxy = withAuth(
   async function middleware(req: NextRequestWithAuth) {
+    if (req.headers.has("next-action")) {
+      return;
+    }
+
     const accessToken = req.nextauth.token?.access_token;
 
     const pathname = req.nextUrl.pathname;
@@ -29,23 +33,16 @@ export const proxy = withAuth(
     ];
 
     if (catalogId && !validOrganizationNumber(catalogId)) {
-      return NextResponse.rewrite(
-        new URL("/not-found", process.env.NEXTAUTH_URL),
-      );
+      return NextResponse.rewrite(new URL("/not-found", req.url));
     }
 
     if (dataServiceId && !validDataServiceID(dataServiceId)) {
-      return NextResponse.rewrite(
-        new URL("/not-found", process.env.NEXTAUTH_URL),
-      );
+      return NextResponse.rewrite(new URL("/not-found", req.url));
     }
 
     if ((await validateOidcUserSession(accessToken)) !== true) {
       return NextResponse.rewrite(
-        new URL(
-          `/auth/signin?callbackUrl=${req.nextUrl.pathname}`,
-          process.env.NEXTAUTH_URL,
-        ),
+        new URL(`/auth/signin?callbackUrl=${req.nextUrl.pathname}`, req.url),
       );
     }
 
@@ -58,7 +55,7 @@ export const proxy = withAuth(
       )
     ) {
       return NextResponse.rewrite(
-        new URL(`/catalogs/${catalogId}/no-access`, process.env.NEXTAUTH_URL),
+        new URL(`/catalogs/${catalogId}/no-access`, req.url),
       );
     }
 
@@ -69,7 +66,7 @@ export const proxy = withAuth(
       writePermissionsRoutes.includes(pathname)
     ) {
       return NextResponse.rewrite(
-        new URL(`/catalogs/${catalogId}/no-access`, process.env.NEXTAUTH_URL),
+        new URL(`/catalogs/${catalogId}/no-access`, req.url),
       );
     }
   },
