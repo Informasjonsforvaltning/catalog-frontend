@@ -16,7 +16,7 @@ export const config = {
 
 export const proxy = withAuth(
   async function middleware(req: NextRequestWithAuth) {
-    if (req.headers.has("next-action")) {
+    if (req.method === "POST" && req.headers.has("next-action")) {
       return;
     }
 
