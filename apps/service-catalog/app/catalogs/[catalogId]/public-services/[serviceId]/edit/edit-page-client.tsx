@@ -9,10 +9,7 @@ import {
 import { Button, ButtonBar, ConfirmModal } from "@catalog-frontend/ui";
 import { LocalDataStorage, localization } from "@catalog-frontend/utils";
 import { ArrowLeftIcon } from "@navikt/aksel-icons";
-import {
-  getPublicServiceById,
-  updatePublicService,
-} from "@service-catalog/app/actions/public-services/actions";
+import { updatePublicService } from "@service-catalog/app/actions/public-services/actions";
 import ServiceForm from "@service-catalog/components/service-form";
 import { serviceTemplate } from "@service-catalog/components/service-form/service-template";
 import {
@@ -71,10 +68,13 @@ export const EditPage = (props: EditPageProps) => {
   const lastSavedRef = useRef(service);
 
   const handleUpdate = async (values: Service) => {
-    await updatePublicService(catalogId, lastSavedRef.current, values);
-    const newValues = await getPublicServiceById(catalogId, serviceId);
-    lastSavedRef.current = newValues;
-    return newValues;
+    const updated = await updatePublicService(
+      catalogId,
+      lastSavedRef.current,
+      values,
+    );
+    lastSavedRef.current = updated;
+    return updated;
   };
 
   useEffect(() => {

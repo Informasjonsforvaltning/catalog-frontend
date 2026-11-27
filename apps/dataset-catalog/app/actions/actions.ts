@@ -115,23 +115,23 @@ export async function updateDataset(
   catalogId: string,
   initialDataset: Dataset,
   values: Dataset,
-): Promise<void> {
+): Promise<Dataset> {
   const updatedDataset = removeEmptyValues(values);
 
   const diff = compare(initialDataset, updatedDataset);
 
   if (diff.length === 0) {
-    return;
+    return initialDataset;
   }
 
-  let success = false;
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
   }
 
+  let response: Response;
   try {
-    const response = await update(
+    response = await update(
       catalogId,
       initialDataset.id,
       diff,
@@ -140,16 +140,15 @@ export async function updateDataset(
     if (response.status !== 200) {
       throw new Error(`${response.status} ${response.statusText}`);
     }
-    success = true;
   } catch (error) {
     console.error(`${localization.alert.fail} ${error}`);
     throw new Error("Noe gikk galt, prøv igjen...");
   }
 
-  if (success) {
-    updateTag("dataset");
-    updateTag("datasets");
-  }
+  updateTag("dataset");
+  updateTag("datasets");
+
+  return await response.json();
 }
 
 export async function publishDataset(

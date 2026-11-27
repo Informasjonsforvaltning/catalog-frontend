@@ -7,10 +7,7 @@ import {
 } from "@catalog-frontend/types";
 import { Button, ButtonBar, ConfirmModal } from "@catalog-frontend/ui";
 import { LocalDataStorage, localization } from "@catalog-frontend/utils";
-import {
-  getDatasetById,
-  updateDataset,
-} from "@dataset-catalog/app/actions/actions";
+import { updateDataset } from "@dataset-catalog/app/actions/actions";
 import DatasetForm from "@dataset-catalog/components/dataset-form";
 import { ArrowLeftIcon } from "@navikt/aksel-icons";
 import { usePathname, useSearchParams } from "next/navigation";
@@ -72,14 +69,13 @@ export const EditPage = ({
   const lastSavedRef = useRef(dataset);
 
   const handleUpdate = async (values: Dataset) => {
-    await updateDataset(
+    const updated = await updateDataset(
       dataset.catalogId.toString(),
       lastSavedRef.current,
       values,
     );
-    const newValues = await getDatasetById(dataset.catalogId, dataset.id);
-    lastSavedRef.current = newValues;
-    return newValues;
+    lastSavedRef.current = updated;
+    return updated;
   };
 
   useEffect(() => {

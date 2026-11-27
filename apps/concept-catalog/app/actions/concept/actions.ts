@@ -201,36 +201,33 @@ async function applyConceptChanges(
   }
 
   const initialId = initialConcept.id;
-  let success = false;
-  let resolvedConceptId: string | undefined = initialId;
+  let response: Response;
 
   try {
-    const response =
+    response =
       mode === "revision"
         ? await createConceptRevision(initialId, diff, session.accessToken)
         : await patchConceptApi(initialId, diff, session.accessToken);
     if (response.status !== 200 && response.status !== 201) {
       throw new Error(`${response.status} ${response.statusText}`);
     }
-
-    success = true;
-    if (response.status === 201) {
-      resolvedConceptId =
-        response.headers.get("location")?.split("/").pop() ?? initialId;
-    }
   } catch (error) {
     console.error(`${localization.alert.fail} ${error}`);
     throw new Error("Noe gikk galt, prøv igjen...");
   }
 
-  if (success) {
-    updateTag("concept");
-    updateTag("concepts");
+  updateTag("concept");
+  updateTag("concepts");
+
+  if (response.status === 201) {
+    const revisionId =
+      response.headers.get("location")?.split("/").pop() ?? initialId;
+    return await getConcept(revisionId, session.accessToken).then((res) =>
+      res.ok ? res.json() : undefined,
+    );
   }
 
-  return await getConcept(`${resolvedConceptId}`, session.accessToken).then(
-    (response) => (response.ok ? response.json() : undefined),
-  );
+  return await response.json();
 }
 
 /**
