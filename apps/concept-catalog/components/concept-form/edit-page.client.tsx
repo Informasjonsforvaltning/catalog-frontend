@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import { ArrowLeftIcon } from "@navikt/aksel-icons";
 import { LocalDataStorage, localization } from "@catalog-frontend/utils";
@@ -75,15 +75,26 @@ export const EditPage = ({
     },
   });
 
+  const lastSavedRef = useRef(concept);
+
   const handleUpdate = async (values: Concept) => {
-    if (mode === "archived") {
-      return await updateArchivedConcept(
-        concept,
-        values,
-        fieldsResult.internal,
-      );
+    const updated =
+      mode === "archived"
+        ? await updateArchivedConcept(
+            lastSavedRef.current,
+            values,
+            fieldsResult.internal,
+          )
+        : await updateConcept(
+            lastSavedRef.current,
+            values,
+            fieldsResult.internal,
+          );
+    // `updated` is undefined if fetching the saved concept failed
+    if (updated) {
+      lastSavedRef.current = updated;
     }
-    return await updateConcept(concept, values, fieldsResult.internal);
+    return updated;
   };
 
   const handleSuccess = () => {

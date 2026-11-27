@@ -21,7 +21,7 @@ import {
   useRouter,
   useSearchParams,
 } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type EditPageProps = {
   currencies?: ReferenceDataCode[];
@@ -68,9 +68,13 @@ export const EditPage = (props: EditPageProps) => {
     router.push(`/catalogs/${service.catalogId}/public-services/${service.id}`);
   };
 
+  const lastSavedRef = useRef(service);
+
   const handleUpdate = async (values: Service) => {
-    await updatePublicService(catalogId, service, values);
-    return getPublicServiceById(catalogId, serviceId);
+    await updatePublicService(catalogId, lastSavedRef.current, values);
+    const newValues = await getPublicServiceById(catalogId, serviceId);
+    lastSavedRef.current = newValues;
+    return newValues;
   };
 
   useEffect(() => {

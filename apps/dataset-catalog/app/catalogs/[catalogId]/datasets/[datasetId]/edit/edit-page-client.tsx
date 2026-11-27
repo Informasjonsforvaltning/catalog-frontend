@@ -14,7 +14,7 @@ import {
 import DatasetForm from "@dataset-catalog/components/dataset-form";
 import { ArrowLeftIcon } from "@navikt/aksel-icons";
 import { usePathname, useSearchParams } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 type EditPageProps = {
   dataset: Dataset;
@@ -69,9 +69,16 @@ export const EditPage = ({
     );
   };
 
+  const lastSavedRef = useRef(dataset);
+
   const handleUpdate = async (values: Dataset) => {
-    await updateDataset(dataset.catalogId.toString(), dataset, values);
+    await updateDataset(
+      dataset.catalogId.toString(),
+      lastSavedRef.current,
+      values,
+    );
     const newValues = await getDatasetById(dataset.catalogId, dataset.id);
+    lastSavedRef.current = newValues;
     return newValues;
   };
 

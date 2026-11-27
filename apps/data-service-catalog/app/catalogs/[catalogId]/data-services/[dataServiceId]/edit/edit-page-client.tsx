@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useRef } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import { ArrowLeftIcon } from "@navikt/aksel-icons";
 import { LocalDataStorage, localization } from "@catalog-frontend/utils";
@@ -32,8 +32,16 @@ export const EditPage = ({
     [],
   );
 
+  const lastSavedRef = useRef(dataService);
+
   const handleUpdate = async (values: DataService) => {
-    return await updateDataService(catalogId, dataService, values);
+    const updated = await updateDataService(
+      catalogId,
+      lastSavedRef.current,
+      values,
+    );
+    lastSavedRef.current = updated;
+    return updated;
   };
 
   const handleCancel = () => {
